@@ -130,30 +130,57 @@ async function desktop(browser) {
   await wait(page, 2000);
   check('quick start fills and runs the search', (await page.textContent('[data-result-summary]')) === 'Villas to buy in Zayed City');
 
-  // Communities carousel
-  await goTo(page, '[data-carousel]', 140);
-  await page.evaluate(() => document.querySelector('[data-carousel-track]').scrollTo({ left: 0, behavior: 'instant' }));
-  await wait(page, 500);
-  await page.click('[data-carousel-next]');
-  await wait(page, 1200);
-  check('carousel arrow moves to the next community', (await activeCommunity(page)) === 'saadiyat-island' && (await page.textContent('[data-carousel-now]')) === '02');
-  const before = await page.evaluate(() => document.querySelector('[data-carousel-track]').scrollLeft);
-  const box = await page.locator('.community.is-active .community__media').boundingBox();
-  await page.mouse.move(box.x + box.width / 2 + 200, box.y + 200);
+  // Communities stage
+  const order = ['zayed-city', 'saadiyat-island', 'al-bateen-marina', 'jumeirah-village-circle', 'eastern-mangrove-corniche'];
+  const nextOf = (id, step = 1) => order[(order.indexOf(id) + step + order.length) % order.length];
+  await goTo(page, '[data-stage]', 100);
+  let from = await activeCommunity(page);
+  await page.click('[data-stage-next]');
+  await wait(page, 1900);
+  check('next button moves to the next community', (await activeCommunity(page)) === nextOf(from) && (await page.textContent('[data-stage-now]')) === String(order.indexOf(nextOf(from)) + 1).padStart(2, '0'));
+  from = await activeCommunity(page);
+  await page.click('[data-stage-peek]');
+  await wait(page, 1900);
+  check('the arch in the corner opens the next community', (await activeCommunity(page)) === nextOf(from));
+  check('only the active community is shown', await page.evaluate(() => [...document.querySelectorAll('.community')].filter((c) => !c.hidden).length === 1));
+  from = await activeCommunity(page);
+  const stageBox = await page.locator('[data-stage]').boundingBox();
+  await page.mouse.move(stageBox.x + stageBox.width * 0.45, stageBox.y + stageBox.height * 0.4);
   await page.mouse.down();
-  await page.mouse.move(box.x + box.width / 2 - 250, box.y + 200, { steps: 12 });
+  await page.mouse.move(stageBox.x + stageBox.width * 0.45 - 260, stageBox.y + stageBox.height * 0.4, { steps: 12 });
   await page.mouse.up();
-  await wait(page, 1600);
-  const after = await page.evaluate(() => document.querySelector('[data-carousel-track]').scrollLeft);
-  check('carousel drags with the mouse and settles on a card', after > before + 100 && (await activeCommunity(page)) !== 'saadiyat-island', { before, after });
-  await page.focus('[data-carousel-track]');
+  await wait(page, 1900);
+  check('stage drags to the next community', (await activeCommunity(page)) === nextOf(from), await activeCommunity(page));
+  from = await activeCommunity(page);
+  await page.focus('[data-stage]');
   await page.keyboard.press('ArrowLeft');
-  await wait(page, 1200);
-  check('carousel responds to arrow keys', (await page.evaluate(() => document.querySelector('[data-carousel-track]').scrollLeft)) < after);
+  await wait(page, 1900);
+  check('stage responds to arrow keys', (await activeCommunity(page)) === nextOf(from, -1));
+  await page.click('.stage__tab[data-go="4"]');
+  await wait(page, 1900);
+  check('index selects a community directly', (await activeCommunity(page)) === 'eastern-mangrove-corniche' && await page.evaluate(() => document.querySelector('.stage__tab[data-go="4"]').getAttribute('aria-selected') === 'true'));
   await shot(page, 'desktop-communities');
   await page.click('.community.is-active [data-find]');
   await wait(page, 1800);
-  check('"Find a home here" carries the community into the search', await page.evaluate(() => document.querySelector('[data-select="community"] input').value === document.querySelector('.community.is-active').dataset.community));
+  check('"Find a home here" carries the community into the search', await page.evaluate(() => document.querySelector('[data-select="community"] input').value === 'eastern-mangrove-corniche'));
+
+  // Intent section
+  await goTo(page, '[data-intents]', 120);
+  await page.hover('.intent[data-intent="services"] .intent__row');
+  await wait(page, 1400);
+  check('pointing at an intent previews its destination', await page.evaluate(() => !document.querySelector('[data-intent-panel="services"]').hidden && document.querySelector('[data-intent-image="services"]').classList.contains('is-active') && document.querySelector('.intent[data-intent="services"]').classList.contains('is-active')));
+  await shot(page, 'desktop-intents');
+  await page.click('[data-intent-panel="services"] a[data-service-jump="super-app"]');
+  await wait(page, 1800);
+  check('intent quick link leads to that service', await page.evaluate(() => document.querySelector('#service-super-app').classList.contains('is-match')));
+  await goTo(page, '[data-intents]', 120);
+  await page.click('.intent[data-intent="communities"] .intent__row');
+  await wait(page, 1600);
+  check('intent line goes to its section', await page.evaluate(() => Math.abs(document.querySelector('#communities').getBoundingClientRect().top) < 80));
+
+  // Motion layer
+  check('buttons carry a rolling label', await page.evaluate(() => document.querySelectorAll('.btn .roll__inner').length > 5 && document.querySelector('.site-header__enquire .roll').getBoundingClientRect().height < 30));
+  check('pointer follower is active for mouse users', await page.evaluate(() => document.documentElement.classList.contains('has-cursor')));
 
   // Ecosystem
   await goTo(page, '[data-orbit]', 140);
@@ -285,6 +312,13 @@ async function phone(browser) {
   console.log('\nPhone 390 x 844 (touch)');
   const { context, page, problems } = await open(browser, { width: 390, height: 844, touch: true });
   await shot(page, 'phone-hero');
+  await goTo(page, '[data-intents]', 90);
+  check('each intent shows its own picture on a phone', await page.evaluate(() => [...document.querySelectorAll('.intent__thumb')].every((thumb) => thumb.getBoundingClientRect().width > 40)));
+  await page.tap('.intent[data-intent="services"] .intent__row');
+  await wait(page, 1800);
+  check('intent line takes you to its section on a phone', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 90));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await wait(page, 600);
   check('desktop navigation is replaced by the menu button', await page.evaluate(() => getComputedStyle(document.querySelector('.primary-nav')).display === 'none' && getComputedStyle(document.querySelector('[data-menu-toggle]')).display !== 'none'));
   await page.tap('[data-menu-toggle]');
   await wait(page, 1500);
@@ -295,9 +329,16 @@ async function phone(browser) {
   check('menu link closes the menu and scrolls', await page.evaluate(() => document.querySelector('[data-mobile-menu]').hidden && Math.abs(document.querySelector('#communities').getBoundingClientRect().top) < 90 && !document.documentElement.classList.contains('is-locked')));
   await shot(page, 'phone-communities');
 
-  await page.evaluate(() => document.querySelector('[data-carousel-track]').scrollTo({ left: 400, behavior: 'instant' }));
-  await wait(page, 900);
-  check('carousel swipes natively and updates the active card', (await activeCommunity(page)) === 'saadiyat-island', await activeCommunity(page));
+  await goTo(page, '[data-stage]', 90);
+  const before = await activeCommunity(page);
+  const media = await page.locator('[data-stage-media]').boundingBox();
+  await page.mouse.move(media.x + media.width * 0.8, media.y + media.height * 0.5);
+  await page.mouse.down();
+  await page.mouse.move(media.x + media.width * 0.15, media.y + media.height * 0.5, { steps: 10 });
+  await page.mouse.up();
+  await wait(page, 1900);
+  const after = await activeCommunity(page);
+  check('stage swipes to the next community', after !== before && after !== undefined, { before, after });
 
   await goTo(page, '[data-search]', 90);
   await page.tap('.mode__option:has(input[value="rent"])');
@@ -382,7 +423,7 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce', query: '' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion') && !document.querySelector('[data-intro]')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community, .service, .stat__value, .orbit__node, .chapter__text')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .service, .stat__value, .orbit__node, .chapter__text')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).length);

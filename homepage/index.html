@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/begin.css">
   <link rel="stylesheet" href="css/find.css">
   <link rel="stylesheet" href="css/communities.css">
   <link rel="stylesheet" href="css/ecosystem.css">
@@ -26,6 +27,7 @@
   <link rel="stylesheet" href="css/about.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/overlays.css">
+  <link rel="stylesheet" href="css/motion.css">
 
   <script>
     /* Decide before first paint whether the animated experience runs.
@@ -363,49 +365,104 @@
       </section>
 
       <!-- ============================================================
-           Intent doors: four ways in, one per primary destination
+           Intent-led entry: four reasons to visit, one per primary destination
            ============================================================ -->
       <section class="begin" id="begin" data-section="begin" aria-labelledby="begin-title">
-        <div class="wrap">
+        <div class="wrap begin__grid" data-intents>
           <div class="begin__head">
             <p class="eyebrow" data-reveal="fade">Start here</p>
             <h2 class="begin__title" id="begin-title" data-split="lines">Where would you like to <em>begin?</em></h2>
+            <p class="begin__hint" data-reveal="fade">Four ways into Bloom. Choose the one that matches why you're here.</p>
           </div>
-          <ul class="doors" data-doors>
-            <li>
-              <a class="door" href="#find">
-                <span class="door__who">Buying or renting</span>
-                <span class="door__intent">I'm looking for a home</span>
-                <span class="door__go"><span>Find a Home</span><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="door__num" aria-hidden="true">1</span>
+
+          <div class="intents-wrap">
+          <span class="intents__marker" aria-hidden="true" data-intent-marker></span>
+          <ol class="intents" data-intent-list>
+            <li class="intent is-active" data-intent="home">
+              <a class="intent__row" href="#find" data-cursor="Open">
+                <span class="intent__num">01</span>
+                <span class="intent__body">
+                  <span class="intent__who">Buying or renting</span>
+                  <span class="intent__text"><span class="intent__line">I'm looking for a <em>home</em></span></span>
+                </span>
+                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/find-buy-560.webp" alt="" width="400" height="500" loading="lazy"></span>
+                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+                <span class="sr-only">Go to Find a Home</span>
               </a>
             </li>
-            <li>
-              <a class="door" href="#communities">
-                <span class="door__who">Choosing where to live</span>
-                <span class="door__intent">I'm exploring communities</span>
-                <span class="door__go"><span>Explore Communities</span><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="door__num" aria-hidden="true">2</span>
+            <li class="intent" data-intent="communities">
+              <a class="intent__row" href="#communities" data-cursor="Open">
+                <span class="intent__num">02</span>
+                <span class="intent__body">
+                  <span class="intent__who">Choosing where to live</span>
+                  <span class="intent__text"><span class="intent__line">I'm exploring <em>communities</em></span></span>
+                </span>
+                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/hero-lake-bridge-portrait-960.webp" alt="" width="400" height="500" loading="lazy"></span>
+                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+                <span class="sr-only">Go to Explore Communities</span>
               </a>
             </li>
-            <li>
-              <a class="door" href="#services">
-                <span class="door__who">Residents, owners, partners</span>
-                <span class="door__intent">I'm already with Bloom</span>
-                <span class="door__go"><span>Customer Services</span><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="door__num" aria-hidden="true">3</span>
+            <li class="intent" data-intent="services">
+              <a class="intent__row" href="#services" data-cursor="Open">
+                <span class="intent__num">03</span>
+                <span class="intent__body">
+                  <span class="intent__who">Residents, owners, partners</span>
+                  <span class="intent__text"><span class="intent__line">I'm already with <em>Bloom</em></span></span>
+                </span>
+                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/ecosystem-facilities-520.webp" alt="" width="400" height="500" loading="lazy"></span>
+                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+                <span class="sr-only">Go to Customer Services</span>
               </a>
             </li>
-            <li>
-              <a class="door" href="#about">
-                <span class="door__who">Investors, partners, visitors</span>
-                <span class="door__intent">I'm getting to know Bloom</span>
-                <span class="door__go"><span>About Bloom</span><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="door__num" aria-hidden="true">4</span>
+            <li class="intent" data-intent="about">
+              <a class="intent__row" href="#about" data-cursor="Open">
+                <span class="intent__num">04</span>
+                <span class="intent__body">
+                  <span class="intent__who">Investors, partners, visitors</span>
+                  <span class="intent__text"><span class="intent__line">I'm getting to know <em>Bloom</em></span></span>
+                </span>
+                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/hero-marina-portrait-820.webp" alt="" width="400" height="500" loading="lazy"></span>
+                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+                <span class="sr-only">Go to About Bloom</span>
               </a>
             </li>
-          </ul>
+          </ol>
+          </div>
+
+          <aside class="intent-view" data-intent-view aria-label="Preview">
+            <div class="intent-view__frame arch" data-intent-frame>
+              <img class="intent-view__img is-active" data-intent-image="home" src="assets/img/find-buy-900.webp" alt="Two-storey villa with arched windows (architectural render)" width="800" height="1000" loading="lazy">
+              <img class="intent-view__img" data-intent-image="communities" src="assets/img/hero-lake-bridge-portrait-960.webp" alt="Footbridge across a lake at sunset at Bloom Living (architectural render)" width="800" height="1000" loading="lazy">
+              <img class="intent-view__img" data-intent-image="services" src="assets/img/ecosystem-facilities-800.webp" alt="Bloom facilities team walking through a landscaped walkway" width="800" height="1000" loading="lazy">
+              <img class="intent-view__img" data-intent-image="about" src="assets/img/hero-marina-portrait-820.webp" alt="Marina-side buildings lit at dusk" width="800" height="1000" loading="lazy">
+              <span class="intent-view__stamp" aria-hidden="true"><span data-intent-num>01</span><i></i>04</span>
+            </div>
+            <div class="intent-view__panels" aria-live="polite">
+              <div class="intent-view__panel" data-intent-panel="home">
+                <p class="intent-view__dest">Find a Home</p>
+                <p class="intent-view__blurb">One search for buying and renting, across every Bloom community.</p>
+                <ul class="intent-view__links"><li><a href="#find" data-find data-mode="buy">Buy a home<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#find" data-find data-mode="rent">Rent a home<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
+              </div>
+              <div class="intent-view__panel" data-intent-panel="communities" hidden>
+                <p class="intent-view__dest">Explore Communities</p>
+                <p class="intent-view__blurb">Five communities across Abu Dhabi and Dubai, each with its own character.</p>
+                <ul class="intent-view__links"><li><a href="#communities" data-community-jump="zayed-city">Zayed City<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#communities" data-community-jump="saadiyat-island">Saadiyat Island<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#communities" data-community-jump="jumeirah-village-circle">Jumeirah Village Circle<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
+              </div>
+              <div class="intent-view__panel" data-intent-panel="services" hidden>
+                <p class="intent-view__dest">Customer Services</p>
+                <p class="intent-view__blurb">Service requests, payments, construction updates and more, in one place.</p>
+                <ul class="intent-view__links"><li><a href="#services" data-service-jump="community-app">Community App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#services" data-service-jump="super-app">Super App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#services" data-service-jump="partners-app">Partners App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
+              </div>
+              <div class="intent-view__panel" data-intent-panel="about" hidden>
+                <p class="intent-view__dest">About Bloom</p>
+                <p class="intent-view__blurb">Seven businesses, one idea: Curated Community Living.</p>
+                <ul class="intent-view__links"><li><a href="#ecosystem" >The ecosystem<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#life" >Life at Bloom<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#about" >Bloom in numbers<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
+              </div>
+            </div>
+          </aside>
         </div>
+      </section>
+    </div>
       </section>
     </div>
 
@@ -413,6 +470,7 @@
          03 · Find a Home
          ============================================================ -->
     <section class="section find" id="find" data-section="find" aria-labelledby="find-title">
+      <svg class="find__arches" viewBox="0 0 400 600" aria-hidden="true"><path data-drift="-0.18" d="M20 600V220a180 180 0 0 1 360 0v380"/><path data-drift="0.12" d="M90 600V250a110 110 0 0 1 220 0v350"/></svg>
       <div class="wrap find__grid">
         <div class="find__intro section-head">
           <p class="eyebrow" data-reveal="fade">Find a Home</p>
@@ -502,7 +560,7 @@
             </button>
           </div>
 
-          <div class="search__quick">
+          <div class="search__quick" data-stagger>
             <span class="search__quick-label">Try</span>
             <button type="button" class="chip" data-find data-mode="buy" data-community="zayed-city" data-type="villa">Villas to buy in Zayed City</button>
             <button type="button" class="chip" data-find data-mode="rent" data-community="jumeirah-village-circle" data-type="apartment">Apartments to rent in JVC</button>
@@ -534,119 +592,92 @@
           <h2 class="display" id="communities-title" data-split="lines">Discover communities designed around <em>life.</em></h2>
         </div>
         <div class="communities__aside">
-          <p class="lede" data-reveal="fade">Five communities across Abu Dhabi and Dubai, each with its own character. Drag to explore, then find a home in the one that fits.</p>
+          <p class="lede" data-reveal="fade">Five communities across Abu Dhabi and Dubai, each with its own character. Drag, swipe or pick one, then find a home in the one that fits.</p>
           <div class="carousel-controls" data-reveal="fade">
-            <p class="carousel-controls__count" aria-live="polite"><span class="carousel-controls__now" data-carousel-now>01</span><span class="carousel-controls__sep" aria-hidden="true"></span><span>05</span></p>
-            <button type="button" class="round-btn" aria-label="Previous community" data-carousel-prev><svg class="icon"><use href="#i-arrow"/></svg></button>
-            <button type="button" class="round-btn" aria-label="Next community" data-carousel-next><svg class="icon"><use href="#i-arrow"/></svg></button>
+            <p class="carousel-controls__count" aria-live="polite"><span class="carousel-controls__now" data-stage-now>01</span><span class="carousel-controls__sep" aria-hidden="true"><i data-stage-progress></i></span><span>05</span></p>
+            <button type="button" class="round-btn" aria-label="Previous community" data-stage-prev><svg class="icon"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="round-btn" aria-label="Next community" data-stage-next><svg class="icon"><use href="#i-arrow"/></svg></button>
           </div>
         </div>
       </div>
 
-      <div class="carousel" data-carousel>
-        <ul class="carousel__track" data-carousel-track tabindex="0" aria-label="Bloom communities, scroll sideways to explore">
-
-          <li class="community community--wide" id="community-zayed-city" data-community="zayed-city" data-name="Zayed City" data-developments="Bloom Living Abu Dhabi">
-            <figure class="community__media">
-              <img src="assets/img/community-zayed-city-800.webp" srcset="assets/img/community-zayed-city-800.webp 800w, assets/img/community-zayed-city-1400.webp 1400w" sizes="(max-width: 760px) 86vw, 52vw" width="1400" height="933" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" draggable="false">
-            </figure>
-            <div class="community__body">
-              <p class="community__index" aria-hidden="true">01</p>
-              <div class="community__main">
-                <h3 class="community__name">Zayed City</h3>
-                <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Khalifa City C, Abu Dhabi</p>
-                <p class="community__text">A new community living experience, and home to Bloom Living.</p>
-                <p class="community__devs"><span>Bloom developments</span>Bloom Living Abu Dhabi</p>
-                <div class="community__actions">
-                  <button type="button" class="link-arrow" data-demo="Zayed City community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
-                  <button type="button" class="link-arrow link-arrow--quiet" data-find data-community="zayed-city">Find a home here <svg class="icon"><use href="#i-arrow"/></svg></button>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="community community--arch" id="community-saadiyat-island" data-community="saadiyat-island" data-name="Saadiyat Island" data-developments="Park View, Soho Square">
-            <figure class="community__media">
-              <img src="assets/img/community-saadiyat-800.webp" srcset="assets/img/community-saadiyat-800.webp 800w, assets/img/community-saadiyat-1400.webp 1400w" sizes="(max-width: 760px) 86vw, 34vw" width="1400" height="933" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" draggable="false">
-            </figure>
-            <div class="community__body">
-              <p class="community__index" aria-hidden="true">02</p>
-              <div class="community__main">
-                <h3 class="community__name">Saadiyat Island</h3>
-                <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
-                <p class="community__text">Where nature meets culture, minutes from downtown.</p>
-                <p class="community__devs"><span>Bloom developments</span>Park View, Soho Square</p>
-                <div class="community__actions">
-                  <button type="button" class="link-arrow" data-demo="Saadiyat Island community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
-                  <button type="button" class="link-arrow link-arrow--quiet" data-find data-community="saadiyat-island">Find a home here <svg class="icon"><use href="#i-arrow"/></svg></button>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="community community--tall" id="community-al-bateen-marina" data-community="al-bateen-marina" data-name="Al Bateen Marina" data-developments="Bloom Marina">
-            <figure class="community__media">
-              <img src="assets/img/community-al-bateen-800.webp" srcset="assets/img/community-al-bateen-800.webp 800w, assets/img/community-al-bateen-1400.webp 1400w" sizes="(max-width: 760px) 86vw, 40vw" width="1400" height="1049" alt="Aerial view of the marina and waterfront buildings at Al Bateen" loading="lazy" draggable="false">
-            </figure>
-            <div class="community__body">
-              <p class="community__index" aria-hidden="true">03</p>
-              <div class="community__main">
-                <h3 class="community__name">Al Bateen Marina</h3>
-                <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
-                <p class="community__text">A waterfront escape from the city buzz.</p>
-                <p class="community__devs"><span>Bloom developments</span>Bloom Marina</p>
-                <div class="community__actions">
-                  <button type="button" class="link-arrow" data-demo="Al Bateen Marina community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
-                  <button type="button" class="link-arrow link-arrow--quiet" data-find data-community="al-bateen-marina">Find a home here <svg class="icon"><use href="#i-arrow"/></svg></button>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="community community--arch" id="community-jumeirah-village-circle" data-community="jumeirah-village-circle" data-name="Jumeirah Village Circle" data-developments="Bloom Towers, Bloom Heights">
-            <figure class="community__media">
-              <img src="assets/img/community-jvc-800.webp" srcset="assets/img/community-jvc-800.webp 800w, assets/img/community-jvc-1400.webp 1400w" sizes="(max-width: 760px) 86vw, 34vw" width="1400" height="934" alt="Two residential towers seen through palm fronds in Jumeirah Village Circle" loading="lazy" draggable="false">
-            </figure>
-            <div class="community__body">
-              <p class="community__index" aria-hidden="true">04</p>
-              <div class="community__main">
-                <h3 class="community__name">Jumeirah Village Circle</h3>
-                <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Dubai</p>
-                <p class="community__text">A dynamic lifestyle in the heart of JVC.</p>
-                <p class="community__devs"><span>Bloom developments</span>Bloom Towers, Bloom Heights</p>
-                <div class="community__actions">
-                  <button type="button" class="link-arrow" data-demo="Jumeirah Village Circle community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
-                  <button type="button" class="link-arrow link-arrow--quiet" data-find data-community="jumeirah-village-circle">Find a home here <svg class="icon"><use href="#i-arrow"/></svg></button>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="community community--wide" id="community-eastern-mangrove-corniche" data-community="eastern-mangrove-corniche" data-name="Eastern Mangrove Corniche" data-developments="Bloom Gardens, Faya, Aldhay">
-            <figure class="community__media">
-              <img src="assets/img/community-eastern-mangrove-800.webp" srcset="assets/img/community-eastern-mangrove-800.webp 800w, assets/img/community-eastern-mangrove-1400.webp 1400w" sizes="(max-width: 760px) 86vw, 52vw" width="1400" height="934" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" draggable="false">
-            </figure>
-            <div class="community__body">
-              <p class="community__index" aria-hidden="true">05</p>
-              <div class="community__main">
-                <h3 class="community__name">Eastern Mangrove Corniche</h3>
-                <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
-                <p class="community__text">A coveted address beside the mangroves.</p>
-                <p class="community__devs"><span>Bloom developments</span>Bloom Gardens, Faya, Aldhay</p>
-                <div class="community__actions">
-                  <button type="button" class="link-arrow" data-demo="Eastern Mangrove Corniche community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
-                  <button type="button" class="link-arrow link-arrow--quiet" data-find data-community="eastern-mangrove-corniche">Find a home here <svg class="icon"><use href="#i-arrow"/></svg></button>
-                </div>
-              </div>
-            </div>
-          </li>
-
-        </ul>
-        <div class="carousel__cursor" aria-hidden="true" data-carousel-cursor><span>Drag</span></div>
-      </div>
-
       <div class="wrap">
-        <div class="carousel-progress" aria-hidden="true"><span data-carousel-progress></span></div>
+        <div class="stage" data-stage tabindex="0" role="region" aria-roledescription="carousel" aria-label="Bloom communities. Use the left and right arrow keys to move between them." data-cursor="Drag">
+          <div class="stage__media" data-stage-media>
+            <figure class="stage__slide is-active" data-slide="zayed-city"><img src="assets/img/community-zayed-city-1400.webp" srcset="assets/img/community-zayed-city-800.webp 800w, assets/img/community-zayed-city-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 92vw" width="1400" height="933" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" draggable="false"></figure>
+            <figure class="stage__slide" data-slide="saadiyat-island"><img src="assets/img/community-saadiyat-1400.webp" srcset="assets/img/community-saadiyat-800.webp 800w, assets/img/community-saadiyat-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 92vw" width="1400" height="933" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" draggable="false"></figure>
+            <figure class="stage__slide" data-slide="al-bateen-marina"><img src="assets/img/community-al-bateen-1400.webp" srcset="assets/img/community-al-bateen-800.webp 800w, assets/img/community-al-bateen-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 92vw" width="1400" height="933" alt="Aerial view of the marina and waterfront buildings at Al Bateen" loading="lazy" draggable="false"></figure>
+            <figure class="stage__slide" data-slide="jumeirah-village-circle"><img src="assets/img/community-jvc-1400.webp" srcset="assets/img/community-jvc-800.webp 800w, assets/img/community-jvc-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 92vw" width="1400" height="933" alt="Two residential towers seen through palm fronds in Jumeirah Village Circle" loading="lazy" draggable="false"></figure>
+            <figure class="stage__slide" data-slide="eastern-mangrove-corniche"><img src="assets/img/community-eastern-mangrove-1400.webp" srcset="assets/img/community-eastern-mangrove-800.webp 800w, assets/img/community-eastern-mangrove-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 92vw" width="1400" height="933" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" draggable="false"></figure>
+            <div class="stage__shade" aria-hidden="true"></div>
+          </div>
+
+          <div class="stage__copy" data-stage-copy>
+            <article class="community is-active" id="community-zayed-city" data-community="zayed-city" data-name="Zayed City" data-developments="Bloom Living Abu Dhabi" data-thumb="assets/img/community-zayed-city-800.webp">
+              <h3 class="community__name" data-community-name>Zayed City</h3>
+              <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Khalifa City C, Abu Dhabi</p>
+              <p class="community__text">A new community living experience, and home to Bloom Living.</p>
+              <p class="community__devs"><span>Bloom developments</span>Bloom Living Abu Dhabi</p>
+              <div class="community__actions">
+                <button type="button" class="btn btn--light btn--small" data-find data-community="zayed-city"><span class="btn__label">Find a home here</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                <button type="button" class="link-arrow" data-demo="Zayed City community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+            </article>
+            <article class="community" id="community-saadiyat-island" data-community="saadiyat-island" data-name="Saadiyat Island" data-developments="Park View, Soho Square" data-thumb="assets/img/community-saadiyat-800.webp" hidden>
+              <h3 class="community__name" data-community-name>Saadiyat Island</h3>
+              <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
+              <p class="community__text">Where nature meets culture, minutes from downtown.</p>
+              <p class="community__devs"><span>Bloom developments</span>Park View, Soho Square</p>
+              <div class="community__actions">
+                <button type="button" class="btn btn--light btn--small" data-find data-community="saadiyat-island"><span class="btn__label">Find a home here</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                <button type="button" class="link-arrow" data-demo="Saadiyat Island community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+            </article>
+            <article class="community" id="community-al-bateen-marina" data-community="al-bateen-marina" data-name="Al Bateen Marina" data-developments="Bloom Marina" data-thumb="assets/img/community-al-bateen-800.webp" hidden>
+              <h3 class="community__name" data-community-name>Al Bateen Marina</h3>
+              <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
+              <p class="community__text">A waterfront escape from the city buzz.</p>
+              <p class="community__devs"><span>Bloom developments</span>Bloom Marina</p>
+              <div class="community__actions">
+                <button type="button" class="btn btn--light btn--small" data-find data-community="al-bateen-marina"><span class="btn__label">Find a home here</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                <button type="button" class="link-arrow" data-demo="Al Bateen Marina community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+            </article>
+            <article class="community" id="community-jumeirah-village-circle" data-community="jumeirah-village-circle" data-name="Jumeirah Village Circle" data-developments="Bloom Towers, Bloom Heights" data-thumb="assets/img/community-jvc-800.webp" hidden>
+              <h3 class="community__name" data-community-name>Jumeirah Village Circle</h3>
+              <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Dubai</p>
+              <p class="community__text">A dynamic lifestyle in the heart of JVC.</p>
+              <p class="community__devs"><span>Bloom developments</span>Bloom Towers, Bloom Heights</p>
+              <div class="community__actions">
+                <button type="button" class="btn btn--light btn--small" data-find data-community="jumeirah-village-circle"><span class="btn__label">Find a home here</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                <button type="button" class="link-arrow" data-demo="Jumeirah Village Circle community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+            </article>
+            <article class="community" id="community-eastern-mangrove-corniche" data-community="eastern-mangrove-corniche" data-name="Eastern Mangrove Corniche" data-developments="Bloom Gardens, Faya, Aldhay" data-thumb="assets/img/community-eastern-mangrove-800.webp" hidden>
+              <h3 class="community__name" data-community-name>Eastern Mangrove Corniche</h3>
+              <p class="community__place"><svg class="icon"><use href="#i-pin"/></svg>Abu Dhabi</p>
+              <p class="community__text">A coveted address beside the mangroves.</p>
+              <p class="community__devs"><span>Bloom developments</span>Bloom Gardens, Faya, Aldhay</p>
+              <div class="community__actions">
+                <button type="button" class="btn btn--light btn--small" data-find data-community="eastern-mangrove-corniche"><span class="btn__label">Find a home here</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                <button type="button" class="link-arrow" data-demo="Eastern Mangrove Corniche community page">Explore community <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+            </article>
+          </div>
+
+          <ol class="stage__tabs" role="tablist" aria-label="Communities" data-stage-tabs>
+            <li><button type="button" class="stage__tab is-active" role="tab" aria-selected="true" data-go="0"><span class="stage__tab-num">01</span><span class="stage__tab-name">Zayed City</span><i class="stage__tab-bar"><b></b></i></button></li>
+            <li><button type="button" class="stage__tab" role="tab" aria-selected="false" tabindex="-1" data-go="1"><span class="stage__tab-num">02</span><span class="stage__tab-name">Saadiyat Island</span><i class="stage__tab-bar"><b></b></i></button></li>
+            <li><button type="button" class="stage__tab" role="tab" aria-selected="false" tabindex="-1" data-go="2"><span class="stage__tab-num">03</span><span class="stage__tab-name">Al Bateen Marina</span><i class="stage__tab-bar"><b></b></i></button></li>
+            <li><button type="button" class="stage__tab" role="tab" aria-selected="false" tabindex="-1" data-go="3"><span class="stage__tab-num">04</span><span class="stage__tab-name">Jumeirah Village Circle</span><i class="stage__tab-bar"><b></b></i></button></li>
+            <li><button type="button" class="stage__tab" role="tab" aria-selected="false" tabindex="-1" data-go="4"><span class="stage__tab-num">05</span><span class="stage__tab-name">Eastern Mangrove Corniche</span><i class="stage__tab-bar"><b></b></i></button></li>
+          </ol>
+
+          <button type="button" class="stage__next" data-stage-peek aria-label="Next community: Saadiyat Island" data-cursor="Next">
+            <span class="stage__next-frame arch"><img data-peek-img src="assets/img/community-saadiyat-800.webp" alt="" width="800" height="533" loading="lazy" draggable="false"></span>
+            <span class="stage__next-label">Next<b data-peek-name>Saadiyat Island</b></span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -927,7 +958,7 @@
         </div>
 
         <div class="about__story">
-          <p class="about__statement" data-split="lines">We are a master developer committed to curating premium communities that provide a high standard of living.</p>
+          <p class="about__statement" data-scrub-words>We are a master developer committed to curating premium communities that provide a high standard of living.</p>
           <p class="lede" data-reveal="fade">Real estate, education, hospitality, retail, healthcare, facilities management and landscaping, working as one.</p>
           <div class="about__actions" data-reveal="fade">
             <button type="button" class="btn" data-demo="About Bloom" data-magnetic>
@@ -1061,7 +1092,7 @@
       <p class="footer__statement" aria-hidden="true" data-footer-statement><span>Curated</span> <span>Community</span> <span><em>Living</em></span></p>
 
       <div class="footer__base">
-        <ul class="footer__social" aria-label="Bloom on social media">
+        <ul class="footer__social" aria-label="Bloom on social media" data-stagger>
           <li><a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener" aria-label="Instagram (opens in a new tab)"><svg class="icon"><use href="#i-instagram"/></svg></a></li>
           <li><a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)"><svg class="icon"><use href="#i-linkedin"/></svg></a></li>
           <li><a href="https://www.facebook.com/BloomHolding" target="_blank" rel="noopener" aria-label="Facebook (opens in a new tab)"><svg class="icon"><use href="#i-facebook"/></svg></a></li>
@@ -1138,6 +1169,10 @@
       </div>
     </div>
   </dialog>
+
+  <!-- Pointer follower (mouse only) and the current-section indicator -->
+  <div class="cursor" aria-hidden="true" data-cursor-el><span class="cursor__ring"><span class="cursor__label" data-cursor-label></span></span><span class="cursor__dot"></span></div>
+  <div class="section-tag" aria-hidden="true" data-section-tag><span class="section-tag__num" data-section-tag-num>01</span><span class="section-tag__line"></span><span class="section-tag__name"><span data-section-tag-name>Start here</span></span></div>
 
   <!-- Feedback for destinations outside this prototype -->
   <div class="toast" role="status" aria-live="polite" data-toast hidden>

@@ -68,8 +68,8 @@ def build_page(html: str) -> str:
 def to_preview(page: str) -> str:
     """Point the preview's relative URLs back at the project root, one level up from dist/."""
     local = r"(?![a-z]+:|#)"
-    # data-preview holds image paths that scripts assign at runtime.
-    page = re.sub(r'((?:src|href|data-preview)=")' + local, r"\1../", page)
+    # data-preview and data-thumb hold image paths that scripts assign at runtime.
+    page = re.sub(r'((?:src|href|data-preview|data-thumb)=")' + local, r"\1../", page)
 
     def rewrite_set(match: re.Match) -> str:
         entries = [entry.strip() for entry in match.group(2).split(",")]

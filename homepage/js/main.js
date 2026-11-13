@@ -7,9 +7,13 @@ import { demoDestination } from './ui/toast.js';
 import { initEnquiry } from './ui/enquiry.js';
 import { initReveals } from './ui/reveal.js';
 import { initMagnetic, initTilt } from './ui/pointer.js';
+import { initCursor } from './ui/cursor.js';
+import { initRoll } from './ui/roll.js';
+import { initSectionTag } from './ui/sectionTag.js';
 import { playIntro } from './sections/intro.js';
 import { initHeader } from './sections/header.js';
 import { initHero } from './sections/hero.js';
+import { initIntents } from './sections/begin.js';
 import { initFind } from './sections/find.js';
 import { initCommunities } from './sections/communities.js';
 import { initEcosystem } from './sections/ecosystem.js';
@@ -69,9 +73,11 @@ function initActions() {
 
 async function start() {
   initActions();
+  initRoll();
   initEnquiry();
   initHeader();
   const hero = initHero();
+  initIntents();
   initFind();
   initCommunities();
   initEcosystem();
@@ -80,7 +86,9 @@ async function start() {
   initAbout();
   initFooter();
   initMagnetic();
-  initTilt('.door', 4);
+  initTilt('[data-intent-frame]', 4);
+  initCursor();
+  initSectionTag();
   initTilt('[data-find-figure]', 5);
 
   // Headline splitting measures text, so wait for the web fonts (briefly).

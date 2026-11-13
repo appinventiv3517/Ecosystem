@@ -1,0 +1,255 @@
+/* Page-wide motion layer: pointer follower, section indicator, rolling button labels,
+   drawn eyebrow rules and drifting arch outlines. Everything here is decoration; the
+   page reads and works the same without it. */
+
+/* ---------- Pointer follower (mouse only, set up by js/ui/cursor.js) ---------- */
+
+.cursor {
+  display: none;
+  pointer-events: none;
+}
+
+html.has-cursor .cursor {
+  display: block;
+}
+
+.cursor__ring,
+.cursor__dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: calc(var(--z-toast) + 1);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.cursor.is-visible .cursor__ring,
+.cursor.is-visible .cursor__dot {
+  opacity: 1;
+}
+
+.cursor__dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--red);
+}
+
+.cursor__ring {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: -1.25rem 0 0 -1.25rem;
+  border: 1px solid var(--red);
+  transition: opacity 300ms ease, width 480ms var(--ease-out), height 480ms var(--ease-out), margin 480ms var(--ease-out), background-color 380ms ease, border-color 380ms ease, scale 300ms var(--ease-out);
+}
+
+.cursor.is-hover .cursor__ring {
+  width: 4rem;
+  height: 4rem;
+  margin: -2rem 0 0 -2rem;
+  background: rgba(150, 43, 35, 0.1);
+}
+
+.cursor.has-label .cursor__ring {
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: -2.75rem 0 0 -2.75rem;
+  background: var(--red);
+}
+
+.cursor.has-label .cursor__dot,
+.cursor.is-hover .cursor__dot {
+  opacity: 0;
+}
+
+.cursor__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 300ms ease, transform 480ms var(--ease-out);
+}
+
+.cursor.has-label .cursor__label {
+  opacity: 1;
+  transform: none;
+}
+
+/* Over photographs and dark or red sections the follower turns cream. */
+.cursor.is-light .cursor__ring {
+  border-color: var(--cream);
+}
+
+.cursor.is-light .cursor__dot {
+  background: var(--cream);
+}
+
+.cursor.is-light.is-hover .cursor__ring {
+  background: rgba(248, 246, 234, 0.14);
+}
+
+.cursor.is-light.has-label .cursor__ring {
+  background: var(--cream);
+}
+
+.cursor.is-light.has-label .cursor__label {
+  color: var(--red);
+}
+
+.cursor.is-down .cursor__ring {
+  scale: 0.82;
+}
+
+/* ---------- Current-section indicator (wide screens) ---------- */
+
+.section-tag {
+  position: fixed;
+  left: calc(max(var(--gutter), env(safe-area-inset-left, 0px)) / 2 - 0.45rem);
+  bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  z-index: calc(var(--z-header) - 2);
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  transition: opacity 420ms ease, transform 620ms var(--ease-out), color 420ms ease;
+}
+
+.section-tag.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.section-tag.is-light {
+  color: var(--cream);
+}
+
+.section-tag__num,
+.section-tag__name {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.section-tag__num {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--red);
+}
+
+.section-tag.is-light .section-tag__num {
+  color: inherit;
+}
+
+.section-tag__name span {
+  display: inline-block;
+}
+
+.section-tag__line {
+  width: 1px;
+  height: 2rem;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+html.motion .section-tag {
+  display: flex;
+}
+
+@media (max-width: 1099px) {
+  html.motion .section-tag {
+    display: none;
+  }
+}
+
+/* ---------- Rolling labels: a second copy of the text rolls up on hover ---------- */
+
+.roll {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+
+.roll__inner {
+  position: relative;
+  display: block;
+  transition: transform 620ms var(--ease-out);
+}
+
+.roll__inner > span {
+  display: block;
+}
+
+/* The copy waits just below the clip, a little further than the clip's padding. */
+.roll__inner > span + span {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.3em);
+}
+
+@media (hover: hover) {
+  .btn:hover .roll__inner,
+  .nav-item__link:hover .roll__inner,
+  a:focus-visible .roll__inner {
+    transform: translateY(calc(-100% - 0.3em));
+  }
+}
+
+/* ---------- Eyebrow rules draw across as they arrive (js/ui/reveal.js) ---------- */
+
+.eyebrow::before {
+  transform: scaleX(var(--draw, 1));
+}
+
+/* ---------- Arch outlines drifting behind the search ---------- */
+
+.find__arches {
+  position: absolute;
+  right: -3vw;
+  top: 4%;
+  z-index: 0;
+  width: min(34vw, 30rem);
+  height: auto;
+  fill: none;
+  stroke: var(--beige);
+  stroke-width: 1.25;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.find__arches path {
+  vector-effect: non-scaling-stroke;
+}
+
+.find__grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* The outlines lean past the right edge; clip sideways only, so dropdowns can still hang below. */
+.find {
+  overflow-x: clip;
+}
+
+@media (max-width: 900px) {
+  .find__arches {
+    display: none;
+  }
+}

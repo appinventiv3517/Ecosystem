@@ -508,3 +508,10 @@ html.motion [data-split] {
     scroll-behavior: auto !important;
   }
 }
+
+/* Text links are comfortable to tap on phones. */
+@media (max-width: 760px) {
+  .link-arrow {
+    min-height: 2.75rem;
+  }
+}

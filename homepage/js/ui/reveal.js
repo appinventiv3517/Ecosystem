@@ -63,6 +63,50 @@ export function initReveals() {
     if (image) timeline.fromTo(image, { scale: 1.3 }, { scale: 1, duration: 1.8, ease: EASE.out }, 0);
   });
 
+  // Eyebrow rules draw across before their label settles.
+  $$('.eyebrow').forEach((element) => {
+    gsap.fromTo(element, { '--draw': 0 }, {
+      '--draw': 1,
+      duration: 1.2,
+      ease: EASE.inOut,
+      scrollTrigger: { trigger: element, start: 'top 92%', once: true },
+    });
+  });
+
+  // Statements that fill in word by word as they scroll through the screen.
+  $$('[data-scrub-words]').forEach((element) => {
+    if (!SplitText) return;
+    const { words } = SplitText.create(element, { type: 'words' });
+    gsap.fromTo(words, { opacity: 0.16 }, {
+      opacity: 1,
+      stagger: 0.1,
+      ease: 'none',
+      scrollTrigger: { trigger: element, start: 'top 85%', end: 'bottom 50%', scrub: true },
+    });
+  });
+
+  // Groups whose children arrive one after another.
+  $$('[data-stagger]').forEach((group) => {
+    gsap.fromTo([...group.children], { autoAlpha: 0, y: 16 }, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.7,
+      stagger: 0.06,
+      ease: EASE.soft,
+      scrollTrigger: { trigger: group, start: 'top 94%', once: true },
+    });
+  });
+
+  // Decorative outlines that drift against the scroll at their own speed.
+  $$('[data-drift]').forEach((element) => {
+    const amount = parseFloat(element.dataset.drift) || 0.1;
+    gsap.fromTo(element, { yPercent: -amount * 100 }, {
+      yPercent: amount * 100,
+      ease: 'none',
+      scrollTrigger: { trigger: element.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+  });
+
   $$('[data-parallax]').forEach((element) => {
     const amount = parseFloat(element.dataset.parallax) || 0.1;
     gsap.fromTo(
