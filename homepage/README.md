@@ -9,6 +9,7 @@ npm start          # http://localhost:4173
 npm test           # browser checks: desktop, tablet, phone, intro, reduced motion
 npm run images     # rebuild assets/img from assets/img/manifest.json
 npm run artifact   # prepare the page for publishing as a Claude Artifact
+npm run standalone # one self-contained file: dist/bloom-homepage.html
 ```
 
 Published for review at <https://claude.ai/artifact/DntWyZ7vHFeYHKbwEbYNL4> — private to the
@@ -118,6 +119,18 @@ PAGE_URL=http://localhost:4173/dist/preview.html npm test
 
 Publishing is one `Artifact` call: `dist/artifact-index.html` as the page and the paths in
 `dist/files.json` as its files. Republishing the same path updates the same URL.
+
+## One-file copy
+
+`npm run standalone` writes `dist/bloom-homepage.html`, a single file that opens straight from
+disk with no server. Stylesheets, GSAP and the page's modules are inlined (the modules bundled
+by a small built-in bundler in `tools/build_standalone.py`), and every picture is embedded once,
+keeping the largest size up to 1400px wide. Only the Google Fonts request goes out; offline the
+page uses the fallback fonts in `css/tokens.css`. To check it:
+
+```sh
+PAGE_URL=file://$PWD/dist/bloom-homepage.html npm test
+```
 
 ## Checks
 
