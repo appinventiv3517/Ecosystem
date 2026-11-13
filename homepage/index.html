@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=DM+Sans:wght@400..700&display=swap">
 
-  <link rel="preload" as="image" href="assets/img/hero-lakeside-villas-1600.webp" imagesrcset="assets/img/hero-lakeside-villas-1600.webp 1600w, assets/img/hero-lakeside-villas-2400.webp 2400w" imagesizes="100vw" media="(min-width: 761px), (orientation: landscape)">
+  <link rel="preload" as="image" href="assets/img/ecosystem-real-estate-card-560.webp" imagesrcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" imagesizes="(max-width: 760px) 40vw, 22vw">
 
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -72,13 +72,13 @@
     <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 3.5v10.8a3.7 3.7 0 1 1-3.7-3.7M14 3.5c.3 2.6 2 4.3 4.5 4.6"/></symbol>
   </svg>
 
-  <!-- Brand-led intro: the wordmark, then an arch that opens into the hero -->
+  <!-- Brand-led intro: three arches rise while the page loads, then bloom open into the hero wheel -->
   <div class="intro" data-intro aria-hidden="true">
     <img class="intro__mark" src="assets/brand/wordmark-red.png" alt="" width="762" height="237" data-intro-mark>
     <div class="intro__arches">
-      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/vignette-education-520.webp" alt="" width="520" height="694"></span>
-      <span class="intro__arch intro__arch--centre" data-intro-arch><img src="assets/img/community-zayed-city-800.webp" alt="" width="800" height="533"></span>
-      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/life-2b-480.webp" alt="" width="480" height="800"></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/hero-lakeside-villas-card-560.webp" alt="" width="560" height="757"></span>
+      <span class="intro__arch intro__arch--centre" data-intro-arch><img src="assets/img/ecosystem-real-estate-card-560.webp" alt="" width="560" height="757"></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/community-al-bateen-card-560.webp" alt="" width="560" height="757"></span>
     </div>
     <p class="intro__words" data-intro-words><span>Curated</span><i></i><span>Community</span><i></i><span>Living</span></p>
     <div class="intro__count"><span data-intro-count>0</span><small>%</small></div>
@@ -291,67 +291,115 @@
            02 · Immersive hero
            ============================================================ -->
       <section class="hero" id="top" data-section="hero" data-hero aria-label="Curated Community Living">
-        <div class="hero__copy wrap" data-hero-content>
-          <p class="hero__eyebrow" data-hero-eyebrow><span class="hero__pulse" aria-hidden="true"></span>A diversified master developer · Abu Dhabi &amp; Dubai</p>
-          <h1 class="hero__title" data-hero-title>
-            <span class="hero__line"><span class="hero__word">Curated</span><span class="hero-pic hero-pic--arch" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/vignette-education-520.webp" alt="" width="520" height="694" data-label="Education" draggable="false"><img src="assets/img/vignette-hospitality-520.webp" alt="" width="520" height="693" data-label="Hospitality" draggable="false"><img src="assets/img/vignette-landscape-520.webp" alt="" width="520" height="693" data-label="Landscaping" draggable="false"></span><span class="hero-pic__tag" data-chip-tag>Education</span></span></span>
-            <span class="hero__line"><span class="hero-pic hero-pic--pill" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/community-zayed-city-800.webp" alt="" width="800" height="533" data-label="Zayed City" draggable="false"><img src="assets/img/community-al-bateen-800.webp" alt="" width="800" height="600" data-label="Al Bateen Marina" draggable="false"><img src="assets/img/community-jvc-800.webp" alt="" width="800" height="534" data-label="Jumeirah Village Circle" draggable="false"></span><span class="hero-pic__tag" data-chip-tag>Zayed City</span></span><span class="hero__word">Community</span></span>
-            <span class="hero__line"><span class="hero__word"><em>Living</em></span><span class="hero-pic hero-pic--round" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/life-2b-480.webp" alt="" width="480" height="800" data-label="" draggable="false"><img src="assets/img/life-3b-480.webp" alt="" width="480" height="800" data-label="" draggable="false"><img src="assets/img/life-1a-460.webp" alt="" width="460" height="697" data-label="" draggable="false"></span></span></span>
-          </h1>
-          <div class="hero__aside">
-            <p class="hero__lede" data-hero-lede>Discover thoughtfully curated places, experiences and communities that bring everyday living together.</p>
-            <div class="hero__actions" data-hero-actions>
-              <a class="btn" href="#find" data-magnetic>
-                <span class="btn__label">Find a Home</span>
-                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-              </a>
-              <a class="btn btn--outline" href="#communities" data-magnetic>
-                <span class="btn__label">Explore Communities</span>
-                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-              </a>
-            </div>
+        <!-- The bloom: Bloom's seven businesses and its communities set on a slowly turning wheel of arches.
+             The arch at the top is the one in focus; drag, click or let it turn on its own. -->
+        <div class="bloom" data-bloom data-cursor="Drag">
+          <div class="bloom__glow" aria-hidden="true"></div>
+          <svg class="bloom__dial" aria-hidden="true" data-bloom-dial></svg>
+          <div class="bloom__petals" role="group" aria-label="Bloom's businesses and communities" data-bloom-petals>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="real-estate" aria-label="Real Estate: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-real-estate-card-560.webp" srcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" fetchpriority="high" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 01</small>Real Estate</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="community" data-id="al-bateen-marina" aria-label="Al Bateen Marina: explore this community">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/community-al-bateen-card-560.webp" srcset="assets/img/community-al-bateen-card-560.webp 560w, assets/img/community-al-bateen-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
+                <span class="petal__label"><small>Community</small>Al Bateen Marina</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="education" aria-label="Education: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-education-card-560.webp" srcset="assets/img/ecosystem-education-card-560.webp 560w, assets/img/ecosystem-education-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 02</small>Education</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="community" data-id="zayed-city" aria-label="Zayed City: explore this community">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/community-zayed-city-card-560.webp" srcset="assets/img/community-zayed-city-card-560.webp 560w, assets/img/community-zayed-city-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Community</small>Zayed City</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="hospitality" aria-label="Hospitality: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-hospitality-card-560.webp" srcset="assets/img/ecosystem-hospitality-card-560.webp 560w, assets/img/ecosystem-hospitality-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 03</small>Hospitality</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="community" data-id="saadiyat-island" aria-label="Saadiyat Island: explore this community">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/community-saadiyat-card-560.webp" srcset="assets/img/community-saadiyat-card-560.webp 560w, assets/img/community-saadiyat-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Community</small>Saadiyat Island</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="retail" aria-label="Retail: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-retail-card-560.webp" srcset="assets/img/ecosystem-retail-card-560.webp 560w, assets/img/ecosystem-retail-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 04</small>Retail</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="life" data-id="life" aria-label="Life at Bloom: see life at Bloom">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/life-3b-card-560.webp" srcset="assets/img/life-3b-card-560.webp 560w, assets/img/life-3b-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Everyday</small>Life at Bloom</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="healthcare" aria-label="Healthcare: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-healthcare-card-560.webp" srcset="assets/img/ecosystem-healthcare-card-560.webp 560w, assets/img/ecosystem-healthcare-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 05</small>Healthcare</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="community" data-id="jumeirah-village-circle" aria-label="Jumeirah Village Circle: explore this community">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/community-jvc-card-560.webp" srcset="assets/img/community-jvc-card-560.webp 560w, assets/img/community-jvc-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Community</small>Jumeirah Village Circle</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="facilities-management" aria-label="Facilities Management: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-facilities-card-560.webp" srcset="assets/img/ecosystem-facilities-card-560.webp 560w, assets/img/ecosystem-facilities-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 06</small>Facilities Management</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="community" data-id="eastern-mangrove-corniche" aria-label="Eastern Mangrove Corniche: explore this community">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/community-eastern-mangrove-card-560.webp" srcset="assets/img/community-eastern-mangrove-card-560.webp 560w, assets/img/community-eastern-mangrove-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
+                <span class="petal__label"><small>Community</small>Eastern Mangrove Corniche</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="business" data-id="landscaping" aria-label="Landscaping: see this business">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/ecosystem-landscape-card-560.webp" srcset="assets/img/ecosystem-landscape-card-560.webp 560w, assets/img/ecosystem-landscape-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
+                <span class="petal__label"><small>Business 07</small>Landscaping</span>
+              </span>
+            </button>
+            <button class="petal" type="button" data-petal data-kind="life" data-id="life" aria-label="Bloom Living: see life at Bloom">
+              <span class="petal__body" data-petal-body>
+                <img src="assets/img/hero-lakeside-villas-card-560.webp" srcset="assets/img/hero-lakeside-villas-card-560.webp 560w, assets/img/hero-lakeside-villas-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
+                <span class="petal__label"><small>Everyday</small>Bloom Living</span>
+              </span>
+            </button>
           </div>
         </div>
 
-        <!-- The photograph window: peeks up from the foot of the screen, then grows to fill it as you scroll -->
-        <div class="hero__window" data-hero-window>
-          <a class="scroll-badge" href="#begin" aria-label="Scroll to start exploring" data-scroll-badge>
-            <svg class="scroll-badge__ring" viewBox="0 0 120 120" aria-hidden="true" data-badge-ring>
-              <defs><path id="badge-path" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0"/></defs>
-              <text><textPath href="#badge-path" textLength="292" lengthAdjust="spacing">Scroll to explore · Curated Community Living · </textPath></text>
-            </svg>
-            <span class="scroll-badge__core" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-          </a>
-          <div class="hero__frame" data-hero-frame>
-            <div class="hero__media" data-hero-media>
-          <picture class="hero__slide is-active" data-hero-slide data-caption="Bloom Living, Abu Dhabi">
-            <source media="(max-width: 760px) and (orientation: portrait)" srcset="assets/img/hero-lakeside-villas-portrait-1000.webp">
-            <img src="assets/img/hero-lakeside-villas-1600.webp" srcset="assets/img/hero-lakeside-villas-1600.webp 1600w, assets/img/hero-lakeside-villas-2400.webp 2400w" sizes="100vw" width="2400" height="1359" alt="Villas along a landscaped lake edge in a Bloom community (architectural render)" fetchpriority="high" decoding="async">
-          </picture>
-          <picture class="hero__slide" data-hero-slide data-caption="Al Bateen Marina, Abu Dhabi">
-            <source media="(max-width: 760px) and (orientation: portrait)" srcset="assets/img/hero-marina-portrait-820.webp">
-            <img src="assets/img/hero-marina-1400.webp" srcset="assets/img/hero-marina-1400.webp 1400w, assets/img/hero-marina-2000.webp 2000w" sizes="100vw" width="2000" height="1150" alt="Marina-side buildings lit at dusk, with boats in the foreground" loading="lazy" decoding="async">
-          </picture>
-          <picture class="hero__slide" data-hero-slide data-caption="Bloom Living, Zayed City">
-            <source media="(max-width: 760px) and (orientation: portrait)" srcset="assets/img/hero-lake-bridge-portrait-960.webp">
-            <img src="assets/img/hero-lake-bridge-1400.webp" srcset="assets/img/hero-lake-bridge-1400.webp 1400w, assets/img/hero-lake-bridge-2000.webp 2000w" sizes="100vw" width="2000" height="1333" alt="Footbridge across a lake at sunset at Bloom Living (architectural render)" loading="lazy" decoding="async">
-          </picture>
-          <div class="hero__shade" aria-hidden="true"></div>
-            </div>
-            <div class="hero__foot" data-hero-foot>
-          <div class="hero__slides" data-hero-controls>
-            <p class="hero__caption" data-hero-caption aria-live="off">Bloom Living, Abu Dhabi</p>
-            <div class="hero__dots" role="group" aria-label="Hero images">
-              <button type="button" class="hero__dot is-active" aria-label="Show image 1 of 3" data-hero-dot="0"><img src="assets/img/hero-lakeside-villas-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
-              <button type="button" class="hero__dot" aria-label="Show image 2 of 3" data-hero-dot="1"><img src="assets/img/hero-marina-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
-              <button type="button" class="hero__dot" aria-label="Show image 3 of 3" data-hero-dot="2"><img src="assets/img/hero-lake-bridge-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
-            </div>
-            <button type="button" class="hero__pause" aria-pressed="false" aria-label="Pause image rotation" data-hero-pause>
-              <svg class="icon" data-icon-pause><use href="#i-pause"/></svg>
-              <svg class="icon" data-icon-play hidden><use href="#i-play"/></svg>
-            </button>
-          </div>
-            </div>
+        <div class="hero__copy" data-hero-content>
+          <p class="hero__eyebrow" data-hero-eyebrow><span class="hero__pulse" aria-hidden="true"></span>A diversified master developer · Abu Dhabi &amp; Dubai</p>
+          <h1 class="hero__title" data-hero-title>
+            <span class="hero__line"><span class="hero__word">Curated</span></span>
+            <span class="hero__line"><span class="hero__word">Community</span> <span class="hero__word"><em>Living</em></span></span>
+          </h1>
+          <p class="hero__lede" data-hero-lede>Discover thoughtfully curated places, experiences and communities that bring everyday living together.</p>
+          <div class="hero__actions" data-hero-actions>
+            <a class="btn" href="#find" data-magnetic>
+              <span class="btn__label">Find a Home</span>
+              <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+            </a>
+            <a class="btn btn--outline" href="#communities" data-magnetic>
+              <span class="btn__label">Explore Communities</span>
+              <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+            </a>
           </div>
         </div>
       </section>

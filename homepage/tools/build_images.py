@@ -3,8 +3,8 @@
 
 Every image the prototype uses is listed in the manifest with the page on
 bloomholding.com it came from. This script downloads each original once into
-tools/originals/ (ignored by git), crops it around its focal point and writes
-the .webp sizes the page references.
+tools/originals/ (ignored by git), crops it around its focal point, applies the warm cream
+grade from tools/grade.py and writes the .webp sizes the page references.
 
     python3 tools/build_images.py            # build anything that is missing
     python3 tools/build_images.py --force    # rebuild everything
@@ -20,6 +20,8 @@ import subprocess
 import sys
 
 from PIL import Image
+
+from grade import finish, warm_grade
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 IMG = ROOT / "assets" / "img"
@@ -73,11 +75,14 @@ def main():
                 if out.exists() and not args.force:
                     continue
                 if source is None:
+                    # Every photograph gets the warm cream grade (tools/grade.py) unless the manifest opts out.
                     source = Image.open(original_for(item)).convert("RGB")
+                    if item.get("grade", True):
+                        source = warm_grade(source)
                 frame = crop_to(source, variant["ratio"], variant["focus"])
                 if frame.width > width:
-                    frame = frame.resize((width, round(frame.height * width / frame.width)), Image.LANCZOS)
-                frame.save(out, "WEBP", quality=80, method=6)
+                    frame = finish(frame.resize((width, round(frame.height * width / frame.width)), Image.LANCZOS))
+                frame.save(out, "WEBP", quality=86, method=6)
                 built += 1
                 print(f"{out.name:44} {frame.width}x{frame.height} {out.stat().st_size // 1024} KB")
     print(f"built {built} file(s)")

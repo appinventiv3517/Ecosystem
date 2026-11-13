@@ -70,18 +70,20 @@ const toastText = (page) => page.evaluate(() => {
 async function desktop(browser) {
   console.log('\nDesktop 1440 x 900');
   const { context, page, problems } = await open(browser, { width: 1440, height: 900 });
+  await wait(page, 2600); // the wheel blooms open on arrival
   await shot(page, 'desktop-hero');
 
   // Header and scrolling
   check('hero headline is dark on cream and readable', await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).backgroundColor === 'rgb(248, 246, 234)' && getComputedStyle(document.querySelector('.hero__title')).color === 'rgb(29, 26, 23)'));
-  check('headline carries three pictures at word size', await page.evaluate(() => [...document.querySelectorAll('[data-chip]')].every((chip) => chip.getBoundingClientRect().height > 60)));
-  check('photograph window peeks up from the foot of the screen', await page.evaluate(() => { const top = document.querySelector('[data-hero-frame]').getBoundingClientRect().top; return top > innerHeight * 0.5 && top < innerHeight - 60; }));
-  const firstPictures = await page.evaluate(() => [...document.querySelectorAll('[data-chip] img.is-active')].map((image) => image.getAttribute('src')).join());
-  await wait(page, 4200);
-  check('headline pictures change on their own', (await page.evaluate(() => [...document.querySelectorAll('[data-chip] img.is-active')].map((image) => image.getAttribute('src')).join())) !== firstPictures);
+  check('the wheel shows at least five arches on screen', await page.evaluate(() => [...document.querySelectorAll('[data-petal]')].filter((petal) => { const box = petal.getBoundingClientRect(); return getComputedStyle(petal).opacity > 0.9 && box.width > 150 && box.right > 0 && box.left < innerWidth && box.top < innerHeight; }).length >= 5));
+  check('the arch in focus sits at the top, centred and named', await page.evaluate(() => { const petal = document.querySelector('[data-petal].is-focus'); const box = petal.getBoundingClientRect(); return Math.abs(box.left + box.width / 2 - innerWidth / 2) < 4 && box.top < innerHeight * 0.2 && getComputedStyle(petal.querySelector('.petal__label')).opacity > 0.95; }));
+  check('the headline sits clear of the arches', await page.evaluate(() => { const title = document.querySelector('.hero__title').getBoundingClientRect(); return [...document.querySelectorAll('[data-petal]')].every((petal) => { const box = petal.querySelector('img').getBoundingClientRect(); const inner = { left: box.left + box.width * 0.3, right: box.right - box.width * 0.3, top: box.top + box.height * 0.3, bottom: box.bottom - box.height * 0.3 }; return inner.right < title.left || inner.left > title.right || inner.bottom < title.top || inner.top > title.bottom; }); }));
+  const firstFocus = await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id);
+  await wait(page, 5600);
+  check('the wheel turns to the next arch on its own', (await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id)) !== firstFocus);
   await page.evaluate(() => window.scrollTo({ top: innerHeight, behavior: 'instant' }));
   await wait(page, 2200);
-  check('scrolling grows the window to fill the screen', await page.evaluate(() => { const frame = document.querySelector('[data-hero-frame]').getBoundingClientRect(); return Math.abs(frame.top) < 2 && getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05; }));
+  check('scrolling opens the wheel outwards and lifts the headline away', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05 && [...document.querySelectorAll('[data-petal]')].every((petal) => { const box = petal.getBoundingClientRect(); return box.bottom < innerHeight * 0.55 || box.top > innerHeight || box.left > innerWidth * 0.6 || box.right < innerWidth * 0.4 || getComputedStyle(petal).opacity < 0.05; })));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 1500);
   await page.click('.primary-nav a[href="#services"]');
@@ -303,11 +305,25 @@ async function desktop(browser) {
   // Hero controls
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 600);
-  await page.click('[data-hero-dot="1"]');
-  await wait(page, 1900);
-  check('hero image changes on demand', await page.evaluate(() => document.querySelectorAll('[data-hero-slide]')[1].classList.contains('is-active') && document.querySelector('[data-hero-caption]').textContent === 'Al Bateen Marina, Abu Dhabi'));
-  await page.click('[data-hero-pause]');
-  check('hero rotation can be paused', await page.evaluate(() => document.querySelector('[data-hero-pause]').getAttribute('aria-pressed') === 'true'));
+  // Pick the business two steps round to the right and click it: it turns to the top.
+  const target = await page.evaluate(() => { const petals = [...document.querySelectorAll('[data-petal]')]; const now = petals.findIndex((petal) => petal.classList.contains('is-focus')); const next = petals.findIndex((petal, i) => i > now && petal.dataset.kind === 'business' && i - now <= 3); return next; });
+  await page.click(`[data-petal] >> nth=${target}`, { force: true });
+  await wait(page, 1700);
+  check('clicking an arch turns it to the top', await page.evaluate((i) => document.querySelectorAll('[data-petal]')[i].classList.contains('is-focus'), target));
+  const business = await page.evaluate((i) => document.querySelectorAll('[data-petal]')[i].dataset.id, target);
+  await page.click(`[data-petal] >> nth=${target}`, { force: true });
+  await wait(page, 2200);
+  check('clicking the arch in focus opens that business in the ecosystem', (await activeVertical(page)) === business && await page.evaluate(() => { const box = document.querySelector('#ecosystem').getBoundingClientRect(); return box.top < innerHeight * 0.5 && box.bottom > innerHeight * 0.5; }));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await wait(page, 900);
+  const before = await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id);
+  await page.mouse.move(1000, 260);
+  await page.mouse.down();
+  await page.mouse.move(820, 262, { steps: 6 });
+  await page.mouse.move(600, 265, { steps: 6 });
+  await page.mouse.up();
+  await wait(page, 2000);
+  check('dragging turns the wheel', (await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id)) !== before);
   await page.click('.hero__actions a[href="#find"]');
   await wait(page, 1600);
   check('hero "Find a Home" scrolls to the search', await page.evaluate(() => document.querySelector('#find').getBoundingClientRect().top < 120));
@@ -345,7 +361,10 @@ async function intro(browser) {
 async function phone(browser) {
   console.log('\nPhone 390 x 844 (touch)');
   const { context, page, problems } = await open(browser, { width: 390, height: 844, touch: true });
+  await wait(page, 2600);
   await shot(page, 'phone-hero');
+  check('phone: headline and both buttons fit on the first screen', await page.evaluate(() => [...document.querySelectorAll('.hero__title, [data-hero-actions] .btn')].every((element) => { const box = element.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && box.bottom <= innerHeight; })));
+  check('phone: three arches show across the top', await page.evaluate(() => [...document.querySelectorAll('[data-petal]')].filter((petal) => { const box = petal.getBoundingClientRect(); return getComputedStyle(petal).opacity > 0.9 && box.right > 40 && box.left < innerWidth - 40 && box.top < innerHeight * 0.45; }).length >= 3));
   await goTo(page, '[data-intents]', 90);
   check('each intent shows its own picture on a phone', await page.evaluate(() => [...document.querySelectorAll('.intent__thumb')].every((thumb) => thumb.getBoundingClientRect().width > 40)));
   await page.tap('.intent[data-intent="services"] .intent__row');

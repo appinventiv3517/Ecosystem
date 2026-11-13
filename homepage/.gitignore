@@ -2,3 +2,4 @@ tools/originals/
 node_modules/
 tests/output/
 dist/
+__pycache__/

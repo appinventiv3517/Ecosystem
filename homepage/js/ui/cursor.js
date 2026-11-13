@@ -7,7 +7,7 @@ import { $, finePointer } from '../lib/dom.js';
 import { gsap, motionOK } from '../lib/motion.js';
 
 const INTERACTIVE = 'a, button, label, input, textarea, [role="option"], [role="tab"]';
-const LIGHT = '.on-dark, .on-red, .hero__frame, .stage__media, .stage__copy, .stage__tabs, .stage__next';
+const LIGHT = '.on-dark, .on-red, .stage__media, .stage__copy, .stage__tabs, .stage__next';
 
 export function initCursor() {
   if (!motionOK || !finePointer()) return;

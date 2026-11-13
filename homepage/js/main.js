@@ -101,8 +101,8 @@ async function start() {
     window.addEventListener('load', () => ScrollTrigger.refresh());
   }
 
-  await playIntro();
-  hero.start();
+  const bloomed = await playIntro(hero);
+  hero.start({ bloomed });
   document.documentElement.classList.add('is-ready');
 }
 
