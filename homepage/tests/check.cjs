@@ -277,10 +277,18 @@ async function desktop(browser) {
   await page.mouse.move(700, 600);
   await page.mouse.wheel(0, 500);
   await wait(page, 900);
-  check('header hides while scrolling down', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-hidden')));
+  check('capsule squeezes to logo, Menu and Enquire while scrolling down', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-condensed') && getComputedStyle(document.querySelector('.primary-nav')).display === 'none' && getComputedStyle(document.querySelector('[data-nav-pill]')).display !== 'none'));
+  await page.click('[data-nav-pill]');
+  await wait(page, 900);
+  check('Menu pill opens the capsule back out', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-condensed') && getComputedStyle(document.querySelector('.primary-nav')).display !== 'none'));
+  await page.mouse.move(700, 600);
+  await page.mouse.wheel(0, 400);
+  await wait(page, 900);
   await page.mouse.wheel(0, -300);
   await wait(page, 900);
-  check('header returns when scrolling up', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-hidden')));
+  check('capsule opens back out when scrolling up', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-condensed')));
+  check('capsule hugs its contents in the middle of the screen', await page.evaluate(() => { const b = document.querySelector('.site-header__bar').getBoundingClientRect(); return b.width < innerWidth * 0.85 && Math.abs(b.left + b.width / 2 - innerWidth / 2) < 3; }));
+  check('label and arrow have space between them', await page.evaluate(() => { const item = document.querySelector('[data-nav-item="communities"]'); return item.querySelector('.nav-item__toggle').getBoundingClientRect().left - item.querySelector('.nav-item__link').getBoundingClientRect().right >= 5; }));
 
   // Section dock
   await page.click('[data-dock-toggle]');
