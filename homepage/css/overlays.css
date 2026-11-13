@@ -41,7 +41,10 @@
 .enquiry__panel {
   position: relative;
   min-height: 100%;
-  padding: clamp(4.5rem, 8vh, 6rem) clamp(1.5rem, 3vw, 3rem) clamp(2rem, 4vh, 3rem);
+  padding-top: calc(clamp(4.5rem, 8vh, 6rem) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(clamp(2rem, 4vh, 3rem) + env(safe-area-inset-bottom, 0px));
+  padding-left: max(clamp(1.5rem, 3vw, 3rem), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(1.5rem, 3vw, 3rem), env(safe-area-inset-right, 0px));
 }
 
 .enquiry__close {

@@ -8,7 +8,11 @@ Homepage only: inner pages, search results and the Arabic site are out of scope.
 npm start          # http://localhost:4173
 npm test           # browser checks: desktop, tablet, phone, intro, reduced motion
 npm run images     # rebuild assets/img from assets/img/manifest.json
+npm run artifact   # prepare the page for publishing as a Claude Artifact
 ```
+
+Published for review at <https://claude.ai/artifact/DntWyZ7vHFeYHKbwEbYNL4> — private to the
+owner until it is shared from the page's Share menu.
 
 `npm start` needs nothing installed. `npm test` needs Playwright with Chromium;
 `npm run images` needs Python with Pillow.
@@ -100,6 +104,21 @@ downloads each original into `tools/originals/` (git-ignored), crops it around a
 writes the `.webp` sizes the page uses. To replace one, change its `source_url` (or drop a file
 named `<name>.<ext>` into `tools/originals/`) and run `npm run images -- --force`.
 
+## Publishing
+
+`npm run artifact` writes three files into `dist/` (ignored by git): `artifact-index.html`,
+the page without its document skeleton, which the artifact host supplies; `preview.html`, the
+same content inside a copy of that skeleton so it can be tested locally; and `files.json`, the
+105 supporting files to publish alongside it. To check that build before publishing:
+
+```sh
+npm start
+PAGE_URL=http://localhost:4173/dist/preview.html npm test
+```
+
+Publishing is one `Artifact` call: `dist/artifact-index.html` as the page and the paths in
+`dist/files.json` as its files. Republishing the same path updates the same URL.
+
 ## Checks
 
 `npm test` drives a real browser through every interaction the brief lists: header states and
@@ -111,7 +130,8 @@ enquiry panel including validation, the counting figures, the language switch, d
 feedback, and back to top. It also asserts no horizontal overflow, no broken images, no console
 errors, touch targets of at least 40px, and that nothing stays hidden under reduced motion.
 
-`SHOTS=1 npm test` writes screenshots to `tests/output/`.
+`SHOTS=1 npm test` writes screenshots to `tests/output/`, and `PAGE_URL=…` points the same
+checks at another build of the page, such as the artifact preview above.
 
 ## Known gaps
 

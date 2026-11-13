@@ -12,6 +12,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const BASE = process.env.BASE_URL || 'http://localhost:4173';
+// PAGE_URL points the checks at another build of the same page (see tools/build_artifact.py).
+const PAGE = process.env.PAGE_URL || `${BASE}/`;
 const SHOTS = Boolean(process.env.SHOTS);
 const OUT = path.join(__dirname, 'output');
 const results = [];
@@ -43,7 +45,7 @@ async function open(browser, { width, height, touch = false, query = '?intro=off
   page.on('console', (message) => message.type() === 'error' && problems.push(message.text()));
   page.on('pageerror', (error) => problems.push(error.message));
   page.on('response', (response) => response.status() >= 400 && problems.push(`${response.status()} ${response.url()}`));
-  await page.goto(`${BASE}/${query}`, { waitUntil: 'load' });
+  await page.goto(PAGE + query, { waitUntil: 'load' });
   await page.waitForFunction(() => document.documentElement.classList.contains('is-ready'), null, { timeout: 15000 });
   return { context, page, problems };
 }
@@ -264,7 +266,7 @@ async function intro(browser) {
   console.log('\nIntro sequence');
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
-  await page.goto(`${BASE}/`, { waitUntil: 'load' });
+  await page.goto(PAGE, { waitUntil: 'load' });
   for (const [index, pause] of [900, 900, 800, 900].entries()) {
     await wait(page, pause);
     await shot(page, `intro-${index + 1}`);

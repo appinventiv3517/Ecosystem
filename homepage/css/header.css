@@ -5,6 +5,7 @@
   --hd-fg-inverse: var(--ink);
   position: fixed;
   inset: 0 0 auto 0;
+  padding-top: env(safe-area-inset-top, 0px);
   z-index: var(--z-header);
   color: var(--hd-fg);
   transition: color var(--dur) var(--ease-out);
@@ -516,7 +517,10 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  padding: calc(var(--header-h) + 1.5rem) var(--gutter) max(1.5rem, env(safe-area-inset-bottom));
+  padding-top: calc(var(--header-h) + 1.5rem + env(safe-area-inset-top, 0px));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
   background: var(--cream);
   color: var(--ink);
   overflow-y: auto;

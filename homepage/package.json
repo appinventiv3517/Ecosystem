@@ -8,6 +8,7 @@
     "dev": "node serve.mjs",
     "start": "node serve.mjs",
     "images": "python3 tools/build_images.py",
+    "artifact": "python3 tools/build_artifact.py",
     "test": "node tests/check.cjs"
   }
 }

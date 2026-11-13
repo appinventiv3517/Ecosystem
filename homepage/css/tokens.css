@@ -3,6 +3,8 @@
    (discovery-deck/final). Change a value here and it carries through the page. */
 
 :root {
+  color-scheme: light;
+
   /* Brand colour */
   --red: #962B23;
   --red-deep: #7C231C;
