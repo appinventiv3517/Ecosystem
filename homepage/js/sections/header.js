@@ -15,16 +15,6 @@ export function initHeader() {
 
   const hero = $('[data-hero]');
   const bar = $('.site-header__bar', header);
-  const pill = $('[data-nav-pill]', header);
-  const wideNav = window.matchMedia('(min-width: 1100px)');
-  let lastY = window.scrollY;
-  let holdUntil = 0;
-  let pointerInside = false;
-  // After the capsule opens, hover menus wait until the mouse really moves.
-  let awaitingMove = false;
-  window.addEventListener('pointermove', (event) => {
-    if (awaitingMove && (event.movementX || event.movementY)) awaitingMove = false;
-  }, { passive: true });
 
   /** Change the header's state and let the capsule glide to its new width. */
   function morph(change) {
@@ -50,68 +40,15 @@ export function initHeader() {
     if (on !== header.classList.contains('is-solid')) morph(() => header.classList.toggle('is-solid', on));
   }
 
-  /** Desktop only: squeeze the capsule to logo, Menu and Enquire, or open it back out. */
-  function setCondensed(on) {
-    if (!wideNav.matches) on = false;
-    if (on === header.classList.contains('is-condensed')) return;
-    morph(() => header.classList.toggle('is-condensed', on));
-    // A link that slides in under a resting pointer should not open its menu straight away.
-    if (!on) awaitingMove = true;
-    if (!motionOK) return;
-    if (on) {
-      gsap.fromTo(pill, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.55, ease: 'back.out(2)', clearProps: 'opacity,visibility,transform' });
-    } else {
-      const parts = [...$$('.nav-item', header), $('.site-header__tools > .lang', header)];
-      gsap.fromTo(parts, { autoAlpha: 0, y: 10, scale: 0.85 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, stagger: 0.05, delay: 0.12, ease: 'back.out(2)', clearProps: 'opacity,visibility,transform' });
-    }
-  }
-
-  // Resting the pointer on the squeezed capsule opens it. The short wait means a quick click
-  // aimed at Menu lands on Menu, not on a link that has just slid in underneath.
-  let expandTimer = 0;
-  header.addEventListener('pointerenter', (event) => {
-    if (event.pointerType !== 'mouse') return;
-    pointerInside = true;
-    expandTimer = setTimeout(() => setCondensed(false), 260);
-  });
-  header.addEventListener('pointerleave', () => {
-    pointerInside = false;
-    clearTimeout(expandTimer);
-  });
-  pill.addEventListener('click', () => {
-    setCondensed(false);
-    setTimeout(() => $('.nav-item__link', header).focus({ preventScroll: true }), 120);
-  });
-
+  // The header always stays on screen; past the hero it becomes the floating capsule.
   const onScroll = rafThrottle(() => {
     const y = window.scrollY;
     const heroEnd = hero ? hero.offsetHeight - header.offsetHeight - 8 : 0;
     header.classList.toggle('is-compact', y > 80);
     setSolid(y > heroEnd || state.megaOpen);
-    // Past the hero, reading down squeezes the capsule on desktop and tucks it away on smaller
-    // screens; scrolling up, pointing at it or following an in-page link brings it back.
-    const busy = state.megaOpen || state.menuOpen || pointerInside || header.contains(document.activeElement) || performance.now() < holdUntil;
-    if (y < heroEnd || busy || y < lastY - 4) {
-      header.classList.remove('is-hidden');
-      setCondensed(false);
-    } else if (y > lastY + 6) {
-      if (wideNav.matches) setCondensed(true);
-      else header.classList.add('is-hidden');
-    }
-    lastY = y;
   });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-  // Moving the pointer to the top of the screen also brings it back.
-  window.addEventListener('pointermove', (event) => {
-    if (event.pointerType === 'mouse' && event.clientY < 90) header.classList.remove('is-hidden');
-  }, { passive: true });
-  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
-  listen('bloom:navigate', () => {
-    holdUntil = performance.now() + 1800;
-    header.classList.remove('is-hidden');
-    setCondensed(false);
-  });
   onScroll();
 
   /* ---------- Sliding indicator and section spy ---------- */
@@ -257,7 +194,7 @@ export function initHeader() {
     if (finePointer()) {
       const hoverOpen = () => {
         clearTimeout(closeTimer);
-        if (awaitingMove || openKey === key) return;
+        if (openKey === key) return;
         clearTimeout(openTimer);
         openTimer = setTimeout(() => openMega(key), openKey ? 0 : 90);
       };
