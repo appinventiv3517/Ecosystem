@@ -198,7 +198,7 @@ async function desktop(browser) {
   await shot(page, 'desktop-intents');
   await page.click('[data-intent-panel="services"] a[data-service-jump="super-app"]');
   await wait(page, 1800);
-  check('intent quick link leads to that service', await page.evaluate(() => document.querySelector('#service-super-app').classList.contains('is-match')));
+  check('intent quick link leads to that service', await page.evaluate(() => document.querySelector('#service-super-app').getAttribute('aria-selected') === 'true' && document.querySelector('#panel-service-super-app').classList.contains('is-active')));
   await goTo(page, '[data-intents]', 120);
   await page.click('.intent[data-intent="communities"] .intent__row');
   await wait(page, 1600);
@@ -242,13 +242,26 @@ async function desktop(browser) {
   // Customer Services
   await goTo(page, '#services', 0);
   await page.click('.task:has-text("Pay an instalment")');
-  await wait(page, 700);
-  check('task finder highlights the right pathway', await page.evaluate(() => document.querySelector('#service-super-app').classList.contains('is-match') && !document.querySelector('#service-community-app').classList.contains('is-match') && document.querySelector('[data-tasks-status]').textContent === 'Start with Bloom Super App.'));
+  await wait(page, 1400);
+  check('choosing a task turns the card to the app that handles it', await page.evaluate(() => document.querySelector('#service-super-app').getAttribute('aria-selected') === 'true' && document.querySelector('#panel-service-super-app').classList.contains('is-active') && !document.querySelector('#panel-service-community-app').classList.contains('is-active') && document.querySelector('[data-tasks-status]').textContent === 'Start with Bloom Super App.'));
+  check('the feature that does the job is picked out', await page.evaluate(() => document.querySelector('#panel-service-super-app [data-feature="Property payments"]').classList.contains('is-match')));
+  check('the highlight sits on the chosen task', await page.evaluate(() => { const glow = document.querySelector('[data-task-glow]').getBoundingClientRect(); const task = document.querySelector('.task:nth-of-type(5)').getBoundingClientRect(); return Math.abs(glow.top - task.top) < 2 && Math.abs(glow.height - task.height) < 2; }));
+  await wait(page, 5000);
+  check('a chosen task stays chosen', await page.evaluate(() => document.querySelector('.task.is-active').textContent.trim() === 'Pay an instalment'));
   await shot(page, 'desktop-services');
-  await page.click('#service-community-app .service__link');
+  await page.click('.task:has-text("Track construction")');
+  await wait(page, 1200);
+  await page.click('#panel-service-super-app [data-svc-also]');
+  await wait(page, 1200);
+  check('"Also in" opens the second place that can help', await page.evaluate(() => document.querySelector('#panel-service-construction-updates').classList.contains('is-active')));
+  await page.click('#service-community-app');
+  await wait(page, 1200);
+  await page.click('#panel-service-community-app [data-demo]');
   await wait(page, 500);
   check('service outside the prototype explains itself', (await toastText(page)).includes('Bloom Community App'));
-  await page.click('#service-enquiry .service__link');
+  await page.click('#service-enquiry');
+  await wait(page, 1200);
+  await page.click('#panel-service-enquiry [data-open-enquiry]');
   await wait(page, 900);
   check('"Make an enquiry" opens the enquiry panel', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('input[name="interest"][value="support"]').checked));
 
@@ -435,9 +448,9 @@ async function phone(browser) {
   await shot(page, 'phone-services');
   await page.tap('.task:has-text("Register as a broker")');
   await wait(page, 1600);
-  check('task finder brings the matching pathway into view', await page.evaluate(() => {
-    const box = document.querySelector('#service-partners-app').getBoundingClientRect();
-    return document.querySelector('#service-partners-app').classList.contains('is-match') && box.top < window.innerHeight && box.bottom > 0;
+  check('task finder brings the matching answer into view', await page.evaluate(() => {
+    const box = document.querySelector('#panel-service-partners-app .svc__name').getBoundingClientRect();
+    return document.querySelector('#panel-service-partners-app').classList.contains('is-active') && box.top > 0 && box.bottom < window.innerHeight;
   }));
   check('header stays on screen while scrolling on a phone', await page.evaluate(() => document.querySelector('.site-header__bar').getBoundingClientRect().top >= 0));
   await page.tap('.site-header__enquire');
@@ -471,6 +484,10 @@ async function tablet(browser) {
   console.log('\nTablet 834 x 1112 (touch)');
   const { context, page, problems } = await open(browser, { width: 834, height: 1112, touch: true });
   await shot(page, 'tablet-hero');
+  await goTo(page, '[data-concierge]', 200);
+  const firstTask = await page.evaluate(() => document.querySelector('.task.is-active')?.textContent.trim());
+  await wait(page, 5000);
+  check('the concierge runs through the tasks on its own', await page.evaluate((first) => { const now = document.querySelector('.task.is-active'); return Boolean(now) && now.textContent.trim() !== first; }, firstTask));
   for (const id of ['begin', 'find', 'communities', 'ecosystem', 'life', 'services', 'about']) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
@@ -501,7 +518,7 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce', query: '' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion') && !document.querySelector('[data-intro]')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .service, .stat__value, .orbit__node, .chapter__text')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .task, .concierge__answer, .stat__value, .orbit__node, .chapter__text')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).length);
