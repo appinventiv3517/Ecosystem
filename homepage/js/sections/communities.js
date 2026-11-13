@@ -1,7 +1,11 @@
 // Explore Communities: one community fills the stage at a time. The next one waits in an
-// arch in the corner, and choosing it opens that arch out until it fills the stage. Arrows,
-// the index, arrow keys, mouse drag and touch swipe all move between the five; until
-// someone does, the stage advances by itself with a timer shown on the index.
+// arch in the corner, and choosing it opens that arch out until it fills the stage.
+//
+// On screens wider than a phone, scrolling drives it: the stage holds still while you scroll
+// and each stretch of scroll brings up the next community, with the index bars filling as
+// you go; past the fifth, the page carries on. Arrows, the index, arrow keys and drag still
+// work, and scroll the page to match. On phones the stage advances by itself on a timer, and
+// swipe and the arrows move between the five.
 
 import { $, $$, clamp, listen, pad2, scrollToTarget } from '../lib/dom.js';
 import { gsap, ScrollTrigger, SplitText, motionOK, EASE } from '../lib/motion.js';
@@ -23,9 +27,14 @@ export function initCommunities() {
   const now = $('[data-stage-now]');
   const progress = $('[data-stage-progress]');
   const count = slides.length;
-  const state = { active: 0, busy: false, interacted: false, inView: false, hovering: false };
+  const state = { active: 0, busy: false, want: null, interacted: false, inView: false, hovering: false };
   let auto = null;
   let drift = null;
+  const track = $('[data-stage-track]');
+  const scrollDriven = motionOK && Boolean(track) && window.matchMedia('(min-width: 761px)').matches;
+  let driver = null; // the ScrollTrigger that maps scroll to a community
+  let lock = null; // while a click scrolls the page, the community it is heading for
+  let lockTimer = null;
 
   // Names are split into letters once, so each change can raise them one by one.
   const names = copies.map((copy) => $('[data-community-name]', copy));
@@ -47,7 +56,7 @@ export function initCommunities() {
       tab.classList.toggle('is-active', on);
       tab.setAttribute('aria-selected', String(on));
       tab.tabIndex = on ? 0 : -1;
-      if (motionOK) gsap.set($('b', tab), { '--fill': on && state.interacted ? 1 : 0 });
+      if (motionOK && !scrollDriven) gsap.set($('b', tab), { '--fill': on && state.interacted ? 1 : 0 });
     });
     if (motionOK) {
       gsap.timeline()
@@ -71,7 +80,12 @@ export function initCommunities() {
   function go(index, { dir = 1, from = null, user = false } = {}) {
     index = (index + count) % count;
     if (user) stopAuto();
-    if (index === state.active || state.busy) return;
+    // Mid-change, remember where to go next; it follows as soon as this change finishes.
+    if (state.busy) {
+      state.want = index;
+      return;
+    }
+    if (index === state.active) return;
     const previous = state.active;
     state.active = index;
     setIndex(index);
@@ -118,6 +132,9 @@ export function initCommunities() {
         state.busy = false;
         startDrift(index);
         scheduleAuto();
+        const want = state.want;
+        state.want = null;
+        if (want !== null && want !== state.active) go(want, { dir: want > state.active ? 1 : -1 });
       },
     });
 
@@ -143,12 +160,24 @@ export function initCommunities() {
       .to(peek, { autoAlpha: 1, y: 0, duration: 0.7, ease: EASE.out }, 1);
   }
 
-  const step = (dir, user = true) => go(state.active + dir, { dir, user, from: dir > 0 && peekVisible() ? peekFrame : null });
+  /** Choose a community. When scroll drives the stage, the page scrolls to its stretch too. */
+  function choose(index, options = {}) {
+    index = (index + count) % count;
+    if (scrollDriven && driver) {
+      lock = index;
+      clearTimeout(lockTimer);
+      lockTimer = setTimeout(() => { lock = null; }, 1800);
+      window.scrollTo({ top: driver.start + (driver.end - driver.start) * ((index + 0.3) / count), behavior: 'smooth' });
+    }
+    go(index, options);
+  }
+
+  const step = (dir, user = true) => choose(state.active + dir, { dir, user, from: dir > 0 && peekVisible() ? peekFrame : null });
 
   $('[data-stage-prev]')?.addEventListener('click', () => step(-1));
   $('[data-stage-next]')?.addEventListener('click', () => step(1));
   peek.addEventListener('click', () => step(1));
-  tabs.forEach((tab, i) => tab.addEventListener('click', () => go(i, { dir: i > state.active ? 1 : -1, user: true })));
+  tabs.forEach((tab, i) => tab.addEventListener('click', () => choose(i, { dir: i > state.active ? 1 : -1, user: true })));
 
   stage.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
@@ -200,7 +229,7 @@ export function initCommunities() {
 
   function scheduleAuto() {
     auto?.kill();
-    if (!motionOK || state.interacted) return;
+    if (!motionOK || state.interacted || scrollDriven) return;
     const bar = $('b', tabs[state.active]);
     auto = gsap.fromTo(bar, { '--fill': 0 }, {
       '--fill': 1,
@@ -234,6 +263,10 @@ export function initCommunities() {
   listen('bloom:community', ({ id }) => {
     const index = copies.findIndex((copy) => copy.dataset.community === id);
     if (index < 0) return;
+    if (scrollDriven && driver) {
+      choose(index, { dir: index > state.active ? 1 : -1, user: true });
+      return;
+    }
     scrollToTarget(stage, { offset: Math.max(96, window.innerHeight * 0.1) });
     setTimeout(() => go(index, { dir: index > state.active ? 1 : -1, user: true }), motionOK ? 450 : 0);
   });
@@ -266,6 +299,33 @@ export function initCommunities() {
         .fromTo(peek, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: EASE.out }, 0.5);
     },
   });
+
+  /* ---------- Scroll drives the stage ---------- */
+
+  if (scrollDriven) {
+    track.style.setProperty('--stage-count', count);
+    const stickyTop = () => parseFloat(getComputedStyle(stage).top) || 0;
+    let last = 0;
+    driver = ScrollTrigger.create({
+      trigger: track,
+      start: () => `top top+=${stickyTop()}`,
+      end: () => `bottom top+=${stickyTop() + stage.offsetHeight}`,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const raw = self.progress * count;
+        const index = Math.min(count - 1, Math.floor(raw));
+        // Bars: the ones passed are full, the current one fills as you scroll through it.
+        tabs.forEach((tab, i) => $('b', tab).style.setProperty('--fill', i < index ? 1 : i === index ? clamp(raw - index, 0, 1).toFixed(3) : 0));
+        if (index === last) return;
+        last = index;
+        if (lock !== null) {
+          if (index === lock) lock = null;
+          return;
+        }
+        go(index, { dir: index > state.active ? 1 : -1, from: index === state.active + 1 && peekVisible() ? peekFrame : null });
+      },
+    });
+  }
 
   ScrollTrigger.create({
     trigger: stage,

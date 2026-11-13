@@ -5,6 +5,8 @@
   z-index: 1;
   background: var(--cream);
   overflow: hidden;
+  /* clip, not hidden: hidden would stop the stage below from sticking while you scroll. */
+  overflow: clip;
   padding-bottom: calc(var(--section-y) + var(--radius-l));
 }
 
@@ -320,6 +322,32 @@
 
 .stage__next:hover .stage__next-frame img {
   transform: scale(1.1);
+}
+
+/* ---------- Scroll-driven stage ----------
+   On screens wider than a phone the stage sticks in place while you scroll through a track
+   below it; each stretch of scroll brings up the next community (js/sections/communities.js).
+   The index bars fill as you go, so it is always clear there is more to see. */
+
+@media (min-width: 761px) {
+  html.motion .stage-track {
+    --stage-h: min(calc(100vh - 7rem), 56rem);
+    height: calc(var(--stage-h) + var(--stage-count, 5) * 60vh);
+    margin-top: clamp(2.5rem, 4.5vw, 4.5rem);
+  }
+
+  html.motion .stage-track > .stage {
+    position: sticky;
+    top: max(5.5rem, calc((100vh - var(--stage-h)) / 2 + 2.75rem));
+    height: var(--stage-h);
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 900px) {
+  html.motion .stage-track {
+    --stage-h: min(calc(100vh - 7rem), 48rem);
+  }
 }
 
 /* ---------- Tablet ---------- */

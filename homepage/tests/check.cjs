@@ -174,9 +174,21 @@ async function desktop(browser) {
   await wait(page, 1900);
   check('index selects a community directly', (await activeCommunity(page)) === 'eastern-mangrove-corniche' && await page.evaluate(() => document.querySelector('.stage__tab[data-go="4"]').getAttribute('aria-selected') === 'true'));
   await shot(page, 'desktop-communities');
+  // Scrolling drives the stage: it holds still, and each stretch of scroll brings the next community.
+  await page.evaluate(() => { const track = document.querySelector('[data-stage-track]'); window.scrollTo({ top: track.getBoundingClientRect().top + scrollY - 400, behavior: 'instant' }); });
+  await wait(page, 2400);
+  check('scrolling into the stage starts at the first community', (await activeCommunity(page)) === 'zayed-city', await activeCommunity(page));
+  for (let i = 0; i < 6; i += 1) {
+    await page.mouse.move(700, 450);
+    await page.mouse.wheel(0, 300);
+    await wait(page, 600);
+  }
+  await wait(page, 1800);
+  const reached = await activeCommunity(page);
+  check('scrolling on moves through the communities while the stage stays put', order.indexOf(reached) >= 2 && await page.evaluate(() => Math.abs(document.querySelector('[data-stage]').getBoundingClientRect().top - parseFloat(getComputedStyle(document.querySelector('[data-stage]')).top)) < 2), await activeCommunity(page));
   await page.click('.community.is-active [data-find]');
   await wait(page, 1800);
-  check('"Find a home here" carries the community into the search', await page.evaluate(() => document.querySelector('[data-select="community"] input').value === 'eastern-mangrove-corniche'));
+  check('"Find a home here" carries the community into the search', await page.evaluate((id) => document.querySelector('[data-select="community"] input').value === id, reached));
 
   // Intent section
   await goTo(page, '[data-intents]', 120);
