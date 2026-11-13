@@ -8,7 +8,7 @@ import { motionOK } from '../lib/motion.js';
 export function initRoll() {
   if (!motionOK) return;
   // The search button's label is rewritten by script, so it keeps its own animation.
-  $$('.btn__label:not([data-search-label]), .nav-item__link').forEach((element) => {
+  $$('.btn__label:not([data-search-label])').forEach((element) => {
     const text = element.textContent.trim();
     if (!text || element.querySelector('.roll')) return;
     const roll = document.createElement('span');

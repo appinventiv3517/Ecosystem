@@ -27,8 +27,9 @@ if (gsap && ScrollTrigger) {
 
 /** Shared easing names so sections stay consistent. */
 export const EASE = {
-  out: 'expo.out',
-  inOut: 'expo.inOut',
+  // Gentle curves: quick to respond, long soft landing, no abrupt start or stop.
+  out: 'power4.out',
+  inOut: 'power3.inOut',
   soft: 'power3.out',
   smooth: 'power2.inOut',
 };

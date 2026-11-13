@@ -12,10 +12,12 @@ const root = document.documentElement;
 function contentTimeline() {
   const timeline = gsap.timeline();
   const headerItems = [...$$('.primary-nav'), ...$$('.site-header__tools > *')];
+  const bar = $('.site-header__bar');
   const lines = $$('[data-hero-lines] path');
   const letters = $$('.hero__char');
 
   timeline
+    .fromTo(bar, { autoAlpha: 0, y: -14, scale: 0.97 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out', clearProps: 'transform' }, 0)
     .fromTo(headerItems, { autoAlpha: 0, y: -24 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.07, ease: EASE.out }, 0)
     .fromTo('[data-hero-eyebrow]', { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: 0.9, ease: EASE.soft }, 0.1)
     .fromTo(letters.length ? letters : '.hero__word', { yPercent: 125, rotate: 10 }, { yPercent: 0, rotate: 0, duration: 1.2, stagger: 0.032, ease: EASE.out }, 0.12)

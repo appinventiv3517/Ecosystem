@@ -16,28 +16,9 @@ export function initHeader() {
   const hero = $('[data-hero]');
   const bar = $('.site-header__bar', header);
 
-  /** Change the header's state and let the capsule glide to its new width. */
-  function morph(change) {
-    if (!motionOK) {
-      change();
-      return;
-    }
-    const before = bar.getBoundingClientRect().width;
-    change();
-    const after = bar.getBoundingClientRect().width;
-    if (Math.abs(after - before) < 2) return;
-    gsap.fromTo(bar, { width: before }, {
-      width: after,
-      duration: 0.8,
-      ease: 'expo.out',
-      overwrite: true,
-      clearProps: 'width',
-      onComplete: () => moveIndicator(openItem() || currentItem),
-    });
-  }
-
+  /** Past the hero the capsule turns from dark glass to light glass. Only colours change. */
   function setSolid(on) {
-    if (on !== header.classList.contains('is-solid')) morph(() => header.classList.toggle('is-solid', on));
+    header.classList.toggle('is-solid', on);
   }
 
   // The header always stays on screen; past the hero it becomes the floating capsule.
@@ -45,7 +26,7 @@ export function initHeader() {
     const y = window.scrollY;
     const heroEnd = hero ? hero.offsetHeight - header.offsetHeight - 8 : 0;
     header.classList.toggle('is-compact', y > 80);
-    setSolid(y > heroEnd || state.megaOpen);
+    setSolid(y > heroEnd);
   });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
@@ -140,22 +121,23 @@ export function initHeader() {
     panels.forEach((panel) => (panel.hidden = panel.dataset.megaPanel !== key));
     const panel = panels.find((item) => item.dataset.megaPanel === key);
     mega.classList.add('is-open');
-    setSolid(true);
     setExpanded();
     moveIndicator(openItem());
 
     if (motionOK) {
+      // macOS-style: the panel fades in while settling a few pixels, its content arrives with it,
+      // and moving between menus only cross-fades the content while the height eases.
       const parts = [...panel.children];
+      const smooth = 'power3.out';
       gsap.killTweensOf([sheet, ...panels.flatMap((item) => [...item.children])]);
       if (wasOpen) {
-        gsap.fromTo(sheet, { height: previousHeight }, { height: sheet.scrollHeight, duration: 0.55, ease: EASE.out, clearProps: 'height' });
-        gsap.set(sheet, { clipPath: 'inset(0% 0% 0% 0%)' });
+        gsap.set(sheet, { opacity: 1, y: 0, scale: 1 });
+        gsap.fromTo(sheet, { height: previousHeight }, { height: sheet.scrollHeight, duration: 0.42, ease: 'power3.inOut', clearProps: 'height' });
+        gsap.fromTo(parts, { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.32, stagger: 0.02, ease: smooth });
       } else {
-        gsap.fromTo(sheet, { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.75, ease: EASE.out });
+        gsap.fromTo(sheet, { opacity: 0, y: -8, scale: 0.985 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: smooth });
+        gsap.fromTo(parts, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.025, delay: 0.04, ease: smooth });
       }
-      gsap.fromTo(parts, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.07, ease: EASE.soft, delay: wasOpen ? 0.05 : 0.14 });
-    } else {
-      sheet.style.clipPath = 'none';
     }
     if (focus) $('a, button', panel)?.focus();
   }
@@ -176,7 +158,7 @@ export function initHeader() {
     };
     if (motionOK) {
       gsap.killTweensOf(sheet);
-      gsap.to(sheet, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.45, ease: 'power3.inOut', onComplete: finish });
+      gsap.to(sheet, { opacity: 0, y: -6, scale: 0.99, duration: 0.22, ease: 'power2.in', onComplete: finish });
     } else {
       finish();
     }
