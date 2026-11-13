@@ -1,0 +1,968 @@
+{
+  "note": "Every photograph used by the homepage prototype. All files were downloaded from bloomholding.com on 13 Nov 2026. Run tools/build_images.py to regenerate the .webp files; replace an image by changing its source_url (or dropping a new original in tools/originals/).",
+  "images": [
+    {
+      "name": "hero-lakeside-villas",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/ab4345615dc563836f9ddb31d90c5d26.jpg",
+      "source_page": "https://bloomholding.com/",
+      "source_size": [
+        2500,
+        1416
+      ],
+      "alt": "Villas along a landscaped lake edge in a Bloom community (architectural render)",
+      "used_in": "Hero, slide 1",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            2400,
+            1600
+          ]
+        },
+        {
+          "suffix": "-portrait",
+          "ratio": 0.72,
+          "focus": [
+            0.3,
+            0.5
+          ],
+          "widths": [
+            1000
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hero-lake-bridge",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/45a7ce6dd2cc763ebc023eea9e31b21e.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Footbridge across a lake at sunset at Bloom Living (architectural render)",
+      "used_in": "Hero, slide 2",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            2000,
+            1400
+          ]
+        },
+        {
+          "suffix": "-portrait",
+          "ratio": 0.72,
+          "focus": [
+            0.46,
+            0.5
+          ],
+          "widths": [
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hero-marina",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/db9f23af861d24de7a5a2da2154106f0.jpg",
+      "source_page": "https://bloomholding.com/what-we-do",
+      "source_size": [
+        2000,
+        1150
+      ],
+      "alt": "Marina-side buildings lit at dusk, with boats in the foreground",
+      "used_in": "Hero, slide 3",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            2000,
+            1400
+          ]
+        },
+        {
+          "suffix": "-portrait",
+          "ratio": 0.72,
+          "focus": [
+            0.42,
+            0.5
+          ],
+          "widths": [
+            820
+          ]
+        }
+      ]
+    },
+    {
+      "name": "vignette-education",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/b929a4a3c567cdc1eed7871f86889634.webp",
+      "source_page": "https://bloomholding.com/",
+      "source_size": [
+        1000,
+        878
+      ],
+      "alt": "School pupils walking along a palm-shaded lane",
+      "used_in": "Hero, floating arch",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.62,
+            0.6
+          ],
+          "widths": [
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "vignette-hospitality",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/fbb0534d409b941f8ce47b51197b041d.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/hospitality",
+      "source_size": [
+        1631,
+        1080
+      ],
+      "alt": "Warmly lit hotel restaurant interior",
+      "used_in": "Hero, floating arch",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "vignette-landscape",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/290e393ab96064b8eaa57d4225f328db.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1200
+      ],
+      "alt": "Fountain bowls and lanterns along a palm-lined walk",
+      "used_in": "Hero, floating arch",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.32,
+            0.5
+          ],
+          "widths": [
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "find-buy",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/cb40528cb3001f107d7ed7e6f6eb29a0.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1400
+      ],
+      "alt": "Two-storey villa with arched windows and a landscaped drive (architectural render)",
+      "used_in": "Find a Home, Buy state",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.55,
+            0.5
+          ],
+          "widths": [
+            900,
+            560
+          ]
+        }
+      ]
+    },
+    {
+      "name": "find-rent",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/5d9c73092b6179c46962162a31ad178b.jpg",
+      "source_page": "https://bloomholding.com/our-communities/al-bateen-marina",
+      "source_size": [
+        2000,
+        1496
+      ],
+      "alt": "Low-rise apartment buildings behind palm trees",
+      "used_in": "Find a Home, Rent state",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.34,
+            0.5
+          ],
+          "widths": [
+            900,
+            560
+          ]
+        }
+      ]
+    },
+    {
+      "name": "community-zayed-city",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/674b7c3108e43a820ba1f109817e79b7.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)",
+      "used_in": "Communities, Zayed City",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "name": "community-saadiyat",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/ffc24c837341fd762938d204f42e3faf.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/soho-square",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Apartment buildings behind a landscaped podium on Saadiyat Island",
+      "used_in": "Communities, Saadiyat Island",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "name": "community-al-bateen",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/79de589018e985ac52b2cae9dba8739b.jpg",
+      "source_page": "https://bloomholding.com/our-communities/al-bateen-marina",
+      "source_size": [
+        2000,
+        1499
+      ],
+      "alt": "Aerial view of the marina and waterfront buildings at Al Bateen",
+      "used_in": "Communities, Al Bateen Marina",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "name": "community-jvc",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/b6508052658f71c85b4f59cbb7965c10.jpg",
+      "source_page": "https://bloomholding.com/our-communities/jumeirah-village-circle",
+      "source_size": [
+        2000,
+        1334
+      ],
+      "alt": "Two residential towers seen through palm fronds in Jumeirah Village Circle",
+      "used_in": "Communities, Jumeirah Village Circle",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "name": "community-eastern-mangrove",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/46005d1b4800c73d2ae28aca36e70110.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1201
+      ],
+      "alt": "Mediterranean-style villa with arches and bougainvillea at Bloom Gardens",
+      "used_in": "Communities, Eastern Mangrove Corniche",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-real-estate",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/f11e7e324d6413c111e74e3cc457c741.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1200
+      ],
+      "alt": "Villas with terracotta roofs behind flowering bougainvillea",
+      "used_in": "Ecosystem, Real Estate",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.62,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-education",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/a68869515e72a86455436ddfd9a86904.jpg",
+      "source_page": "https://bloomholding.com/what-we-do",
+      "source_size": [
+        1756,
+        1010
+      ],
+      "alt": "Two pupils in school gowns under a colonnade",
+      "used_in": "Ecosystem, Education",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.56,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-hospitality",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/1dd2f20b21f0316a1de8a4ae810f1b7f.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/hospitality",
+      "source_size": [
+        1600,
+        1066
+      ],
+      "alt": "Hotel bedroom with a view over a marina",
+      "used_in": "Ecosystem, Hospitality",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.56,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-retail",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/2a6c68a494e6e5c8f27606de2b331f33.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1124
+      ],
+      "alt": "Evening plaza with outdoor dining below apartment buildings (architectural render)",
+      "used_in": "Ecosystem, Retail",
+      "status": "temporary: Bloom Living town-centre render standing in until Bloom supplies retail photography",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-healthcare",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/848b20f6f3e98ae8db99a9c15097f511.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "People walking a planted path through a residential community (architectural render)",
+      "used_in": "Ecosystem, Healthcare",
+      "status": "temporary: Bloom Living landscape render standing in until Bloom supplies healthcare photography",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.52,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-facilities",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/742924ace2ffb213a27ccc71a92176e4.jpg",
+      "source_page": "https://bloomholding.com/what-we-do",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Three Bloom facilities team members walking through a landscaped walkway",
+      "used_in": "Ecosystem, Facilities Management",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.44,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ecosystem-landscape",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/c7b3d559f2d73ee2528844e6cdf59522.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/bloomscape",
+      "source_size": [
+        1920,
+        1079
+      ],
+      "alt": "Landscaper laying turf beside planted beds, seen from above",
+      "used_in": "Ecosystem, Landscaping",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.8,
+          "focus": [
+            0.72,
+            0.5
+          ],
+          "widths": [
+            800,
+            520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-1a",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/a47c2a5f8e6c9de0a4a918be53ce50ff.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Couple on a timber footbridge looking over a lake (architectural render)",
+      "used_in": "Life at Bloom, chapter 1",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.66,
+          "focus": [
+            0.8,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-1b",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/636e2d1929708c5ba9f10d3a5bb304f1.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Family cycling along a park path beneath a large tree (architectural render)",
+      "used_in": "Life at Bloom, chapter 1",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.6,
+          "focus": [
+            0.36,
+            0.5
+          ],
+          "widths": [
+            760,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-1c",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/3496ee7f85ce11acc1468c8245573593.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1200
+      ],
+      "alt": "Garden path between white villas and hedges",
+      "used_in": "Life at Bloom, chapter 1",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.42,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-2a",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/9759f2a7bbd8009c192aa3083bdf35ef.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1200
+      ],
+      "alt": "Children playing among ground fountains at golden hour",
+      "used_in": "Life at Bloom, chapter 2",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.66,
+          "focus": [
+            0.34,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-2b",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/b6c889b81c9b6110cbe8a9f16986c0c2.jpg",
+      "source_page": "https://bloomholding.com/",
+      "source_size": [
+        1260,
+        1204
+      ],
+      "alt": "Mother and daughter laughing together in a sunlit garden",
+      "used_in": "Life at Bloom, chapter 2",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.6,
+          "focus": [
+            0.46,
+            0.5
+          ],
+          "widths": [
+            760,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-2c",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/b929a4a3c567cdc1eed7871f86889634.webp",
+      "source_page": "https://bloomholding.com/",
+      "source_size": [
+        1000,
+        878
+      ],
+      "alt": "School pupils walking along a palm-shaded lane",
+      "used_in": "Life at Bloom, chapter 2",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.62,
+            0.58
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-3a",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/fbb0534d409b941f8ce47b51197b041d.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/hospitality",
+      "source_size": [
+        1631,
+        1080
+      ],
+      "alt": "Warmly lit hotel restaurant interior",
+      "used_in": "Life at Bloom, chapter 3",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.66,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-3b",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/6b960d61989cb818b585e6232b75484e.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Pool terrace with palms at sunset (architectural render)",
+      "used_in": "Life at Bloom, chapter 3",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            760,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-3c",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/c415b97895a90109db91a21fb8bb45b0.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1125
+      ],
+      "alt": "Roof terrace with a fire bowl and lanterns at dusk (architectural render)",
+      "used_in": "Life at Bloom, chapter 3",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.6,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-4a",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/1544b3682470941007fd46aa8a456bc5.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/bfm",
+      "source_size": [
+        1920,
+        1080
+      ],
+      "alt": "Two engineers reviewing building plans on a monitor",
+      "used_in": "Life at Bloom, chapter 4",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.66,
+          "focus": [
+            0.62,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-4b",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/75e7a1ee57893d77d7ef667ae47e3d36.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/bloomscape",
+      "source_size": [
+        1640,
+        1030
+      ],
+      "alt": "Fountain on a palm-lined boulevard at dusk",
+      "used_in": "Life at Bloom, chapter 4",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            760,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "name": "life-4c",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/2d9fc0226a56616e54ff39511dfaba33.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-gardens",
+      "source_size": [
+        1800,
+        1200
+      ],
+      "alt": "Clipped hedges and flowering shrubs in front of villas",
+      "used_in": "Life at Bloom, chapter 4",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": 0.75,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            700,
+            460
+          ]
+        }
+      ]
+    },
+    {
+      "name": "about-aerial",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/91b580cddec94561913b2e65769de436.jpg",
+      "source_page": "https://bloomholding.com/what-we-do/properties/bloom-living",
+      "source_size": [
+        2000,
+        1333
+      ],
+      "alt": "Aerial view of a lakeside town centre at Bloom Living (architectural render)",
+      "used_in": "About Bloom",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1800,
+            1000
+          ]
+        }
+      ]
+    },
+    {
+      "name": "service-community-app",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/8900b5761b5b698daf71cf5464231369.jpg",
+      "source_page": "https://bloomholding.com/bloom-community-app",
+      "source_size": [
+        1000,
+        486
+      ],
+      "alt": "Two phones showing the Bloom Community App",
+      "used_in": "Customer Services, Bloom Community App",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1000
+          ]
+        }
+      ]
+    },
+    {
+      "name": "service-super-app",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/3d3479a4947ef950c45ee8b7b4e7e5dd.jpg",
+      "source_page": "https://bloomholding.com/bloom-super-app",
+      "source_size": [
+        1000,
+        486
+      ],
+      "alt": "Laptop and phone showing the Bloom Super App",
+      "used_in": "Customer Services, Bloom Super App",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1000
+          ]
+        }
+      ]
+    },
+    {
+      "name": "service-partners-app",
+      "source_url": "https://bloomholding.com/application/files/cache/thumbnails/004cccda3b1c3bc897cd168d3ca4b990.jpg",
+      "source_page": "https://bloomholding.com/bloom-partners-app",
+      "source_size": [
+        1000,
+        486
+      ],
+      "alt": "Laptop and phone showing the Bloom Partners App",
+      "used_in": "Customer Services, Bloom Partners App",
+      "status": "Bloom photography from bloomholding.com",
+      "variants": [
+        {
+          "suffix": "",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1000
+          ]
+        }
+      ]
+    }
+  ]
+}

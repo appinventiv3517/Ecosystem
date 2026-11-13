@@ -1,0 +1,90 @@
+/* Bloom Holding homepage — design tokens.
+   Colours, type and the arch motif follow the approved discovery deck
+   (discovery-deck/final). Change a value here and it carries through the page. */
+
+:root {
+  /* Brand colour */
+  --red: #962B23;
+  --red-deep: #7C231C;
+  --red-soft: #B4483D;
+  --cream: #F8F6EA;
+  --ivory: #FFFDF7;
+  --sand: #E9E1CF;
+  --beige: #DDD3BD;
+  --ink: #1D1A17;
+  --black: #0B0B0B;
+  --muted: #6B655C;
+  --muted-on-dark: #B9B1A2;
+
+  /* Roles */
+  --canvas: var(--cream);
+  --surface: var(--ivory);
+  --text: var(--ink);
+  --text-soft: var(--muted);
+  --line: var(--beige);
+  --line-on-dark: rgba(248, 246, 234, 0.18);
+  --accent: var(--red);
+  --focus-ring: #C4553F;
+
+  /* Type */
+  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --font-body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+
+  --text-hero: clamp(3.5rem, 8.5vw, 9.75rem);
+  --text-display: clamp(2.5rem, 5.5vw, 5.75rem);
+  --text-title: clamp(1.875rem, 3.1vw, 3rem);
+  --text-subtitle: clamp(1.375rem, 1.9vw, 1.875rem);
+  --text-lede: clamp(1.0625rem, 1.25vw, 1.3125rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-micro: 0.75rem;
+
+  --leading-display: 1.04;
+  --leading-body: 1.55;
+  --tracking-display: -0.018em;
+  --tracking-label: 0.18em;
+
+  /* Space */
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+  --section-y: clamp(5rem, 11vw, 11rem);
+  --stack-xs: 0.5rem;
+  --stack-s: 1rem;
+  --stack-m: 1.75rem;
+  --stack-l: clamp(2.5rem, 5vw, 4.5rem);
+  --content-max: 105rem;
+
+  /* Shape: the arch is Bloom's motif */
+  --radius-s: 0.625rem;
+  --radius-m: 1.25rem;
+  --radius-l: 2rem;
+  --radius-pill: 999px;
+  --radius-arch: 999px 999px 0 0;
+
+  /* Elevation */
+  --shadow-soft: 0 1px 2px rgba(29, 26, 23, 0.04), 0 12px 32px -12px rgba(29, 26, 23, 0.14);
+  --shadow-lift: 0 2px 4px rgba(29, 26, 23, 0.05), 0 28px 60px -24px rgba(29, 26, 23, 0.28);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 640ms;
+
+  /* Layout */
+  --header-h: 5.5rem;
+  --header-h-compact: 4.25rem;
+  --z-header: 60;
+  --z-menu: 70;
+  --z-dialog: 80;
+  --z-toast: 90;
+  --z-intro: 100;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --header-h: 4.5rem;
+    --header-h-compact: 4rem;
+  }
+}

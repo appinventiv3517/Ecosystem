@@ -1,0 +1,13 @@
+{
+  "name": "bloom-homepage-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bloom Holding homepage prototype: static HTML, CSS and ES modules, with GSAP vendored in vendor/gsap.",
+  "type": "module",
+  "scripts": {
+    "dev": "node serve.mjs",
+    "start": "node serve.mjs",
+    "images": "python3 tools/build_images.py",
+    "test": "node tests/check.cjs"
+  }
+}

@@ -1,0 +1,356 @@
+/* 04 · Explore Communities: a draggable, editorial gallery with cards of different shapes. */
+
+.communities {
+  --edge: max(var(--gutter), calc((100vw - var(--content-max)) / 2 + var(--gutter)));
+  z-index: 1;
+  background: var(--cream);
+  overflow: hidden;
+  padding-bottom: clamp(5rem, 9vw, 9rem);
+}
+
+.communities__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: end;
+}
+
+.communities__aside {
+  display: grid;
+  gap: 1.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.carousel-controls__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: auto;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+}
+
+.carousel-controls__now {
+  display: inline-block;
+  min-width: 1.6em;
+  color: var(--red);
+  font-style: italic;
+}
+
+.carousel-controls__now.is-changing {
+  animation: count-roll 520ms var(--ease-out);
+}
+
+@keyframes count-roll {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+}
+
+.carousel-controls__sep {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--line);
+}
+
+[data-carousel-prev] .icon {
+  transform: rotate(180deg);
+}
+
+/* Track: native horizontal scrolling (touch, trackpad, keyboard) plus mouse drag with inertia. */
+.carousel {
+  position: relative;
+  margin-top: clamp(2.5rem, 4.5vw, 5rem);
+}
+
+.carousel__track {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1rem, 2.2vw, 2.25rem);
+  padding-inline: var(--edge);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--edge);
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__track:focus-visible {
+  outline-offset: -3px;
+}
+
+.carousel__track.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+
+.carousel__track.is-dragging * {
+  pointer-events: none;
+}
+
+.community {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.community--wide {
+  width: min(52vw, 50rem);
+}
+
+.community--arch {
+  width: min(27vw, 26rem);
+  margin-top: clamp(2rem, 5vw, 5rem);
+}
+
+.community--tall {
+  width: min(34vw, 32rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
+}
+
+.community__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  background: var(--sand);
+  transform: translateZ(0);
+}
+
+.community--arch .community__media {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-arch);
+}
+
+.community--tall .community__media {
+  aspect-ratio: 4 / 5;
+  border-radius: 0 var(--radius-arch);
+  border-radius: var(--radius-l) 16rem var(--radius-l) var(--radius-l);
+}
+
+/* The image is wider than its frame so it can drift as the track moves. */
+.community__media img {
+  position: absolute;
+  top: 0;
+  left: -9%;
+  width: 118%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  translate: var(--shift, 0px) 0;
+  transition: scale 1200ms var(--ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@media (hover: hover) {
+  .community:hover .community__media img {
+    scale: 1.06;
+  }
+}
+
+.community__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 1.25rem;
+  padding-top: 1.25rem;
+  transition: opacity 520ms ease;
+}
+
+.community:not(.is-active) .community__body {
+  opacity: 0.62;
+}
+
+.community__index {
+  padding-top: 0.5rem;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: color var(--dur) ease;
+}
+
+.community.is-active .community__index {
+  color: var(--red);
+}
+
+.community__main {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+.community__name {
+  font-family: var(--font-display);
+  font-size: var(--text-subtitle);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: var(--tracking-display);
+}
+
+.community__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--red);
+}
+
+.community__place .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.community__text {
+  color: var(--muted);
+  max-width: 26rem;
+}
+
+.community__devs {
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.community__devs span {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.community__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.link-arrow--quiet {
+  color: var(--muted);
+}
+
+.link-arrow--quiet:hover {
+  color: var(--ink);
+}
+
+/* "Drag" follows the pointer over the gallery (fine pointers only). */
+.carousel__cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: -2.75rem 0 0 -2.75rem;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--cream);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  pointer-events: none;
+  scale: 0;
+  transition: scale 420ms var(--ease-out);
+}
+
+.carousel__cursor.is-visible {
+  scale: 1;
+}
+
+.carousel__cursor.is-pressed {
+  scale: 0.78;
+}
+
+@media (hover: none) {
+  .carousel__cursor {
+    display: none;
+  }
+}
+
+.carousel-progress {
+  position: relative;
+  height: 1px;
+  margin-top: clamp(2rem, 3.5vw, 3.5rem);
+  background: var(--line);
+}
+
+.carousel-progress span {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: var(--thumb, 20%);
+  height: 3px;
+  background: var(--red);
+  border-radius: 2px;
+  transform: translateX(var(--pos, 0%));
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .communities__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .community--wide {
+    width: min(72vw, 36rem);
+  }
+
+  .community--arch {
+    width: min(48vw, 22rem);
+  }
+
+  .community--tall {
+    width: min(56vw, 26rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .community--wide,
+  .community--tall {
+    width: 84vw;
+  }
+
+  .community--arch {
+    width: 72vw;
+    margin-top: 0;
+  }
+
+  .community--tall {
+    margin-top: 0;
+  }
+
+  .community--wide .community__media {
+    aspect-ratio: 5 / 4;
+  }
+
+  .community--tall .community__media {
+    border-radius: var(--radius-l) 9rem var(--radius-l) var(--radius-l);
+  }
+
+  .community:not(.is-active) .community__body {
+    opacity: 1;
+  }
+
+  .link-arrow {
+    min-height: 2.75rem;
+  }
+}

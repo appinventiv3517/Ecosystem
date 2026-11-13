@@ -1,0 +1,258 @@
+/* 06 · Life at Bloom: three arch "reels" that turn as the page scrolls through four chapters. */
+
+.life {
+  position: relative;
+  z-index: 1;
+  background: var(--cream);
+}
+
+.life__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-block: calc(var(--header-h-compact) + 1.5rem) 2.5rem;
+  overflow: hidden;
+}
+
+.life__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  align-items: center;
+}
+
+.life__copy {
+  display: grid;
+  gap: var(--stack-m);
+}
+
+.life__title {
+  font-size: clamp(2.25rem, 4.4vw, 4.5rem);
+  max-width: 11em;
+}
+
+/* Chapters */
+.chapters {
+  display: grid;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.chapter {
+  border-top: 1px solid var(--line);
+}
+
+.chapter__head {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding-block: 0.875rem;
+  text-align: left;
+  color: var(--muted);
+  transition: color 420ms ease;
+}
+
+.chapter__num {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.chapter__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  line-height: 1.15;
+  transition: transform 620ms var(--ease-out);
+}
+
+.chapter.is-active .chapter__head {
+  color: var(--ink);
+}
+
+.chapter.is-active .chapter__num {
+  color: var(--red);
+}
+
+.chapter.is-active .chapter__title {
+  font-style: italic;
+  transform: translateX(0.375rem);
+}
+
+.chapter__head:hover {
+  color: var(--ink);
+}
+
+.chapter__text {
+  display: grid;
+  grid-template-rows: 1fr;
+  max-width: 28rem;
+  padding: 0 0 1.125rem 2.5rem;
+  color: var(--muted);
+  overflow: hidden;
+}
+
+/* With motion on, only the active chapter is open; otherwise every chapter stays readable. */
+html.motion .chapter__text {
+  max-height: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transition: max-height 620ms var(--ease-out), padding-bottom 620ms var(--ease-out), opacity 420ms ease;
+}
+
+html.motion .chapter.is-active .chapter__text {
+  max-height: 8rem;
+  padding-bottom: 1.125rem;
+  opacity: 1;
+}
+
+/* Reels */
+.reels {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(0.625rem, 1.4vw, 1.5rem);
+  height: min(74vh, 46rem);
+}
+
+.reel {
+  flex: 1 1 0;
+  height: 100%;
+}
+
+.reel--a {
+  height: 72%;
+}
+
+.reel--b {
+  flex-grow: 1.18;
+}
+
+.reel--c {
+  flex-grow: 0.9;
+  height: 56%;
+}
+
+.reel__strip {
+  position: absolute;
+  inset: 0 0 auto 0;
+  display: flex;
+  flex-direction: column;
+  height: 400%;
+  will-change: transform;
+}
+
+.reel[data-reel="down"] .reel__strip {
+  flex-direction: column-reverse;
+  transform: translateY(-75%);
+}
+
+.reel__strip img {
+  flex: 0 0 25%;
+  width: 100%;
+  height: 25%;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.life__meter {
+  position: absolute;
+  right: calc(var(--gutter) * 0.4);
+  top: 50%;
+  width: 2px;
+  height: 9rem;
+  margin-top: -4.5rem;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.life__meter span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--red);
+  transform-origin: top;
+  transform: scaleY(var(--progress, 0.25));
+}
+
+/* ---------- Tablet and mobile: reels on top, one chapter at a time below ---------- */
+
+@media (max-width: 900px) {
+  .life__stage {
+    align-items: stretch;
+    padding-block: calc(var(--header-h-compact) + 1rem) 1.5rem;
+  }
+
+  .life__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    gap: 1.5rem;
+    align-content: start;
+    width: 100%;
+  }
+
+  .reels {
+    order: -1;
+    height: min(40vh, 24rem);
+    height: min(40svh, 24rem);
+  }
+
+  .life__copy {
+    gap: 0.875rem;
+    align-content: start;
+  }
+
+  .life__copy .eyebrow {
+    display: none;
+  }
+
+  .life__title {
+    font-size: clamp(1.75rem, 6.4vw, 2.75rem);
+  }
+
+  .life__meter {
+    position: static;
+    width: 100%;
+    height: 2px;
+    margin: 0;
+  }
+
+  .life__meter span {
+    transform-origin: left;
+    transform: scaleX(var(--progress, 0.25));
+  }
+
+  html.motion .chapters {
+    border-bottom: 0;
+  }
+
+  html.motion .chapter {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.75rem);
+    transition: opacity 420ms ease, transform 620ms var(--ease-out), visibility 0s 420ms;
+  }
+
+  html.motion .chapter.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  html.motion .chapter__text,
+  html.motion .chapter.is-active .chapter__text {
+    max-height: none;
+    opacity: 1;
+    padding-bottom: 0;
+  }
+
+  .chapter.is-active .chapter__title {
+    transform: none;
+  }
+}
