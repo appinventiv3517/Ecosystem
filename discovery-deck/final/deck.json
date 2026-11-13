@@ -1,0 +1,19 @@
+{
+  "v": 4,
+  "createdOnFiles": { "v": 1, "at": "2026-11-12T12:00:00Z" },
+  "lists": "css",
+  "title": "Bloom Homepage Product Discovery",
+  "order": ["cover", "context", "audit", "findings", "audiences", "pain-high", "pain-medium", "current-desired", "opportunities", "next-steps"],
+  "cover": "cover",
+  "sections": {
+    "overview": { "description": "What this discovery covers and why: Bloom Holding's homepage, assessed against the RFP.", "start": "cover" },
+    "current": { "description": "How the existing homepage communicates today and who it has to serve.", "start": "audit" },
+    "gaps": { "description": "Where the current experience falls short and how it differs from the desired one.", "start": "pain-high" },
+    "next": { "description": "The five opportunity areas and the steps that follow discovery.", "start": "opportunities" }
+  },
+  "faces": {
+    "playfair-display": { "family": "Playfair Display", "href": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap" },
+    "dm-sans": { "family": "DM Sans", "href": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&display=swap" }
+  },
+  "designSystems": []
+}

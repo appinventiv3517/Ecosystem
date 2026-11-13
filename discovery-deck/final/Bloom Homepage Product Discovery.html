@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bloom Homepage Product Discovery</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=DM+Sans:wght@400..700&display=swap">
+<style>
+*{margin:0;box-sizing:border-box}body{background:#1D1A17;padding:24px 0}
+.frame{width:min(96vw,1920px);aspect-ratio:16/9;margin:0 auto 24px;overflow:hidden;position:relative}
+.frame>section{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;transform:scale(calc(min(96vw,1920px) / 1920px))}
+section aside{display:none}ul,ol{padding-left:1.2em}hr{border:0;height:0}
+div:not([style*="display"]){display:flex;flex-direction:column}
+x-shape{display:block}x-shape[kind=arrow-right]{clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%)}
+</style></head><body>
+<div class="frame"><section id="cover" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:96px 96px 0px;display:flex;gap:72px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0px 0px 96px">
+<img src="../assets/deck/wordmark-red.png" alt="Bloom wordmark" style="width:190px;height:59px;object-fit:contain">
+<div style="display:flex;flex-direction:column;gap:26px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Bloom Holding · Website redesign</p>
+<h1 style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-weight:400;line-height:1;letter-spacing:-3px">Homepage Product <i><span style="color:#962B23">Discovery</span></i></h1>
+<p style="font-size:30px;line-height:1.45;color:#6B655C;width:760px">Understanding the current experience, identifying user pain points and defining opportunities for a more intuitive digital homepage.</p>
+</div>
+<div style="display:flex;gap:56px;border-top:1px solid #DDD3BD;padding:24px 0px 0px">
+<div style="display:flex;flex-direction:column;gap:2px">
+<p style="font-size:24px;color:#6B655C">Client</p>
+<p style="font-size:26px;font-weight:700">Bloom Holding</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<p style="font-size:24px;color:#6B655C">Stage</p>
+<p style="font-size:26px;font-weight:700">Product discovery</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<p style="font-size:24px;color:#6B655C">Scope</p>
+<p style="font-size:26px;font-weight:700;color:#962B23">Homepage only</p>
+</div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-end;gap:24px">
+<img src="../assets/deck/photo-marina.jpg" alt="Bloom marina-side development at dusk, image from the Bloom Holding homepage" style="width:260px;height:640px;object-fit:cover;border-radius:130px 130px 0px 0px">
+<img src="../assets/deck/cover.jpg" alt="Bloom residential towers, image from the Bloom Holding homepage" style="width:260px;height:900px;object-fit:cover;border-radius:130px 130px 0px 0px">
+<img src="../assets/deck/photo-skyline.jpg" alt="Bloom towers on the city skyline, image from the Bloom Holding homepage" style="width:260px;height:500px;object-fit:cover;border-radius:130px 130px 0px 0px">
+</div>
+<aside>Product Discovery: current experience, pain points and UX disparities. Scope: homepage discovery and UX assessment only. This is a discovery presentation, not a redesign proposal. Source: Website RFP pp. 1, 4–6. The three photographs and the wordmark are Bloom’s own, taken from bloomholding.com.</aside>
+</section>
+</div>
+<div class="frame"><section id="context" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:40px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">02 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Project overview</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">Seven businesses. One <i><span style="color:#962B23">homepage</span></i></h2>
+</div>
+<div style="display:flex;gap:80px">
+<div style="width:760px;display:flex;flex-direction:column;gap:22px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;line-height:1.22">Bloom Holding is a diversified master developer. Its website needs to become a connected digital ecosystem.</p>
+<p style="font-size:26px;line-height:1.45;color:#6B655C">One that communicates Bloom’s proposition while serving the needs of its different audiences.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column">
+<p style="font-size:24px;font-weight:700;color:#6B655C;padding:0px 0px 12px">We are evaluating the homepage to find ways to:</p>
+<div style="display:flex;align-items:center;gap:20px;border-top:1px solid #DDD3BD;padding:9px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:40px;font-style:italic;line-height:1;color:#962B23;width:48px">1</p>
+<p style="flex:1;font-size:28px;font-weight:500;line-height:1.25">Communicate the brand proposition clearly</p>
+</div>
+<div style="display:flex;align-items:center;gap:20px;border-top:1px solid #DDD3BD;padding:9px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:40px;font-style:italic;line-height:1;color:#962B23;width:48px">2</p>
+<p style="flex:1;font-size:28px;font-weight:500;line-height:1.25">Make key user journeys easy to discover</p>
+</div>
+<div style="display:flex;align-items:center;gap:20px;border-top:1px solid #DDD3BD;padding:9px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:40px;font-style:italic;line-height:1;color:#962B23;width:48px">3</p>
+<p style="flex:1;font-size:28px;font-weight:500;line-height:1.25">Connect Bloom’s business ecosystem</p>
+</div>
+<div style="display:flex;align-items:center;gap:20px;border-top:1px solid #DDD3BD;padding:9px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:40px;font-style:italic;line-height:1;color:#962B23;width:48px">4</p>
+<p style="flex:1;font-size:28px;font-weight:500;line-height:1.25">Open up property and community discovery</p>
+</div>
+<div style="display:flex;align-items:center;gap:20px;border-top:1px solid #DDD3BD;padding:9px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:40px;font-style:italic;line-height:1;color:#962B23;width:48px">5</p>
+<p style="flex:1;font-size:28px;font-weight:500;line-height:1.25">Improve access to customer services</p>
+</div>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:flex-end;gap:20px">
+<div style="flex:1;height:250px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#962B23;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center;color:#F8F6EA">Real Estate</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Education</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Hospitality</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Retail</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Healthcare</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Facilities Management</p>
+</div>
+<div style="flex:1;height:215px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#E9E1CF;border-radius:115px 115px 0px 0px;padding:0px 12px 26px">
+<p style="font-size:24px;font-weight:700;line-height:1.2;text-align:center">Landscaping</p>
+</div>
+</div>
+<aside>Project context in full: Bloom Holding is a diversified master developer with businesses across Real Estate, Education, Hospitality, Retail, Healthcare, Facilities Management and Landscaping (the seven arches). The current website needs to evolve into a connected digital ecosystem that communicates Bloom’s proposition while serving the needs of its different audiences.
+
+Discovery objective: evaluate the current homepage experience and identify opportunities to (1) communicate Bloom’s brand proposition more clearly, (2) improve discoverability of key user journeys, (3) connect Bloom’s business ecosystem, (4) make property and community discovery more accessible, (5) improve access to relevant customer services.
+
+Scope: homepage discovery and UX assessment only. Source: Website RFP pp. 1, 4–6.</aside>
+</section>
+</div>
+<div class="frame"><section id="audit" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:40px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">03 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Existing homepage audit</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">Understanding the current <i><span style="color:#962B23">experience</span></i></h2>
+</div>
+<div style="display:flex;gap:56px;align-items:center">
+<div style="position:relative;width:1252px;height:640px">
+<div style="position:absolute;left:0px;top:56px;width:880px;height:584px;background:#962B23;border-radius:24px"></div>
+<p style="position:absolute;left:48px;top:590px;width:800px;font-size:24px;color:#F8F6EA">bloomholding.com · homepage, first view</p>
+<img src="../assets/deck/hero.jpg" alt="Live screenshot of the bloomholding.com homepage first view: navigation, Bloom wordmark and property search bar" style="position:absolute;left:48px;top:0px;width:880px;height:550px;object-fit:cover;border-radius:14px;box-shadow:0px 24px 48px rgba(29,26,23,0.3)">
+<img src="../assets/deck/ccl.jpg" alt="Live screenshot: Curated Community Living section" style="position:absolute;left:952px;top:0px;width:300px;height:188px;object-fit:cover;border-radius:14px">
+<img src="../assets/deck/verticals.jpg" alt="Live screenshot: business tiles for Education and Hospitality" style="position:absolute;left:952px;top:226px;width:300px;height:188px;object-fit:cover;border-radius:14px;border:1px solid #DDD3BD">
+<img src="../assets/deck/footer.jpg" alt="Live screenshot: footer with What We Do, Our Communities and E-Services" style="position:absolute;left:952px;top:452px;width:300px;height:188px;object-fit:cover;border-radius:14px">
+<p style="position:absolute;left:598px;top:20px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">3</p>
+<p style="position:absolute;left:88px;top:238px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">2</p>
+<p style="position:absolute;left:462px;top:455px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">4</p>
+<p style="position:absolute;left:964px;top:12px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">1</p>
+<p style="position:absolute;left:964px;top:238px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">5</p>
+<p style="position:absolute;left:964px;top:464px;width:52px;height:52px;border-radius:50%;background:#F8F6EA;border:2px solid #962B23;color:#962B23;font-size:24px;font-weight:800;text-align:center;line-height:2;box-shadow:0px 4px 12px rgba(0,0,0,0.4)">6</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column">
+<p style="font-size:24px;font-weight:700;color:#6B655C;padding:0px 0px 14px">Six things we looked at</p>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">1</p>
+<p style="flex:1;font-size:28px;font-weight:500">Brand proposition</p>
+</div>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">2</p>
+<p style="flex:1;font-size:28px;font-weight:500">Hero &amp; primary CTA</p>
+</div>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">3</p>
+<p style="flex:1;font-size:28px;font-weight:500">Navigation</p>
+</div>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">4</p>
+<p style="flex:1;font-size:28px;font-weight:500">Property discovery</p>
+</div>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">5</p>
+<p style="flex:1;font-size:28px;font-weight:500">Business ecosystem</p>
+</div>
+<div style="display:flex;gap:16px;align-items:center;border-top:1px solid #DDD3BD;padding:14px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1;color:#962B23;width:44px">6</p>
+<p style="flex:1;font-size:28px;font-weight:500">Customer services</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:96px;bottom:36px;width:1728px;font-size:24px;color:#6B655C">Live capture, desktop, 12 Nov 2026 · Hero video not loaded in capture</p>
+<aside>An initial review of how the existing homepage communicates Bloom’s brand, services and user journeys. Sources: Website RFP pp. 2–4 and a preliminary audit of the live homepage (bloomholding.com, captured 12 Nov 2026, desktop 1440px). Screenshots are genuine captures. The hero background video did not load in the capture environment, so the first view shows the wordmark on black; re-capture in a normal browser before client use.
+
+Audit questions per dimension:
+1 First Impression &amp; Brand Proposition: Does the homepage immediately communicate who Bloom Holding is? Is its master developer positioning clear? Is Curated Community Living meaningfully explained?
+2 Hero Section &amp; Primary CTA: Does the hero serve different audience needs? Are key user actions immediately visible? Does the primary CTA reflect the breadth of Bloom’s offering?
+3 Navigation &amp; Information Hierarchy: Can users easily identify where to go? Are important journeys easily discoverable? Is navigation based on user intent or business structure?
+4 Property &amp; Community Discovery: How easily can users find a home? Are Buy and Rent pathways visible? Can users explore communities without unnecessary navigation?
+5 Business Ecosystem: Are the verticals clearly represented? Is the relationship between businesses and community living explained?
+6 Customer Services: Can existing customers and residents easily identify their service entry points?</aside>
+</section>
+</div>
+<div class="frame"><section id="findings" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:40px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">04 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Preliminary audit findings</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">What the homepage shows <i><span style="color:#962B23">today</span></i></h2>
+</div>
+<div style="flex:1;display:flex;gap:72px">
+<div style="width:500px;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;background:#962B23;color:#F8F6EA;border-radius:250px 250px 24px 24px;padding:0px 52px 56px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#EBC9BE">Key observation</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;line-height:1.15">The experience is organization-led.</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:44px;font-style:italic;line-height:1.15">Bloom’s ambition is to make it user-led.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column">
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">1</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Brand proposition</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">The first view shows the wordmark only. The proposition appears on scroll.</p>
+</div>
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">2</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Hero &amp; primary CTA</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">One primary action: Search Properties. No entry point for other audiences.</p>
+</div>
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">3</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Navigation</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">Menu labels follow Bloom’s company structure rather than visitor intent.</p>
+</div>
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">4</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Property discovery</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">No Buy or Rent choice in search. Sales and Leasing are separate menu items.</p>
+</div>
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">5</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Business ecosystem</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">Five businesses appear as tiles. Retail and Healthcare are not shown.</p>
+</div>
+<div style="flex:1;display:flex;gap:24px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:48px;font-style:italic;line-height:1;color:#962B23;width:48px">6</p>
+<p style="font-size:28px;font-weight:700;line-height:1.2;width:300px">Customer services</p>
+<p style="flex:1;font-size:26px;line-height:1.35;color:#6B655C">No resident entry point in the header. Apps sit in the footer.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:668px;bottom:36px;width:1156px;font-size:24px;color:#6B655C">Preliminary observations from the live homepage, desktop only · RFP pp. 2–4</p>
+<aside>Key observation: the current experience is primarily organization-led, while Bloom’s ambition is to make it more user-led.
+
+Observations in full (preliminary, desktop only, from the live homepage captured 12 Nov 2026):
+1 The first view shows the Bloom wordmark only. “Curated Community Living” appears on scroll as a heading without explanation; the master developer statement sits further down.
+2 One primary action, Search Properties, with Make Enquiry in the header. No visible entry point for residents, investors or corporate visitors.
+3 Who We Are, What We Do, Properties, Media Centre, Careers. Labels follow the company structure.
+4 Search filters by property, type and bedrooms, with no Buy or Rent choice. Sales and Leasing are separate menu items; 13 developments are listed by name.
+5 Five businesses appear as numbered tiles (Properties, Education, Hospitality, Landscape, Facilities Management). Retail and Healthcare are not shown, and the link to community living is not explained.
+6 No resident or customer entry point in the header; the Bloom apps sit under “E-Services” in the footer.
+
+Mobile, Arabic and analytics review are still to come.</aside>
+</section>
+</div>
+<div class="frame"><section id="audiences" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:36px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">05 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Audience &amp; user intent</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">One homepage. Multiple user <i><span style="color:#962B23">intentions</span></i></h2>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;background:#FFFDF7;border:1px solid #DDD3BD;border-radius:206px 206px 20px 20px;padding:44px 32px 36px">
+<p style="width:60px;height:60px;border-radius:50%;background:#962B23;color:#F8F6EA;font-size:26px;font-weight:700;text-align:center;line-height:2.3">1</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:38px;font-weight:400;line-height:1.12;text-align:center;height:86px">Buyers &amp; Renters</h3>
+<p style="font-size:24px;line-height:1.5;color:#6B655C;text-align:center;height:144px">Find available properties<br>Explore communities<br>Understand property details<br>Submit an enquiry</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:27px;font-style:italic;line-height:1.25;color:#962B23;text-align:center;border-top:1px solid #DDD3BD;padding:20px 0px 0px;height:94px;width:340px">Find a suitable home</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;background:#FFFDF7;border:1px solid #DDD3BD;border-radius:206px 206px 20px 20px;padding:44px 32px 36px">
+<p style="width:60px;height:60px;border-radius:50%;background:#962B23;color:#F8F6EA;font-size:26px;font-weight:700;text-align:center;line-height:2.3">2</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:38px;font-weight:400;line-height:1.12;text-align:center;height:86px">Existing Residents &amp; Customers</h3>
+<p style="font-size:24px;line-height:1.5;color:#6B655C;text-align:center;height:144px">Access customer services<br>Find relevant support<br>Access community services</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:27px;font-style:italic;line-height:1.25;color:#962B23;text-align:center;border-top:1px solid #DDD3BD;padding:20px 0px 0px;height:94px;width:340px">Get assistance and access services</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;background:#FFFDF7;border:1px solid #DDD3BD;border-radius:206px 206px 20px 20px;padding:44px 32px 36px">
+<p style="width:60px;height:60px;border-radius:50%;background:#962B23;color:#F8F6EA;font-size:26px;font-weight:700;text-align:center;line-height:2.3">3</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:38px;font-weight:400;line-height:1.12;text-align:center;height:86px">Investors &amp; Business Partners</h3>
+<p style="font-size:24px;line-height:1.5;color:#6B655C;text-align:center;height:144px">Bloom’s business portfolio<br>Its scale and capabilities<br>Credibility and track record</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:27px;font-style:italic;line-height:1.25;color:#962B23;text-align:center;border-top:1px solid #DDD3BD;padding:20px 0px 0px;height:94px;width:340px">Understand Bloom’s business and opportunities</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;background:#FFFDF7;border:1px solid #DDD3BD;border-radius:206px 206px 20px 20px;padding:44px 32px 36px">
+<p style="width:60px;height:60px;border-radius:50%;background:#962B23;color:#F8F6EA;font-size:26px;font-weight:700;text-align:center;line-height:2.3">4</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:38px;font-weight:400;line-height:1.12;text-align:center;height:86px">Corporate Visitors &amp; Stakeholders</h3>
+<p style="font-size:24px;line-height:1.5;color:#6B655C;text-align:center;height:144px">Understand Bloom’s identity<br>Explore business verticals<br>Leadership and news</p>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:27px;font-style:italic;line-height:1.25;color:#962B23;text-align:center;border-top:1px solid #DDD3BD;padding:20px 0px 0px;height:94px;width:340px">Learn about Bloom Holding</p>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:center;gap:16px">
+<p style="flex:1;font-size:24px;font-weight:700;color:#6B655C">Four primary homepage destinations</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA;background:#1D1A17;border-radius:40px;padding:12px 26px;white-space:nowrap">Find a Home</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA;background:#1D1A17;border-radius:40px;padding:12px 26px;white-space:nowrap">Explore Communities</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA;background:#1D1A17;border-radius:40px;padding:12px 26px;white-space:nowrap">Customer Services</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA;background:#1D1A17;border-radius:40px;padding:12px 26px;white-space:nowrap">About Bloom</p>
+</div>
+<p style="position:absolute;left:96px;bottom:36px;width:1728px;font-size:24px;color:#6B655C">RFP pp. 2, 5–6 · Audience needs are working assumptions to validate in research</p>
+<aside>One homepage, multiple user intentions. The homepage needs to accommodate different audiences without requiring them to understand Bloom’s organizational structure.
+
+Key insight: different audiences arrive with different expectations. The homepage should provide clear entry points based on what visitors want to accomplish. The four pills are the four primary homepage destinations named in the RFP (p. 5): Find a Home, Explore Communities, Customer Services, About Bloom. The red italic line in each arch is that audience’s primary intention.
+
+Sources: Website RFP pp. 2, 5–6. The RFP names the audiences (buyers, investors, brokers, residents, partners, corporate stakeholders, media, employees). The four groupings and the needs listed are our working assumptions for discovery; they have not yet been validated with users. Personas are an RFP discovery deliverable (p. 6).
+
+Needs in full. Buyers &amp; Renters: find available properties, explore residential communities, understand property details, submit an enquiry. Existing Residents &amp; Customers: access customer services, find relevant support, access community-related services. Investors &amp; Business Partners: understand Bloom’s business portfolio, explore its scale and capabilities, evaluate its credibility and track record. Corporate Visitors &amp; Stakeholders: understand Bloom’s identity, explore its business verticals, discover leadership, news and company information.</aside>
+</section>
+</div>
+<div class="frame"><section id="pain-high" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:36px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">06 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Key pain points · High priority</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">Where does the experience fall <i><span style="color:#962B23">short?</span></i></h2>
+</div>
+<div style="display:flex">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 44px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#962B23">1</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Unclear Brand Positioning</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">The homepage does not immediately communicate Bloom’s identity, scale and value proposition.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">First-time visitors may not understand what Bloom offers beyond property.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 44px;border-left:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#962B23">2</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Limited Visibility of User Journeys</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">The experience does not give enough prominence to the key actions visitors want to take.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">Buyers, renters and residents may have to explore the menu first.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 0px 0px 44px;border-left:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#962B23">3</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Fragmented Property Discovery</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">Sales and leasing journeys are not unified into one intuitive discovery experience.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">Finding the right property can involve unnecessary, disconnected navigation.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:96px;bottom:36px;width:1728px;font-size:24px;color:#6B655C">Problems: RFP pp. 2–4 · User impacts are hypotheses to validate · Priorities are preliminary</p>
+<aside>Where does the current experience fall short? The initial discovery highlights gaps in brand communication, navigation, discoverability and audience relevance. These three are our preliminary high priorities.
+
+1 Unclear Brand Positioning: the homepage does not immediately communicate Bloom’s complete identity, scale and differentiated value proposition. User impact: first-time visitors may not fully understand what Bloom offers beyond its property developments. (RFP p.2 A)
+2 Limited Visibility of User Journeys: the experience does not give sufficient prominence to the key actions visitors want to accomplish. User impact: buyers, renters and residents may need to explore navigation before reaching their intended destination. (RFP p.2 B)
+3 Fragmented Property Discovery: sales and leasing journeys are not sufficiently unified into an intuitive discovery experience. User impact: finding the right property can involve unnecessary navigation and disconnected journeys. (RFP p.3 B/C)
+
+User impacts are hypotheses, not validated user feedback. Priorities are a preliminary view for discussion.</aside>
+</section>
+</div>
+<div class="frame"><section id="pain-medium" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:36px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">07 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#6B655C">Key pain points · Medium priority</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">Three more gaps to <i><span style="color:#962B23">close</span></i></h2>
+</div>
+<div style="display:flex">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 44px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#1D1A17">4</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Disconnected Ecosystem Storytelling</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">Bloom’s verticals are not connected through one consistent expression of Curated Community Living.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">Visitors may not see how Bloom’s businesses together shape its communities.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 44px;border-left:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#1D1A17">5</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Limited Community Discovery</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">Community storytelling and active property opportunities are not sufficiently connected.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">Users may struggle to move from exploring a community to finding a property.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0px 0px 0px 44px;border-left:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:140px;font-style:italic;line-height:1.1;color:#1D1A17">6</p>
+<h3 style="font-family:'Playfair Display', Georgia, serif;font-size:42px;font-weight:400;line-height:1.15;height:98px">Customer Service Discoverability</h3>
+<p style="font-size:26px;line-height:1.4;height:148px">Residents and customers need stronger homepage pathways to relevant services.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#E9E1CF;border-radius:18px;padding:22px 26px;height:182px">
+<p style="font-size:24px;font-weight:700;color:#962B23">User impact</p>
+<p style="font-size:24px;line-height:1.35">Post-purchase and resident service journeys may be less accessible.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:96px;bottom:36px;width:1728px;font-size:24px;color:#6B655C">Problems: RFP pp. 2–4 · User impacts are hypotheses to validate · Priorities are preliminary</p>
+<aside>The second half of “Where does the current experience fall short?”: three pain points we rate as preliminary medium priority.
+
+4 Disconnected Ecosystem Storytelling: Bloom’s business verticals are not sufficiently connected through one consistent expression of Curated Community Living. User impact: visitors may not understand how Bloom’s businesses collectively contribute to its communities. (RFP p.2 A)
+5 Limited Community Discovery: community storytelling and active property opportunities are not sufficiently connected. User impact: users may struggle to move naturally from exploring a community to finding relevant properties. (RFP p.3 C)
+6 Customer Service Discoverability: the homepage needs stronger pathways for existing residents and customers to access relevant services. User impact: important post-purchase and resident service journeys may be less accessible. (RFP pp. 2, 6)
+
+The preliminary live-site audit is consistent with all six. User impacts are hypotheses, not validated user feedback. High and Medium are a preliminary view for discussion, to be confirmed with stakeholders, research and analytics.</aside>
+</section>
+</div>
+<div class="frame"><section id="current-desired" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 96px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">08 / 10</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Current vs desired experience</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">From organization-led to <i><span style="color:#962B23">user-led</span></i></h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:24px;align-items:center">
+<div style="width:250px"></div>
+<p style="flex:1;font-size:24px;font-weight:700;color:#6B655C;padding:0px 0px 0px 36px">Today</p>
+<p style="flex:1;font-size:24px;font-weight:700;color:#962B23;padding:0px 0px 0px 36px">Where it should go</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">Brand</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Broad corporate messaging</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">Clear, evidence-led positioning</p>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">Navigation</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Organized around the company</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">Organized around user intent</p>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">User journeys</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Key actions are not prominent</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">Prominent entry points per audience</p>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">Property discovery</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Sales and leasing sit apart</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">One Find a Home, with Buy and Rent</p>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">Ecosystem</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Verticals shown as separate categories</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">One connected Bloom ecosystem</p>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center">
+<p style="width:250px;font-size:24px;font-weight:700">Customer services</p>
+<div style="flex:1;display:flex">
+<p style="flex:1;font-size:26px;line-height:1.3;background:#E9E1CF;border-radius:36px 0px 0px 36px;padding:18px 36px">Customer pathways lack prominence</p>
+<div style="flex:1;display:flex;align-items:center;gap:18px;background:#962B23;border-radius:0px 36px 36px 0px;padding:18px 36px">
+<x-shape kind="arrow-right" style="background:#F8F6EA;width:36px;height:18px"></x-shape>
+<p style="flex:1;font-size:26px;font-weight:700;line-height:1.3;color:#F8F6EA">Easy access for residents and customers</p>
+</div>
+</div>
+</div>
+</div>
+<div style="flex:1"></div>
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:36px;line-height:1.25">The homepage should not simply introduce Bloom Holding. <i><span style="color:#962B23">It should help every visitor understand Bloom and identify their next meaningful action.</span></i></p>
+<aside>The opportunity is to transform the homepage from a corporate introduction into a connected gateway to Bloom’s ecosystem.
+
+Current experience in full. Brand communication: broad corporate messaging; limited immediate differentiation. Navigation: primarily organization-led; users need to understand business categories. User journeys: important actions are not sufficiently prominent; different journeys require navigation exploration. Property discovery: sales and leasing journeys lack a unified experience. Business ecosystem: business verticals are presented as separate organizational categories. Customer services: customer-facing pathways need greater homepage prominence.
+
+Desired experience in full. Brand communication: clear positioning; evidence-led Curated Community Living proposition. Navigation: user-intent-led structure; clear and accessible navigation. User journeys: prominent entry points for priority audiences. Property discovery: unified Find a Home experience with clear Buy and Rent pathways. Business ecosystem: connected expression of Bloom’s businesses and capabilities. Customer services: easy access to relevant customer and resident services.
+
+Key takeaway: the homepage should not simply introduce Bloom Holding. It should help every visitor understand Bloom and identify their next meaningful action.
+
+Sources: “Current” summarises RFP-stated challenges (pp. 2–4) and the preliminary live-site audit. “Desired” reflects the RFP ambition (pp. 4–6). This is a direction of travel, not a layout proposal.</aside>
+</section>
+</div>
+<div class="frame"><section id="opportunities" data-transition="fade" style="background:#F8F6EA;color:#1D1A17;font-family:'DM Sans', Arial, sans-serif;padding:150px 96px 0px;display:flex;gap:80px">
+<div style="position:absolute;left:0px;top:0px;width:1920px;height:92px;background:#962B23;display:flex;align-items:center;gap:28px;padding:0px 96px">
+<img src="../assets/deck/wordmark-cream.png" alt="Bloom" style="width:118px;height:37px;object-fit:contain">
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#F8F6EA">Homepage Product Discovery</p>
+<p style="font-size:24px;font-weight:700;color:#F8F6EA">09 / 10</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:30px;padding:0px 0px 96px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#962B23">Key UX opportunities</p>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">Where should we focus <i><span style="color:#962B23">next?</span></i></h2>
+</div>
+<div style="flex:1;display:flex;flex-direction:column">
+<div style="flex:1;display:flex;gap:28px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:64px;font-style:italic;line-height:1;color:#962B23;width:60px">1</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<h3 style="font-size:30px;font-weight:700;line-height:1.2">Stronger Brand Introduction</h3>
+<p style="font-size:24px;line-height:1.3;color:#6B655C">Establish Bloom’s identity, scale and unique proposition immediately.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;gap:28px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:64px;font-style:italic;line-height:1;color:#962B23;width:60px">2</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<h3 style="font-size:30px;font-weight:700;line-height:1.2">Intent-Led Homepage Navigation</h3>
+<p style="font-size:24px;line-height:1.3;color:#6B655C">Make important destinations accessible according to visitor needs.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;gap:28px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:64px;font-style:italic;line-height:1;color:#962B23;width:60px">3</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<h3 style="font-size:30px;font-weight:700;line-height:1.2">Prominent Property &amp; Community Discovery</h3>
+<p style="font-size:24px;line-height:1.3;color:#6B655C">Create clearer entry points to finding homes and exploring communities.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;gap:28px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:64px;font-style:italic;line-height:1;color:#962B23;width:60px">4</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<h3 style="font-size:30px;font-weight:700;line-height:1.2">Connected Ecosystem Storytelling</h3>
+<p style="font-size:24px;line-height:1.3;color:#6B655C">Show how Bloom’s verticals together support community living.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;gap:28px;align-items:center;border-top:1px solid #DDD3BD">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:64px;font-style:italic;line-height:1;color:#962B23;width:60px">5</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<h3 style="font-size:30px;font-weight:700;line-height:1.2">Improved Customer Access &amp; Engagement</h3>
+<p style="font-size:24px;line-height:1.3;color:#6B655C">Make services, enquiries and next steps easier to identify.</p>
+</div>
+</div>
+</div>
+</div>
+<img src="../assets/deck/photo-marina.jpg" alt="Bloom marina-side development at dusk, image from the Bloom Holding homepage" style="width:540px;height:880px;object-fit:cover;border-radius:270px 270px 0px 0px;align-self:flex-end">
+<p style="position:absolute;left:96px;bottom:36px;width:1000px;font-size:24px;color:#6B655C">RFP pp. 5–6 · Areas to explore, not design solutions</p>
+<aside>The discovery findings point towards five key areas of homepage experience improvement.
+
+Sources: Website RFP pp. 5–6. The five opportunity areas map to the RFP ambition: differentiate the master brand through evidence; restructure around user intent; make the homepage the gateway to the Bloom ecosystem; unify property discovery; improve customer access to services. They are areas to explore, not UI solutions.
+
+In full: 1 Stronger Brand Introduction: establish Bloom’s identity, scale and unique proposition immediately. 2 Intent-Led Homepage Navigation: make important destinations accessible according to visitor needs. 3 Prominent Property &amp; Community Discovery: create clearer entry points to finding homes and exploring communities. 4 Connected Ecosystem Storytelling: demonstrate how Bloom’s business verticals collectively support its community living proposition. 5 Improved Customer Access &amp; Engagement: make customer services, enquiries and important next steps easier to identify.
+
+The photograph is Bloom’s own, from bloomholding.com.</aside>
+</section>
+</div>
+<div class="frame"><section id="next-steps" data-transition="fade" style="background:#0E0D0C;color:#F8F6EA;font-family:'DM Sans', Arial, sans-serif;padding:96px 96px 96px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center">
+<p style="flex:1;font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C9BFA9">Next steps</p>
+<p style="font-size:24px;font-weight:700;color:#C9BFA9">10 / 10</p>
+</div>
+<h2 style="font-family:'Playfair Display', Georgia, serif;font-size:84px;font-weight:400;line-height:1.05;letter-spacing:-1px">From discovery <i>to design</i></h2>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:3px solid #962B23;padding:20px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:72px;font-style:italic;line-height:1">1</p>
+<p style="font-size:30px;line-height:1.3;color:#E4DCC9">Complete the section-by-section homepage UX audit.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:3px solid #962B23;padding:20px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:72px;font-style:italic;line-height:1">2</p>
+<p style="font-size:30px;line-height:1.3;color:#E4DCC9">Validate pain points with stakeholders, research and analytics.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:3px solid #962B23;padding:20px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:72px;font-style:italic;line-height:1">3</p>
+<p style="font-size:30px;line-height:1.3;color:#E4DCC9">Prioritize audience needs and primary homepage journeys.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:3px solid #962B23;padding:20px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:72px;font-style:italic;line-height:1">4</p>
+<p style="font-size:30px;line-height:1.3;color:#E4DCC9">Define information hierarchy and experience strategy.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:3px solid #962B23;padding:20px 0px 0px">
+<p style="font-family:'Playfair Display', Georgia, serif;font-size:72px;font-style:italic;line-height:1">5</p>
+<p style="font-size:30px;line-height:1.3;color:#E4DCC9">Move into homepage wireframing and interaction design.</p>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:flex-end;gap:72px">
+<p style="flex:1;font-family:'Playfair Display', Georgia, serif;font-size:52px;line-height:1.18">A more intuitive homepage should connect Bloom’s brand, communities, properties and services <i>through one clear and meaningful user experience.</i></p>
+<img src="../assets/deck/wordmark-red.png" alt="Bloom wordmark" style="width:440px;height:137px;object-fit:contain">
+</div>
+<aside>Next steps in full: (1) complete the detailed section-by-section homepage UX audit; (2) validate pain points through stakeholder feedback, user research and analytics; (3) prioritize audience needs and primary homepage journeys; (4) define homepage information hierarchy and experience strategy; (5) move into homepage wireframing and interaction design.
+
+Closing statement: a more intuitive homepage should connect Bloom’s brand, communities, properties and services through one clear and meaningful user experience.
+
+These follow the RFP discovery, IA and UX phases (pp. 6–8). The black slide with the red wordmark echoes the footer of bloomholding.com.</aside>
+</section>
+</div>
+<script>
+// scale each 1920x1080 slide to its frame
+const fit=()=>document.querySelectorAll('.frame').forEach(f=>f.firstElementChild.style.transform='scale('+f.clientWidth/1920+')');
+addEventListener('resize',fit);fit();
+</script></body></html>
