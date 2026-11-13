@@ -67,7 +67,7 @@ export function initDock() {
     const y = window.scrollY;
     const range = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.setProperty('--progress', range > 0 ? (y / range).toFixed(4) : 0);
-    const pastHero = !hero || y > hero.offsetHeight * 0.6;
+    const pastHero = !hero || y > hero.offsetHeight * 1.5;
     dock.classList.toggle('is-visible', pastHero);
     if (!pastHero) close();
     // The section whose top has passed the middle of the screen is the current one.

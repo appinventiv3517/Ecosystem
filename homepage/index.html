@@ -77,8 +77,8 @@
     <img class="intro__mark" src="assets/brand/wordmark-red.png" alt="" width="762" height="237" data-intro-mark>
     <div class="intro__arches">
       <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/vignette-education-520.webp" alt="" width="520" height="694"></span>
-      <span class="intro__arch intro__arch--centre" data-intro-centre></span>
-      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/vignette-landscape-520.webp" alt="" width="520" height="693"></span>
+      <span class="intro__arch intro__arch--centre" data-intro-arch><img src="assets/img/community-zayed-city-800.webp" alt="" width="800" height="533"></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/life-2b-480.webp" alt="" width="480" height="800"></span>
     </div>
     <p class="intro__words" data-intro-words><span>Curated</span><i></i><span>Community</span><i></i><span>Living</span></p>
     <div class="intro__count"><span data-intro-count>0</span><small>%</small></div>
@@ -291,7 +291,39 @@
            02 · Immersive hero
            ============================================================ -->
       <section class="hero" id="top" data-section="hero" data-hero aria-label="Curated Community Living">
-        <div class="hero__media" data-hero-media>
+        <div class="hero__copy wrap" data-hero-content>
+          <p class="hero__eyebrow" data-hero-eyebrow><span class="hero__pulse" aria-hidden="true"></span>A diversified master developer · Abu Dhabi &amp; Dubai</p>
+          <h1 class="hero__title" data-hero-title>
+            <span class="hero__line"><span class="hero__word">Curated</span><span class="hero-pic hero-pic--arch" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/vignette-education-520.webp" alt="" width="520" height="694" data-label="Education" draggable="false"><img src="assets/img/vignette-hospitality-520.webp" alt="" width="520" height="693" data-label="Hospitality" draggable="false"><img src="assets/img/vignette-landscape-520.webp" alt="" width="520" height="693" data-label="Landscaping" draggable="false"></span><span class="hero-pic__tag" data-chip-tag>Education</span></span></span>
+            <span class="hero__line"><span class="hero-pic hero-pic--pill" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/community-zayed-city-800.webp" alt="" width="800" height="533" data-label="Zayed City" draggable="false"><img src="assets/img/community-al-bateen-800.webp" alt="" width="800" height="600" data-label="Al Bateen Marina" draggable="false"><img src="assets/img/community-jvc-800.webp" alt="" width="800" height="534" data-label="Jumeirah Village Circle" draggable="false"></span><span class="hero-pic__tag" data-chip-tag>Zayed City</span></span><span class="hero__word">Community</span></span>
+            <span class="hero__line"><span class="hero__word"><em>Living</em></span><span class="hero-pic hero-pic--round" data-chip aria-hidden="true"><span class="hero-pic__frame"><img class="is-active" src="assets/img/life-2b-480.webp" alt="" width="480" height="800" data-label="" draggable="false"><img src="assets/img/life-3b-480.webp" alt="" width="480" height="800" data-label="" draggable="false"><img src="assets/img/life-1a-460.webp" alt="" width="460" height="697" data-label="" draggable="false"></span></span></span>
+          </h1>
+          <div class="hero__aside">
+            <p class="hero__lede" data-hero-lede>Discover thoughtfully curated places, experiences and communities that bring everyday living together.</p>
+            <div class="hero__actions" data-hero-actions>
+              <a class="btn" href="#find" data-magnetic>
+                <span class="btn__label">Find a Home</span>
+                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+              </a>
+              <a class="btn btn--outline" href="#communities" data-magnetic>
+                <span class="btn__label">Explore Communities</span>
+                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- The photograph window: peeks up from the foot of the screen, then grows to fill it as you scroll -->
+        <div class="hero__window" data-hero-window>
+          <a class="scroll-badge" href="#begin" aria-label="Scroll to start exploring" data-scroll-badge>
+            <svg class="scroll-badge__ring" viewBox="0 0 120 120" aria-hidden="true" data-badge-ring>
+              <defs><path id="badge-path" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0"/></defs>
+              <text><textPath href="#badge-path" textLength="292" lengthAdjust="spacing">Scroll to explore · Curated Community Living · </textPath></text>
+            </svg>
+            <span class="scroll-badge__core" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+          </a>
+          <div class="hero__frame" data-hero-frame>
+            <div class="hero__media" data-hero-media>
           <picture class="hero__slide is-active" data-hero-slide data-caption="Bloom Living, Abu Dhabi">
             <source media="(max-width: 760px) and (orientation: portrait)" srcset="assets/img/hero-lakeside-villas-portrait-1000.webp">
             <img src="assets/img/hero-lakeside-villas-1600.webp" srcset="assets/img/hero-lakeside-villas-1600.webp 1600w, assets/img/hero-lakeside-villas-2400.webp 2400w" sizes="100vw" width="2400" height="1359" alt="Villas along a landscaped lake edge in a Bloom community (architectural render)" fetchpriority="high" decoding="async">
@@ -305,60 +337,8 @@
             <img src="assets/img/hero-lake-bridge-1400.webp" srcset="assets/img/hero-lake-bridge-1400.webp 1400w, assets/img/hero-lake-bridge-2000.webp 2000w" sizes="100vw" width="2000" height="1333" alt="Footbridge across a lake at sunset at Bloom Living (architectural render)" loading="lazy" decoding="async">
           </picture>
           <div class="hero__shade" aria-hidden="true"></div>
-        </div>
-
-        <!-- Arch outlines that draw themselves behind the floating arches -->
-        <svg class="hero__lines" viewBox="0 0 600 720" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" data-hero-lines>
-          <path pathLength="1" d="M40 720V330a260 260 0 0 1 520 0v390"/>
-          <path pathLength="1" d="M130 720V340a170 170 0 0 1 340 0v380"/>
-          <path pathLength="1" d="M220 720V350a80 80 0 0 1 160 0v370"/>
-        </svg>
-
-        <div class="hero__vignettes" data-hero-vignettes>
-          <a class="vignette vignette--a" href="#ecosystem" data-vertical-jump="education" data-depth="0.9">
-            <span class="vignette__frame arch"><img src="assets/img/vignette-education-520.webp" alt="" width="520" height="694" loading="lazy"></span>
-            <span class="vignette__label">Education</span>
-          </a>
-          <a class="vignette vignette--b" href="#ecosystem" data-vertical-jump="hospitality" data-depth="1.6">
-            <span class="vignette__frame arch"><img src="assets/img/vignette-hospitality-520.webp" alt="" width="520" height="693" loading="lazy"></span>
-            <span class="vignette__label">Hospitality</span>
-          </a>
-          <a class="vignette vignette--c" href="#ecosystem" data-vertical-jump="landscaping" data-depth="0.5">
-            <span class="vignette__frame arch"><img src="assets/img/vignette-landscape-520.webp" alt="" width="520" height="693" loading="lazy"></span>
-            <span class="vignette__label">Landscaping</span>
-          </a>
-        </div>
-
-        <div class="hero__content wrap" data-hero-content>
-          <p class="eyebrow eyebrow--light hero__eyebrow" data-hero-eyebrow>A diversified master developer</p>
-          <h1 class="hero__title" data-hero-title>
-            <span class="hero__line"><span class="hero__word">Curated</span></span>
-            <span class="hero__line"><span class="hero__word">Community</span></span>
-            <span class="hero__line"><span class="hero__word"><em>Living</em></span></span>
-          </h1>
-          <div class="hero__aside">
-            <p class="hero__lede" data-hero-lede>Discover thoughtfully curated places, experiences and communities that bring everyday living together.</p>
-            <div class="hero__actions" data-hero-actions>
-              <a class="btn btn--light" href="#find" data-magnetic>
-                <span class="btn__label">Find a Home</span>
-                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-              </a>
-              <a class="btn btn--outline-light" href="#communities" data-magnetic>
-                <span class="btn__label">Explore Communities</span>
-                <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-              </a>
             </div>
-          </div>
-        </div>
-
-        <div class="hero__foot wrap" data-hero-foot>
-          <a class="scroll-badge" href="#begin" aria-label="Scroll to start exploring" data-scroll-badge>
-            <svg class="scroll-badge__ring" viewBox="0 0 120 120" aria-hidden="true" data-badge-ring>
-              <defs><path id="badge-path" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0"/></defs>
-              <text><textPath href="#badge-path" textLength="292" lengthAdjust="spacing">Scroll to explore · Curated Community Living · </textPath></text>
-            </svg>
-            <span class="scroll-badge__core" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-          </a>
+            <div class="hero__foot" data-hero-foot>
           <div class="hero__slides" data-hero-controls>
             <p class="hero__caption" data-hero-caption aria-live="off">Bloom Living, Abu Dhabi</p>
             <div class="hero__dots" role="group" aria-label="Hero images">
@@ -371,8 +351,11 @@
               <svg class="icon" data-icon-play hidden><use href="#i-play"/></svg>
             </button>
           </div>
+            </div>
+          </div>
         </div>
       </section>
+      <div class="hero-runway" aria-hidden="true"></div>
 
       <!-- ============================================================
            Intent-led entry: four reasons to visit, one per primary destination

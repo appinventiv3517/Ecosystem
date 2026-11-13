@@ -73,7 +73,17 @@ async function desktop(browser) {
   await shot(page, 'desktop-hero');
 
   // Header and scrolling
-  check('header is transparent over the hero', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-solid')));
+  check('hero headline is dark on cream and readable', await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).backgroundColor === 'rgb(248, 246, 234)' && getComputedStyle(document.querySelector('.hero__title')).color === 'rgb(29, 26, 23)'));
+  check('headline carries three pictures at word size', await page.evaluate(() => [...document.querySelectorAll('[data-chip]')].every((chip) => chip.getBoundingClientRect().height > 60)));
+  check('photograph window peeks up from the foot of the screen', await page.evaluate(() => { const top = document.querySelector('[data-hero-frame]').getBoundingClientRect().top; return top > innerHeight * 0.5 && top < innerHeight - 60; }));
+  const firstPictures = await page.evaluate(() => [...document.querySelectorAll('[data-chip] img.is-active')].map((image) => image.getAttribute('src')).join());
+  await wait(page, 4200);
+  check('headline pictures change on their own', (await page.evaluate(() => [...document.querySelectorAll('[data-chip] img.is-active')].map((image) => image.getAttribute('src')).join())) !== firstPictures);
+  await page.evaluate(() => window.scrollTo({ top: innerHeight, behavior: 'instant' }));
+  await wait(page, 2200);
+  check('scrolling grows the window to fill the screen', await page.evaluate(() => { const frame = document.querySelector('[data-hero-frame]').getBoundingClientRect(); return Math.abs(frame.top) < 2 && getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05; }));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await wait(page, 1500);
   await page.click('.primary-nav a[href="#services"]');
   await wait(page, 1600);
   check('nav link scrolls to its section', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 80));
@@ -268,9 +278,7 @@ async function desktop(browser) {
   await page.click('.footer__top');
   await wait(page, 2500);
   check('back to top returns to the hero', (await page.evaluate(() => window.scrollY)) < 5);
-  await page.click('.vignette[data-vertical-jump="education"]');
-  await wait(page, 2600);
-  check('hero arch jumps to its business', (await activeVertical(page)) === 'education');
+
 
   // The nav stays on screen however you scroll
   await goTo(page, '#about', 0);

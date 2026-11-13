@@ -157,15 +157,16 @@ html.is-intro .intro {
 }
 
 /* Until the intro hands over, keep the page chrome out of sight. */
-html.is-intro .site-header__bar > *,
-html.is-intro .hero__content > *,
-html.is-intro .hero__foot,
-html.is-intro .hero__vignettes,
-html.is-intro .hero__lines {
+html.is-intro .site-header__bar,
+html.is-intro .hero__copy > *,
+html.is-intro .hero__window {
   visibility: hidden;
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero ----------
+   A cream canvas with the proposition set large, three small pictures set into the
+   headline itself, and a photograph "window" peeking up from the foot of the screen.
+   Scrolling grows the window to fill the screen before the next section slides over. */
 
 .opening {
   position: relative;
@@ -176,21 +177,218 @@ html.is-intro .hero__lines {
   top: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   height: 100vh;
   height: 100svh;
-  min-height: 35rem;
+  min-height: 36rem;
   overflow: hidden;
   background: var(--cream);
+  color: var(--ink);
+}
+
+/* Scroll room for the window to grow into before the next section arrives. */
+.hero-runway {
+  height: 100vh;
+  height: 100svh;
+}
+
+html:not(.motion) .hero-runway {
+  display: none;
+}
+
+.hero__copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.875rem, 2.2vh, 1.5rem);
+  padding-top: calc(var(--header-h) + clamp(1.25rem, 3.5vh, 2.75rem));
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.45rem 1rem 0.45rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--ivory);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hero__pulse {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--red);
+  animation: hero-pulse 2.4s ease-out infinite;
+}
+
+@keyframes hero-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(150, 43, 35, 0.45);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 0.6rem rgba(150, 43, 35, 0);
+  }
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7.4vw, 8.75rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.hero__line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.08em 0.16em;
+  margin-block: -0.08em -0.16em;
+  white-space: nowrap;
+}
+
+.hero__word {
+  display: inline-block;
+}
+
+.hero__char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--red);
+  padding-right: 0.04em;
+}
+
+/* ---------- Pictures set into the headline ---------- */
+
+.hero-pic {
+  position: relative;
+  display: inline-block;
+  height: 0.76em;
+  margin-inline: 0.16em;
+  vertical-align: -0.02em;
+  will-change: transform;
+}
+
+.hero-pic__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--sand);
+  box-shadow: 0 0.08em 0.24em -0.1em rgba(29, 26, 23, 0.45);
+  transform: translateZ(0);
+}
+
+.hero-pic--arch {
+  width: 0.6em;
+  border-radius: 999px 999px 0.07em 0.07em;
+}
+
+.hero-pic--pill {
+  width: 1.5em;
+  border-radius: 999px;
+}
+
+.hero-pic--round {
+  width: 0.76em;
+  border-radius: 50%;
+}
+
+.hero-pic img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  user-select: none;
+}
+
+.hero-pic img.is-active {
+  opacity: 1;
+}
+
+/* A small label naming what the picture shows, hanging off its foot. */
+.hero-pic__tag {
+  position: absolute;
+  left: 50%;
+  bottom: -0.05em;
+  z-index: 3;
+  translate: -50% 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(0.5625rem, 0.62vw, 0.6875rem);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
   color: var(--cream);
+  white-space: nowrap;
+}
+
+.hero__aside {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  margin-top: clamp(0.25rem, 1vh, 0.75rem);
+}
+
+.hero__lede {
+  max-width: 34rem;
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: balance;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ---------- The window ---------- */
+
+.hero__window {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  height: 100vh;
+  height: 100svh;
+  margin-top: clamp(1.75rem, 5vh, 3.5rem);
+  will-change: transform;
+}
+
+.hero__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ink);
+  clip-path: inset(0px max(var(--gutter), env(safe-area-inset-right, 0px)) 0px max(var(--gutter), env(safe-area-inset-left, 0px)) round 2.5rem 2.5rem 0px 0px);
 }
 
 .hero__media {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: var(--ink);
-  will-change: clip-path;
+  will-change: transform;
 }
 
 .hero__slide {
@@ -220,212 +418,20 @@ html.motion .hero__slide {
   position: absolute;
   inset: 0;
   z-index: 3;
-  background:
-    linear-gradient(180deg, rgba(11, 11, 11, 0.5) 0%, rgba(11, 11, 11, 0.12) 26%, rgba(11, 11, 11, 0.16) 48%, rgba(11, 11, 11, 0.78) 100%),
-    linear-gradient(90deg, rgba(11, 11, 11, 0.42) 0%, rgba(11, 11, 11, 0) 62%);
-}
-
-.hero__lines {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  width: min(46vw, 44rem);
-  height: 92%;
-  fill: none;
-  stroke: rgba(248, 246, 234, 0.3);
-  stroke-width: 1;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent 62%);
-  mask-image: linear-gradient(180deg, #000 30%, transparent 62%);
+  background: linear-gradient(180deg, rgba(11, 11, 11, 0) 55%, rgba(11, 11, 11, 0.55) 100%);
 }
 
-.hero__lines path {
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-html.motion .hero__lines path {
-  stroke-dashoffset: 1;
-}
-
-/* Floating arches: three glimpses of the wider Bloom ecosystem */
-.hero__vignettes {
-  position: absolute;
-  z-index: 2;
-  top: 13%;
-  right: var(--gutter);
-  width: clamp(24rem, 33vw, 32rem);
-  height: 38%;
-}
-
-.vignette {
-  position: absolute;
-  display: grid;
-  gap: 0.625rem;
-  justify-items: center;
-  will-change: transform;
-}
-
-.vignette--a {
-  left: 0;
-  top: 24%;
-  width: 28%;
-}
-
-.vignette--b {
-  left: 35%;
-  top: 0;
-  width: 36%;
-}
-
-.vignette--c {
-  right: 0;
-  top: 36%;
-  width: 24%;
-}
-
-.vignette__frame {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.55);
-  outline: 1px solid rgba(248, 246, 234, 0.4);
-  outline-offset: 5px;
-  animation: vignette-float 7s ease-in-out infinite alternate;
-}
-
-.vignette--b .vignette__frame {
-  animation-duration: 9s;
-  animation-delay: -3s;
-}
-
-.vignette--c .vignette__frame {
-  animation-duration: 8s;
-  animation-delay: -5s;
-}
-
-@keyframes vignette-float {
-  from {
-    translate: 0 -0.5rem;
-  }
-  to {
-    translate: 0 0.625rem;
-  }
-}
-
-.vignette__frame img {
-  transition: transform 900ms var(--ease-out);
-}
-
-.vignette__label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-pill);
-  background: rgba(11, 11, 11, 0.42);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  transition: background-color var(--dur) ease, letter-spacing 520ms var(--ease-out);
-}
-
-.vignette:hover .vignette__frame img,
-.vignette:focus-visible .vignette__frame img {
-  transform: scale(1.08);
-}
-
-.vignette:hover .vignette__label,
-.vignette:focus-visible .vignette__label {
-  background: var(--red);
-  letter-spacing: 0.24em;
-}
-
-/* Copy */
-.hero__content {
-  position: relative;
-  z-index: 4;
-  padding-bottom: clamp(7.5rem, 13vh, 9.5rem);
-}
-
-.hero__eyebrow {
-  margin-bottom: clamp(1rem, 2.2vh, 1.75rem);
-}
-
-.hero__title {
-  font-family: var(--font-display);
-  font-size: var(--text-hero);
-  font-weight: 400;
-  line-height: 0.92;
-  letter-spacing: -0.028em;
-}
-
-.hero__line {
-  display: block;
-  overflow: hidden;
-  padding-block: 0.1em 0.14em;
-  margin-block: -0.1em -0.14em;
-}
-
-.hero__char {
-  display: inline-block;
-  will-change: transform;
-}
-
-.hero__word {
-  display: inline-block;
-  will-change: transform;
-}
-
-.hero__title em {
-  font-style: italic;
-  padding-right: 0.06em;
-}
-
-.hero__aside {
-  position: absolute;
-  right: var(--gutter);
-  bottom: clamp(7.5rem, 13vh, 9.5rem);
-  width: min(31rem, 38%);
-  display: grid;
-  gap: 1.5rem;
-}
-
-.hero__lede {
-  font-size: var(--text-lede);
-  line-height: 1.5;
-  color: rgba(248, 246, 234, 0.92);
-  text-wrap: pretty;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-/* Foot: scroll cue and slide controls */
 .hero__foot {
   position: absolute;
-  inset: auto 0 0 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 4;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  height: clamp(4.5rem, 9vh, 5.75rem);
-}
-
-.hero__foot::before {
-  content: "";
-  position: absolute;
-  inset: 0 var(--gutter) auto var(--gutter);
-  height: 1px;
-  background: rgba(248, 246, 234, 0.24);
+  justify-content: flex-end;
+  padding: 1.25rem max(var(--gutter), env(safe-area-inset-right, 0px)) calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  color: var(--cream);
 }
 
 /* Rotating badge: the scroll cue as a ring of text around a button */
@@ -580,89 +586,80 @@ html.motion .hero__lines path {
   color: var(--ink);
 }
 
-/* ---------- Responsive ---------- */
 
-@media (max-width: 1099px), (max-height: 42rem) {
-  .hero__vignettes {
-    display: none;
-  }
+/* The badge sits on the window's top edge, half on the cream and half on the photograph. */
+.hero__window .scroll-badge {
+  position: absolute;
+  top: 0;
+  left: calc(max(var(--gutter), env(safe-area-inset-left, 0px)) + 2.5rem);
+  z-index: 5;
+  align-self: auto;
+  translate: 0 -50%;
 }
 
+/* ---------- Responsive ---------- */
+
 @media (max-width: 900px) {
-  .hero__aside {
-    position: static;
-    width: auto;
-    max-width: 30rem;
-    margin-top: 1.5rem;
-  }
-
-  .hero__lines {
-    width: 70vw;
-    height: 70%;
-    opacity: 0.7;
-  }
-
   .hero__caption {
     display: none;
   }
 }
 
-@media (max-width: 760px) {
+@media (min-width: 761px) and (max-height: 50rem) {
   .hero__title {
-    font-size: clamp(3rem, 15vw, 5rem);
-    line-height: 0.95;
-  }
-
-  .hero__word {
-    display: block;
-  }
-
-  .hero__content {
-    padding-bottom: 7.5rem;
+    font-size: clamp(2.75rem, 6.2vw, 7rem);
   }
 
   .hero__lede {
     font-size: 1.0625rem;
   }
+}
+
+@media (max-width: 760px) {
+  .hero__title {
+    font-size: clamp(2.5rem, 12.5vw, 4.25rem);
+  }
+
+  .hero__eyebrow {
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+
+  .hero__lede {
+    font-size: 1rem;
+  }
 
   .hero__actions {
     display: grid;
-    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 22rem;
   }
 
   .hero__actions .btn {
     justify-content: space-between;
   }
 
-  .hero__foot {
-    height: 4.5rem;
+  .hero__frame {
+    clip-path: inset(0px max(var(--gutter), env(safe-area-inset-right, 0px)) 0px max(var(--gutter), env(safe-area-inset-left, 0px)) round 1.75rem 1.75rem 0px 0px);
+  }
+
+  .hero__window .scroll-badge {
+    left: auto;
+    right: calc(max(var(--gutter), env(safe-area-inset-right, 0px)) + 1rem);
+    width: 4.5rem;
   }
 
   .hero__pause {
     display: none;
   }
 
-  .scroll-badge {
-    width: 4.5rem;
-    translate: 0 -30%;
-  }
-
-
   .hero__slides {
     padding-left: 0.3125rem;
   }
 }
 
-@media (max-width: 900px) and (max-height: 46rem) {
-  .hero__eyebrow {
-    display: none;
-  }
-
-  .hero__title {
-    font-size: clamp(2.5rem, 12.5vw, 4rem);
-  }
-
+@media (max-width: 760px) and (max-height: 41rem) {
   .hero__lede {
-    font-size: 1rem;
+    display: none;
   }
 }

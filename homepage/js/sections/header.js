@@ -24,9 +24,8 @@ export function initHeader() {
   // The header always stays on screen; past the hero it becomes the floating capsule.
   const onScroll = rafThrottle(() => {
     const y = window.scrollY;
-    const heroEnd = hero ? hero.offsetHeight - header.offsetHeight - 8 : 0;
     header.classList.toggle('is-compact', y > 80);
-    setSolid(y > heroEnd);
+    setSolid(true);
   });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
