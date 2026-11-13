@@ -10,7 +10,7 @@
         1416
       ],
       "alt": "Villas along a landscaped lake edge in a Bloom community (architectural render)",
-      "used_in": "Hero, slide 1",
+      "used_in": "Hero, slide 1; hero slide thumbnail",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -35,6 +35,17 @@
           "widths": [
             1000
           ]
+        },
+        {
+          "suffix": "-thumb",
+          "ratio": 1,
+          "focus": [
+            0.3,
+            0.5
+          ],
+          "widths": [
+            160
+          ]
         }
       ]
     },
@@ -47,7 +58,7 @@
         1333
       ],
       "alt": "Footbridge across a lake at sunset at Bloom Living (architectural render)",
-      "used_in": "Hero, slide 2",
+      "used_in": "Hero, slide 2; hero slide thumbnail",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -72,6 +83,17 @@
           "widths": [
             960
           ]
+        },
+        {
+          "suffix": "-thumb",
+          "ratio": 1,
+          "focus": [
+            0.46,
+            0.5
+          ],
+          "widths": [
+            160
+          ]
         }
       ]
     },
@@ -84,7 +106,7 @@
         1150
       ],
       "alt": "Marina-side buildings lit at dusk, with boats in the foreground",
-      "used_in": "Hero, slide 3",
+      "used_in": "Hero, slide 3; hero slide thumbnail",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -108,6 +130,17 @@
           ],
           "widths": [
             820
+          ]
+        },
+        {
+          "suffix": "-thumb",
+          "ratio": 1,
+          "focus": [
+            0.45,
+            0.5
+          ],
+          "widths": [
+            160
           ]
         }
       ]

@@ -401,3 +401,68 @@
     min-height: 19rem;
   }
 }
+
+/* ---------- Switching: outlined name behind the ring, ripple, countdown ring ---------- */
+
+.orbit__ghost {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  margin: 0;
+  padding-block: 0.1em;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(4rem, 10vw, 10.5rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(248, 246, 234, 0.16);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orbit__ghost .ghost-char {
+  display: inline-block;
+}
+
+/* Above the outlined name, below the business buttons, and never in the way of a click. */
+.orbit__stage {
+  z-index: 1;
+}
+
+.orbit__svg {
+  pointer-events: none;
+}
+
+.orbit__nodes {
+  z-index: 2;
+}
+
+.orbit__burst {
+  fill: none;
+  stroke: #E0796C;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+/* The active number carries a ring that fills until the next business comes round. */
+.orbit__node.is-active .orbit__num {
+  background:
+    radial-gradient(closest-side, var(--cream) 76%, transparent 79%),
+    conic-gradient(var(--black) calc(var(--p, 1) * 1turn), rgba(11, 11, 11, 0.28) 0);
+}
+
+.eco-panel__name .eco-char-mask {
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+
+@media (max-width: 1099px) {
+  .orbit__ghost {
+    top: 58%;
+    font-size: clamp(3rem, 14vw, 6rem);
+  }
+}

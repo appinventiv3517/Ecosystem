@@ -3,12 +3,13 @@
 // and swaps the photograph and copy. On smaller screens the ring becomes a row of tabs.
 
 import { $, $$, finePointer, listen, scrollToTarget } from '../lib/dom.js';
-import { gsap, ScrollTrigger, motionOK, EASE } from '../lib/motion.js';
+import { gsap, ScrollTrigger, SplitText, motionOK, EASE } from '../lib/motion.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const RING_RADIUS = 420; // in the 1000-unit viewBox, so 42% of the stage
 const ANCHOR_ANGLE = 180; // the active business sits at nine o'clock, beside its description
-const AUTOPLAY_SECONDS = 5.5;
+const AUTOPLAY_SECONDS = 4.8;
+const RESUME_AFTER_SECONDS = 9;
 
 export function initEcosystem() {
   const root = $('[data-ecosystem]');
@@ -23,6 +24,14 @@ export function initEcosystem() {
   const images = $$('[data-vertical-image]', root);
   const linkGroup = $('[data-orbit-links]', root);
   const pulse = $('[data-orbit-pulse]', root);
+  const burst = $('[data-orbit-burst]', root);
+  const ghost = $('[data-orbit-ghost]', root);
+  // Each business name rises letter by letter when it comes round.
+  const nameLetters = panels.map((panel) => {
+    const name = $('.eco-panel__name', panel);
+    return motionOK && SplitText ? SplitText.create(name, { type: 'words,chars', mask: 'chars', charsClass: 'eco-char' }).chars : [name];
+  });
+  let resume = null;
   const desktop = window.matchMedia('(min-width: 1100px)');
   const step = 360 / nodes.length;
 
@@ -138,14 +147,16 @@ export function initEcosystem() {
       gsap.set(images, { zIndex: 0 });
       gsap.set(outgoing, { zIndex: 1, opacity: 1 });
       gsap.set(incoming, { zIndex: 2, opacity: 1 });
-      gsap.fromTo(incoming, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.25 }, {
-        clipPath: 'inset(0% 0% 0% 0%)',
+      gsap.fromTo(outgoing, { filter: 'blur(0px) brightness(1)' }, { filter: 'blur(8px) brightness(0.6)', scale: 1.15, duration: 1.1, ease: EASE.inOut });
+      gsap.fromTo(incoming, { clipPath: 'inset(62% 30% 0% 30% round 999px 999px 0px 0px)', scale: 1.4, rotate: -4 }, {
+        clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0px 0px)',
         scale: 1,
-        duration: 1.15,
+        rotate: 0,
+        duration: 1.2,
         ease: EASE.inOut,
         onComplete: () => {
           images.forEach((image, i) => image.classList.toggle('is-active', i === index));
-          gsap.set(images, { clearProps: 'opacity,zIndex,clipPath' });
+          gsap.set(images, { clearProps: 'opacity,zIndex,clipPath,filter,scale,rotate,transform' });
         },
       });
     } else {
@@ -159,9 +170,15 @@ export function initEcosystem() {
         panel.classList.toggle('is-active', i === index);
       });
       if (motionOK) {
-        gsap.fromTo([...panels[index].children], { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.75, stagger: 0.06, ease: EASE.soft, overwrite: true });
+        const parts = [...panels[index].children].filter((child) => !child.classList.contains('eco-panel__name'));
+        gsap.fromTo(parts, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.75, stagger: 0.06, ease: EASE.soft, overwrite: true });
+        gsap.fromTo(nameLetters[index], { yPercent: 120, rotate: 6 }, { yPercent: 0, rotate: 0, duration: 0.95, stagger: 0.028, ease: EASE.out });
       }
     };
+    swapGhost(index);
+    if (motionOK) {
+      gsap.fromTo(burst, { attr: { r: 250 }, opacity: 0.9 }, { attr: { r: 480 }, opacity: 0, duration: 1.4, ease: 'power2.out' });
+    }
     if (motionOK) {
       gsap.to([...panels[previous].children], { autoAlpha: 0, y: -14, duration: 0.22, ease: 'power2.in', overwrite: true, onComplete: show });
     } else {
@@ -221,23 +238,77 @@ export function initEcosystem() {
 
   /* ---------- Autoplay until someone takes over ---------- */
 
+  /** The large outlined name behind the ring swaps letter by letter. */
+  function swapGhost(index) {
+    if (!ghost) return;
+    const label = $('.eco-panel__name', panels[index]).textContent.trim();
+    const build = () => {
+      ghost.replaceChildren(...Array.from(label).map((letter) => {
+        const span = document.createElement('span');
+        span.className = 'ghost-char';
+        span.textContent = letter === ' ' ? '\u00a0' : letter;
+        return span;
+      }));
+      return $$('.ghost-char', ghost);
+    };
+    if (!motionOK) {
+      ghost.textContent = label;
+      return;
+    }
+    const old = $$('.ghost-char', ghost);
+    const swap = gsap.timeline();
+    // The first time round the name is still plain text, so there are no letters to send away.
+    if (old.length) swap.to(old, { yPercent: -110, duration: 0.4, stagger: 0.015, ease: 'power2.in' });
+    swap.add(() => gsap.fromTo(build(), { yPercent: 110 }, { yPercent: 0, duration: 0.9, stagger: 0.03, ease: EASE.out }));
+  }
+
   function stopAutoplay() {
     state.interacted = true;
     autoplay?.kill();
     autoplay = null;
+    gsap?.set(nodes, { '--p': 1 });
+    // Pick the rotation back up once the visitor has left it alone for a while.
+    resume?.kill();
+    if (motionOK) {
+      resume = gsap.delayedCall(RESUME_AFTER_SECONDS, () => {
+        state.interacted = false;
+        scheduleAutoplay();
+      });
+    }
   }
 
   function scheduleAutoplay() {
     autoplay?.kill();
     if (!motionOK || state.interacted) return;
-    autoplay = gsap.delayedCall(AUTOPLAY_SECONDS, () => {
-      if (state.inView && !state.hovering && !document.hidden) select(state.index + 1);
-      scheduleAutoplay();
+    const node = nodes[state.index];
+    autoplay = gsap.fromTo(node, { '--p': 0 }, {
+      '--p': 1,
+      duration: AUTOPLAY_SECONDS,
+      ease: 'none',
+      paused: !state.inView || state.hovering || document.hidden,
+      onComplete: () => {
+        select(state.index + 1);
+        scheduleAutoplay();
+      },
     });
   }
 
-  orbit.addEventListener('pointerenter', () => (state.hovering = true));
-  orbit.addEventListener('pointerleave', () => (state.hovering = false));
+  function syncAutoplay() {
+    if (!autoplay) return;
+    if (state.inView && !state.hovering && !document.hidden) autoplay.resume();
+    else autoplay.pause();
+  }
+  document.addEventListener('visibilitychange', syncAutoplay);
+
+  orbit.addEventListener('pointerenter', (event) => {
+    if (event.pointerType !== 'mouse') return;
+    state.hovering = true;
+    syncAutoplay();
+  });
+  orbit.addEventListener('pointerleave', () => {
+    state.hovering = false;
+    syncAutoplay();
+  });
   orbit.addEventListener('focusin', stopAutoplay);
 
   /* ---------- Entrance and housekeeping ---------- */
@@ -259,8 +330,11 @@ export function initEcosystem() {
     gsap.set(ring, { strokeDasharray: 1, strokeDashoffset: 1 });
     gsap.set(nodes, { autoAlpha: 0 });
     gsap.set(links, { autoAlpha: 0 });
-    gsap.set(core, { autoAlpha: 0, y: 36 });
-    gsap.set($$('.eco-panel.is-active > *', root), { autoAlpha: 0, y: 26 });
+    // The arch is centred with translate(-50%, -50%); hand that to GSAP so it survives the entrance.
+    gsap.set(core, { xPercent: -50, yPercent: -50, x: 0, autoAlpha: 0, y: 36 });
+    gsap.set($$('.eco-panel.is-active > *:not(.eco-panel__name)', root), { autoAlpha: 0, y: 26 });
+    gsap.set(nameLetters[0], { yPercent: 120 });
+    swapGhost(0);
 
     ScrollTrigger.create({
       trigger: orbit,
@@ -272,7 +346,8 @@ export function initEcosystem() {
           .to(core, { autoAlpha: 1, y: 0, duration: 1.2, ease: EASE.out }, 0.2)
           .to(nodes, { autoAlpha: 1, duration: 0.6, stagger: 0.09 }, 0.5)
           .to(links, { autoAlpha: 1, duration: 0.8, stagger: 0.06 }, 0.8)
-          .to($$('.eco-panel.is-active > *', root), { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.07, ease: EASE.soft }, 0.5);
+          .to($$('.eco-panel.is-active > *:not(.eco-panel__name)', root), { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.07, ease: EASE.soft }, 0.5)
+          .to(nameLetters[0], { yPercent: 0, duration: 1, stagger: 0.03, ease: EASE.out }, 0.4);
       },
     });
 
@@ -282,7 +357,8 @@ export function initEcosystem() {
       end: 'bottom 40%',
       onToggle: (self) => {
         state.inView = self.isActive;
-        if (self.isActive) scheduleAutoplay();
+        if (self.isActive && !autoplay) scheduleAutoplay();
+        syncAutoplay();
       },
     });
 

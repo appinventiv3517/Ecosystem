@@ -9,7 +9,7 @@ import { initReveals } from './ui/reveal.js';
 import { initMagnetic, initTilt } from './ui/pointer.js';
 import { initCursor } from './ui/cursor.js';
 import { initRoll } from './ui/roll.js';
-import { initSectionTag } from './ui/sectionTag.js';
+import { initDock } from './ui/dock.js';
 import { playIntro } from './sections/intro.js';
 import { initHeader } from './sections/header.js';
 import { initHero } from './sections/hero.js';
@@ -88,7 +88,7 @@ async function start() {
   initMagnetic();
   initTilt('[data-intent-frame]', 4);
   initCursor();
-  initSectionTag();
+  initDock();
   initTilt('[data-find-figure]', 5);
 
   // Headline splitting measures text, so wait for the web fonts (briefly).

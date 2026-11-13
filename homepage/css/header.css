@@ -29,8 +29,17 @@
   --hd-fg-inverse: var(--cream);
 }
 
-.site-header.is-solid::before {
-  opacity: 1;
+/* The full-width bar is gone: once scrolled, the bar itself floats as a capsule. */
+.site-header::before {
+  display: none;
+}
+
+.site-header {
+  transition: color var(--dur) var(--ease-out), transform 700ms var(--ease-out);
+}
+
+.site-header.is-hidden {
+  transform: translateY(calc(-100% - 1.5rem));
 }
 
 .site-header.is-menu-open {
@@ -47,7 +56,27 @@
   align-items: center;
   gap: clamp(1.5rem, 3vw, 3.5rem);
   height: var(--header-h);
-  transition: height 480ms var(--ease-out);
+  border: 1px solid transparent;
+  transition: height 600ms var(--ease-out), max-width 800ms var(--ease-out), margin 800ms var(--ease-out),
+    padding 800ms var(--ease-out), border-radius 800ms var(--ease-out), background-color 500ms ease,
+    border-color 500ms ease, box-shadow 600ms ease;
+}
+
+.site-header.is-solid .site-header__bar {
+  max-width: min(calc(100% - 2 * max(var(--gutter), 0.75rem)), 82rem);
+  margin-top: 0.75rem;
+  padding-left: 1.5rem;
+  padding-right: 0.4375rem;
+  border-radius: var(--radius-pill);
+  border-color: rgba(221, 211, 189, 0.9);
+  background: rgba(255, 253, 247, 0.8);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: 0 14px 44px -18px rgba(29, 26, 23, 0.32);
+}
+
+.site-header.is-solid.is-compact .site-header__bar {
+  height: 3.75rem;
 }
 
 .site-header.is-compact .site-header__bar {
@@ -123,23 +152,40 @@
 .primary-nav {
   position: relative;
   margin-inline: auto;
+  padding: 0.3125rem;
+  border: 1px solid rgba(248, 246, 234, 0.2);
+  border-radius: var(--radius-pill);
+  background: rgba(11, 11, 11, 0.24);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition: background-color 500ms ease, border-color 500ms ease;
+}
+
+.site-header.is-solid .primary-nav,
+.site-header.is-menu-open .primary-nav {
+  border-color: transparent;
+  background: rgba(233, 225, 207, 0.55);
 }
 
 .primary-nav__list {
-  display: flex;
-  align-items: center;
-  gap: clamp(1.25rem, 2.4vw, 2.75rem);
-}
-
-.nav-item {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.125rem;
 }
 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 0.375rem 0 1.125rem;
+  border-radius: var(--radius-pill);
+}
+
 .nav-item__link {
   position: relative;
-  padding-block: 0.75rem;
+  padding-block: 0.625rem;
   font-size: 0.9375rem;
   font-weight: 500;
   letter-spacing: 0.005em;
@@ -184,20 +230,27 @@
 /* One indicator slides between items instead of each item owning an underline. */
 .primary-nav__indicator {
   position: absolute;
+  top: 0.3125rem;
+  bottom: 0.3125rem;
   left: 0;
-  bottom: 0.3rem;
-  width: 1px;
-  height: 1.5px;
-  background: var(--red);
-  transform-origin: left;
-  transform: translateX(var(--x, 0px)) scaleX(var(--w, 0));
+  width: var(--w, 0px);
+  border-radius: var(--radius-pill);
+  background: var(--ivory);
+  box-shadow: 0 4px 14px -6px rgba(29, 26, 23, 0.3);
+  transform: translateX(var(--x, 0px));
   opacity: var(--o, 0);
-  transition: transform 520ms var(--ease-out), opacity var(--dur) ease, background-color var(--dur) ease;
+  transition: transform 560ms cubic-bezier(0.34, 1.3, 0.64, 1), width 560ms cubic-bezier(0.34, 1.3, 0.64, 1), opacity var(--dur) ease, background-color var(--dur) ease;
   pointer-events: none;
 }
 
-.site-header:not(.is-solid) .primary-nav__indicator {
-  background: var(--cream);
+.site-header:not(.is-solid):not(.is-menu-open) .primary-nav__indicator {
+  background: rgba(248, 246, 234, 0.2);
+  box-shadow: none;
+}
+
+/* The item under the highlight takes the darker text on the light pill. */
+.site-header.is-solid .nav-item.is-lit {
+  color: var(--red);
 }
 
 /* Tools */
@@ -307,33 +360,11 @@
   transform: rotate(-45deg);
 }
 
-/* Scroll progress along the bottom edge of the bar */
-.site-header__progress {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 2px;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity var(--dur) ease;
-}
-
-.site-header.is-solid .site-header__progress {
-  opacity: 1;
-}
-
-.site-header__progress span {
-  display: block;
-  height: 100%;
-  background: var(--red);
-  transform-origin: left;
-  transform: scaleX(var(--progress, 0));
-}
-
 /* ---------- Mega menu ---------- */
 
 .mega {
   position: absolute;
-  inset: 100% 0 auto 0;
+  inset: calc(100% + 0.625rem) 0 auto 0;
   visibility: hidden;
   pointer-events: none;
 }
@@ -360,9 +391,12 @@
 
 .mega__sheet {
   position: relative;
+  width: min(calc(100% - 2 * max(var(--gutter), 0.75rem)), 82rem);
+  margin-inline: auto;
   background: var(--cream);
   color: var(--ink);
-  border-radius: 0 0 var(--radius-l) var(--radius-l);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
   box-shadow: var(--shadow-lift);
   overflow: hidden;
   clip-path: inset(0 0 100% 0);
@@ -370,6 +404,7 @@
 
 .mega__wrap {
   position: relative;
+  padding-inline: clamp(1.75rem, 3vw, 3rem);
 }
 
 .mega__panel {

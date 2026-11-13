@@ -229,7 +229,7 @@
 .toast {
   position: fixed;
   left: 50%;
-  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
   z-index: var(--z-toast);
   display: flex;
   align-items: center;

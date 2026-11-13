@@ -78,7 +78,9 @@ async function desktop(browser) {
   await wait(page, 1600);
   check('nav link scrolls to its section', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 80));
   check('header turns solid and marks the active section', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-solid') && document.querySelector('[data-nav-item="services"]').classList.contains('is-current')));
-  check('scroll progress advances', await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('[data-scroll-progress]')).getPropertyValue('--progress')) > 0.3));
+  check('section dock appears and its arch fills with progress', await page.evaluate(() => document.querySelector('[data-dock]').classList.contains('is-visible') && parseFloat(getComputedStyle(document.querySelector('[data-dock-progress]')).getPropertyValue('--progress')) > 0.3));
+  check('dock names the current section', (await page.textContent('[data-dock-name]')).replace(/\u00a0/g, ' ') === 'Customer Services', await page.textContent('[data-dock-name]'));
+  check('header floats as a capsule once scrolled', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header__bar')).borderRadius === '999px'));
 
   // Mega menu: hover, keyboard, and a link that drives another section
   await page.hover('[data-nav-item="communities"] .nav-item__link');
@@ -270,6 +272,24 @@ async function desktop(browser) {
   await wait(page, 2600);
   check('hero arch jumps to its business', (await activeVertical(page)) === 'education');
 
+  // Header steps aside on the way down and returns on the way up
+  await goTo(page, '#about', 0);
+  await page.mouse.move(700, 600);
+  await page.mouse.wheel(0, 500);
+  await wait(page, 900);
+  check('header hides while scrolling down', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-hidden')));
+  await page.mouse.wheel(0, -300);
+  await wait(page, 900);
+  check('header returns when scrolling up', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-hidden')));
+
+  // Section dock
+  await page.click('[data-dock-toggle]');
+  await wait(page, 600);
+  check('dock opens a list of sections', await page.evaluate(() => !document.querySelector('[data-dock-list]').hidden && document.querySelector('[data-dock-toggle]').getAttribute('aria-expanded') === 'true'));
+  await page.click('[data-dock-link="life"]');
+  await wait(page, 2200);
+  check('dock link jumps to its section', await page.evaluate(() => Math.abs(document.querySelector('#life').getBoundingClientRect().top) < 90 && document.querySelector('[data-dock-list]').hidden));
+
   // Hero controls
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 600);
@@ -294,9 +314,13 @@ async function intro(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto(PAGE, { waitUntil: 'load' });
-  for (const [index, pause] of [900, 900, 800, 900].entries()) {
+  await wait(page, 1100);
+  const counted = Number(await page.textContent('[data-intro-count]'));
+  check('loader counts up while the arches rise', counted > 0 && counted <= 100, counted);
+  await shot(page, 'intro-1');
+  for (const [index, pause] of [800, 800, 900].entries()) {
     await wait(page, pause);
-    await shot(page, `intro-${index + 1}`);
+    await shot(page, `intro-${index + 2}`);
   }
   await page.waitForFunction(() => document.documentElement.classList.contains('is-ready'), null, { timeout: 15000 });
   check('intro finishes, unlocks scrolling and removes its overlay', await page.evaluate(() => !document.querySelector('[data-intro]') && !document.documentElement.classList.contains('is-locked') && getComputedStyle(document.querySelector('[data-brand]')).visibility === 'visible'));
@@ -374,6 +398,10 @@ async function phone(browser) {
     const box = document.querySelector('#service-partners-app').getBoundingClientRect();
     return document.querySelector('#service-partners-app').classList.contains('is-match') && box.top < window.innerHeight && box.bottom > 0;
   }));
+  // The header steps aside while reading down; scrolling up brings it back.
+  check('header hides while scrolling down on a phone', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-hidden')));
+  await page.evaluate(() => window.scrollBy({ top: -160, behavior: 'instant' }));
+  await wait(page, 900);
   await page.tap('.site-header__enquire');
   await wait(page, 1000);
   check('enquiry opens as a bottom sheet', await page.evaluate(() => {
@@ -409,6 +437,18 @@ async function tablet(browser) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
+  await goTo(page, '[data-orbit]', 100);
+  await wait(page, 800);
+  const firstVertical = await activeVertical(page);
+  await wait(page, 6200);
+  check('ecosystem switches business on its own', (await activeVertical(page)) !== firstVertical, { firstVertical, now: await activeVertical(page) });
+  check('active business shows its countdown ring', await page.evaluate(() => getComputedStyle(document.querySelector('.orbit__node.is-active .orbit__num')).backgroundImage.includes('conic-gradient')));
+  // The outlined name changes a moment after the business does.
+  await page.waitForFunction(() => document.querySelector('[data-orbit-ghost]').textContent.replace(/ /g, ' ') === document.querySelector('.orbit__node.is-active').textContent.replace(/^\d+/, '').trim(), null, { timeout: 2500 }).catch(() => {});
+  const ghostPair = await page.evaluate(() => [document.querySelector('[data-orbit-ghost]').textContent.replace(/\u00a0/g, ' '), document.querySelector('.orbit__node.is-active').textContent.replace(/^\d+/, '').trim()]);
+  check('ghost name behind the ring follows the business', ghostPair[0] === ghostPair[1], ghostPair);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await wait(page, 800);
   await page.tap('[data-menu-toggle]');
   await wait(page, 1300);
   check('menu opens on a tablet', await page.evaluate(() => !document.querySelector('[data-mobile-menu]').hidden));

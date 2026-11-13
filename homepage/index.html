@@ -75,6 +75,14 @@
   <!-- Brand-led intro: the wordmark, then an arch that opens into the hero -->
   <div class="intro" data-intro aria-hidden="true">
     <img class="intro__mark" src="assets/brand/wordmark-red.png" alt="" width="762" height="237" data-intro-mark>
+    <div class="intro__arches">
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/vignette-education-520.webp" alt="" width="520" height="694"></span>
+      <span class="intro__arch intro__arch--centre" data-intro-centre></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/vignette-landscape-520.webp" alt="" width="520" height="693"></span>
+    </div>
+    <p class="intro__words" data-intro-words><span>Curated</span><i></i><span>Community</span><i></i><span>Living</span></p>
+    <div class="intro__count"><span data-intro-count>0</span><small>%</small></div>
+    <span class="intro__bar"><i data-intro-bar></i></span>
   </div>
 
   <!-- ============================================================
@@ -237,7 +245,6 @@
       </div>
     </div>
 
-    <div class="site-header__progress" aria-hidden="true"><span data-scroll-progress></span></div>
   </header>
 
   <!-- Full-screen mobile menu -->
@@ -345,16 +352,19 @@
         </div>
 
         <div class="hero__foot wrap" data-hero-foot>
-          <a class="scroll-cue" href="#begin" aria-label="Scroll to start exploring">
-            <span class="scroll-cue__arch" aria-hidden="true"><i></i></span>
-            <span class="scroll-cue__text">Scroll</span>
+          <a class="scroll-badge" href="#begin" aria-label="Scroll to start exploring" data-scroll-badge>
+            <svg class="scroll-badge__ring" viewBox="0 0 120 120" aria-hidden="true" data-badge-ring>
+              <defs><path id="badge-path" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0"/></defs>
+              <text><textPath href="#badge-path" textLength="292" lengthAdjust="spacing">Scroll to explore · Curated Community Living · </textPath></text>
+            </svg>
+            <span class="scroll-badge__core" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
           </a>
           <div class="hero__slides" data-hero-controls>
             <p class="hero__caption" data-hero-caption aria-live="off">Bloom Living, Abu Dhabi</p>
             <div class="hero__dots" role="group" aria-label="Hero images">
-              <button type="button" class="hero__dot is-active" aria-label="Show image 1 of 3" data-hero-dot="0"><span>01</span><i></i></button>
-              <button type="button" class="hero__dot" aria-label="Show image 2 of 3" data-hero-dot="1"><span>02</span><i></i></button>
-              <button type="button" class="hero__dot" aria-label="Show image 3 of 3" data-hero-dot="2"><span>03</span><i></i></button>
+              <button type="button" class="hero__dot is-active" aria-label="Show image 1 of 3" data-hero-dot="0"><img src="assets/img/hero-lakeside-villas-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
+              <button type="button" class="hero__dot" aria-label="Show image 2 of 3" data-hero-dot="1"><img src="assets/img/hero-marina-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
+              <button type="button" class="hero__dot" aria-label="Show image 3 of 3" data-hero-dot="2"><img src="assets/img/hero-lake-bridge-thumb-160.webp" alt="" width="160" height="160"><i></i></button>
             </div>
             <button type="button" class="hero__pause" aria-pressed="false" aria-label="Pause image rotation" data-hero-pause>
               <svg class="icon" data-icon-pause><use href="#i-pause"/></svg>
@@ -700,11 +710,13 @@
         </div>
 
         <div class="orbit" data-orbit>
+          <p class="orbit__ghost" aria-hidden="true" data-orbit-ghost>Real Estate</p>
           <div class="orbit__stage" data-orbit-stage>
           <svg class="orbit__svg" viewBox="0 0 1000 1000" aria-hidden="true" data-orbit-svg>
             <circle class="orbit__ring orbit__ring--outer" cx="500" cy="500" r="420" pathLength="1"/>
             <circle class="orbit__ring orbit__ring--inner" cx="500" cy="500" r="300"/>
             <g data-orbit-links></g>
+            <circle class="orbit__burst" cx="500" cy="500" r="300" data-orbit-burst/>
             <circle class="orbit__pulse" r="7" cx="500" cy="500" data-orbit-pulse/>
           </svg>
 
@@ -1172,7 +1184,25 @@
 
   <!-- Pointer follower (mouse only) and the current-section indicator -->
   <div class="cursor" aria-hidden="true" data-cursor-el><span class="cursor__ring"><span class="cursor__label" data-cursor-label></span></span><span class="cursor__dot"></span></div>
-  <div class="section-tag" aria-hidden="true" data-section-tag><span class="section-tag__num" data-section-tag-num>01</span><span class="section-tag__line"></span><span class="section-tag__name"><span data-section-tag-name>Start here</span></span></div>
+  <nav class="dock" aria-label="Page sections" data-dock>
+    <ol class="dock__list" id="dock-list" data-dock-list hidden>
+      <li><a href="#begin" data-dock-link="begin"><span>01</span>Start here</a></li>
+      <li><a href="#find" data-dock-link="find"><span>02</span>Find a Home</a></li>
+      <li><a href="#communities" data-dock-link="communities"><span>03</span>Explore Communities</a></li>
+      <li><a href="#ecosystem" data-dock-link="ecosystem"><span>04</span>Bloom Ecosystem</a></li>
+      <li><a href="#life" data-dock-link="life"><span>05</span>Life at Bloom</a></li>
+      <li><a href="#services" data-dock-link="services"><span>06</span>Customer Services</a></li>
+      <li><a href="#about" data-dock-link="about"><span>07</span>About Bloom</a></li>
+      <li><a href="#footer" data-dock-link="footer"><span>08</span>Make an enquiry</a></li>
+    </ol>
+    <button type="button" class="dock__toggle" aria-expanded="false" aria-controls="dock-list" data-dock-toggle>
+      <svg class="dock__arch" viewBox="0 0 24 30" aria-hidden="true"><path class="dock__arch-track" d="M3 29V12a9 9 0 0 1 18 0v17"/><path class="dock__arch-fill" pathLength="1" d="M3 29V12a9 9 0 0 1 18 0v17" data-dock-progress/></svg>
+      <span class="dock__num" data-dock-num>01</span>
+      <span class="dock__name"><span data-dock-name>Start here</span></span>
+      <span class="sr-only">, show all sections</span>
+      <svg class="icon dock__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+    </button>
+  </nav>
 
   <!-- Feedback for destinations outside this prototype -->
   <div class="toast" role="status" aria-live="polite" data-toast hidden>

@@ -13,19 +13,32 @@ export function initHeader() {
 
   /* ---------- Scroll states and progress ---------- */
 
-  const progress = $('[data-scroll-progress]', header);
   const hero = $('[data-hero]');
+  let lastY = window.scrollY;
+  let holdUntil = 0;
 
   const onScroll = rafThrottle(() => {
     const y = window.scrollY;
     const heroEnd = hero ? hero.offsetHeight - header.offsetHeight - 8 : 0;
     header.classList.toggle('is-compact', y > 80);
     header.classList.toggle('is-solid', y > heroEnd || state.megaOpen);
-    const range = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.setProperty('--progress', range > 0 ? (y / range).toFixed(4) : 0);
+    // Past the hero the header steps aside while you read down, and returns as soon as you scroll up.
+    const busy = state.megaOpen || state.menuOpen || header.contains(document.activeElement) || performance.now() < holdUntil;
+    if (y < heroEnd || busy || y < lastY - 4) header.classList.remove('is-hidden');
+    else if (y > lastY + 6) header.classList.add('is-hidden');
+    lastY = y;
   });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
+  // Moving the pointer to the top of the screen also brings it back.
+  window.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'mouse' && event.clientY < 90) header.classList.remove('is-hidden');
+  }, { passive: true });
+  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+  listen('bloom:navigate', () => {
+    holdUntil = performance.now() + 1800;
+    header.classList.remove('is-hidden');
+  });
   onScroll();
 
   /* ---------- Sliding indicator and section spy ---------- */
@@ -38,14 +51,16 @@ export function initHeader() {
   function moveIndicator(item) {
     if (!item) {
       indicator.style.setProperty('--o', 0);
+      items.forEach((other) => other.classList.remove('is-lit'));
       return;
     }
-    const link = $('.nav-item__link', item);
+    // The pill slides and stretches behind the whole item, link and chevron together.
     const navBox = nav.getBoundingClientRect();
-    const box = link.getBoundingClientRect();
-    indicator.style.setProperty('--x', `${box.left - navBox.left}px`);
-    indicator.style.setProperty('--w', box.width);
+    const box = item.getBoundingClientRect();
+    indicator.style.setProperty('--x', `${box.left - navBox.left - nav.clientLeft}px`);
+    indicator.style.setProperty('--w', `${box.width}px`);
     indicator.style.setProperty('--o', 1);
+    items.forEach((other) => other.classList.toggle('is-lit', other === item));
   }
 
   items.forEach((item) => {
