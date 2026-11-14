@@ -971,141 +971,53 @@
             <p class="eyebrow" data-reveal="fade">Customer Services</p>
             <h2 class="display" id="services-title" data-split="lines">Everything you need, closer to <em>home.</em></h2>
           </div>
-          <p class="lede" data-reveal="fade">Already part of a Bloom community? Tell us what you need to do and we'll point you to the right place.</p>
+          <p class="lede" data-reveal="fade">Already part of a Bloom community? Everything you need is in one of three Bloom apps.</p>
         </div>
 
-        <!-- The concierge: pick what you need to do on the left, and the card on the right shows
-             where to do it. Until someone picks, it runs through the tasks by itself. -->
-        <div class="concierge" data-concierge>
-          <div class="concierge__ask">
-            <p class="concierge__label"><span id="tasks-label">I need to</span> <span class="concierge__typed" aria-hidden="true" data-typed></span><span class="concierge__caret" aria-hidden="true"></span></p>
-            <div class="concierge__tasks" role="group" aria-labelledby="tasks-label" data-tasks>
-              <span class="concierge__glow" aria-hidden="true" data-task-glow></span>
-              <button type="button" class="task" aria-pressed="false" data-task="community-app" data-feature="Service requests" data-also="super-app">
-                <span class="task__text">Raise a service request</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="community-app" data-feature="Amenity booking">
-                <span class="task__text">Book an amenity</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="community-app" data-feature="Tenancy renewal">
-                <span class="task__text">Renew my tenancy</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="community-app" data-feature="Service charges" data-also="super-app">
-                <span class="task__text">Pay service charges</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="super-app" data-feature="Property payments">
-                <span class="task__text">Pay an instalment</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="super-app" data-feature="Construction updates" data-also="construction-updates">
-                <span class="task__text">Track construction</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="partners-app" data-feature="Agency onboarding">
-                <span class="task__text">Register as a broker</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
-              <button type="button" class="task" aria-pressed="false" data-task="enquiry" data-feature="Ask a question">
-                <span class="task__text">Ask a question</span>
-                <span class="task__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="task__timer" aria-hidden="true"><b></b></span>
-              </button>
+        <!-- Three apps and a way to get them, as a grid of tiles. -->
+        <div class="apps" data-apps>
+          <article class="app-tile app-tile--tall" id="service-community-app" data-app-tile data-service="community-app" style="--i: 0">
+            <figure class="app-tile__media"><img src="assets/img/service-community-app-1000.webp" alt="Two phones showing the Bloom Community App" width="1000" height="486" loading="lazy" decoding="async"></figure>
+            <div class="app-tile__body">
+              <p class="app-tile__who">Residents and homeowners</p>
+              <h3 class="app-tile__name">Bloom Community App</h3>
+              <p class="app-tile__line">Service requests, amenity bookings, moving in and out, tenancy renewals and service charges, in one place.</p>
             </div>
-          </div>
-
-          <div class="concierge__answer" data-answer>
-            <div class="concierge__tabs" role="tablist" aria-label="Customer services" data-service-tabs>
-              <span class="concierge__pill" aria-hidden="true" data-tab-pill></span>
-              <button type="button" class="concierge__tab is-active" role="tab" id="service-community-app" aria-controls="panel-service-community-app" aria-selected="true" data-service-tab="community-app">Community App</button>
-              <button type="button" class="concierge__tab" role="tab" id="service-super-app" aria-controls="panel-service-super-app" aria-selected="false" tabindex="-1" data-service-tab="super-app">Super App</button>
-              <button type="button" class="concierge__tab" role="tab" id="service-partners-app" aria-controls="panel-service-partners-app" aria-selected="false" tabindex="-1" data-service-tab="partners-app">Partners App</button>
-              <button type="button" class="concierge__tab" role="tab" id="service-construction-updates" aria-controls="panel-service-construction-updates" aria-selected="false" tabindex="-1" data-service-tab="construction-updates">Construction</button>
-              <button type="button" class="concierge__tab" role="tab" id="service-enquiry" aria-controls="panel-service-enquiry" aria-selected="false" tabindex="-1" data-service-tab="enquiry">Enquiry</button>
+            <button type="button" class="app-tile__go" data-demo="Bloom Community App" aria-label="Open Bloom Community App"><svg class="icon"><use href="#i-arrow-ne"/></svg></button>
+            <span class="app-tile__glint" aria-hidden="true"></span>
+          </article>
+          <article class="app-tile app-tile--wide" id="service-super-app" data-app-tile data-service="super-app" style="--i: 1">
+            <figure class="app-tile__media"><img src="assets/img/service-super-app-1000.webp" alt="Laptop and phone showing the Bloom Super App" width="1000" height="486" loading="lazy" decoding="async"></figure>
+            <div class="app-tile__body">
+              <p class="app-tile__who">Property owners</p>
+              <h3 class="app-tile__name">Bloom Super App</h3>
+              <p class="app-tile__line">Payments, property documents and construction updates for the homes you own.</p>
             </div>
-            <div class="concierge__panels">
-            <article class="svc is-active" id="panel-service-community-app" role="tabpanel" aria-labelledby="service-community-app" data-service="community-app" data-name="Bloom Community App">
-              <figure class="svc__media" data-svc-media><img src="assets/img/service-community-app-1000.webp" alt="Two phones showing the Bloom Community App" width="1000" height="486" loading="lazy" decoding="async"></figure>
-              <div class="svc__body">
-                <div class="svc__head">
-                  <p class="svc__for">For residents and homeowners</p>
-                  <h3 class="svc__name">Bloom Community App</h3>
-                </div>
-                <div class="svc__side">
-                  <ul class="svc__features" aria-label="What you can do"><li data-feature="Service requests"><svg class="icon"><use href="#i-check"/></svg>Service requests</li><li data-feature="Amenity booking"><svg class="icon"><use href="#i-check"/></svg>Amenity booking</li><li data-feature="Move in and out"><svg class="icon"><use href="#i-check"/></svg>Move in and out</li><li data-feature="Tenancy renewal"><svg class="icon"><use href="#i-check"/></svg>Tenancy renewal</li><li data-feature="Service charges"><svg class="icon"><use href="#i-check"/></svg>Service charges</li></ul>
-                  <div class="svc__actions"><button type="button" class="btn btn--small" data-demo="Bloom Community App"><span class="btn__label">Open Bloom Community App</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow-ne"/></svg></span></button><button type="button" class="svc__also" data-svc-also hidden>Also in <b></b><svg class="icon"><use href="#i-arrow"/></svg></button></div>
-                </div>
-              </div>
-            </article>
-            <article class="svc" id="panel-service-super-app" role="tabpanel" aria-labelledby="service-super-app" data-service="super-app" data-name="Bloom Super App" inert>
-              <figure class="svc__media" data-svc-media><img src="assets/img/service-super-app-1000.webp" alt="Laptop and phone showing the Bloom Super App" width="1000" height="486" loading="lazy" decoding="async"></figure>
-              <div class="svc__body">
-                <div class="svc__head">
-                  <p class="svc__for">For property owners</p>
-                  <h3 class="svc__name">Bloom Super App</h3>
-                </div>
-                <div class="svc__side">
-                  <ul class="svc__features" aria-label="What you can do"><li data-feature="Property payments"><svg class="icon"><use href="#i-check"/></svg>Property payments</li><li data-feature="Property documents"><svg class="icon"><use href="#i-check"/></svg>Property documents</li><li data-feature="Construction updates"><svg class="icon"><use href="#i-check"/></svg>Construction updates</li><li data-feature="Service requests"><svg class="icon"><use href="#i-check"/></svg>Service requests</li></ul>
-                  <div class="svc__actions"><button type="button" class="btn btn--small" data-demo="Bloom Super App"><span class="btn__label">Open Bloom Super App</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow-ne"/></svg></span></button><button type="button" class="svc__also" data-svc-also hidden>Also in <b></b><svg class="icon"><use href="#i-arrow"/></svg></button></div>
-                </div>
-              </div>
-            </article>
-            <article class="svc" id="panel-service-partners-app" role="tabpanel" aria-labelledby="service-partners-app" data-service="partners-app" data-name="Bloom Partners App" inert>
-              <figure class="svc__media" data-svc-media><img src="assets/img/service-partners-app-1000.webp" alt="Laptop and phone showing the Bloom Partners App" width="1000" height="486" loading="lazy" decoding="async"></figure>
-              <div class="svc__body">
-                <div class="svc__head">
-                  <p class="svc__for">For agencies and brokers</p>
-                  <h3 class="svc__name">Bloom Partners App</h3>
-                </div>
-                <div class="svc__side">
-                  <ul class="svc__features" aria-label="What you can do"><li data-feature="Agency onboarding"><svg class="icon"><use href="#i-check"/></svg>Agency onboarding</li><li data-feature="Inventory access"><svg class="icon"><use href="#i-check"/></svg>Inventory access</li><li data-feature="Leads"><svg class="icon"><use href="#i-check"/></svg>Leads</li><li data-feature="Commission tracking"><svg class="icon"><use href="#i-check"/></svg>Commission tracking</li></ul>
-                  <div class="svc__actions"><button type="button" class="btn btn--small" data-demo="Bloom Partners App"><span class="btn__label">Open Bloom Partners App</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow-ne"/></svg></span></button><button type="button" class="svc__also" data-svc-also hidden>Also in <b></b><svg class="icon"><use href="#i-arrow"/></svg></button></div>
-                </div>
-              </div>
-            </article>
-            <article class="svc" id="panel-service-construction-updates" role="tabpanel" aria-labelledby="service-construction-updates" data-service="construction-updates" data-name="Construction updates" inert>
-              <figure class="svc__media svc__media--photo" data-svc-media><img src="assets/img/hero-lakeside-villas-1600.webp" alt="Villas along a landscaped lake edge in a Bloom community (architectural render)" width="1600" height="906" loading="lazy" decoding="async"></figure>
-              <div class="svc__body">
-                <div class="svc__head">
-                  <p class="svc__for">For buyers of homes under construction</p>
-                  <h3 class="svc__name">Construction updates</h3>
-                </div>
-                <div class="svc__side">
-                  <ul class="svc__features" aria-label="What you can do"><li data-feature="Progress by project"><svg class="icon"><use href="#i-check"/></svg>Progress by project</li></ul>
-                  <div class="svc__actions"><button type="button" class="btn btn--small" data-demo="Construction updates"><span class="btn__label">Open Construction updates</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow-ne"/></svg></span></button><button type="button" class="svc__also" data-svc-also hidden>Also in <b></b><svg class="icon"><use href="#i-arrow"/></svg></button></div>
-                </div>
-              </div>
-            </article>
-            <article class="svc" id="panel-service-enquiry" role="tabpanel" aria-labelledby="service-enquiry" data-service="enquiry" data-name="Make an enquiry" inert>
-              <div class="svc__media svc__media--contact" data-svc-media>
-                <p class="svc__contact-label">Prefer to talk?</p>
-                <a class="svc__phone" href="tel:80025666"><svg class="icon"><use href="#i-phone"/></svg>800 Bloom <small>(25666)</small></a>
-                <a class="svc__mail" href="mailto:customerservice@bloomholding.com"><svg class="icon"><use href="#i-mail"/></svg>customerservice@bloomholding.com</a>
-              </div>
-              <div class="svc__body">
-                <div class="svc__head">
-                  <p class="svc__for">For anything else</p>
-                  <h3 class="svc__name">Make an enquiry</h3>
-                </div>
-                <div class="svc__side">
-                  <ul class="svc__features" aria-label="What you can do"><li data-feature="Ask a question"><svg class="icon"><use href="#i-check"/></svg>Ask a question</li><li data-feature="Request a call back"><svg class="icon"><use href="#i-check"/></svg>Request a call back</li></ul>
-                  <div class="svc__actions"><button type="button" class="btn btn--small" data-open-enquiry data-interest="support"><span class="btn__label">Make an enquiry</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></button><button type="button" class="svc__also" data-svc-also hidden>Also in <b></b><svg class="icon"><use href="#i-arrow"/></svg></button></div>
-                </div>
-              </div>
-            </article>
+            <button type="button" class="app-tile__go" data-demo="Bloom Super App" aria-label="Open Bloom Super App"><svg class="icon"><use href="#i-arrow-ne"/></svg></button>
+            <span class="app-tile__glint" aria-hidden="true"></span>
+          </article>
+          <article class="app-tile " id="service-partners-app" data-app-tile data-service="partners-app" style="--i: 2">
+            <figure class="app-tile__media"><img src="assets/img/service-partners-app-1000.webp" alt="Laptop and phone showing the Bloom Partners App" width="1000" height="486" loading="lazy" decoding="async"></figure>
+            <div class="app-tile__body">
+              <p class="app-tile__who">Agencies and brokers</p>
+              <h3 class="app-tile__name">Bloom Partners App</h3>
+              <p class="app-tile__line">Onboarding, live inventory, leads and commission tracking for partners.</p>
             </div>
-            <p class="concierge__status" role="status" data-tasks-status></p>
-          </div>
+            <button type="button" class="app-tile__go" data-demo="Bloom Partners App" aria-label="Open Bloom Partners App"><svg class="icon"><use href="#i-arrow-ne"/></svg></button>
+            <span class="app-tile__glint" aria-hidden="true"></span>
+          </article>
+          <aside class="app-tile app-tile--get" data-app-tile style="--i: 3" aria-label="Get the apps">
+            <p class="app-tile__who">Get the apps</p>
+            <div class="app-stores">
+              <button type="button" class="app-store" data-demo="App Store"><svg class="icon"><use href="#i-arrow"/></svg><span><small>Download on the</small>App Store</span></button>
+              <button type="button" class="app-store" data-demo="Google Play"><svg class="icon"><use href="#i-arrow"/></svg><span><small>Get it on</small>Google Play</span></button>
+            </div>
+            <div class="app-talk">
+              <p class="app-talk__label">Prefer to talk?</p>
+              <a class="app-talk__phone" href="tel:80025666"><svg class="icon"><use href="#i-phone"/></svg>800 Bloom <small>(25666)</small></a>
+              <button type="button" class="app-talk__enquire" data-open-enquiry data-interest="support">Make an enquiry <svg class="icon"><use href="#i-arrow"/></svg></button>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

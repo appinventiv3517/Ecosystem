@@ -11,6 +11,9 @@ html {
   text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
   scroll-padding-top: calc(var(--header-h-compact) + 1rem);
+  /* The browser's scroll anchoring latches onto the sticky and pinned stages and nudges the
+     page when they release. Layout changes above are handled by re-measuring instead (main.js). */
+  overflow-anchor: none;
 }
 
 html.is-locked,
