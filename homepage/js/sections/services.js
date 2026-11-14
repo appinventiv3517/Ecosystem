@@ -119,9 +119,29 @@ export function initServices() {
     status.textContent = `Start with ${names.join(' or ')}.`;
   }
 
+  /* ---------- "I need to ..." types out the task in focus ---------- */
+
+  const typed = $('[data-typed]', concierge);
+  let typing = null;
+  function typeOut(text) {
+    if (!typed) return;
+    const target = text ? text.charAt(0).toLowerCase() + text.slice(1) : '';
+    typing?.kill();
+    if (!motionOK) {
+      typed.textContent = target;
+      return;
+    }
+    const from = typed.textContent;
+    const state = { n: from.length };
+    typing = gsap.timeline()
+      .to(state, { n: 0, duration: Math.min(0.32, from.length * 0.012), ease: 'none', onUpdate: () => (typed.textContent = from.slice(0, Math.round(state.n))) })
+      .to(state, { n: target.length, duration: target.length * 0.034, ease: 'none', onUpdate: () => (typed.textContent = target.slice(0, Math.round(state.n))) });
+  }
+
   function selectTask(index, { user = false, instant = false } = {}) {
     currentTask = index;
     const task = tasks[index];
+    typeOut($('.task__text', task).textContent);
     tasks.forEach((item, i) => {
       item.classList.toggle('is-active', i === index);
       item.setAttribute('aria-pressed', String(i === index && user));
@@ -133,6 +153,7 @@ export function initServices() {
 
   function clearTasks() {
     currentTask = -1;
+    typeOut('');
     tasks.forEach((item) => {
       item.classList.remove('is-active');
       item.setAttribute('aria-pressed', 'false');
@@ -259,6 +280,16 @@ export function initServices() {
       if (inView) runAuto();
       else resetTimers();
     },
+  });
+
+  // The arch outlines behind drift on their own and slide past at their own pace as you scroll.
+  const deco = $$('[data-services-deco] i');
+  deco.forEach((item, i) => {
+    gsap.to(item, { y: i % 2 ? 26 : -22, rotation: i % 2 ? -2 : 2, duration: 7 + i * 1.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  });
+  gsap.fromTo('[data-services-deco]', { yPercent: 8 }, {
+    yPercent: -8, ease: 'none',
+    scrollTrigger: { trigger: concierge.closest('section'), start: 'top bottom', end: 'bottom top', scrub: 1 },
   });
 
   // Entrance: the tasks slide in one by one and the card rises out of the red.

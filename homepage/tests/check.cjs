@@ -61,7 +61,20 @@ const goTo = async (page, selector, offset = 120) => {
 };
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 const activeCommunity = (page) => page.evaluate(() => document.querySelector('.community.is-active')?.dataset.community);
-const activeVertical = (page) => page.evaluate(() => document.querySelector('.orbit__node[aria-selected="true"]')?.dataset.vertical);
+const activeVertical = (page) => page.evaluate(() => document.querySelector('.eco-arch__tab[aria-expanded="true"]')?.dataset.vertical);
+/** True when the section's content sits wholly on one screen once the section is at the top. */
+const fitsOneScreen = async (page, id) => {
+  await page.evaluate((sel) => { const s = document.getElementById(sel); window.scrollTo({ top: s.getBoundingClientRect().top + scrollY, behavior: 'instant' }); }, id);
+  await wait(page, 900);
+  await page.evaluate((sel) => { const s = document.getElementById(sel); window.scrollTo({ top: s.getBoundingClientRect().top + scrollY, behavior: 'instant' }); }, id);
+  await wait(page, 900);
+  return page.evaluate((sel) => {
+    const section = document.getElementById(sel);
+    const box = section.getBoundingClientRect();
+    const deepest = Math.max(...[...section.querySelectorAll('.wrap *')].filter((el) => el.offsetParent && !el.closest('[hidden], .svc:not(.is-active)')).map((el) => el.getBoundingClientRect().bottom));
+    return Math.abs(box.top) < 2 && box.height <= innerHeight + 1 && deepest <= innerHeight + 1;
+  }, id);
+};
 const toastText = (page) => page.evaluate(() => {
   const toast = document.querySelector('[data-toast]');
   return toast.classList.contains('is-visible') ? toast.textContent.trim() : '';
@@ -208,24 +221,25 @@ async function desktop(browser) {
   check('buttons carry a rolling label', await page.evaluate(() => document.querySelectorAll('.btn .roll__inner').length > 5 && document.querySelector('.site-header__enquire .roll').getBoundingClientRect().height < 30));
   check('pointer follower is active for mouse users', await page.evaluate(() => document.documentElement.classList.contains('has-cursor')));
 
-  // Ecosystem
-  await goTo(page, '[data-orbit]', 140);
-  await page.click('.orbit__node[data-vertical="hospitality"]');
-  await wait(page, 1900);
-  check('ecosystem selects a business on click', (await activeVertical(page)) === 'hospitality' && await page.evaluate(() => !document.querySelector('#panel-hospitality').hidden && document.querySelector('[data-vertical-image="hospitality"]').classList.contains('is-active')));
+  // Ecosystem: the skyline
+  check('ecosystem fits one laptop screen', await fitsOneScreen(page, 'ecosystem'));
+  await wait(page, 1600);
+  await page.click('.eco-arch__tab[data-vertical="hospitality"]');
+  await wait(page, 1600);
+  check('ecosystem opens a business on click', (await activeVertical(page)) === 'hospitality' && await page.evaluate(() => !document.querySelector('#panel-hospitality').hidden && document.querySelector('#panel-real-estate').hidden));
+  check('the open arch is the widest, the rest stand slim', await page.evaluate(() => {
+    const widths = [...document.querySelectorAll('.eco-arch')].map((arch) => arch.getBoundingClientRect().width);
+    const open = document.querySelector('.eco-arch.is-active').getBoundingClientRect().width;
+    return widths.filter((w) => w < open * 0.3).length === 6;
+  }));
+  check('the open business shows its whole story', await page.evaluate(() => {
+    const arch = document.querySelector('.eco-arch.is-active').getBoundingClientRect();
+    return [...document.querySelectorAll('#panel-hospitality > *')].every((el) => { const box = el.getBoundingClientRect(); return box.left >= arch.left - 1 && box.right <= arch.right + 1 && box.bottom <= arch.bottom + 1; });
+  }));
   await page.keyboard.press('ArrowRight');
-  await wait(page, 1900);
+  await wait(page, 1600);
   check('ecosystem moves with arrow keys', (await activeVertical(page)) === 'retail' && await page.evaluate(() => document.activeElement.dataset.vertical === 'retail'));
-  check('active business sits beside its description', await page.evaluate(() => {
-    const node = document.querySelector('.orbit__node.is-active').getBoundingClientRect();
-    const stage = document.querySelector('[data-orbit-stage]').getBoundingClientRect();
-    return Math.abs(node.top + node.height / 2 - (stage.top + stage.height / 2)) < 6 && node.left < stage.left + stage.width * 0.25;
-  }));
-  check('centre arch is centred in the ring', await page.evaluate(() => {
-    const core = document.querySelector('[data-orbit-core]').getBoundingClientRect();
-    const stage = document.querySelector('[data-orbit-stage]').getBoundingClientRect();
-    return Math.abs(core.top + core.height / 2 - (stage.top + stage.height / 2)) < 4 && Math.abs(core.left + core.width / 2 - (stage.left + stage.width / 2)) < 4;
-  }));
+  check('the ring counts the business in view', (await page.textContent('[data-eco-count]')) === '04');
   await shot(page, 'desktop-ecosystem');
 
   // Life at Bloom: pinned chapters
@@ -240,9 +254,11 @@ async function desktop(browser) {
   await shot(page, 'desktop-life');
 
   // Customer Services
+  check('customer services fits one laptop screen', await fitsOneScreen(page, 'services'));
   await goTo(page, '#services', 0);
   await page.click('.task:has-text("Pay an instalment")');
   await wait(page, 1400);
+  check('"I need to" types out the chosen task', await page.evaluate(() => document.querySelector('[data-typed]').textContent === 'pay an instalment'));
   check('choosing a task turns the card to the app that handles it', await page.evaluate(() => document.querySelector('#service-super-app').getAttribute('aria-selected') === 'true' && document.querySelector('#panel-service-super-app').classList.contains('is-active') && !document.querySelector('#panel-service-community-app').classList.contains('is-active') && document.querySelector('[data-tasks-status]').textContent === 'Start with Bloom Super App.'));
   check('the feature that does the job is picked out', await page.evaluate(() => document.querySelector('#panel-service-super-app [data-feature="Property payments"]').classList.contains('is-match')));
   check('the highlight sits on the chosen task', await page.evaluate(() => { const glow = document.querySelector('[data-task-glow]').getBoundingClientRect(); const task = document.querySelector('.task:nth-of-type(5)').getBoundingClientRect(); return Math.abs(glow.top - task.top) < 2 && Math.abs(glow.height - task.height) < 2; }));
@@ -432,10 +448,11 @@ async function phone(browser) {
   check('result names that community\'s developments', devs === 'Bloom developments in Jumeirah Village Circle: Bloom Towers, Bloom Heights', devs);
   await shot(page, 'phone-search-result');
 
-  await goTo(page, '[data-orbit]', 90);
-  await page.tap('.orbit__node[data-vertical="education"]');
-  await wait(page, 1700);
-  check('ecosystem becomes tabs that select by tap', (await activeVertical(page)) === 'education' && await page.evaluate(() => getComputedStyle(document.querySelector('.orbit__node')).position === 'static'));
+  await goTo(page, '[data-skyline]', 90);
+  await wait(page, 1600);
+  await page.tap('.eco-arch__tab[data-vertical="education"]');
+  await wait(page, 1500);
+  check('on a phone the skyline stacks and opens by tap', (await activeVertical(page)) === 'education' && await page.evaluate(() => { const arches = [...document.querySelectorAll('.eco-arch')].map((a) => a.getBoundingClientRect()); return arches[1].top > arches[0].bottom - 1 && arches[1].height > 300 && arches[0].height < 80; }));
   await shot(page, 'phone-ecosystem');
 
   await goTo(page, '#life', 0);
@@ -492,16 +509,12 @@ async function tablet(browser) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
-  await goTo(page, '[data-orbit]', 100);
-  await wait(page, 800);
+  await goTo(page, '[data-skyline]', 100);
+  await wait(page, 1200);
   const firstVertical = await activeVertical(page);
-  await wait(page, 6200);
+  check('the open arch shows a timer while the skyline moves on by itself', await page.evaluate(() => document.querySelector('[data-skyline]').classList.contains('is-auto') && getComputedStyle(document.querySelector('.eco-arch.is-active .eco-arch__timer')).opacity > 0.5));
+  await wait(page, 6600);
   check('ecosystem switches business on its own', (await activeVertical(page)) !== firstVertical, { firstVertical, now: await activeVertical(page) });
-  check('active business shows its countdown ring', await page.evaluate(() => getComputedStyle(document.querySelector('.orbit__node.is-active .orbit__num')).backgroundImage.includes('conic-gradient')));
-  // The outlined name changes a moment after the business does.
-  await page.waitForFunction(() => document.querySelector('[data-orbit-ghost]').textContent.replace(/ /g, ' ') === document.querySelector('.orbit__node.is-active').textContent.replace(/^\d+/, '').trim(), null, { timeout: 2500 }).catch(() => {});
-  const ghostPair = await page.evaluate(() => [document.querySelector('[data-orbit-ghost]').textContent.replace(/\u00a0/g, ' '), document.querySelector('.orbit__node.is-active').textContent.replace(/^\d+/, '').trim()]);
-  check('ghost name behind the ring follows the business', ghostPair[0] === ghostPair[1], ghostPair);
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 800);
   await page.tap('[data-menu-toggle]');
@@ -518,7 +531,7 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce', query: '' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion') && !document.querySelector('[data-intro]')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .task, .concierge__answer, .stat__value, .orbit__node, .chapter__text')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .task, .concierge__answer, .stat__value, .eco-arch, .eco-arch__panel:not([hidden]), .chapter__text')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).length);
@@ -527,8 +540,8 @@ async function reducedMotion(browser) {
   await page.click('[data-search-submit]');
   await wait(page, 400);
   check('search still works', (await page.textContent('[data-result-summary]')) === 'Homes to buy across all Bloom communities');
-  await goTo(page, '[data-orbit]', 120);
-  await page.click('.orbit__node[data-vertical="landscaping"]');
+  await goTo(page, '[data-skyline]', 120);
+  await page.click('.eco-arch__tab[data-vertical="landscaping"]');
   await wait(page, 300);
   check('ecosystem still works', await page.evaluate(() => !document.querySelector('#panel-landscaping').hidden));
   check('life section is not pinned', await page.evaluate(() => !document.querySelector('.pin-spacer')));
