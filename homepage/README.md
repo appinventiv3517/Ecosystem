@@ -12,8 +12,9 @@ npm run artifact   # prepare the page for publishing as a Claude Artifact
 npm run standalone # one self-contained file: dist/bloom-homepage.html
 ```
 
-Published for review at <https://claude.ai/artifact/DntWyZ7vHFeYHKbwEbYNL4> — private to the
-owner until it is shared from the page's Share menu.
+This cinematic redesign is published for review at <https://claude.ai/artifact/3ooRrhXXGpoZXkencD2EXu>.
+The previous design (commit 434c635) stays at <https://claude.ai/artifact/DntWyZ7vHFeYHKbwEbYNL4>.
+Both are private to the owner until shared from the page's Share menu.
 
 `npm start` needs nothing installed. `npm test` needs Playwright with Chromium;
 `npm run images` needs Python with Pillow.
