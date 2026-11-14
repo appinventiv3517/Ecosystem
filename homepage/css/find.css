@@ -722,3 +722,41 @@
     min-height: 2.75rem;
   }
 }
+
+/* ---------- Editorial frame for the search (redesign) ---------- */
+
+.find {
+  overflow: clip;
+}
+
+.find__intro {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.find__title {
+  font-size: clamp(3rem, 6.6vw, 7.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  max-width: 9em;
+}
+
+/* An oversized outlined word that slides across behind the console as the section passes. */
+.find__ghost {
+  position: absolute;
+  right: -0.08em;
+  top: 0.1em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(9rem, 26vw, 28rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(150, 43, 35, 0.18);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.find__grid {
+  position: relative;
+}

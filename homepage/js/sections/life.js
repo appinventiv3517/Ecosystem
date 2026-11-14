@@ -1,82 +1,51 @@
-// Life at Bloom: the stage pins while the page scrolls through four chapters. Three arch
-// "reels" turn in opposite directions to bring up each chapter's photographs.
+// Life at Bloom: a sticky stage. The headline rises out of its masks; six photographs drift up
+// past it, each at its own depth; then a doorway-shaped frame rises from the bottom and opens
+// to fill the screen with a closing photograph and line. All scrubbed by the scroll.
 
-import { $, $$, clamp } from '../lib/dom.js';
-import { gsap, ScrollTrigger, motionOK, EASE } from '../lib/motion.js';
+import { $, $$ } from '../lib/dom.js';
+import { gsap, motionOK, EASE } from '../lib/motion.js';
 
 export function initLife() {
-  const section = $('[data-life]');
-  if (!section) return;
+  const track = $('[data-life-track]');
+  if (!track || !motionOK) return;
+  const head = $('[data-life-head]', track);
+  const lines = $$('.life__line > span', track);
+  const shots = $$('[data-lshot]', track);
+  const open = $('[data-life-open]', track);
+  const openImage = $('[data-life-open-img]', track);
+  const openCopy = [...$('[data-life-open-copy]', track).children];
 
-  const stage = $('[data-life-stage]', section);
-  const chapters = $$('[data-life-chapter]', section);
-  const reels = $$('.reel', section).map((reel) => ({ strip: $('.reel__strip', reel), down: reel.dataset.reel === 'down' }));
-  const meter = $('[data-life-meter]', section);
-  const count = chapters.length;
-  let active = 0;
-  let trigger = null;
-
-  /** Strip position for a (possibly fractional) chapter index. */
-  const stripPercent = (reel, position) => (reel.down ? -75 + 25 * position : -25 * position);
-
-  function setChapter(index, position = index) {
-    meter.style.setProperty('--progress', ((position + 1) / count).toFixed(3));
-    if (index === active) return;
-    active = index;
-    chapters.forEach((chapter, i) => chapter.classList.toggle('is-active', i === index));
-  }
-
-  $$('[data-life-go]', section).forEach((button) => {
-    button.addEventListener('click', () => {
-      const index = Number(button.dataset.lifeGo);
-      if (trigger) {
-        // Scroll to the point in the pinned sequence where this chapter sits.
-        const top = trigger.start + ((trigger.end - trigger.start) * index) / (count - 1);
-        window.scrollTo({ top: Math.round(top) + 1, behavior: 'smooth' });
-      } else {
-        setChapter(index);
-        reels.forEach((reel) => (reel.strip.style.transform = `translateY(${stripPercent(reel, index)}%)`));
-      }
-    });
-  });
-
-  if (!motionOK) return;
-
-  reels.forEach((reel) => gsap.set(reel.strip, { y: 0, yPercent: stripPercent(reel, 0) }));
-
-  const timeline = gsap.timeline({ defaults: { ease: EASE.smooth, duration: 0.86 } });
-  for (let step = 1; step < count; step += 1) {
-    timeline.addLabel(`chapter-${step - 1}`, step - 1);
-    reels.forEach((reel, i) => {
-      timeline.to(reel.strip, { yPercent: stripPercent(reel, step) }, step - 1 + i * 0.07);
-    });
-  }
-  timeline.addLabel(`chapter-${count - 1}`, count - 1);
-  timeline.set({}, {}, count - 1);
-
-  trigger = ScrollTrigger.create({
-    animation: timeline,
-    trigger: stage,
-    start: 'top top',
-    end: () => `+=${Math.round(window.innerHeight * (window.innerWidth < 900 ? 0.75 : 0.95) * (count - 1))}`,
-    pin: true,
-    scrub: 0.6,
-    anticipatePin: 1,
-    invalidateOnRefresh: true,
-    snap: { snapTo: 'labels', inertia: false, duration: { min: 0.25, max: 0.6 }, delay: 0.1, ease: 'power2.inOut' },
-    onUpdate: (self) => {
-      const position = self.progress * (count - 1);
-      setChapter(clamp(Math.round(position), 0, count - 1), position);
-    },
-  });
-
-  // The reels rise into place as the section arrives.
-  gsap.from($$('.reel', section), {
-    yPercent: 28,
-    autoAlpha: 0,
-    duration: 1.3,
+  gsap.fromTo(lines, { yPercent: 110 }, {
+    yPercent: 0,
+    duration: 1.4,
     stagger: 0.12,
-    ease: EASE.out,
-    scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+    ease: 'expo.out',
+    scrollTrigger: { trigger: track, start: 'top 60%', once: true },
   });
+
+  const doorway = (top, side) => () => {
+    const radius = Math.round(window.innerWidth * (1 - side * 2 / 100) / 2);
+    return `inset(${top}% ${side}% 0% ${side}% round ${radius}px ${radius}px 0px 0px)`;
+  };
+  const narrow = () => (window.innerWidth < 760 ? 30 : 41);
+
+  gsap.set(openCopy, { autoAlpha: 0, y: 30 });
+  const timeline = gsap.timeline({
+    defaults: { ease: 'none' },
+    scrollTrigger: { trigger: track, start: 'top top', end: 'bottom bottom', scrub: 0.5, invalidateOnRefresh: true },
+  });
+
+  shots.forEach((shot) => {
+    const depth = parseFloat(shot.dataset.depth) || 1;
+    timeline.fromTo(shot, { y: 0 }, { y: () => -window.innerHeight * (1.05 + depth * 0.55), duration: 0.8 }, 0);
+    timeline.fromTo($('img', shot), { yPercent: -8, scale: 1.12 }, { yPercent: 8, scale: 1.12, duration: 0.8 }, 0);
+  });
+
+  timeline
+    .fromTo(open, { clipPath: doorway(100, 44) }, { clipPath: () => doorway(64, narrow())(), duration: 0.3, ease: 'power1.out' }, 0.25)
+    .to(open, { clipPath: 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)', duration: 0.4, ease: EASE.inOut }, 0.55)
+    .fromTo(openImage, { scale: 1.4 }, { scale: 1, duration: 0.7, ease: 'power1.out' }, 0.25)
+    .to(head, { autoAlpha: 0, scale: 0.94, yPercent: -10, duration: 0.25 }, 0.55)
+    .to(openCopy, { autoAlpha: 1, y: 0, duration: 0.12, stagger: 0.03 }, 0.86)
+    .to({}, { duration: 0.06 }, 0.98);
 }

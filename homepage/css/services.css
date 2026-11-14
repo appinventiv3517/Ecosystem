@@ -1,486 +1,266 @@
-/* 07 · Customer Services: the three Bloom apps, and a way to get them, as a grid of tiles on
-   the red. On a laptop the whole section fits one screen. */
+/* 07 · Customer Services: six pathways as a large numbered index on brick red. Hovering a row
+   fills it with cream, and for the apps a screenshot follows the pointer (js/sections/services.js). */
 
-.services {
-  z-index: 2;
-  margin-top: calc(var(--radius-l) * -1);
-  border-radius: var(--radius-l) var(--radius-l) 0 0;
-  overflow: hidden;
+.care {
   overflow: clip;
 }
 
-/* Arch outlines drifting slowly behind everything, as if seen through the red. */
-.services__deco {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.services__deco i {
-  position: absolute;
-  border: 1px solid rgba(248, 246, 234, 0.1);
-  border-bottom: 0;
-  border-radius: 999px 999px 0 0;
-}
-
-.services__deco i:nth-child(1) {
-  left: -6vw;
-  bottom: -10%;
-  width: 34vw;
-  height: 78%;
-}
-
-.services__deco i:nth-child(2) {
-  left: 22vw;
-  bottom: -30%;
-  width: 22vw;
-  height: 70%;
-  border-color: rgba(248, 246, 234, 0.07);
-}
-
-.services__deco i:nth-child(3) {
-  right: -8vw;
-  top: 8%;
-  width: 40vw;
-  height: 120%;
-  border-color: rgba(248, 246, 234, 0.08);
-}
-
-.services__inner {
-  position: relative;
-}
-
-.services__head {
+.care__head {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 5vw, 6rem);
-  align-items: end;
-  margin-bottom: clamp(1.25rem, 3.4vh, 2.75rem);
-}
-
-.services__head .section-head {
-  gap: 0.75rem;
-}
-
-.services__head .display {
-  font-size: clamp(2.125rem, min(3.8vw, 6.6vh), 4.25rem);
-}
-
-.services__head .lede {
-  max-width: 24rem;
-  padding-bottom: 0.5rem;
-  color: var(--text-soft);
-}
-
-/* ---------- The tiles ---------- */
-
-.apps {
-  display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr) minmax(0, 0.82fr);
-  grid-template-rows: minmax(0, 0.9fr) minmax(0, 1.1fr);
   grid-template-areas:
-    "community super super"
-    "community partners get";
-  gap: clamp(0.75rem, 1.2vw, 1.25rem);
-  min-height: 34rem;
+    "label label"
+    "title lede";
+  gap: 1.75rem clamp(2rem, 6vw, 6rem);
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
 }
 
-.app-tile {
-  --mx: 50%;
-  --my: 50%;
-  --spot: 0;
+.care__head .sec-label { grid-area: label; }
+
+.care__title {
+  grid-area: title;
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.care__title em {
+  color: #F2C9BE;
+}
+
+.care__lede {
+  grid-area: lede;
+  max-width: 24rem;
+  font-size: var(--text-lede);
+  color: rgba(248, 246, 234, 0.85);
+}
+
+/* ---------- Pathways ---------- */
+
+.paths {
+  border-bottom: 1px solid rgba(248, 246, 234, 0.3);
+}
+
+.path__row {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  border-radius: var(--radius-l);
-  background: var(--cream);
-  color: var(--ink);
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1.15fr) minmax(0, 1fr) 3.25rem;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: clamp(1.125rem, 2.2vw, 1.75rem) 1rem;
+  border-top: 1px solid rgba(248, 246, 234, 0.3);
+  color: var(--cream);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
   isolation: isolate;
-  box-shadow: 0 2rem 4rem -2.5rem rgba(40, 8, 5, 0.7);
-  transition: box-shadow 600ms var(--ease-out);
+  transition: color 450ms var(--ease-out);
 }
 
-#service-community-app {
-  grid-area: community;
-}
-
-#service-super-app {
-  grid-area: super;
-  flex-direction: row-reverse;
-}
-
-#service-partners-app {
-  grid-area: partners;
-}
-
-.app-tile--get {
-  grid-area: get;
-}
-
-/* A soft light that follows the pointer across the tile. */
-.app-tile::before {
+/* Cream fills the row from the bottom on hover. */
+.path__row::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
-  background: radial-gradient(28rem circle at var(--mx) var(--my), rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%);
-  opacity: var(--spot);
-  mix-blend-mode: soft-light;
-  transition: opacity 500ms var(--ease-out);
-  pointer-events: none;
-}
-
-.app-tile:hover {
-  box-shadow: 0 2.5rem 5rem -2rem rgba(40, 8, 5, 0.85);
-}
-
-.app-tile:not(.app-tile--get) {
-  cursor: pointer;
-}
-
-/* A glint of light sweeps across each tile in turn, every few seconds. */
-.app-tile__glint {
-  position: absolute;
-  inset: -20% auto -20% -40%;
-  z-index: 4;
-  width: 30%;
-  background: linear-gradient(100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-  transform: translateX(-120%) skewX(-12deg);
-  pointer-events: none;
-}
-
-html.motion .app-tile__glint {
-  animation: app-glint 9s var(--ease-in-out) infinite;
-  animation-delay: calc(var(--i) * 1.4s + 2s);
-}
-
-@keyframes app-glint {
-  0%,
-  86% {
-    transform: translateX(-120%) skewX(-12deg);
-  }
-  100% {
-    transform: translateX(560%) skewX(-12deg);
-  }
-}
-
-.app-tile__media {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  margin: 0;
-  overflow: hidden;
-  background: #F4F1E9;
-}
-
-.app-tile__media img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform 1100ms var(--ease-out);
-}
-
-/* The Community App picture carries a red band, so it fills its frame instead. */
-#service-community-app .app-tile__media img {
-  object-fit: cover;
-}
-
-#service-super-app .app-tile__media {
-  flex: 1.1;
-}
-
-.app-tile:hover .app-tile__media img {
-  transform: scale(1.06);
-}
-
-.app-tile__body {
-  position: relative;
-  display: grid;
-  gap: 0.375rem;
-  padding: clamp(0.875rem, 2vh, 1.5rem) clamp(1.25rem, 1.8vw, 1.75rem) clamp(1rem, 2.4vh, 1.75rem);
-}
-
-#service-super-app .app-tile__body {
-  flex: 1;
-  align-content: end;
-}
-
-.app-tile__who {
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--red);
-}
-
-.app-tile__name {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, min(2.2vw, 4.2vh), 2.375rem);
-  font-weight: 400;
-  line-height: 1.05;
-}
-
-#service-community-app .app-tile__name {
-  font-size: clamp(1.75rem, min(2.8vw, 5vh), 3rem);
-}
-
-.app-tile__line {
-  max-width: 28rem;
-  font-size: clamp(0.8125rem, min(1vw, 1.9vh), 1rem);
-  line-height: 1.5;
-  color: var(--muted);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-
-/* The arrow. A click anywhere on the tile presses it (services.js). */
-.app-tile__go {
-  position: absolute;
-  top: clamp(0.875rem, 1.4vw, 1.25rem);
-  right: clamp(0.875rem, 1.4vw, 1.25rem);
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: var(--ink);
-  color: var(--cream);
-  transition: background-color 400ms var(--ease-out), transform 600ms var(--ease-out);
-}
-
-.app-tile__go .icon {
-  width: 1.125rem;
-  height: 1.125rem;
+  z-index: -1;
+  background: var(--cream);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
   transition: transform 600ms var(--ease-out);
 }
 
-.app-tile:hover .app-tile__go {
-  background: var(--red);
-  transform: scale(1.08);
+.path__num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  opacity: 0.75;
 }
 
-.app-tile:hover .app-tile__go .icon {
-  transform: rotate(45deg);
-}
-
-/* Lit up when another part of the page sends you to this app. */
-.app-tile.is-called {
-  animation: app-called 1.6s var(--ease-out) 2;
-}
-
-@keyframes app-called {
-  0% {
-    box-shadow: 0 0 0 0 rgba(248, 246, 234, 0.9);
-  }
-  100% {
-    box-shadow: 0 0 0 1.25rem rgba(248, 246, 234, 0);
-  }
-}
-
-/* ---------- Getting the apps ---------- */
-
-.app-tile--get {
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: clamp(1rem, 2.4vh, 1.75rem) clamp(1.25rem, 1.8vw, 1.75rem);
-  background: var(--ink);
-  color: var(--cream);
-}
-
-.app-tile--get .app-tile__who {
-  color: #E0796C;
-}
-
-.app-stores {
+.path__main {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
+  gap: 0.25rem;
+}
+
+.path__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 3vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  transition: transform 600ms var(--ease-out);
+}
+
+.path__who {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.path__line {
+  max-width: 26rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  opacity: 0.85;
+}
+
+.path__go {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: background-color 450ms var(--ease-out), border-color 450ms var(--ease-out), color 450ms var(--ease-out);
+}
+
+.path__go .icon {
+  transition: transform 600ms var(--ease-out);
+}
+
+.path.is-called .path__row::before {
+  transform: none;
+}
+
+.path.is-called .path__row {
+  color: var(--red);
+}
+
+@media (hover: hover) {
+  .path__row:hover {
+    color: var(--red);
+  }
+
+  .path__row:hover::before {
+    transform: none;
+  }
+
+  .path__row:hover .path__name {
+    transform: translateX(0.75rem);
+  }
+
+  .path__row:hover .path__go {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--cream);
+  }
+
+  .path__row:hover .path__go .icon {
+    animation: arrow-diag 560ms var(--ease-out);
+  }
+}
+
+@keyframes arrow-diag {
+  0% { transform: translate(0, 0); }
+  45% { transform: translate(140%, -140%); opacity: 0; }
+  46% { transform: translate(-140%, 140%); opacity: 0; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+
+/* Screenshot that follows the pointer over the app rows. */
+.path-preview {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: clamp(16rem, 24vw, 22rem);
+  aspect-ratio: 1000 / 486;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--ivory);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition: opacity 350ms var(--ease-out), scale 500ms var(--ease-out);
+}
+
+.path-preview.is-visible {
+  opacity: 1;
+  scale: 1;
+}
+
+.path-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- App stores ---------- */
+
+.care__stores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 2.5rem;
+}
+
+.care__stores-label {
+  margin-right: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
 }
 
 .app-store {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.375rem 0.875rem;
-  border: 1px solid rgba(248, 246, 234, 0.3);
-  border-radius: var(--radius-pill);
-  text-align: left;
-  font-size: 0.875rem;
+  min-height: 3rem;
+  padding: 0.4rem 1.25rem;
+  border: 1px solid rgba(248, 246, 234, 0.55);
+  border-radius: 0.75rem;
+  color: var(--cream);
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.15;
-  transition: background-color 400ms var(--ease-out), color 400ms var(--ease-out), border-color 400ms var(--ease-out);
-}
-
-.app-store .icon {
-  display: none;
-  width: 1rem;
-  height: 1rem;
-  transform: rotate(90deg);
+  line-height: 1.1;
+  text-align: left;
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
 
 .app-store small {
   display: block;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .app-store:hover {
   background: var(--cream);
-  border-color: var(--cream);
-  color: var(--ink);
+  color: var(--red);
 }
 
-.app-talk {
-  display: grid;
-  gap: 0;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(248, 246, 234, 0.18);
-}
-
-.app-talk__label {
-  font-size: var(--text-small);
-  color: var(--muted-on-dark);
-}
-
-.app-talk__phone {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, min(1.7vw, 3.2vh), 1.75rem);
-}
-
-.app-talk__phone small {
-  font-size: 0.55em;
-  color: var(--muted-on-dark);
-}
-
-.app-talk__phone .icon {
-  width: 1.125rem;
-  height: 1.125rem;
-  color: #E0796C;
-}
-
-.app-talk__enquire {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  justify-self: start;
-  font-size: var(--text-small);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: rgba(248, 246, 234, 0.4);
-  text-underline-offset: 0.3em;
-}
-
-.app-talk__enquire .icon {
-  width: 0.875rem;
-  height: 0.875rem;
-}
-
-/* ---------- One screen tall on laptops and up ---------- */
-
-@media (min-width: 1100px) {
-  .services {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100svh;
-    min-height: 40rem;
-    max-height: 68rem;
-    padding-top: calc(var(--header-h) + 0.5rem);
-    padding-bottom: clamp(1rem, 2.4vh, 2rem);
+@media (max-width: 899px) {
+  .care__head {
+    grid-template-columns: 1fr;
+    grid-template-areas: "label" "title" "lede";
   }
 
-  .services__inner {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 0;
-    width: 100%;
+  .path__row {
+    grid-template-columns: 2.25rem minmax(0, 1fr) 2.75rem;
+    gap: 0.5rem 1rem;
+    padding-inline: 0;
   }
 
-  .apps {
-    flex: 1;
-    min-height: 0;
-  }
-}
-
-/* ---------- Responsive ---------- */
-
-@media (max-width: 1099px) {
-  .apps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: none;
-    grid-template-areas:
-      "community community"
-      "super super"
-      "partners get";
-    min-height: 0;
+  .path__line {
+    grid-column: 2;
+    grid-row: 2;
   }
 
-  .app-tile {
-    min-height: 22rem;
+  .path__go {
+    grid-column: 3;
+    grid-row: 1;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
-  #service-community-app {
-    flex-direction: row;
-    min-height: 24rem;
+  .path-preview {
+    display: none;
   }
-
-  #service-community-app .app-tile__media,
-  #service-super-app .app-tile__media {
-    flex: 1.15;
-  }
-
-  #service-community-app .app-tile__body {
-    flex: 1;
-    align-content: end;
-  }
-
-}
-
-@media (max-width: 900px) {
-  .services__head {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 760px) {
-  .apps {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "community"
-      "super"
-      "partners"
-      "get";
-  }
-
-  .app-tile,
-  #service-community-app,
-  #service-super-app {
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .app-tile__media,
-  #service-community-app .app-tile__media,
-  #service-super-app .app-tile__media {
-    flex: none;
-    aspect-ratio: 1000 / 560;
-  }
-
 }

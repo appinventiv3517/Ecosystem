@@ -1,478 +1,503 @@
-/* 04 · Explore Communities: one community at a time on a full-width stage. The next one
-   waits in an arch at the corner; choosing it opens that arch out to fill the stage. */
+/* 03 · Explore Communities: a horizontal gallery of mixed proportions.
+   Wide screens with motion: the stage holds still (CSS sticky) and the rail slides sideways as
+   the page scrolls; the card nearest the centre comes to full size (js/sections/gallery.js).
+   Phones, tablets and reduced motion: a native swipe rail with snap points. */
 
-.communities {
-  z-index: 1;
-  background: var(--cream);
+.gallery {
+  position: relative;
+  background: var(--ivory);
+  border-top: 1px solid var(--line);
+}
+
+.gallery__track {
+  position: relative;
+}
+
+.gallery__stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding-top: calc(var(--header-h) + 1.5rem);
   overflow: hidden;
-  /* clip, not hidden: hidden would stop the stage below from sticking while you scroll. */
-  overflow: clip;
-  padding-bottom: calc(var(--section-y) + var(--radius-l));
 }
 
-.communities__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 6rem);
-  align-items: end;
-}
-
-.communities__aside {
-  display: grid;
-  gap: 1.75rem;
-  padding-bottom: 0.5rem;
-}
-
-.carousel-controls {
+.gallery__viewport {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  outline: none;
 }
 
-.carousel-controls__count {
-  display: inline-flex;
+.gallery__viewport:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring);
+}
+
+.gallery__rail {
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-right: auto;
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-}
-
-.carousel-controls__now {
-  display: inline-block;
-  min-width: 1.6em;
-  color: var(--red);
-  font-style: italic;
-}
-
-/* The line between the counts fills as you move through the five. */
-.carousel-controls__sep {
-  position: relative;
-  width: 3.5rem;
-  height: 1px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.carousel-controls__sep i {
-  position: absolute;
-  inset: 0;
-  background: var(--red);
-  transform-origin: left;
-  transform: scaleX(var(--fill, 0.2));
-}
-
-[data-stage-prev] .icon {
-  transform: rotate(180deg);
-}
-
-/* ---------- Stage ---------- */
-
-.stage {
-  position: relative;
-  height: clamp(34rem, 84vh, 56rem);
-  margin-top: clamp(2.5rem, 4.5vw, 4.5rem);
-  color: var(--cream);
-  isolation: isolate;
-  touch-action: pan-y;
-  cursor: grab;
-  border-radius: var(--radius-l);
-  outline-offset: 4px;
-}
-
-.stage.is-dragging {
-  cursor: grabbing;
-  user-select: none;
-}
-
-.stage__media {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: var(--radius-l);
-  background: var(--ink);
-  transform: translateZ(0);
-}
-
-.stage__slide {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.stage__slide.is-active {
-  opacity: 1;
-}
-
-.stage__slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.06);
-  user-select: none;
-  -webkit-user-drag: none;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+  padding-inline: var(--gutter);
   will-change: transform;
 }
 
-.stage__shade {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background:
-    linear-gradient(0deg, rgba(11, 11, 11, 0.86) 0%, rgba(11, 11, 11, 0.28) 46%, rgba(11, 11, 11, 0) 66%),
-    linear-gradient(90deg, rgba(11, 11, 11, 0.42) 0%, rgba(11, 11, 11, 0) 55%),
-    linear-gradient(180deg, rgba(11, 11, 11, 0.38) 0%, rgba(11, 11, 11, 0) 24%);
-}
-
-/* Copy sits on the image, bottom left */
-.stage__copy {
-  position: absolute;
-  left: clamp(1.5rem, 3.6vw, 3.75rem);
-  bottom: clamp(1.5rem, 3.6vw, 3.75rem);
-  z-index: 4;
+/* Opening panel: the section's headline sits in the rail, as the first frame. */
+.gallery__intro {
+  flex: none;
+  width: clamp(18rem, 30vw, 30rem);
   display: grid;
-  width: min(42rem, 58%);
+  gap: 1.25rem;
+  align-content: center;
 }
 
-.community {
-  display: grid;
-  gap: 0.75rem;
-  justify-items: start;
-}
-
-.community__name {
-  max-width: 11ch;
+.gallery__title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 7.25rem);
+  font-size: clamp(2.5rem, min(4.6vw, 8.5vh), 5.25rem);
   font-weight: 400;
-  line-height: 0.94;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+  line-height: 1;
+  letter-spacing: -0.025em;
 }
 
-.community__name .name-char-mask {
-  /* Room for descenders inside each letter's mask */
-  padding-bottom: 0.18em;
-  margin-bottom: -0.18em;
+.gallery__title em {
+  color: var(--red);
 }
 
-.community__place {
+.gallery__lede {
+  max-width: 22rem;
+  color: var(--text-soft);
+  font-size: var(--text-lede);
+  line-height: 1.5;
+}
+
+.gallery__hint {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  margin-top: 0.25rem;
-  padding: 0.35rem 0.875rem 0.35rem 0.625rem;
-  border-radius: var(--radius-pill);
-  background: rgba(248, 246, 234, 0.16);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font-size: var(--text-small);
-  font-weight: 600;
+  gap: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
-.community__place .icon {
+.gallery__hint-line {
+  position: relative;
+  width: 3rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--beige);
+}
+
+.gallery__hint-line i {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  animation: gallery-hint 2.2s var(--ease-in-out) infinite;
+  animation-play-state: var(--hint-play, paused);
+}
+
+.gallery.is-in-view {
+  --hint-play: running;
+}
+
+@keyframes gallery-hint {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+/* ---------- Cards ---------- */
+
+.gcard {
+  --media-h: 46vh;
+  --ratio: 1.45;
+  flex: none;
+  display: grid;
+  gap: clamp(0.75rem, 1.6vh, 1.125rem);
+  width: calc(var(--media-h) * var(--ratio));
+  user-select: none;
+}
+
+.gcard--wide { --media-h: min(42vh, 100svh - 27rem, 30rem); --ratio: 1.5; }
+.gcard--tall { --media-h: min(50vh, 100svh - 26rem, 34rem); --ratio: 0.82; align-self: flex-start; }
+.gcard--mid  { --media-h: min(32vh, 100svh - 30rem, 26rem); --ratio: 1.3; align-self: flex-end; }
+.gcard--arch { --media-h: min(46vh, 100svh - 27rem, 33rem); --ratio: 0.8; }
+
+.gcard__media {
+  position: relative;
+  height: var(--media-h);
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--sand);
+  transform: scale(0.92);
+  transform-origin: 50% 100%;
+  transition: transform 1100ms var(--ease-out), border-radius 1100ms var(--ease-out);
+}
+
+.gcard--arch .gcard__media {
+  border-radius: 999px 999px 3px 3px;
+}
+
+.gcard.is-active .gcard__media {
+  transform: none;
+}
+
+/* The photograph is wider than its frame so it can slide inside it: the crop shifts as the card travels. */
+.gcard__media img {
+  position: absolute;
+  top: 0;
+  left: -9%;
+  width: 118%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  transform: translate3d(var(--shift, 0%), 0, 0);
+  scale: 1.06;
+  transition: scale 1100ms var(--ease-out);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.gcard__body {
+  position: relative;
+  display: grid;
+  row-gap: 0.35rem;
+  opacity: 0.55;
+  transition: opacity 700ms var(--ease-out);
+}
+
+.gcard.is-active .gcard__body {
+  opacity: 1;
+}
+
+.gcard__num {
+  position: absolute;
+  right: calc(100% + 0.625rem);
+  top: 0.45rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--red);
+}
+
+.gcard__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2vw, 2.125rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.gcard__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+
+.gcard__place .icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--red);
+}
+
+.gcard__text {
+  max-width: 28rem;
+  min-width: 15rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+/* Developments sit on the photograph as a small glass label. */
+.gcard__devs {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  width: fit-content;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 13, 12, 0.42);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--cream);
+}
+
+.gcard__devs span {
+  margin-right: 0.4rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.gcard__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.125rem;
+  margin-top: 0.375rem;
+}
+
+/* "Explore" is a pill whose arrow slides out and back in on hover. */
+.gcard__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem 0 1.125rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow: hidden;
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+
+.gcard__explore .icon {
   width: 1rem;
   height: 1rem;
 }
 
-.community__text {
-  max-width: 30rem;
-  font-size: var(--text-lede);
-  line-height: 1.45;
-  color: rgba(248, 246, 234, 0.9);
+@media (hover: hover) {
+  .gcard__explore:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--cream);
+  }
+
+  .gcard__explore:hover .icon {
+    animation: arrow-through 520ms var(--ease-out);
+  }
+
+  .gcard:hover .gcard__media img {
+    scale: 1.12;
+  }
 }
 
-.community__devs {
-  font-size: var(--text-small);
-  font-weight: 600;
+@keyframes arrow-through {
+  0% { transform: translateX(0); }
+  45% { transform: translateX(140%); opacity: 0; }
+  46% { transform: translateX(-140%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
 }
 
-.community__devs span {
-  display: block;
-  margin-bottom: 0.125rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(248, 246, 234, 0.66);
+.gallery__end {
+  flex: none;
+  width: clamp(18rem, 26vw, 26rem);
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+  padding-right: var(--gutter);
 }
 
-.community__actions {
-  display: flex;
-  flex-wrap: wrap;
+.gallery__end-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  line-height: 1.05;
+}
+
+.gallery__end-title em {
+  color: var(--red);
+}
+
+/* ---------- Navigation and progress ---------- */
+
+/* The progress bar sits at the top of the stage, clear of the section dock at the foot. */
+.gallery__stage {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.gallery__nav {
+  order: -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 0.75rem 1.75rem;
-  margin-top: 0.5rem;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
 }
 
-/* Index of all five, top right */
-.stage__tabs {
-  position: absolute;
-  top: clamp(1.25rem, 2.6vw, 2.5rem);
-  right: clamp(1.25rem, 2.6vw, 2.5rem);
-  z-index: 4;
-  display: grid;
-  gap: 0.125rem;
-  width: 16.5rem;
-  padding: 0.75rem 1rem 0.875rem;
-  border-radius: var(--radius-m);
-  background: rgba(11, 11, 11, 0.34);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-}
-
-.stage__tab {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  align-items: center;
-  width: 100%;
-  min-height: 2.75rem;
-  padding-block: 0.25rem;
-  text-align: left;
-  color: var(--cream);
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.6;
-  transition: opacity var(--dur) ease;
-}
-
-.stage__tab:hover,
-.stage__tab:focus-visible,
-.stage__tab.is-active {
-  opacity: 1;
-}
-
-.stage__tab-num {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-}
-
-.stage__tab-bar {
-  grid-column: 2;
-  display: block;
-  height: 1px;
-  margin-top: 0.375rem;
-  background: rgba(248, 246, 234, 0.26);
-  overflow: hidden;
-}
-
-.stage__tab-bar b {
-  display: block;
-  height: 100%;
-  background: var(--cream);
-  transform-origin: left;
-  transform: scaleX(var(--fill, 0));
-}
-
-.stage__tab.is-active .stage__tab-bar b {
-  --fill: 1;
-}
-
-/* The next community, waiting in an arch */
-.stage__next {
-  position: absolute;
-  right: clamp(1.25rem, 2.6vw, 2.5rem);
-  bottom: clamp(1.25rem, 2.6vw, 2.5rem);
-  z-index: 4;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  color: var(--cream);
-  text-align: left;
-}
-
-.stage__next-frame {
-  width: clamp(6.5rem, 9vw, 9rem);
-  aspect-ratio: 3 / 4;
-  outline: 1px solid rgba(248, 246, 234, 0.55);
-  outline-offset: 5px;
-  transition: transform 720ms var(--ease-out);
-}
-
-.stage__next-frame img {
-  transition: transform 1000ms var(--ease-out);
-}
-
-.stage__next-label {
-  display: grid;
-  gap: 0.25rem;
-  padding-bottom: 0.25rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-}
-
-.stage__next-label b {
+.gallery__count {
   font-family: var(--font-display);
   font-size: 1.125rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+  font-variant-numeric: tabular-nums;
 }
 
-.stage__next:hover .stage__next-frame,
-.stage__next:focus-visible .stage__next-frame {
-  transform: translateY(-0.5rem);
+.gallery__now {
+  display: inline-block;
+  min-width: 1.4em;
+  color: var(--red);
 }
 
-.stage__next:hover .stage__next-frame img {
-  transform: scale(1.1);
+.gallery__total::before {
+  content: "/";
+  margin: 0 0.35rem;
+  color: var(--beige);
 }
 
-/* ---------- Scroll-driven stage ----------
-   On screens wider than a phone the stage sticks in place while you scroll through a track
-   below it; each stretch of scroll brings up the next community (js/sections/communities.js).
-   The index bars fill as you go, so it is always clear there is more to see. */
+.gallery__progress {
+  position: relative;
+  height: 1px;
+  background: var(--beige);
+}
 
-@media (min-width: 761px) {
-  html.motion .stage-track {
-    --stage-h: min(calc(100vh - 7rem), 56rem);
-    height: calc(var(--stage-h) + var(--stage-count, 5) * 60vh);
-    margin-top: clamp(2.5rem, 4.5vw, 4.5rem);
-  }
+.gallery__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+}
 
-  html.motion .stage-track > .stage {
+.gallery__ticks {
+  position: absolute;
+  inset: -3px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gallery__ticks b {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ivory);
+  border: 1px solid var(--beige);
+  transition: background-color 400ms var(--ease-out), border-color 400ms var(--ease-out), transform 400ms var(--ease-out);
+}
+
+.gallery__ticks b.is-on {
+  background: var(--red);
+  border-color: var(--red);
+  transform: scale(1.3);
+}
+
+.gallery__name {
+  min-width: 13rem;
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.gallery__name span {
+  display: inline-block;
+}
+
+.gallery__buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gallery__buttons [data-gallery-prev] .icon {
+  transform: scaleX(-1);
+}
+
+/* ---------- Pinned mode (wide screens with motion) ---------- */
+
+@media (min-width: 900px) {
+  html.motion .gallery__stage {
     position: sticky;
-    top: max(5.5rem, calc((100vh - var(--stage-h)) / 2 + 2.75rem));
-    height: var(--stage-h);
-    margin-top: 0;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    padding-bottom: 4.5rem;
+  }
+
+  html.motion .gallery__viewport {
+    overflow: hidden;
+    cursor: grab;
+  }
+
+  html.motion .gallery__viewport.is-dragging {
+    cursor: grabbing;
   }
 }
 
-@media (min-width: 761px) and (max-width: 900px) {
-  html.motion .stage-track {
-    --stage-h: min(calc(100vh - 7rem), 48rem);
-  }
-}
+/* ---------- Swipe mode ---------- */
 
-/* ---------- Tablet ---------- */
-
-@media (max-width: 1099px) {
-  .stage__copy {
-    width: min(36rem, 64%);
-  }
-
-  .stage__tabs {
-    width: 14rem;
+@media (max-width: 899px) {
+  .gallery__viewport {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
   }
 
-  .community__devs {
-    display: none;
-  }
-}
-
-@media (max-width: 900px) {
-  .communities__head {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .stage {
-    height: clamp(32rem, 78vh, 48rem);
-  }
-
-  .stage__copy {
-    width: auto;
-    right: clamp(1.5rem, 3.6vw, 3.75rem);
-    bottom: calc(clamp(1.25rem, 2.6vw, 2.5rem) + 3.5rem);
-  }
-
-  .stage__tabs {
+  .gallery__viewport::-webkit-scrollbar {
     display: none;
   }
 
-  .stage__next {
-    left: clamp(1.5rem, 3.6vw, 3.75rem);
-    right: auto;
+  .gallery__rail {
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  .stage__next-frame {
-    display: none;
+  .gallery__intro {
+    width: min(82vw, 24rem);
+    align-self: center;
+    scroll-snap-align: start;
   }
 
-  .stage__next-label {
-    grid-auto-flow: column;
-    align-items: baseline;
-    gap: 0.625rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid rgba(248, 246, 234, 0.4);
-    border-radius: var(--radius-pill);
-    min-height: 2.75rem;
-    align-content: center;
+  .gcard,
+  .gcard--wide,
+  .gcard--mid {
+    --media-h: min(52vw, 22rem);
+    width: min(84vw, 30rem);
+    margin: 0;
+    align-self: flex-start;
+    scroll-snap-align: center;
   }
 
-  .stage__next-label b {
-    font-size: 1rem;
-  }
-}
-
-/* ---------- Phone: picture on top, words below on the cream page ---------- */
-
-@media (max-width: 760px) {
-  .stage {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    color: var(--ink);
-    border-radius: 0;
+  .gcard--tall,
+  .gcard--arch {
+    --media-h: min(86vw, 26rem);
+    width: min(64vw, 19rem);
+    margin: 0;
+    align-self: flex-start;
+    scroll-snap-align: center;
   }
 
-  .stage__media {
-    position: relative;
-    inset: auto;
-    aspect-ratio: 4 / 4.4;
+  .gcard__body {
+    opacity: 1;
   }
 
-  .stage__shade {
-    background: linear-gradient(0deg, rgba(11, 11, 11, 0.35) 0%, rgba(11, 11, 11, 0) 40%);
-  }
-
-  .stage__copy {
+  .gcard__num {
     position: static;
-    padding-top: 1.5rem;
   }
 
-  .community__name {
-    font-size: clamp(2.25rem, 10vw, 3rem);
+  .gallery__end {
+    width: 70vw;
+    align-self: center;
+    scroll-snap-align: end;
   }
 
-  .community__place {
-    background: var(--sand);
-    color: var(--red);
+  .gallery__nav {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
   }
 
-  .community__text {
-    font-size: 1rem;
-    color: var(--muted);
-  }
-
-  .community__devs {
-    display: block;
-  }
-
-  .community__devs span {
-    color: var(--muted);
-  }
-
-  .community__actions .btn--light {
-    --btn-bg: var(--red);
-    --btn-fg: var(--cream);
-    --btn-border: var(--red);
-    --btn-hover-bg: var(--ink);
-    --btn-hover-fg: var(--cream);
-    --btn-hover-border: var(--ink);
-  }
-
-  .community__actions .link-arrow {
-    min-height: 2.75rem;
-  }
-
-  /* Swipe and the arrows above do this job on a phone. */
-  .stage__next {
+  .gallery__name {
     display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  html:not(.motion) .gallery__viewport {
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 1rem;
+  }
+
+  html:not(.motion) .gcard {
+    scroll-snap-align: center;
   }
 }

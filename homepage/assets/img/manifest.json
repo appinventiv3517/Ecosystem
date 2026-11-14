@@ -911,7 +911,7 @@
         1200
       ],
       "alt": "Children playing among ground fountains at golden hour",
-      "used_in": "Life at Bloom, chapter 2",
+      "used_in": "Life at Bloom, chapter 2; Life at Bloom gallery",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -924,6 +924,18 @@
           "widths": [
             700,
             460
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1400,
+            800
           ]
         }
       ]
@@ -1015,7 +1027,7 @@
         1333
       ],
       "alt": "Pool terrace with palms at sunset (architectural render)",
-      "used_in": "Life at Bloom, chapter 3; hero wheel card",
+      "used_in": "Life at Bloom, chapter 3; hero wheel card; Life at Bloom closing frame",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -1041,6 +1053,18 @@
             900,
             560
           ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            2000,
+            1100
+          ]
         }
       ]
     },
@@ -1053,7 +1077,7 @@
         1125
       ],
       "alt": "Roof terrace with a fire bowl and lanterns at dusk (architectural render)",
-      "used_in": "Life at Bloom, chapter 3",
+      "used_in": "Life at Bloom, chapter 3; Story chapter 3",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -1066,6 +1090,18 @@
           "widths": [
             700,
             460
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": null,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
           ]
         }
       ]

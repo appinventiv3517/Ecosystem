@@ -1,258 +1,225 @@
-/* 06 · Life at Bloom: three arch "reels" that turn as the page scrolls through four chapters. */
+/* 05 · Life at Bloom: photographs drift past the headline at different depths, then the
+   last frame opens from a small arch to the whole screen (js/sections/life.js).
+   Without motion it is a still collage followed by the full-width photograph. */
 
 .life {
   position: relative;
-  z-index: 1;
-  background: var(--cream);
+  background: var(--sand);
+}
+
+.life__track {
+  position: relative;
+}
+
+html.motion .life__track {
+  height: 340vh;
 }
 
 .life__stage {
   position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding-block: calc(var(--header-h-compact) + 1.5rem) 2.5rem;
   overflow: hidden;
 }
 
-.life__grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  gap: clamp(2rem, 6vw, 7rem);
-  align-items: center;
+html.motion .life__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
 }
 
-.life__copy {
+.life__head {
+  position: relative;
+  z-index: 2;
   display: grid;
-  gap: var(--stack-m);
+  justify-items: center;
+  gap: 1.5rem;
+  padding: var(--section-y) var(--gutter) 2rem;
+  text-align: center;
+}
+
+html.motion .life__head {
+  position: absolute;
+  inset: 0;
+  align-content: center;
+  padding: 0 var(--gutter);
+  pointer-events: none;
 }
 
 .life__title {
-  font-size: clamp(2.25rem, 4.4vw, 4.5rem);
-  max-width: 11em;
-}
-
-/* Chapters */
-.chapters {
-  display: grid;
-  margin-top: 0.5rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.chapter {
-  border-top: 1px solid var(--line);
-}
-
-.chapter__head {
-  display: flex;
-  align-items: baseline;
-  gap: 1.25rem;
-  width: 100%;
-  min-height: 3.25rem;
-  padding-block: 0.875rem;
-  text-align: left;
-  color: var(--muted);
-  transition: color 420ms ease;
-}
-
-.chapter__num {
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-}
-
-.chapter__title {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
-  line-height: 1.15;
-  transition: transform 620ms var(--ease-out);
-}
-
-.chapter.is-active .chapter__head {
+  font-size: clamp(2.75rem, min(7vw, 12vh), 8.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   color: var(--ink);
 }
 
-.chapter.is-active .chapter__num {
+.life__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.life__line > span {
+  display: inline-block;
+}
+
+.life__title em {
   color: var(--red);
 }
 
-.chapter.is-active .chapter__title {
-  font-style: italic;
-  transform: translateX(0.375rem);
-}
+/* ---------- The drifting photographs ---------- */
 
-.chapter__head:hover {
-  color: var(--ink);
-}
-
-.chapter__text {
+.life__shots {
+  position: relative;
   display: grid;
-  grid-template-rows: 1fr;
-  max-width: 28rem;
-  padding: 0 0 1.125rem 2.5rem;
-  color: var(--muted);
-  overflow: hidden;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  padding: 0 var(--gutter) var(--section-y);
 }
 
-/* With motion on, only the active chapter is open; otherwise every chapter stays readable. */
-html.motion .chapter__text {
-  max-height: 0;
-  padding-bottom: 0;
-  opacity: 0;
-  transition: max-height 620ms var(--ease-out), padding-bottom 620ms var(--ease-out), opacity 420ms ease;
-}
-
-html.motion .chapter.is-active .chapter__text {
-  max-height: 8rem;
-  padding-bottom: 1.125rem;
-  opacity: 1;
-}
-
-/* Reels */
-.reels {
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(0.625rem, 1.4vw, 1.5rem);
-  height: min(74vh, 46rem);
-}
-
-.reel {
-  flex: 1 1 0;
-  height: 100%;
-}
-
-.reel--a {
-  height: 72%;
-}
-
-.reel--b {
-  flex-grow: 1.18;
-}
-
-.reel--c {
-  flex-grow: 0.9;
-  height: 56%;
-}
-
-.reel__strip {
+html.motion .life__shots {
   position: absolute;
-  inset: 0 0 auto 0;
-  display: flex;
-  flex-direction: column;
-  height: 400%;
-  will-change: transform;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  padding: 0;
 }
 
-.reel[data-reel="down"] .reel__strip {
-  flex-direction: column-reverse;
-  transform: translateY(-75%);
+.lshot figure {
+  display: grid;
+  gap: 0.5rem;
 }
 
-.reel__strip img {
-  flex: 0 0 25%;
+.lshot__frame {
+  display: block;
+  overflow: hidden;
+  border-radius: 3px;
+  aspect-ratio: 0.8;
+  background: var(--beige);
+}
+
+.lshot__frame img {
   width: 100%;
-  height: 25%;
-  min-height: 0;
+  height: 100%;
   object-fit: cover;
 }
 
-.life__meter {
-  position: absolute;
-  right: calc(var(--gutter) * 0.4);
-  top: 50%;
-  width: 2px;
-  height: 9rem;
-  margin-top: -4.5rem;
-  background: var(--line);
-  border-radius: 2px;
-  overflow: hidden;
+.lshot figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
-.life__meter span {
-  display: block;
+.lshot figcaption::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: var(--red);
+}
+
+html.motion .lshot {
+  position: absolute;
+  will-change: transform;
+}
+
+/* Positions and sizes of the six photographs on the stage. */
+html.motion .lshot--1 { left: 6%;  top: 62%; width: clamp(9rem, 17vw, 17rem); }
+html.motion .lshot--2 { left: 27%; top: 84%; width: clamp(7rem, 12vw, 12rem); }
+html.motion .lshot--3 { left: 64%; top: 70%; width: clamp(11rem, 22vw, 22rem); }
+html.motion .lshot--4 { left: 82%; top: 96%; width: clamp(7rem, 12vw, 12rem); }
+html.motion .lshot--5 { left: 46%; top: 104%; width: clamp(8rem, 13vw, 13rem); }
+html.motion .lshot--6 { left: 12%; top: 118%; width: clamp(7rem, 11vw, 11rem); }
+
+.lshot--3 .lshot__frame { aspect-ratio: 1.5; }
+.lshot--1 .lshot__frame { border-radius: 999px 999px 3px 3px; }
+.lshot--5 .lshot__frame { border-radius: 999px 999px 3px 3px; }
+
+/* ---------- The frame that opens to fill the screen ---------- */
+
+.life__open {
+  position: relative;
+  z-index: 3;
+  height: 100vh;
+  height: 100svh;
+  min-height: 32rem;
+  overflow: hidden;
+  color: var(--cream);
+}
+
+html.motion .life__open {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  clip-path: inset(38% 42% 34% 42% round 999px 999px 0 0);
+  will-change: clip-path;
+}
+
+.life__open img {
   width: 100%;
   height: 100%;
-  background: var(--red);
-  transform-origin: top;
-  transform: scaleY(var(--progress, 0.25));
+  object-fit: cover;
+  will-change: transform;
 }
 
-/* ---------- Tablet and mobile: reels on top, one chapter at a time below ---------- */
+.life__open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(14, 13, 12, 0.7) 0%, rgba(14, 13, 12, 0.15) 55%, rgba(14, 13, 12, 0.1) 100%);
+  pointer-events: none;
+}
 
-@media (max-width: 900px) {
-  .life__stage {
-    align-items: stretch;
-    padding-block: calc(var(--header-h-compact) + 1rem) 1.5rem;
+.life__open-copy {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: clamp(3rem, 10vh, 6rem);
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+}
+
+.life__open-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 246, 234, 0.82);
+}
+
+.life__open-title {
+  max-width: 12em;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, min(6vw, 10vh), 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.life__open-title em {
+  color: #F2C9BE;
+}
+
+@media (max-width: 760px) {
+  html.motion .lshot--1 { left: 4%; top: 64%; width: 40vw; }
+  html.motion .lshot--2 { left: 58%; top: 80%; width: 32vw; }
+  html.motion .lshot--3 { left: 30%; top: 100%; width: 56vw; }
+  html.motion .lshot--4 { left: 70%; top: 118%; width: 26vw; }
+  html.motion .lshot--5 { left: 6%;  top: 126%; width: 30vw; }
+  html.motion .lshot--6 { display: none; }
+
+  .life__shots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .life__grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    gap: 1.5rem;
-    align-content: start;
-    width: 100%;
-  }
-
-  .reels {
-    order: -1;
-    height: min(40vh, 24rem);
-    height: min(40svh, 24rem);
-  }
-
-  .life__copy {
-    gap: 0.875rem;
-    align-content: start;
-  }
-
-  .life__copy .eyebrow {
-    display: none;
-  }
-
-  .life__title {
-    font-size: clamp(1.75rem, 6.4vw, 2.75rem);
-  }
-
-  .life__meter {
-    position: static;
-    width: 100%;
-    height: 2px;
-    margin: 0;
-  }
-
-  .life__meter span {
-    transform-origin: left;
-    transform: scaleX(var(--progress, 0.25));
-  }
-
-  html.motion .chapters {
-    border-bottom: 0;
-  }
-
-  html.motion .chapter {
-    grid-area: 1 / 1;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(0.75rem);
-    transition: opacity 420ms ease, transform 620ms var(--ease-out), visibility 0s 420ms;
-  }
-
-  html.motion .chapter.is-active {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    transition-delay: 0s;
-  }
-
-  html.motion .chapter__text,
-  html.motion .chapter.is-active .chapter__text {
-    max-height: none;
-    opacity: 1;
-    padding-bottom: 0;
-  }
-
-  .chapter.is-active .chapter__title {
-    transform: none;
+  html.motion .life__open {
+    clip-path: inset(36% 30% 34% 30% round 999px 999px 0 0);
   }
 }

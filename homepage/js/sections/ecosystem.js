@@ -1,182 +1,185 @@
-// Bloom ecosystem, "the Bloom book". The section's stage holds still while you scroll through
-// a track behind it, and the scroll turns the pages: first the red cover opens, then one page
-// per business. Every spread is one business: its photograph in an arch window on the left
-// page, its story set like a magazine page on the right. The book always settles on a whole
-// spread. On phones the businesses are a deck of pages that flip up and away instead.
-//
-// The book is built here from the plain list in the markup (which is what shows without
-// motion): leaf 0 is the cover with the first photograph on its back; leaf n carries the story
-// of business n-1 on its front and the photograph of business n on its back. A leaf turns
-// from 0 to -180deg about the spine as the scroll passes it.
+// Bloom Ecosystem: seven numbered businesses and one large photograph.
+// Wide screens with motion: the stage is sticky and scrolling walks the selection down the list
+// (a click scrolls to that business's stretch of the track, so scroll and selection never
+// disagree). Each change wipes the new photograph in from the direction of travel, draws a wire
+// from the selected row to the frame, turns the orbit to the business and shifts the ground colour.
+// Without motion a click selects directly; on phones every business is shown in turn.
 
-import { $, $$, clamp, listen } from '../lib/dom.js';
-import { gsap, ScrollTrigger, motionOK } from '../lib/motion.js';
+import { $, $$, clamp, listen, pad2, scrollToTarget } from '../lib/dom.js';
+import { gsap, ScrollTrigger, motionOK, EASE } from '../lib/motion.js';
 
-const easeTurn = (t) => -(Math.cos(Math.PI * t) - 1) / 2; // sine in-out, like a hand turning a page
-
-function el(className) {
-  const node = document.createElement('div');
-  node.className = className;
-  return node;
-}
+const SVG = 'http://www.w3.org/2000/svg';
 
 export function initEcosystem() {
-  const section = $('#ecosystem');
-  const list = $('[data-eco-list]', section || document);
-  if (!section || !list) return;
-
+  const section = $('[data-eco]');
+  if (!section) return;
   const track = $('[data-eco-track]', section);
-  const body = $('[data-book-body]', section);
-  const items = $$('.eco-item', list);
-  const count = items.length;
-  const indexItems = $$('.eco-index__item', section);
-  const hint = $('[data-eco-hint]', section);
-  const ids = items.map((item) => item.dataset.verticalItem);
-  let active = -1;
-  let pages = [];
+  const stage = $('[data-eco-stage]', section);
+  const rows = $$('[data-eco-row]', section);
+  const images = $$('[data-eco-img]', section);
+  const num = $('[data-eco-num]', section);
+  const dots = $('[data-eco-dots]', section);
+  const wire = $('[data-eco-wire-path]', section);
+  const wireDot = $('[data-eco-wire-dot]', section);
+  const glow = $('[data-eco-glow]', section);
+  const frame = $('[data-eco-frame]', section);
+  const wide = window.matchMedia('(min-width: 900px)');
+  const count = rows.length;
+  let active = 0;
+  let trigger = null;
 
-  function setActive(index) {
-    if (index === active) return;
-    active = index;
-    indexItems.forEach((button, i) => {
-      button.classList.toggle('is-active', i === index);
-      if (i === index) button.setAttribute('aria-current', 'true');
-      else button.removeAttribute('aria-current');
-    });
-    // Only the story in view can take focus; the others are tucked inside the book.
-    pages.forEach((page, i) => (page.inert = i !== index));
-  }
-
-  /* ---------- Without motion: the plain list, and the index jumps to it ---------- */
-
-  if (!motionOK) {
-    setActive(0);
-    const jump = (index) => {
-      setActive(index);
-      items[index].scrollIntoView({ block: 'start' });
-    };
-    indexItems.forEach((button, i) => button.addEventListener('click', () => jump(i)));
-    listen('bloom:vertical', ({ id }) => ids.includes(id) && jump(ids.indexOf(id)));
-    return;
-  }
-
-  const phone = window.matchMedia('(max-width: 760px)').matches;
-  // Move each business's pages out of the list and into the book (or the deck on phones),
-  // keeping their ids so links into the section still find them.
-  const photos = items.map((item) => $('.eco-photo', item));
-  pages = items.map((item) => {
-    const page = $('.eco-page', item);
-    page.id = item.id;
-    item.removeAttribute('id');
-    return page;
+  // Seven points around the orbit, the first at the top.
+  const points = rows.map((row, i) => {
+    const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+    const dot = document.createElementNS(SVG, 'circle');
+    dot.setAttribute('class', `eco__orbit-dot${i === 0 ? ' is-on' : ''}`);
+    dot.setAttribute('cx', (100 + 78 * Math.cos(angle)).toFixed(2));
+    dot.setAttribute('cy', (100 + 78 * Math.sin(angle)).toFixed(2));
+    dot.setAttribute('r', '3.5');
+    dots.append(dot);
+    return dot;
   });
 
-  let steps;
-  let render;
-  let restingStep; // the scroll step at which business i is fully in view
+  section.style.setProperty('--eco-bg', rows[0].dataset.tone);
 
-  if (!phone) {
-    /* ---------- The book ---------- */
-    const cover = $('template[data-book-cover]', section).content.cloneNode(true);
-    const baseLeft = el('book__base book__base--left');
-    const baseRight = el('book__base book__base--right');
-    baseRight.append(pages[count - 1]);
-    body.append(baseLeft, baseRight);
+  /* ---------- The wire from the selected row to the photograph ---------- */
 
-    const leaves = items.map((_, n) => {
-      const leaf = el('book__leaf');
-      const front = el('book__face book__face--front');
-      const back = el('book__face book__face--back');
-      front.append(n === 0 ? cover : pages[n - 1]);
-      back.append(photos[n]);
-      leaf.append(front, back);
-      body.append(leaf);
-      return leaf;
-    });
-
-    steps = count; // the cover, then a page for each business after the first
-    restingStep = (i) => i + 1;
-    render = (p) => {
-      // The endpaper on the left shows itself as the cover lifts off it.
-      body.style.setProperty('--open', easeTurn(clamp(p * 2.5, 0, 1)).toFixed(4));
-      leaves.forEach((leaf, n) => {
-        const turn = easeTurn(clamp(p - n, 0, 1));
-        const lift = Math.sin(Math.PI * turn);
-        leaf.style.transform = `translateZ(${(lift * 40).toFixed(1)}px) rotateY(${(-180 * turn).toFixed(2)}deg)`;
-        // Unturned leaves stack with the next page on top; turned ones with the latest on top.
-        leaf.style.zIndex = String(turn < 0.5 ? 200 - n : 100 + n);
-        leaf.style.setProperty('--shade', lift.toFixed(3));
-      });
-    };
-  } else {
-    /* ---------- Phones: a deck of pages ---------- */
-    body.classList.add('is-deck');
-    const cards = items.map((_, i) => {
-      const card = el('deck-card');
-      card.append(photos[i], pages[i]);
-      body.append(card);
-      return card;
-    });
-    steps = count - 1;
-    restingStep = (i) => i;
-    render = (p) => {
-      cards.forEach((card, i) => {
-        const gone = clamp(p - i, 0, 1);
-        const depth = clamp(i - p, 0, 3);
-        card.style.transform = `translateY(${(depth * 3 - gone * 16).toFixed(2)}%) rotateX(${(gone * 82).toFixed(2)}deg) scale(${(1 - depth * 0.05).toFixed(4)})`;
-        card.style.opacity = String(gone > 0.75 ? clamp(1 - (gone - 0.75) / 0.25, 0, 1) : 1);
-        card.style.zIndex = String(100 - i);
-        card.style.visibility = gone > 0.999 ? 'hidden' : '';
-      });
-    };
+  function drawWire(animate) {
+    if (!wide.matches) return;
+    const box = stage.getBoundingClientRect();
+    const head = $('.eco-row__head', rows[active]).getBoundingClientRect();
+    const target = frame.getBoundingClientRect();
+    const sx = head.right - box.left + 12;
+    const sy = head.top + head.height / 2 - box.top;
+    const ex = target.left - box.left + target.width * 0.08;
+    const ey = target.top + target.height * 0.55 - box.top;
+    const mid = sx + (ex - sx) * 0.55;
+    wire.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} C${mid.toFixed(1)} ${sy.toFixed(1)} ${mid.toFixed(1)} ${ey.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+    wireDot.setAttribute('cx', ex.toFixed(1));
+    wireDot.setAttribute('cy', ey.toFixed(1));
+    if (animate && motionOK) {
+      gsap.fromTo(wire, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, ease: EASE.inOut });
+      gsap.fromTo(wireDot, { scale: 0, transformOrigin: '50% 50%' }, { scale: 1, duration: 0.5, delay: 0.7, ease: 'back.out(3)' });
+    } else {
+      gsap.set(wire, { strokeDasharray: 'none' });
+    }
   }
 
-  /* ---------- Scroll drives it ---------- */
+  /* ---------- Selection ---------- */
 
-  track.style.setProperty('--steps', steps);
-  const state = { p: 0 };
+  function select(index) {
+    index = clamp(index, 0, count - 1);
+    if (index === active) return;
+    const forward = index > active;
+    const incoming = images[index];
+    const outgoing = images[active];
+    active = index;
 
-  function update() {
-    const p = state.p;
-    render(p);
-    const index = clamp(Math.round(p) - restingStep(0), 0, count - 1);
-    setActive(index);
-    // Each index line fills as you read through that business's stretch of scroll.
-    indexItems.forEach((button, i) => {
-      const fill = i < index ? 1 : i > index ? 0 : clamp(0.5 + p - restingStep(i), 0, 1);
-      $('b', button).style.setProperty('--fill', fill.toFixed(3));
+    rows.forEach((row, i) => {
+      row.classList.toggle('is-active', i === index);
+      $('.eco-row__head', row).setAttribute('aria-expanded', String(i === index));
     });
-    if (hint) hint.style.opacity = String(clamp(1 - (p - restingStep(0)) * 1.5, 0, 1));
+    points.forEach((dot, i) => dot.classList.toggle('is-on', i === index));
+    num.textContent = pad2(index + 1);
+    section.style.setProperty('--eco-bg', rows[index].dataset.tone);
+
+    if (!motionOK) {
+      images.forEach((image) => image.classList.toggle('is-active', image === incoming));
+      drawWire(false);
+      return;
+    }
+
+    gsap.killTweensOf([incoming, outgoing]);
+    images.forEach((image) => {
+      if (image !== incoming && image !== outgoing) gsap.set(image, { autoAlpha: 0, zIndex: 0 });
+    });
+    gsap.set(outgoing, { zIndex: 1 });
+    gsap.set(incoming, { zIndex: 2, autoAlpha: 1 });
+    incoming.classList.add('is-active');
+    gsap.fromTo(incoming,
+      { clipPath: forward ? 'inset(100% 0% 0% 0%)' : 'inset(0% 0% 100% 0%)', scale: 1.18 },
+      { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.15, ease: 'expo.out', clearProps: 'clipPath' });
+    gsap.to(outgoing, {
+      scale: 1.08,
+      yPercent: forward ? -6 : 6,
+      duration: 1.15,
+      ease: 'expo.out',
+      onComplete: () => {
+        outgoing.classList.remove('is-active');
+        gsap.set(outgoing, { autoAlpha: 0, yPercent: 0, scale: 1 });
+      },
+    });
+    gsap.to(dots, { rotation: -(index / count) * 360, svgOrigin: '100 100', duration: 1.2, ease: EASE.inOut });
+    gsap.to(glow, { xPercent: -5 * index, yPercent: (index % 3) * 10 - 10, duration: 1.4, ease: EASE.inOut });
+    gsap.fromTo(num, { yPercent: forward ? 80 : -80, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: EASE.out });
+    drawWire(true);
   }
 
-  const turn = gsap.to(state, {
-    p: steps,
-    ease: 'none',
-    onUpdate: update,
-    scrollTrigger: {
+  /* ---------- Scroll-controlled selection ---------- */
+
+  function bind() {
+    trigger?.kill();
+    trigger = null;
+    if (!motionOK || !wide.matches) return;
+    trigger = ScrollTrigger.create({
       trigger: track,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.8,
-      // Always come to rest on a whole spread.
-      snap: { snapTo: 1 / steps, inertia: false, duration: { min: 0.25, max: 0.7 }, delay: 0.08, ease: 'power2.inOut' },
-      invalidateOnRefresh: true,
-    },
-  });
-  update();
+      onUpdate: (self) => select(Math.floor(self.progress * count * 0.999)),
+      onRefresh: () => drawWire(false),
+    });
+  }
+  bind();
+  wide.addEventListener('change', bind);
+  window.addEventListener('resize', () => drawWire(false));
 
-  /** Scroll to business i's spread; the scroll turns the pages on the way. */
-  function goTo(index) {
-    const trigger = turn.scrollTrigger;
-    const top = trigger.start + (trigger.end - trigger.start) * (restingStep(index) / steps);
-    window.scrollTo({ top: Math.ceil(top), behavior: 'smooth' });
+  function scrollToIndex(index) {
+    if (!trigger) {
+      select(index);
+      return false;
+    }
+    const span = trigger.end - trigger.start;
+    window.scrollTo({ top: trigger.start + span * ((index + 0.5) / count), behavior: 'smooth' });
+    return true;
   }
 
-  indexItems.forEach((button, i) => button.addEventListener('click', () => goTo(i)));
-
-  // From the menu, the hero wheel or the footer: turn to that business.
-  listen('bloom:vertical', ({ id }) => {
-    if (ids.includes(id)) goTo(ids.indexOf(id));
+  rows.forEach((row, index) => {
+    $('.eco-row__head', row).addEventListener('click', () => {
+      if (!wide.matches) return;
+      scrollToIndex(index);
+    });
   });
 
+  listen('bloom:vertical', ({ id }) => {
+    const index = rows.findIndex((row) => row.dataset.verticalItem === id);
+    if (index < 0) return;
+    if (trigger) {
+      scrollToIndex(index);
+    } else if (wide.matches) {
+      scrollToTarget(section);
+      select(index);
+    } else {
+      scrollToTarget(rows[index]);
+    }
+  });
+
+  // First wire once fonts and images have settled.
+  requestAnimationFrame(() => drawWire(false));
+  if (motionOK) {
+    gsap.from(rows.map((row) => $('.eco-row__head', row)), {
+      autoAlpha: 0,
+      x: -30,
+      duration: 0.9,
+      stagger: 0.06,
+      ease: EASE.out,
+      scrollTrigger: { trigger: stage, start: 'top 75%', once: true },
+    });
+    gsap.from(frame, {
+      clipPath: 'inset(100% 0% 0% 0% round 999px 999px 4px 4px)',
+      duration: 1.6,
+      ease: 'expo.inOut',
+      scrollTrigger: { trigger: stage, start: 'top 70%', once: true },
+      onComplete: () => gsap.set(frame, { clearProps: 'clipPath' }),
+    });
+  }
 }

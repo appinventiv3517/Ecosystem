@@ -1,36 +1,125 @@
-/* 09 · Footer: an enquiry prompt, the full directory, and the proposition set large. */
+/* 08 · Enquiry and footer. The closing screen: an arch window opens to the whole screen behind
+   the enquiry headline as it scrolls in (js/sections/footer.js), then the directory, and the
+   Bloom wordmark set across the full width as the last thing on the page. */
 
 .footer {
   position: relative;
-  z-index: 2;
-  margin-top: calc(var(--radius-l) * -1);
-  padding-top: clamp(4.5rem, 9vw, 9rem);
-  border-radius: var(--radius-l) var(--radius-l) 0 0;
+  /* clip, not hidden: hidden would stop the closing stage from sticking. */
+  overflow: clip;
+}
+
+.closing {
+  position: relative;
+}
+
+html.motion .closing {
+  height: 190vh;
+}
+
+.closing__stage {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
 }
 
-.about {
-  padding-bottom: calc(var(--section-y) + var(--radius-l));
+html.motion .closing__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
 }
 
-.footer__cta {
+.closing__window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+html.motion .closing__window {
+  clip-path: inset(18% 34% 0% 34% round 999px 999px 0 0);
+  will-change: clip-path;
+}
+
+.closing__window img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.closing__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(14, 13, 12, 0.88) 0%, rgba(14, 13, 12, 0.35) 55%, rgba(14, 13, 12, 0.25) 100%);
+}
+
+.closing__copy {
+  position: relative;
   display: grid;
-  gap: var(--stack-m);
+  gap: 1.75rem;
   justify-items: start;
-  padding-bottom: clamp(3.5rem, 7vw, 7rem);
-  border-bottom: 1px solid var(--line-on-dark);
+  padding-bottom: clamp(3rem, 10vh, 6.5rem);
 }
 
-.footer__headline {
-  max-width: 13em;
+.closing__title {
+  max-width: 12em;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, min(7vw, 12vh), 8rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
 }
 
-.footer__cta-actions {
+.closing__title em {
+  color: #F2C9BE;
+}
+
+.closing__actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem 2rem;
-  margin-top: 0.5rem;
+  gap: 0.75rem;
+}
+
+.footer__body {
+  position: relative;
+  background: var(--near-black);
+}
+
+/* The wordmark, full width: the supplied artwork, scaled evenly. */
+.footer__mark {
+  padding-block: clamp(1.5rem, 3vw, 3rem) clamp(2rem, 4vw, 4rem);
+  border-top: 1px solid var(--line-on-dark);
+  overflow: hidden;
+}
+
+.footer__mark {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
+}
+
+/* The supplied wordmark is 762px wide, so it is never shown larger than that. */
+.footer__mark img {
+  width: min(100%, 762px);
+  height: auto;
+  opacity: 0.94;
+}
+
+.footer__mark-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.4vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--muted-on-dark);
+}
+
+.footer__mark-line em {
+  color: #E0796C;
 }
 
 .footer__grid {
@@ -125,32 +214,6 @@
   font-style: normal;
   line-height: 1.6;
   color: var(--muted-on-dark);
-}
-
-/* The proposition, large */
-.footer__statement {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0 0.25em;
-  padding-block: clamp(1rem, 2vw, 2rem) clamp(1.5rem, 3vw, 3rem);
-  border-top: 1px solid var(--line-on-dark);
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 9.6vw, 11.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(248, 246, 234, 0.34);
-  user-select: none;
-}
-
-.footer__statement span {
-  display: inline-block;
-}
-
-.footer__statement em {
-  color: var(--red);
-  -webkit-text-stroke: 0;
 }
 
 /* Base row */
@@ -294,10 +357,6 @@
     display: none;
   }
 
-  .footer__statement {
-    justify-content: flex-start;
-    font-size: clamp(2.75rem, 15vw, 5rem);
-  }
 
   .footer__base {
     grid-template-columns: minmax(0, 1fr);

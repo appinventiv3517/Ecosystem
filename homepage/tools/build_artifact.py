@@ -89,7 +89,14 @@ def main() -> None:
         SKELETON.replace("__PAGE__", to_preview(page)), encoding="utf-8"
     )
 
-    files = sorted(str(path.relative_to(ROOT)) for glob in ASSET_GLOBS for path in ROOT.glob(glob))
+    # Photographs are published only if the page, a stylesheet or a script refers to them.
+    sources = page + "".join(path.read_text(encoding="utf-8") for glob in ("css/*.css", "js/**/*.js") for path in ROOT.glob(glob))
+    files = sorted(
+        str(path.relative_to(ROOT))
+        for glob in ASSET_GLOBS
+        for path in ROOT.glob(glob)
+        if path.suffix != ".webp" or str(path.relative_to(ROOT)) in sources
+    )
     (DIST / "files.json").write_text(json.dumps(files, indent=1) + "\n", encoding="utf-8")
 
     missing = [

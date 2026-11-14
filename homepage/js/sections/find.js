@@ -123,7 +123,7 @@ export function initFind() {
 
     if (search.community) {
       // Developments come from the community cards, the page's single source for them.
-      const card = document.querySelector(`.community[data-community="${search.community}"]`);
+      const card = document.querySelector(`[data-gcard][data-community="${search.community}"]`);
       const developments = document.createElement('p');
       developments.className = 'search-result__devs';
       developments.innerHTML = `Bloom developments in ${card.dataset.name}: <strong>${card.dataset.developments}</strong>`;

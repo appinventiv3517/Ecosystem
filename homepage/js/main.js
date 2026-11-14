@@ -10,16 +10,15 @@ import { initMagnetic, initTilt } from './ui/pointer.js';
 import { initCursor } from './ui/cursor.js';
 import { initRoll } from './ui/roll.js';
 import { initDock } from './ui/dock.js';
-import { playIntro } from './sections/intro.js';
 import { initHeader } from './sections/header.js';
 import { initHero } from './sections/hero.js';
-import { initIntents } from './sections/begin.js';
+import { initStory } from './sections/story.js';
 import { initFind } from './sections/find.js';
-import { initCommunities } from './sections/communities.js';
+import { initGallery } from './sections/gallery.js';
 import { initEcosystem } from './sections/ecosystem.js';
 import { initLife } from './sections/life.js';
 import { initServices } from './sections/services.js';
-import { initAbout } from './sections/about.js';
+import { initImpact } from './sections/impact.js';
 import { initFooter } from './sections/footer.js';
 
 window.__bloomStarted = true;
@@ -76,23 +75,24 @@ async function start() {
   initRoll();
   initEnquiry();
   initHeader();
-  const hero = initHero();
-  initIntents();
+  // The hero starts straight away: the headline never waits for fonts or a loader.
+  initHero();
   initFind();
-  initCommunities();
-  initEcosystem();
-  initLife();
-  initServices();
-  initAbout();
-  initFooter();
   initMagnetic();
-  initTilt('[data-intent-frame]', 4);
   initCursor();
   initDock();
   initTilt('[data-find-figure]', 5);
 
   // Headline splitting measures text, so wait for the web fonts (briefly).
   await Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, 1800))]);
+  // Scroll-driven sections measure their content, so they are built once the fonts are in.
+  initStory();
+  initGallery();
+  initEcosystem();
+  initLife();
+  initImpact();
+  initServices();
+  initFooter();
   initReveals();
 
   if (motionOK) {
@@ -114,14 +114,11 @@ async function start() {
     }).observe(document.body);
   }
 
-  const bloomed = await playIntro(hero);
-  hero.start({ bloomed });
   document.documentElement.classList.add('is-ready');
 }
 
 start().catch((error) => {
   // Never leave the page hidden behind a failed animation.
   console.error(error);
-  document.documentElement.classList.remove('motion', 'is-intro', 'is-locked');
-  $('[data-intro]')?.remove();
+  document.documentElement.classList.remove('motion', 'is-locked');
 });

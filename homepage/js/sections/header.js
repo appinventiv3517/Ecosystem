@@ -25,7 +25,7 @@ export function initHeader() {
   const onScroll = rafThrottle(() => {
     const y = window.scrollY;
     header.classList.toggle('is-compact', y > 80);
-    setSolid(true);
+    setSolid(!hero || y > hero.offsetHeight - 90);
   });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);

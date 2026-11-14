@@ -518,3 +518,58 @@ html.motion [data-split] {
     min-height: 2.75rem;
   }
 }
+
+/* ---------- Numbered section label with a rule that draws across (js/ui/reveal.js) ---------- */
+
+.sec-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.sec-label__num {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sec-label__num::before {
+  content: "(";
+}
+
+.sec-label__num::after {
+  content: ")";
+}
+
+.sec-label__rule {
+  width: 3.5rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transform: scaleX(var(--draw, 1));
+}
+
+.on-dark .sec-label,
+.on-red .sec-label {
+  color: var(--cream);
+}
+
+/* Translucent button for photographs and dark grounds. */
+.btn--glass {
+  --btn-bg: rgba(248, 246, 234, 0.12);
+  --btn-fg: var(--cream);
+  --btn-border: rgba(248, 246, 234, 0.4);
+  --btn-hover-bg: var(--cream);
+  --btn-hover-fg: var(--ink);
+  --btn-hover-border: var(--cream);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}

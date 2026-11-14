@@ -1,13 +1,13 @@
 // Pointer follower for mouse users: a dot that tracks exactly and a ring that trails it.
 // The ring swells over anything clickable and shows a word where an area has its own
-// gesture (data-cursor="Drag" on the communities stage, "Open" on the intent lines).
+// gesture (data-cursor="Drag" on the communities gallery).
 // The system pointer stays visible; this only adds to it.
 
 import { $, finePointer } from '../lib/dom.js';
 import { gsap, motionOK } from '../lib/motion.js';
 
 const INTERACTIVE = 'a, button, label, input, textarea, [role="option"], [role="tab"]';
-const LIGHT = '.on-dark, .on-red, .stage__media, .stage__copy, .stage__tabs, .stage__next';
+const LIGHT = '.on-dark, .on-red, .hero, .life__open';
 
 export function initCursor() {
   if (!motionOK || !finePointer()) return;

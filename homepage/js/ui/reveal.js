@@ -63,6 +63,24 @@ export function initReveals() {
     if (image) timeline.fromTo(image, { scale: 1.3 }, { scale: 1, duration: 1.8, ease: EASE.out }, 0);
   });
 
+  // Numbered section labels: the number fades up and the rule draws across.
+  $$('.sec-label').forEach((element) => {
+    const rule = $('.sec-label__rule', element);
+    const timeline = gsap.timeline({ scrollTrigger: { trigger: element, start: 'top 92%', once: true } });
+    timeline.fromTo(element, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: EASE.soft }, 0);
+    if (rule) timeline.fromTo(rule, { '--draw': 0 }, { '--draw': 1, duration: 1.3, ease: EASE.inOut }, 0.1);
+  });
+
+  // Oversized outlined words that slide sideways as their section passes.
+  $$('[data-drift-x]').forEach((element) => {
+    const amount = parseFloat(element.dataset.driftX) || 0.2;
+    gsap.fromTo(element, { xPercent: amount * 50 }, {
+      xPercent: -amount * 50,
+      ease: 'none',
+      scrollTrigger: { trigger: element.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+  });
+
   // Eyebrow rules draw across before their label settles.
   $$('.eyebrow').forEach((element) => {
     gsap.fromTo(element, { '--draw': 0 }, {
