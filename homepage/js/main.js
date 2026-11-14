@@ -99,6 +99,19 @@ async function start() {
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
     window.addEventListener('load', () => ScrollTrigger.refresh());
+    // When content above a scroll-driven section grows or shrinks (a search result opening,
+    // say), measure the scroll positions again so the book and the pinned stages stay in step.
+    let lastHeight = document.body.offsetHeight;
+    let pending = 0;
+    new ResizeObserver(() => {
+      const height = document.body.offsetHeight;
+      if (Math.abs(height - lastHeight) < 2) return;
+      clearTimeout(pending);
+      pending = setTimeout(() => {
+        ScrollTrigger.refresh();
+        lastHeight = document.body.offsetHeight;
+      }, 200);
+    }).observe(document.body);
   }
 
   const bloomed = await playIntro(hero);

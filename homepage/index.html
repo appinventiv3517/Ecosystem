@@ -729,147 +729,174 @@
          05 · Bloom ecosystem
          ============================================================ -->
     <section class="section ecosystem on-dark" id="ecosystem" data-section="ecosystem" aria-labelledby="ecosystem-title">
-      <div class="wrap ecosystem__inner">
-        <div class="ecosystem__head">
-          <div class="section-head">
-            <p class="eyebrow" data-reveal="fade">Bloom Ecosystem</p>
-            <h2 class="display" id="ecosystem-title" data-split="lines">A world of experiences. One connected <em>ecosystem.</em></h2>
-          </div>
-          <div class="ecosystem__aside">
-            <p class="lede" data-reveal="fade">Seven businesses work around one idea: Curated Community Living. Select a business to see the part it plays.</p>
-            <div class="eco-ring" aria-hidden="true" data-eco-ring>
-              <svg viewBox="0 0 120 120" data-eco-ring-text>
-                <defs><path id="eco-ring-path" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
-                <text><textPath href="#eco-ring-path">Curated · Community · Living · One idea ·</textPath></text>
-              </svg>
-              <span class="eco-ring__count"><b data-eco-count>01</b>/07</span>
+      <!-- The Bloom book. On larger screens the stage holds still while you scroll and the book
+           opens, then turns a page for each business. On phones the pages flip up like a deck. -->
+      <div class="eco-track" data-eco-track>
+        <div class="eco-stage" data-eco-stage>
+          <div class="wrap eco-stage__inner">
+            <div class="eco-intro">
+              <p class="eyebrow" data-reveal="fade">Bloom Ecosystem</p>
+              <h2 class="display" id="ecosystem-title" data-split="lines">A world of experiences. One connected <em>ecosystem.</em></h2>
+              <p class="lede" data-reveal="fade">Seven businesses work around one idea: Curated Community Living. Scroll to turn the pages, or pick a business.</p>
+              <ol class="eco-index" aria-label="Bloom's seven businesses" data-eco-index>
+              <li><button type="button" class="eco-index__item" id="tab-real-estate" aria-controls="panel-real-estate" data-vertical="real-estate"><span class="eco-index__num">01</span><span class="eco-index__label">Real Estate</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-education" aria-controls="panel-education" data-vertical="education"><span class="eco-index__num">02</span><span class="eco-index__label">Education</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-hospitality" aria-controls="panel-hospitality" data-vertical="hospitality"><span class="eco-index__num">03</span><span class="eco-index__label">Hospitality</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-retail" aria-controls="panel-retail" data-vertical="retail"><span class="eco-index__num">04</span><span class="eco-index__label">Retail</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-healthcare" aria-controls="panel-healthcare" data-vertical="healthcare"><span class="eco-index__num">05</span><span class="eco-index__label">Healthcare</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-facilities-management" aria-controls="panel-facilities-management" data-vertical="facilities-management"><span class="eco-index__num">06</span><span class="eco-index__label">Facilities Management</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              <li><button type="button" class="eco-index__item" id="tab-landscaping" aria-controls="panel-landscaping" data-vertical="landscaping"><span class="eco-index__num">07</span><span class="eco-index__label">Landscaping</span><span class="eco-index__bar" aria-hidden="true"><b></b></span></button></li>
+              </ol>
+              <p class="eco-hint" aria-hidden="true" data-eco-hint><span class="eco-hint__mouse"><i></i></span>Scroll to turn the page</p>
             </div>
-          </div>
-        </div>
 
-        <!-- The skyline: seven arches side by side. The chosen business opens wide; the others
-             stand as slim arches with their names. It moves on by itself until someone picks. -->
-        <div class="skyline" data-skyline>
-          <div class="eco-arch is-active" data-vertical-item="real-estate">
-            <button class="eco-arch__tab" type="button" id="tab-real-estate" aria-controls="panel-real-estate" aria-expanded="true" data-vertical="real-estate">
-              <span class="eco-arch__num">01</span>
-              <span class="eco-arch__label">Real Estate</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="real-estate" src="assets/img/ecosystem-real-estate-arch-640.webp" srcset="assets/img/ecosystem-real-estate-arch-640.webp 640w, assets/img/ecosystem-real-estate-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Villas with terracotta roofs behind flowering bougainvillea" loading="lazy" decoding="async" draggable="false">
+            <div class="book" data-book>
+              <div class="book__body" data-book-body></div>
+              <div class="book__shadow" aria-hidden="true"></div>
             </div>
-            <div class="eco-arch__panel" id="panel-real-estate" role="region" aria-labelledby="tab-real-estate" data-vertical-panel="real-estate">
-              <p class="eco-arch__brand">Bloom Properties</p>
-              <h3 class="eco-arch__name" data-eco-name>Real Estate</h3>
-              <p class="eco-arch__text">Homes at the centre of every community: apartments, townhouses and villas across Abu Dhabi and Dubai.</p>
-              <p class="eco-arch__fact"><strong>6,500+</strong> residential units delivered</p>
-              <button type="button" class="link-arrow" data-demo="Bloom Properties">Explore Bloom Properties <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="education">
-            <button class="eco-arch__tab" type="button" id="tab-education" aria-controls="panel-education" aria-expanded="false" data-vertical="education">
-              <span class="eco-arch__num">02</span>
-              <span class="eco-arch__label">Education</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="education" src="assets/img/ecosystem-education-arch-640.webp" srcset="assets/img/ecosystem-education-arch-640.webp 640w, assets/img/ecosystem-education-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Two pupils in school gowns under a colonnade" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-education" role="region" aria-labelledby="tab-education" data-vertical-panel="education" hidden>
-              <p class="eco-arch__brand">Bloom Education</p>
-              <h3 class="eco-arch__name" data-eco-name>Education</h3>
-              <p class="eco-arch__text">Schools anchor Bloom's communities, from Brighton College to Bloom World Academy.</p>
-              <p class="eco-arch__fact"><strong>15</strong> schools serving more than 20,000 students</p>
-              <button type="button" class="link-arrow" data-demo="Bloom Education">Explore Bloom Education <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="hospitality">
-            <button class="eco-arch__tab" type="button" id="tab-hospitality" aria-controls="panel-hospitality" aria-expanded="false" data-vertical="hospitality">
-              <span class="eco-arch__num">03</span>
-              <span class="eco-arch__label">Hospitality</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="hospitality" src="assets/img/ecosystem-hospitality-arch-640.webp" srcset="assets/img/ecosystem-hospitality-arch-640.webp 640w, assets/img/ecosystem-hospitality-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Hotel bedroom with a view over a marina" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-hospitality" role="region" aria-labelledby="tab-hospitality" data-vertical-panel="hospitality" hidden>
-              <p class="eco-arch__brand">Bloom Hospitality</p>
-              <h3 class="eco-arch__name" data-eco-name>Hospitality</h3>
-              <p class="eco-arch__text">Hotels and serviced apartments with Marriott Downtown, The Abu Dhabi EDITION and Bloom Arjaan by Rotana.</p>
-              <p class="eco-arch__fact"><strong>851</strong> hotel rooms and serviced apartments</p>
-              <button type="button" class="link-arrow" data-demo="Bloom Hospitality">Explore Bloom Hospitality <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="retail">
-            <button class="eco-arch__tab" type="button" id="tab-retail" aria-controls="panel-retail" aria-expanded="false" data-vertical="retail">
-              <span class="eco-arch__num">04</span>
-              <span class="eco-arch__label">Retail</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="retail" src="assets/img/ecosystem-retail-arch-640.webp" srcset="assets/img/ecosystem-retail-arch-640.webp 640w, assets/img/ecosystem-retail-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Evening plaza with outdoor dining below apartment buildings (architectural render)" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-retail" role="region" aria-labelledby="tab-retail" data-vertical-panel="retail" hidden>
-              <p class="eco-arch__brand">Part of Bloom Holding</p>
-              <h3 class="eco-arch__name" data-eco-name>Retail</h3>
-              <p class="eco-arch__text">Shops, cafés and everyday conveniences that bring a community's streets to life.</p>
-              <p class="eco-arch__flag"><span class="tag tag--demo">Sample copy and temporary image</span></p>
-              <button type="button" class="link-arrow" data-demo="Retail">Explore Retail <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="healthcare">
-            <button class="eco-arch__tab" type="button" id="tab-healthcare" aria-controls="panel-healthcare" aria-expanded="false" data-vertical="healthcare">
-              <span class="eco-arch__num">05</span>
-              <span class="eco-arch__label">Healthcare</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="healthcare" src="assets/img/ecosystem-healthcare-arch-640.webp" srcset="assets/img/ecosystem-healthcare-arch-640.webp 640w, assets/img/ecosystem-healthcare-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="People walking a planted path through a residential community (architectural render)" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-healthcare" role="region" aria-labelledby="tab-healthcare" data-vertical-panel="healthcare" hidden>
-              <p class="eco-arch__brand">Part of Bloom Holding</p>
-              <h3 class="eco-arch__name" data-eco-name>Healthcare</h3>
-              <p class="eco-arch__text">Care and wellbeing, close to where people live.</p>
-              <p class="eco-arch__flag"><span class="tag tag--demo">Sample copy and temporary image</span></p>
-              <button type="button" class="link-arrow" data-demo="Healthcare">Explore Healthcare <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="facilities-management">
-            <button class="eco-arch__tab" type="button" id="tab-facilities-management" aria-controls="panel-facilities-management" aria-expanded="false" data-vertical="facilities-management">
-              <span class="eco-arch__num">06</span>
-              <span class="eco-arch__label">Facilities Management</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="facilities-management" src="assets/img/ecosystem-facilities-arch-640.webp" srcset="assets/img/ecosystem-facilities-arch-640.webp 640w, assets/img/ecosystem-facilities-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Three Bloom facilities team members walking through a landscaped walkway" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-facilities-management" role="region" aria-labelledby="tab-facilities-management" data-vertical-panel="facilities-management" hidden>
-              <p class="eco-arch__brand">Bloom Facilities Management</p>
-              <h3 class="eco-arch__name" data-eco-name>Facilities Management</h3>
-              <p class="eco-arch__text">Community and facilities management that keeps homes, buildings and shared spaces running day to day.</p>
-              <p class="eco-arch__fact"><strong>8,500+</strong> units managed</p>
-              <button type="button" class="link-arrow" data-demo="Bloom Facilities Management">Explore Bloom Facilities Management <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
-          </div>
-          <div class="eco-arch" data-vertical-item="landscaping">
-            <button class="eco-arch__tab" type="button" id="tab-landscaping" aria-controls="panel-landscaping" aria-expanded="false" data-vertical="landscaping">
-              <span class="eco-arch__num">07</span>
-              <span class="eco-arch__label">Landscaping</span>
-            </button>
-            <div class="eco-arch__media">
-              <img data-vertical-image="landscaping" src="assets/img/ecosystem-landscape-arch-640.webp" srcset="assets/img/ecosystem-landscape-arch-640.webp 640w, assets/img/ecosystem-landscape-arch-1100.webp 1100w" sizes="(max-width: 760px) 92vw, 46vw" width="1100" height="1222" alt="Landscaper laying turf beside planted beds, seen from above" loading="lazy" decoding="async" draggable="false">
-            </div>
-            <div class="eco-arch__panel" id="panel-landscaping" role="region" aria-labelledby="tab-landscaping" data-vertical-panel="landscaping" hidden>
-              <p class="eco-arch__brand">Bloom Landscape</p>
-              <h3 class="eco-arch__name" data-eco-name>Landscaping</h3>
-              <p class="eco-arch__text">Design, construction and maintenance of the parks, streets and gardens between the buildings.</p>
-              <button type="button" class="link-arrow" data-demo="Bloom Landscape">Explore Bloom Landscape <svg class="icon"><use href="#i-arrow"/></svg></button>
-            </div>
-            <span class="eco-arch__timer" aria-hidden="true"><b></b></span>
+
+            <!-- The book's cover, used by the script as its first leaf. -->
+            <template data-book-cover>
+              <div class="book-cover">
+                <span class="book-cover__frame" aria-hidden="true"></span>
+                <span class="book-cover__arch" aria-hidden="true"></span>
+                <img class="book-cover__mark" src="assets/brand/wordmark-cream.png" alt="Bloom" width="762" height="237">
+                <p class="book-cover__title"><em>Ecosystem</em></p>
+                <p class="book-cover__sub">Seven businesses · One idea</p>
+                <p class="book-cover__cue" aria-hidden="true">Scroll to open</p>
+              </div>
+            </template>
           </div>
         </div>
       </div>
+
+      <ol class="eco-list" data-eco-list>
+          <li class="eco-item" id="panel-real-estate" data-vertical-item="real-estate">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="real-estate" src="assets/img/ecosystem-real-estate-arch-640.webp" srcset="assets/img/ecosystem-real-estate-arch-640.webp 640w, assets/img/ecosystem-real-estate-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Villas with terracotta roofs behind flowering bougainvillea" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 01</span>Real Estate</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>01 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">01</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Bloom Properties</p>
+                <h3 class="eco-page__name">Real Estate</h3>
+                <p class="eco-page__text">Homes at the centre of every community: apartments, townhouses and villas across Abu Dhabi and Dubai.</p>
+                <p class="eco-page__fact"><strong>6,500+</strong> residential units delivered</p>
+                <button type="button" class="link-arrow" data-demo="Bloom Properties">Explore Bloom Properties <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>01</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-education" data-vertical-item="education">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="education" src="assets/img/ecosystem-education-arch-640.webp" srcset="assets/img/ecosystem-education-arch-640.webp 640w, assets/img/ecosystem-education-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Two pupils in school gowns under a colonnade" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 02</span>Education</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>02 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">02</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Bloom Education</p>
+                <h3 class="eco-page__name">Education</h3>
+                <p class="eco-page__text">Schools anchor Bloom's communities, from Brighton College to Bloom World Academy.</p>
+                <p class="eco-page__fact"><strong>15</strong> schools serving more than 20,000 students</p>
+                <button type="button" class="link-arrow" data-demo="Bloom Education">Explore Bloom Education <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>02</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-hospitality" data-vertical-item="hospitality">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="hospitality" src="assets/img/ecosystem-hospitality-arch-640.webp" srcset="assets/img/ecosystem-hospitality-arch-640.webp 640w, assets/img/ecosystem-hospitality-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Hotel bedroom with a view over a marina" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 03</span>Hospitality</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>03 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">03</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Bloom Hospitality</p>
+                <h3 class="eco-page__name">Hospitality</h3>
+                <p class="eco-page__text">Hotels and serviced apartments with Marriott Downtown, The Abu Dhabi EDITION and Bloom Arjaan by Rotana.</p>
+                <p class="eco-page__fact"><strong>851</strong> hotel rooms and serviced apartments</p>
+                <button type="button" class="link-arrow" data-demo="Bloom Hospitality">Explore Bloom Hospitality <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>03</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-retail" data-vertical-item="retail">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="retail" src="assets/img/ecosystem-retail-arch-640.webp" srcset="assets/img/ecosystem-retail-arch-640.webp 640w, assets/img/ecosystem-retail-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Evening plaza with outdoor dining below apartment buildings (architectural render)" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 04</span>Retail</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>04 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">04</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Part of Bloom Holding</p>
+                <h3 class="eco-page__name">Retail</h3>
+                <p class="eco-page__text">Shops, cafés and everyday conveniences that bring a community's streets to life.</p>
+                <p class="eco-page__flag"><span class="tag tag--demo">Sample copy and temporary image</span></p>
+                <button type="button" class="link-arrow" data-demo="Retail">Explore Retail <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>04</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-healthcare" data-vertical-item="healthcare">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="healthcare" src="assets/img/ecosystem-healthcare-arch-640.webp" srcset="assets/img/ecosystem-healthcare-arch-640.webp 640w, assets/img/ecosystem-healthcare-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="People walking a planted path through a residential community (architectural render)" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 05</span>Healthcare</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>05 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">05</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Part of Bloom Holding</p>
+                <h3 class="eco-page__name">Healthcare</h3>
+                <p class="eco-page__text">Care and wellbeing, close to where people live.</p>
+                <p class="eco-page__flag"><span class="tag tag--demo">Sample copy and temporary image</span></p>
+                <button type="button" class="link-arrow" data-demo="Healthcare">Explore Healthcare <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>05</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-facilities-management" data-vertical-item="facilities-management">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="facilities-management" src="assets/img/ecosystem-facilities-arch-640.webp" srcset="assets/img/ecosystem-facilities-arch-640.webp 640w, assets/img/ecosystem-facilities-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Three Bloom facilities team members walking through a landscaped walkway" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 06</span>Facilities Management</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>06 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">06</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Bloom Facilities Management</p>
+                <h3 class="eco-page__name">Facilities Management</h3>
+                <p class="eco-page__text">Community and facilities management that keeps homes, buildings and shared spaces running day to day.</p>
+                <p class="eco-page__fact"><strong>8,500+</strong> units managed</p>
+                <button type="button" class="link-arrow" data-demo="Bloom Facilities Management">Explore Bloom Facilities Management <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>06</span></p>
+            </div>
+          </li>
+          <li class="eco-item" id="panel-landscaping" data-vertical-item="landscaping">
+            <figure class="eco-photo">
+              <span class="eco-photo__arch"><img data-vertical-image="landscaping" src="assets/img/ecosystem-landscape-arch-640.webp" srcset="assets/img/ecosystem-landscape-arch-640.webp 640w, assets/img/ecosystem-landscape-arch-1100.webp 1100w" sizes="(max-width: 760px) 90vw, 30vw" width="1100" height="1222" alt="Landscaper laying turf beside planted beds, seen from above" loading="lazy" decoding="async" draggable="false"></span>
+              <figcaption class="eco-photo__caption"><span>Fig. 07</span>Landscaping</figcaption>
+            </figure>
+            <div class="eco-page">
+              <p class="eco-page__head"><span>Bloom Ecosystem</span><span>07 / 07</span></p>
+              <span class="eco-page__mark" aria-hidden="true">07</span>
+              <div class="eco-page__body">
+                <p class="eco-page__brand">Bloom Landscape</p>
+                <h3 class="eco-page__name">Landscaping</h3>
+                <p class="eco-page__text">Design, construction and maintenance of the parks, streets and gardens between the buildings.</p>
+                <button type="button" class="link-arrow" data-demo="Bloom Landscape">Explore Bloom Landscape <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </div>
+              <p class="eco-page__foot"><span>Curated Community Living</span><span>07</span></p>
+            </div>
+          </li>
+      </ol>
     </section>
 
     <!-- ============================================================

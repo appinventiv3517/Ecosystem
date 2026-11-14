@@ -1,407 +1,707 @@
-/* 05 · Bloom ecosystem, "the skyline": seven arches side by side. The chosen business opens
-   wide with its photograph and story; the others stand as slim lit arches with their names.
-   On a laptop the whole section fits one screen. */
+/* 05 · Bloom ecosystem, "the Bloom book". The stage holds still while you scroll; the book
+   opens, then each stretch of scroll turns a page to the next business: its photograph in an
+   arch window on the left, its story set like a magazine page on the right. On phones the
+   pages flip up like a deck. js/sections/ecosystem.js builds the book from the list below. */
 
 .ecosystem {
+  --paper: #F7F2E6;
+  --paper-edge: #E6DCC6;
   z-index: 2;
   margin-top: calc(var(--radius-l) * -1);
   border-radius: var(--radius-l) var(--radius-l) 0 0;
   overflow: hidden;
   overflow: clip;
+  background:
+    radial-gradient(60% 50% at 70% 55%, rgba(150, 43, 35, 0.22), rgba(150, 43, 35, 0) 70%),
+    var(--black);
 }
 
-/* One screen tall on laptops and up: the head takes what it needs, the skyline the rest. */
-@media (min-width: 761px) {
-  .ecosystem {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100svh;
-    min-height: 40rem;
-    max-height: 68rem;
-    padding-top: calc(var(--header-h) + 0.5rem);
-    padding-bottom: clamp(1rem, 2.4vh, 2rem);
-  }
+/* ---------- Scroll track and the stage that holds still ---------- */
 
-  .ecosystem__inner {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 0;
-    width: 100%;
-  }
+html.motion .eco-track {
+  height: calc(100vh + var(--steps, 7) * 55vh);
 }
 
-.ecosystem__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 5rem);
-  align-items: end;
-  margin-bottom: clamp(1.25rem, 3vh, 2.25rem);
+.eco-stage {
+  padding-block: var(--section-y);
 }
 
-.ecosystem__head .section-head {
-  gap: 0.75rem;
-}
-
-.ecosystem__head .display {
-  font-size: clamp(2.125rem, min(3.6vw, 6.4vh), 4rem);
-}
-
-.ecosystem__aside {
+html.motion .eco-stage {
+  position: sticky;
+  top: 0;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem;
+  height: 100vh;
+  height: 100svh;
+  min-height: 36rem;
+  padding: calc(var(--header-h) + 0.5rem) 0 clamp(1rem, 3vh, 2rem);
 }
 
-.ecosystem__aside .lede {
-  max-width: 24rem;
-  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
-  color: var(--muted-on-dark);
-}
-
-/* A ring of words turning around the number of the business in view. */
-.eco-ring {
-  position: relative;
-  flex: none;
-  width: clamp(5.5rem, 7vw, 7rem);
-  aspect-ratio: 1;
-}
-
-.eco-ring svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.eco-ring text {
-  fill: var(--muted-on-dark);
-  font-family: var(--font-body);
-  font-size: 9.2px;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-.eco-ring__count {
-  position: absolute;
-  inset: 0;
+.eco-stage__inner {
   display: grid;
-  place-content: center;
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  color: var(--muted-on-dark);
-  text-align: center;
+  grid-template-columns: minmax(0, 0.46fr) minmax(0, 1.54fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: center;
+  width: 100%;
 }
 
-.eco-ring__count b {
-  display: block;
-  font-size: 1.75rem;
-  font-weight: 400;
-  line-height: 1;
+html.motion .eco-stage__inner {
+  height: 100%;
+}
+
+/* ---------- Beside the book: title, index, hint ---------- */
+
+.eco-intro {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.8vh, 1.25rem);
+}
+
+.eco-intro .display {
+  font-size: clamp(1.875rem, min(2.5vw, 4.8vh), 3.25rem);
+}
+
+.eco-intro .lede {
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  color: var(--muted-on-dark);
+}
+
+.eco-index {
+  display: grid;
+  margin-top: clamp(0.25rem, 1.5vh, 1rem);
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-on-dark);
+}
+
+.eco-index__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  min-height: clamp(2.375rem, 5vh, 2.875rem);
+  border-bottom: 1px solid var(--line-on-dark);
+  text-align: left;
+  color: var(--muted-on-dark);
+  font-size: 0.9375rem;
+  transition: color 500ms var(--ease-out);
+}
+
+.eco-index__num {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.eco-index__label {
+  transition: transform 600ms var(--ease-out);
+}
+
+.eco-index__item:hover,
+.eco-index__item.is-active {
+  color: var(--cream);
+}
+
+.eco-index__item.is-active .eco-index__label {
+  transform: translateX(0.375rem);
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-style: italic;
+}
+
+.eco-index__item.is-active .eco-index__num {
   color: #E0796C;
 }
 
-/* ---------- The skyline ---------- */
-
-.skyline {
-  display: flex;
-  gap: clamp(0.375rem, 0.7vw, 0.75rem);
-  height: clamp(26rem, 62vh, 44rem);
-}
-
-@media (min-width: 761px) {
-  .skyline {
-    flex: 1;
-    min-height: 0;
-    height: auto;
-  }
-}
-
-.eco-arch {
-  --grow: 1;
-  position: relative;
-  flex: var(--grow) 1 0;
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 999px 999px var(--radius-m) var(--radius-m);
-  background: #1A1715;
-  isolation: isolate;
-  transition: flex-grow 1000ms cubic-bezier(0.7, 0, 0.2, 1);
-  transform: translateZ(0);
-}
-
-.eco-arch.is-active {
-  --grow: 6.4;
-}
-
-@media (hover: hover) {
-  .skyline:not(.is-entering) .eco-arch.is-peek:not(.is-active) {
-    --grow: 1.45;
-  }
-}
-
-.eco-arch__media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.eco-arch__media img {
-  position: absolute;
-  inset: -3%;
-  width: 106%;
-  height: 106%;
-  max-width: none;
-  object-fit: cover;
-  filter: saturate(0.75) brightness(0.62);
-  transition: filter 900ms var(--ease-out);
-  will-change: transform;
-}
-
-.eco-arch.is-active .eco-arch__media img,
-.eco-arch.is-peek .eco-arch__media img {
-  filter: none;
-}
-
-/* Shade under the words of the open arch, and a soft vignette on the slim ones. */
-.eco-arch__media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(11, 11, 11, 0.92) 0%, rgba(11, 11, 11, 0.7) 30%, rgba(11, 11, 11, 0.25) 55%, rgba(11, 11, 11, 0) 72%);
-  opacity: 0.55;
-  transition: opacity 900ms var(--ease-out);
-}
-
-.eco-arch.is-active .eco-arch__media::after {
-  opacity: 1;
-}
-
-/* The whole slim arch is its button. */
-.eco-arch__tab {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(1.75rem, 4vh, 2.75rem) 0 1.25rem;
-  color: var(--cream);
-  border-radius: inherit;
-  cursor: pointer;
-}
-
-.eco-arch.is-active .eco-arch__tab {
-  cursor: default;
-}
-
-.eco-arch__num {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid rgba(248, 246, 234, 0.4);
-  border-radius: 50%;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  background: rgba(11, 11, 11, 0.25);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  transition: background-color 600ms var(--ease-out), border-color 600ms var(--ease-out);
-}
-
-.eco-arch.is-active .eco-arch__num {
-  border-color: var(--red);
-  background: var(--red);
-}
-
-.eco-arch__label {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-display);
-  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
-  line-height: 1;
-  white-space: nowrap;
-  transition: opacity 500ms var(--ease-out), transform 700ms var(--ease-out);
-}
-
-.eco-arch.is-active .eco-arch__label {
-  opacity: 0;
-  transform: rotate(180deg) translateX(-1rem);
-}
-
-.eco-arch__tab:focus-visible {
-  outline: 2px solid var(--cream);
-  outline-offset: -4px;
-}
-
-/* The story of the open business, set at the foot of its arch. */
-.eco-arch__panel {
+/* How far through this business's spread you have scrolled. */
+.eco-index__bar {
   position: absolute;
   left: 0;
-  bottom: 0;
-  z-index: 2;
-  display: grid;
-  gap: 0.5rem;
-  /* The open width is set by ecosystem.js, so the words keep their
-     final line breaks while the arch is still opening. */
-  width: min(32rem, var(--open-w, 46vw));
-  padding: clamp(1.25rem, 2.4vw, 2.25rem);
-  color: var(--cream);
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  overflow: hidden;
 }
 
-.eco-arch__brand {
+.eco-index__bar b {
+  display: block;
+  height: 100%;
+  background: #E0796C;
+  transform: scaleX(var(--fill, 0));
+  transform-origin: left;
+}
+
+.eco-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
   font-size: var(--text-micro);
   font-weight: 700;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: rgba(248, 246, 234, 0.85);
+  color: var(--muted-on-dark);
 }
 
-.eco-arch__brand::before {
-  content: "";
-  display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  margin-right: 0.625rem;
+.eco-hint__mouse {
+  position: relative;
+  width: 1.125rem;
+  height: 1.75rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+}
+
+.eco-hint__mouse i {
+  position: absolute;
+  left: 50%;
+  top: 0.3rem;
+  width: 2px;
+  height: 0.375rem;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: eco-wheel 1.6s var(--ease-out) infinite;
+}
+
+@keyframes eco-wheel {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+html:not(.motion) .eco-hint {
+  display: none;
+}
+
+/* ---------- The book ---------- */
+
+.book {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 0;
+  container-type: size;
+  perspective: 2600px;
+}
+
+html:not(.motion) .book {
+  display: none;
+}
+
+.book__body {
+  --open: 1;
+  position: relative;
+  z-index: 1;
+  width: min(100cqw, 146cqh);
+  aspect-ratio: 1.46;
+  /* Closed, the cover lies where the right-hand page will be; it opens to the left. */
+  transform-style: preserve-3d;
+}
+
+/* A soft shadow on the "table" under the book. */
+.book__shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  width: min(92cqw, 134cqh);
+  height: 6%;
   border-radius: 50%;
-  background: var(--red);
-  box-shadow: 0 0 0 0.25rem rgba(150, 43, 35, 0.3);
+  background: rgba(0, 0, 0, 0.75);
+  filter: blur(22px);
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
-.eco-arch__name {
+.book__base,
+.book__face {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.book__base--left {
+  left: 0;
+  width: 50%;
+  border-radius: 14px 0 0 14px;
+  opacity: var(--open);
+  box-shadow: -3px 0 0 var(--paper-edge), -6px 0 0 #D8CCB2;
+  /* The endpaper: Bloom red, patterned with small arches. */
+  background:
+    linear-gradient(to left, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 14%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='52'%3E%3Cpath d='M10 48V24a12 12 0 0 1 24 0v24' fill='none' stroke='%23F8F6EA' stroke-opacity='.16'/%3E%3C/svg%3E"),
+    #84231C;
+}
+
+.book__base--right {
+  left: 50%;
+  width: 50%;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 3px 0 0 var(--paper-edge), 6px 0 0 #D8CCB2, 9px 0 0 #CDBFA3;
+}
+
+.book__leaf {
+  --shade: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.book__face {
+  inset: 0;
+  width: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.book__face--front {
+  border-radius: 0 14px 14px 0;
+}
+
+.book__face--back {
+  border-radius: 14px 0 0 14px;
+  transform: rotateY(180deg);
+}
+
+/* Paper: shading towards the spine, and light sweeping across a page as it turns. */
+.book__base--right::before,
+.book__face--front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: linear-gradient(to right, rgba(74, 48, 24, 0.22), rgba(74, 48, 24, 0) 9%);
+  pointer-events: none;
+}
+
+.book__face--back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: linear-gradient(to left, rgba(74, 48, 24, 0.22), rgba(74, 48, 24, 0) 9%);
+  pointer-events: none;
+}
+
+.book__face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  opacity: var(--shade);
+  pointer-events: none;
+}
+
+.book__face--front::after {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.32), rgba(255, 252, 240, 0.18) 55%, rgba(0, 0, 0, 0) 80%);
+}
+
+.book__face--back::after {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.32), rgba(255, 252, 240, 0.18) 55%, rgba(0, 0, 0, 0) 80%);
+}
+
+/* ---------- The cover ---------- */
+
+.book-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  padding: 10%;
+  background:
+    radial-gradient(120% 80% at 30% 20%, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 60%),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.035) 0 2px, rgba(0, 0, 0, 0) 2px 5px),
+    var(--red);
+  color: var(--cream);
+  text-align: center;
+}
+
+.book-cover__frame {
+  position: absolute;
+  inset: 4.5%;
+  border: 1px solid rgba(248, 246, 234, 0.4);
+  border-radius: 8px;
+}
+
+.book-cover__arch {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  top: 14%;
+  bottom: 30%;
+  border: 1px solid rgba(248, 246, 234, 0.28);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+.book-cover__mark {
+  position: relative;
+  width: 42%;
+  height: auto;
+}
+
+.book-cover__title {
+  position: relative;
   font-family: var(--font-display);
-  font-size: clamp(2rem, min(3.4vw, 6vh), 3.5rem);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 3.6cqh, 2.75rem);
+  line-height: 1.05;
 }
 
-.eco-arch__text {
-  max-width: 26rem;
-  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
-  line-height: 1.5;
-  color: rgba(248, 246, 234, 0.82);
+.book-cover__sub,
+.book-cover__cue {
+  position: relative;
+  font-size: clamp(0.5625rem, 1.3cqh, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.8;
 }
 
-.eco-arch__fact {
+.book-cover__cue {
+  position: absolute;
+  bottom: 9%;
+  opacity: 0.65;
+  animation: cover-cue 2.2s var(--ease-in-out) infinite;
+}
+
+@keyframes cover-cue {
+  50% {
+    transform: translateY(0.375rem);
+    opacity: 1;
+  }
+}
+
+/* ---------- A photograph page: the picture in an arch window ---------- */
+
+.eco-photo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  margin: 0;
+  padding: 9% 11% 7%;
+}
+
+.eco-photo__arch {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 999px 999px 10px 10px;
+  box-shadow: inset 0 0 0 1px rgba(29, 26, 23, 0.08);
+}
+
+.eco-photo__arch img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.eco-photo__caption {
   display: flex;
   align-items: baseline;
   gap: 0.625rem;
-  margin-top: 0.25rem;
-  font-size: var(--text-small);
-  color: rgba(248, 246, 234, 0.82);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.9375rem, 2.2cqh, 1.25rem);
+  color: var(--ink);
 }
 
-.eco-arch__fact strong {
+.eco-photo__caption span {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+/* ---------- A story page, set like a magazine ---------- */
+
+.eco-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8% 10% 7% 11%;
+  color: var(--ink);
+}
+
+.eco-page__head,
+.eco-page__foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(0.5625rem, 1.25cqh, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.eco-page__head {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--beige);
+}
+
+.eco-page__foot {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--beige);
+}
+
+/* The page number, large and outlined behind the words. */
+.eco-page__mark {
+  position: absolute;
+  right: 6%;
+  bottom: 9%;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+  font-style: italic;
+  font-size: clamp(6rem, 30cqh, 16rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(150, 43, 35, 0.22);
+  pointer-events: none;
+}
+
+.eco-page__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(0.5rem, 1.6cqh, 1rem);
+}
+
+.eco-page__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: clamp(0.625rem, 1.4cqh, 0.75rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.eco-page__brand::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.eco-page__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.875rem, 7cqh, 3.75rem);
   font-weight: 400;
   line-height: 1;
-  color: var(--cream);
+  letter-spacing: -0.015em;
 }
 
-.eco-arch__panel .link-arrow {
-  justify-self: start;
-  margin-top: 0.375rem;
-  color: var(--cream);
+.eco-page__text {
+  max-width: 26rem;
+  font-size: clamp(0.875rem, 2.1cqh, 1.0625rem);
+  line-height: 1.55;
+  color: var(--muted);
 }
 
-/* Hairline timer along the foot of the open arch while the skyline moves on by itself. */
-.eco-arch__timer {
-  position: absolute;
-  left: clamp(1.25rem, 2.4vw, 2.25rem);
-  right: clamp(1.25rem, 2.4vw, 2.25rem);
-  bottom: 0.625rem;
-  z-index: 3;
-  height: 2px;
-  border-radius: 2px;
-  background: rgba(248, 246, 234, 0.16);
-  opacity: 0;
+.eco-page__fact {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  font-size: clamp(0.75rem, 1.8cqh, 0.875rem);
+  color: var(--muted);
+}
+
+.eco-page__fact strong {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7.5cqh, 3.5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--red);
+}
+
+.eco-page__flag .tag {
+  color: var(--muted);
+  border-color: var(--beige);
+}
+
+.eco-page .link-arrow {
+  margin-top: 0.25rem;
+  color: var(--ink);
+}
+
+/* ---------- Without motion: a plain list of the seven ---------- */
+
+.eco-list {
+  display: grid;
+  gap: 1.5rem;
+  width: min(100% - 2 * var(--gutter), var(--content-max));
+  margin: 0 auto var(--section-y);
+  padding: 0;
+  list-style: none;
+}
+
+html.motion .eco-list {
+  display: none;
+}
+
+.eco-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  min-height: 30rem;
   overflow: hidden;
-  transition: opacity 500ms var(--ease-out);
+  border-radius: var(--radius-m);
+  background: var(--paper);
 }
 
-.eco-arch__timer b {
-  display: block;
-  height: 100%;
-  background: var(--cream);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-
-.skyline.is-auto .eco-arch.is-active .eco-arch__timer {
-  opacity: 1;
+.eco-item .eco-photo,
+.eco-item .eco-page {
+  position: relative;
 }
 
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1099px) {
-  .ecosystem__head {
+  .eco-stage__inner {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: clamp(1rem, 3vh, 2rem);
   }
 
-  .eco-arch.is-active {
-    --grow: 5;
+  .eco-index {
+    display: none;
   }
 
+  .eco-intro .lede {
+    max-width: 34rem;
+  }
 }
 
-/* Phones: the skyline stands on its side, a stack of arches that opens one at a time. */
+/* Phones: one page at a time, flipping up and away like a deck. */
 @media (max-width: 760px) {
-  .ecosystem {
-    padding-block: var(--section-y);
+  /* Room at the foot for the floating section name. */
+  html.motion .eco-stage {
+    padding-top: calc(var(--header-h) + 0.25rem);
+    padding-bottom: 5rem;
   }
 
-  .eco-ring {
-    width: 5rem;
+  .eco-page .link-arrow {
+    min-height: 2.75rem;
   }
 
-  .skyline {
-    flex-direction: column;
-    height: auto;
+  .eco-intro {
+    gap: 0.5rem;
   }
 
-  .eco-arch {
-    flex: none;
-    height: 4rem;
-    border-radius: var(--radius-m);
-    transition: height 900ms cubic-bezier(0.7, 0, 0.2, 1);
+  .eco-intro .display {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
   }
 
-  .eco-arch.is-active {
-    height: 31rem;
-    border-radius: 999px 999px var(--radius-m) var(--radius-m);
+  .eco-intro .lede {
+    display: none;
   }
 
-  .eco-arch__tab {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 1rem;
-    padding: 0 1.25rem;
+  .book {
+    perspective: 1400px;
   }
 
-  .eco-arch.is-active .eco-arch__tab {
-    align-items: flex-start;
-    padding-top: 1.5rem;
-    justify-content: center;
-  }
-
-  .eco-arch__label {
-    writing-mode: horizontal-tb;
+  .book__body.is-deck {
+    width: 100cqw;
+    height: 100cqh;
+    aspect-ratio: auto;
     transform: none;
   }
 
-  .eco-arch.is-active .eco-arch__label {
-    transform: translateY(0.5rem);
+  .book__shadow {
+    display: none;
   }
 
-  .eco-arch__panel {
-    width: 100%;
+  .deck-card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    background: var(--paper);
+    box-shadow: 0 1.5rem 3rem -1rem rgba(0, 0, 0, 0.7);
+    transform-origin: 50% 0;
+    will-change: transform, opacity;
+  }
+
+  .deck-card .eco-photo {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  .deck-card .eco-photo__caption {
+    display: none;
+  }
+
+  .deck-card .eco-page {
+    position: relative;
+    inset: auto;
+    padding: 0.75rem 1.25rem 1rem;
+  }
+
+  .deck-card .eco-page__head,
+  .deck-card .eco-page__foot,
+  .deck-card .eco-page__text {
+    display: none;
+  }
+
+  .deck-card .eco-page__mark {
+    font-size: 6rem;
+    bottom: 0.5rem;
+  }
+
+  .deck-card .eco-page__name {
+    font-size: 1.875rem;
+  }
+
+  .deck-card .eco-page__fact strong {
+    font-size: 1.75rem;
+  }
+
+  .eco-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .eco-item .eco-photo {
+    min-height: 20rem;
   }
 }
