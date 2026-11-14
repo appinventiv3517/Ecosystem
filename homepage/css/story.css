@@ -1,10 +1,13 @@
-/* 01 · Brand story: a sticky stage. While the track scrolls past, the frame changes shape and
-   photograph, the three words of the proposition light up one by one and the copy follows the
-   picture (js/sections/story.js). Without motion it is a still composition with all four lines. */
+/* 01 · Our philosophy: Curated Community Living, word by word.
+   A sticky stage turns through four chapters. In each, one word of the proposition is set huge and
+   filled with a photograph, with a dictionary-style definition and the verified figures behind it.
+   The last chapter sets the three words side by side (js/sections/story.js). Without motion the
+   chapters simply follow one another down the page. */
 
 .story {
   position: relative;
-  background: var(--cream);
+  --story-bg: var(--cream);
+  background: var(--story-bg);
 }
 
 .story__track {
@@ -12,18 +15,17 @@
 }
 
 html.motion .story__track {
-  height: 440vh;
+  height: 420vh;
 }
 
 .story__stage {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 6rem);
-  padding: calc(var(--header-h) + 2rem) var(--gutter) 3rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 3vh, 2rem);
+  padding: calc(var(--header-h) + 1.5rem) var(--gutter) 2.5rem;
+  background: var(--story-bg);
   overflow: hidden;
-  background: var(--story-bg, var(--cream));
 }
 
 html.motion .story__stage {
@@ -31,240 +33,395 @@ html.motion .story__stage {
   top: 0;
   height: 100vh;
   height: 100svh;
-  padding-bottom: 2rem;
+  padding-bottom: 5.5rem; /* clear of the section dock */
 }
 
-/* Big outlined chapter number, drifting behind everything. */
-.story__ghost {
-  position: absolute;
-  left: calc(var(--gutter) - 0.06em);
-  bottom: -0.2em;
-  font-family: var(--font-display);
-  font-size: clamp(12rem, 30vw, 30rem);
-  line-height: 1;
-  font-style: italic;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(150, 43, 35, 0.16);
-  pointer-events: none;
-  user-select: none;
-}
+/* ---------- Top row: label and chapter steps ---------- */
 
-.story__copy {
-  position: relative;
-  display: grid;
-  gap: clamp(1.25rem, 3vh, 2.25rem);
-  align-content: center;
-}
-
-.story__title {
-  display: grid;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, min(6.4vw, 11vh), 7rem);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-}
-
-.story__word {
-  display: block;
-  transform-origin: left 80%;
-}
-
-.story__word:nth-child(2) {
-  padding-left: 0.6em;
-}
-
-.story__word em {
-  color: var(--red);
-}
-
-html.motion .story__word {
-  opacity: 0.14;
-}
-
-.story__texts {
-  display: grid;
-  max-width: 25rem;
-}
-
-.story__text {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  font-size: var(--text-lede);
-  line-height: 1.5;
-  color: var(--text-soft);
-}
-
-.story__text-num {
-  padding-top: 0.3em;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--red);
-}
-
-html.motion .story__text {
-  grid-area: 1 / 1;
-  opacity: 0;
-  visibility: hidden;
-}
-
-html.motion .story__text.is-active {
-  opacity: 1;
-  visibility: visible;
-}
-
-html:not(.motion) .story__texts {
-  gap: 1rem;
-}
-
-.story__meter {
+.story__top {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.875rem;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.story__steps {
+  display: flex;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+}
+
+.story__step {
+  display: grid;
+  gap: 0.5rem;
+  min-width: clamp(4.5rem, 7.5vw, 7.5rem);
+  min-height: 2.75rem;
+  align-content: center;
+  text-align: left;
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--ink);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: color 400ms var(--ease-out);
 }
 
-.story__meter i {
+.story__step i {
   position: relative;
-  width: 7rem;
-  height: 1px;
+  height: 2px;
   background: var(--beige);
+  overflow: hidden;
 }
 
-.story__meter b {
+.story__step b {
   position: absolute;
   inset: 0;
   background: var(--red);
   transform-origin: left;
-  transform: scaleX(var(--p, 0.25));
+  transform: scaleX(var(--fill, 0));
 }
 
-html:not(.motion) .story__meter {
+.story__step.is-active {
+  color: var(--ink);
+}
+
+.story__step:hover {
+  color: var(--red);
+}
+
+html:not(.motion) .story__steps {
   display: none;
 }
 
-.story__visual {
+/* ---------- A chapter ---------- */
+
+.story__tenets {
   position: relative;
-  height: 100%;
-  max-height: 46rem;
+  min-height: 0;
+}
+
+.tenet {
   display: grid;
-  grid-template-rows: 1fr auto;
-  gap: 0.875rem;
+  grid-template-columns: minmax(0, 1fr) clamp(10rem, 18vw, 18rem);
+  grid-template-rows: auto auto;
+  align-content: center;
+  column-gap: clamp(1.5rem, 4vw, 4.5rem);
+  row-gap: clamp(1rem, 3vh, 2.25rem);
 }
 
-.story__frame {
-  position: relative;
-  overflow: hidden;
-  border-radius: 2px;
-  background: var(--sand);
-  will-change: clip-path;
-}
-
-.story__shot {
+html.motion .tenet {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  visibility: hidden;
 }
 
-.story__shot img {
+html.motion .tenet.is-active {
+  visibility: visible;
+}
+
+html:not(.motion) .tenet + .tenet {
+  margin-top: var(--section-y);
+}
+
+/* The word, filled with a photograph: the image sits behind a layer of page colour carrying the
+   word in black, blended with "lighten", so the page colour wins everywhere except the letters. */
+.tenet__word,
+.whole__word {
+  position: relative;
+  display: block;
+  width: fit-content;
+  isolation: isolate;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.tenet__word {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  font-size: clamp(4rem, min(13.5vw, 27vh), 15rem);
+}
+
+.tenet__fill,
+.whole__fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--red);
+}
+
+.tenet__fill img,
+.whole__fill img {
+  position: absolute;
+  left: 0;
+  top: -15%;
   width: 100%;
-  height: 100%;
+  height: 130%;
+  max-width: none;
   object-fit: cover;
+  /* A shade deeper than the photograph itself, so pale skies still read as letters. */
+  filter: brightness(0.78) saturate(1.12);
   will-change: transform;
 }
 
-html.motion .story__shot + .story__shot {
-  clip-path: inset(100% 0 0 0);
+.tenet__ink {
+  display: block;
+  padding: 0.02em 0.04em 0.1em 0;
+  background: var(--story-bg);
+  color: #000;
+  mix-blend-mode: lighten;
 }
 
-html:not(.motion) .story__shot + .story__shot {
-  display: none;
+/* Without blend support the word is simply set in Bloom red. */
+@supports not (mix-blend-mode: lighten) {
+  .tenet__ink {
+    color: var(--red);
+  }
 }
 
-.story__caption {
+.tenet__foot {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+  padding-top: clamp(1rem, 2.4vh, 1.75rem);
+  border-top: 1px solid var(--line);
+}
+
+.tenet__say {
   display: flex;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.625rem;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  color: var(--text-soft);
+}
+
+.tenet__say i {
+  font-size: 0.9375rem;
+}
+
+.tenet__num {
+  font-family: var(--font-body);
   font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--red);
+}
+
+.tenet__define {
+  max-width: 30rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, min(1.75vw, 3vh), 1.75rem);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.tenet__facts dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2.25rem;
+}
+
+.tenet__fact {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+  max-width: 13rem;
+}
+
+.tenet__fact dd {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, min(3.6vw, 6vh), 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--red);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.tenet__fact dt {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text-soft);
+}
+
+.tenet__note {
+  margin-top: 0.875rem;
+  max-width: 24rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+/* The arch photograph on the right, the full height of the chapter. */
+.tenet__photo {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
+  display: grid;
+  gap: 0.625rem;
+}
+
+.tenet__frame {
+  display: block;
+  aspect-ratio: 0.74;
+  max-height: 100%;
+  overflow: hidden;
+  border-radius: 999px 999px 4px 4px;
+  background: var(--sand);
+}
+
+.tenet__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tenet__photo figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--text-soft);
-  overflow: hidden;
+  color: var(--ink);
 }
 
-.story__caption span {
-  display: inline-block;
+.tenet__photo figcaption::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: var(--red);
 }
 
-/* A fine arch outline set behind the frame, which draws in and turns slowly. */
-.story__arch {
-  position: absolute;
-  z-index: 0;
-  right: -2.5rem;
-  top: -2.5rem;
-  width: 42%;
-  fill: none;
-  stroke: var(--red);
-  stroke-width: 1;
-  opacity: 0.45;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
+/* ---------- The last chapter: all three words together ---------- */
+
+.whole__line {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.18em;
+  font-size: clamp(2.5rem, min(6.6vw, 15vh), 8rem);
 }
 
-.story__frame {
-  z-index: 1;
+.whole__word {
+  font-size: 1em;
 }
 
-html.motion .story__arch path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+.whole__word:nth-child(2) .tenet__ink {
+  font-style: italic;
 }
+
+.whole__text {
+  max-width: 30rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, min(1.75vw, 3vh), 1.75rem);
+  line-height: 1.3;
+}
+
+.whole__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+/* ---------- Smaller screens ---------- */
 
 @media (max-width: 899px) {
-  .story__stage {
+  .tenet {
+    grid-template-columns: minmax(0, 1fr) clamp(7rem, 26vw, 11rem);
+  }
+
+  .tenet__word {
+    font-size: clamp(3rem, min(15vw, 14vh), 8rem);
+  }
+
+  .tenet__foot {
+    grid-column: 1 / -1;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-    align-items: stretch;
-    gap: 1.25rem;
-    padding-top: calc(var(--header-h) + 1.5rem);
+    gap: 1rem;
   }
 
-  .story__copy {
-    gap: 0.875rem;
+  .tenet__photo {
+    grid-row: 1;
+    align-self: end;
   }
 
-  .story__title {
-    font-size: clamp(2.5rem, min(12vw, 7.5vh), 4.5rem);
-  }
-
-  .story__texts {
-    max-width: 32rem;
-    min-height: 4.5em;
-  }
-
-  .story__text {
-    font-size: 1rem;
-  }
-
-  .story__visual {
-    max-height: none;
-    min-height: 16rem;
-  }
-
-  html:not(.motion) .story__visual {
-    height: 60vw;
-  }
-
-  .story__arch {
+  .tenet__photo figcaption {
     display: none;
   }
 
-  .story__meter {
+  .whole__line {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    font-size: clamp(2.75rem, min(13vw, 9vh), 5rem);
+  }
+
+  .tenet--whole .tenet__photo {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .tenet {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
+    column-gap: 1rem;
+  }
+
+  .tenet {
+    grid-template-rows: auto auto auto;
+  }
+
+  .tenet__photo {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+  }
+
+  .tenet__word {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .tenet__foot {
+    grid-row: 3;
+  }
+
+  .whole__line {
+    grid-row: 2;
+  }
+
+  .story__steps {
+    gap: 0.5rem;
+  }
+
+  .story__step {
+    min-width: 2.75rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+  }
+
+  .tenet__define,
+  .whole__text {
+    font-size: 1.125rem;
+  }
+
+  .tenet__fact dd {
+    font-size: 2rem;
+  }
+
+  .tenet__note {
     display: none;
   }
 }

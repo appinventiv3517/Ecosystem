@@ -54,7 +54,7 @@ and the footer can drive the ecosystem without the modules importing one another
 
 | Discovery finding | In the design |
 |---|---|
-| Unclear brand positioning | A full-screen photographic hero states Curated Community Living at once; the story that follows lights up the three words one at a time against Bloom's landscapes, architecture and lifestyle |
+| Unclear brand positioning | A full-screen photographic hero states Curated Community Living at once; Our philosophy then explains it word by word (the evidence-led proposition the discovery asked for), each word defined and backed by verified figures |
 | Limited visibility of user journeys | Find a Home and Explore Communities are the hero's two actions and the next two sections; the header, mega menu and section dock reach every part of the page |
 | Fragmented property discovery | One search console with a Buy / Rent switch, community, type and bedrooms, replacing today's separate sales and leasing journeys |
 | Disconnected ecosystem storytelling | "Seven businesses. One connected world.": a numbered index of all seven, with a wire from the selected business to its photograph and an orbit that turns to it |
@@ -69,7 +69,7 @@ scrolling (sticky CSS stages, no scroll hijacking):
 | Section | Motion |
 |---|---|
 | Hero | The photograph settles from a slow push-in, the headline rises out of line masks, an arch window wipes open and its outline draws; scrolling away parts the layers at different speeds; a mouse adds slight depth |
-| 01 Story | Sticky stage, scrubbed: each photograph wipes up from the bottom, the frame changes shape (full, arch, inset panel, full), the ground colour shifts and the words light up in turn |
+| 01 Our philosophy | Sticky stage in four chapters (Curated, Community, Living, Together): each word is set huge and filled with a photograph that drifts inside the letters; words wipe out and in through masks, definitions rise line by line, figures count up, the arch photograph opens; a step bar fills with the scroll and jumps to a chapter on click |
 | 02 Find a Home | Clip-path wipe between the Buy and Rent photographs, sliding pill, animated dropdowns, an outlined word drifting sideways behind |
 | 03 Communities | Sticky horizontal rail moved by the scroll (drag and sideways trackpad swipes scroll the page by the same amount); the crop slides inside each frame; the centred card scales up; custom progress. Phones and tablets swipe natively |
 | 04 Ecosystem | Sticky two columns; scroll walks the selection down seven numbered rows; images wipe in from the direction of travel; a wire draws to the photograph; the orbit turns; the ground tint changes |
@@ -107,8 +107,10 @@ Placeholder or unverified, and marked as such on the page:
   seven, so both appear, with one line of sample copy, no brand name, a "Sample copy and
   temporary image" tag, and a stand-in photograph (a Bloom Living town-centre render and a
   Bloom Living landscape render) noted in the image manifest.
-- **The four story lines and the Life at Bloom category captions**: written for this prototype
-  from the discovery deck, not supplied by Bloom.
+- **Our philosophy definitions and closing line, and the Life at Bloom category captions**:
+  written for this prototype from the discovery deck, not supplied by Bloom. The figures in Our
+  philosophy are the RFP figures (7 businesses, 5 communities, 15 schools, 20,000+ students,
+  6,500+ units delivered, 8,500+ units managed).
 - **Arabic.** The EN/AR switch is present and explains that the prototype is English only.
 - Every destination outside the homepage (community pages, business pages, the apps, legal
   pages) says so when activated, rather than linking nowhere.

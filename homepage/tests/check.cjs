@@ -138,21 +138,34 @@ async function desktop(browser) {
   await wait(page, 700);
   check('Escape closes the mega menu and returns focus', await page.evaluate(() => !document.querySelector('[data-mega]').classList.contains('is-open') && document.activeElement.classList.contains('nav-item__toggle')));
 
-  // Brand story
-  await toTrack(page, '[data-story]', 0.02);
+  // Our philosophy
+  const activeTenet = () => page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].findIndex((t) => t.classList.contains('is-active') && getComputedStyle(t).visibility === 'visible'));
+  await toTrack(page, '[data-story]', 0.05, 2400);
   await shot(page, 'desktop-story-1');
-  check('story stage holds still on one screen', await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2));
-  check('story opens on its first chapter and word', await page.evaluate(() => document.querySelectorAll('[data-story-text]')[0].classList.contains('is-active') && Number(getComputedStyle(document.querySelectorAll('[data-story-word]')[0]).opacity) > 0.95 && Number(getComputedStyle(document.querySelectorAll('[data-story-word]')[2]).opacity) < 0.5));
-  await toTrack(page, '[data-story]', 0.55);
-  await shot(page, 'desktop-story-2');
-  check('scrolling wipes in the next photograph and changes the copy', await page.evaluate(() => {
-    const index = [...document.querySelectorAll('[data-story-text]')].findIndex((text) => text.classList.contains('is-active'));
-    return index >= 1 && getComputedStyle(document.querySelectorAll('[data-story-shot]')[index]).clipPath.startsWith('inset(0');
+  check('philosophy stage holds still on one screen', await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2));
+  check('it opens on "Curated", the word filled with a photograph', (await activeTenet()) === 0 && await page.evaluate(() => {
+    const word = document.querySelector('[data-tenet] .tenet__word');
+    const img = word.querySelector('[data-tenet-fill]');
+    return word.textContent.trim() === 'Curated' && img.complete && img.naturalWidth > 800 && getComputedStyle(word.querySelector('.tenet__ink')).mixBlendMode === 'lighten';
   }));
-  check('the frame changes shape between chapters', await page.evaluate(() => getComputedStyle(document.querySelector('[data-story-frame]')).clipPath.includes('round')));
-  await toTrack(page, '[data-story]', 0.99);
-  check('the last chapter lights the whole proposition', await page.evaluate(() => document.querySelectorAll('[data-story-text]')[3].classList.contains('is-active') && [...document.querySelectorAll('[data-story-word]')].every((word) => Number(getComputedStyle(word).opacity) > 0.95)));
-  check('only one line of story copy is visible at a time', await page.evaluate(() => [...document.querySelectorAll('[data-story-text]')].filter((text) => Number(getComputedStyle(text).opacity) > 0.05).length === 1));
+  check('each chapter defines its word and backs it with verified figures', await page.evaluate(() => {
+    const figures = [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.dataset.final || d.textContent.trim());
+    return document.querySelectorAll('.tenet__define').length === 3 && figures.join(' ') === '7 5 15 6,500+ 8,500+';
+  }), await page.evaluate(() => [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.textContent.trim())));
+  await toTrack(page, '[data-story]', 0.4, 2400);
+  await shot(page, 'desktop-story-2');
+  check('scrolling turns to "Community" and its figures count to the RFP values', (await activeTenet()) === 1 && await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')[1].querySelectorAll('[data-tenet-count]')].map((d) => d.textContent).join(' ') === '5 15'));
+  check('only one chapter is visible at a time', await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].filter((t) => getComputedStyle(t).visibility === 'visible').length === 1));
+  check('the step bar marks the chapter and fills with the scroll', await page.evaluate(() => {
+    const steps = [...document.querySelectorAll('[data-story-go]')];
+    return steps[1].classList.contains('is-active') && Number(steps[0].style.getPropertyValue('--fill')) === 1 && Number(steps[2].style.getPropertyValue('--fill')) === 0;
+  }));
+  const fitStory = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
+  check('the chapter clears the dock', fitStory.deepest <= fitStory.limit - 60, fitStory);
+  await page.click('[data-story-go="3"]');
+  await wait(page, 2600);
+  check('a step jumps to its chapter: the three words together', (await activeTenet()) === 3 && await page.evaluate(() => document.querySelectorAll('.whole__word [data-tenet-fill]').length === 3));
+  await shot(page, 'desktop-story-3');
 
   // Find a Home
   await goTo(page, '[data-search]', 260);
@@ -410,8 +423,8 @@ async function laptop(browser) {
     await wait(page, 1500);
     check(`${width}: hero headline and actions fit the first screen`, await page.evaluate(() => [...document.querySelectorAll('.hero__title, .hero__actions .btn')].every((el) => el.getBoundingClientRect().bottom <= innerHeight - 40)));
     await toTrack(page, '[data-story]', 0.3);
-    const story = await stageFits(page, '[data-story-stage]', '.story__copy *, [data-story-frame]');
-    check(`${width}: story fits one screen`, story.deepest <= story.limit, story);
+    const story = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
+    check(`${width}: philosophy chapter fits one screen and clears the dock`, story.deepest <= story.limit - 60, story);
     for (const fraction of [0.2, 0.5, 0.8]) {
       await toTrack(page, '[data-gallery-track]', fraction);
       const fit = await stageFits(page, '[data-gallery-stage]', '[data-gcard] .gcard__actions > *, [data-gcard] .gcard__media');
@@ -446,7 +459,7 @@ async function phone(browser) {
 
   await toTrack(page, '[data-story]', 0.5);
   await shot(page, 'phone-story');
-  check('story pins on a phone with the frame below the words', await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2 && document.querySelector('[data-story-frame]').getBoundingClientRect().top > document.querySelector('.story__title').getBoundingClientRect().bottom));
+  check('philosophy pins on a phone, word clear of its photograph', await page.evaluate(() => { const t = document.querySelector('[data-tenet].is-active'); const w = t.querySelector('.tenet__word, .whole__line').getBoundingClientRect(); const ph = t.querySelector('.tenet__photo').getBoundingClientRect(); return Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2 && w.right <= innerWidth && (ph.height === 0 || ph.bottom <= w.top + 1); }));
 
   await goTo(page, '#communities', 0);
   await shot(page, 'phone-communities');
@@ -523,7 +536,7 @@ async function tablet(browser) {
     await shot(page, `tablet-${id}`);
   }
   await toTrack(page, '[data-story]', 0.5);
-  check('story frame fills its half of the tablet screen', await page.evaluate(() => { const b = document.querySelector('[data-story-frame]').getBoundingClientRect(); return b.width > innerWidth * 0.8 && b.height > innerHeight * 0.35; }));
+  check('philosophy word fits the tablet screen', await page.evaluate(() => { const w = document.querySelector('[data-tenet].is-active .tenet__word, [data-tenet].is-active .whole__line').getBoundingClientRect(); return w.width > innerWidth * 0.35 && w.right <= innerWidth; }));
   check('communities swipe natively on a tablet', await page.evaluate(() => getComputedStyle(document.querySelector('[data-gallery-viewport]')).overflowX === 'auto'));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 800);
@@ -541,12 +554,12 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-hero-fade], .story__word, .story__text, .gcard, .eco-row, .lshot, .life__open-copy > *, .figure__value, .path, .closing__title')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-hero-fade], .tenet__word, .whole__word, [data-tenet-line], [data-tenet-photo], .gcard, .eco-row, .lshot, .life__open-copy > *, .figure__value, .path, .closing__title')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).map((el) => el.className));
   check('all content is visible without animation', hidden.length === 0, hidden.slice(0, 8));
-  check('no section is pinned or scroll-jacked', await page.evaluate(() => ['[data-story-stage]', '[data-gallery-stage]', '[data-eco-stage]', '[data-life-stage]', '.closing__stage'].every((sel) => getComputedStyle(document.querySelector(sel)).position !== 'sticky') && document.querySelector('[data-story]').offsetHeight < innerHeight * 1.6));
+  check('no section is pinned or scroll-jacked', await page.evaluate(() => ['[data-story-stage]', '[data-gallery-stage]', '[data-eco-stage]', '[data-life-stage]', '.closing__stage'].every((sel) => getComputedStyle(document.querySelector(sel)).position !== 'sticky')));
   await goTo(page, '[data-search]', 200);
   await page.click('[data-search-submit]');
   await wait(page, 400);
