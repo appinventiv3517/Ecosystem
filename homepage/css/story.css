@@ -33,7 +33,7 @@ html.motion .story__stage {
   top: 0;
   height: 100vh;
   height: 100svh;
-  padding-bottom: 5.5rem; /* clear of the section dock */
+  padding-bottom: 2rem;
 }
 
 /* ---------- Top row: label and chapter steps ---------- */

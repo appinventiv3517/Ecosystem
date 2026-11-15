@@ -9,7 +9,6 @@ import { initReveals } from './ui/reveal.js';
 import { initMagnetic } from './ui/pointer.js';
 import { initCursor } from './ui/cursor.js';
 import { initRoll } from './ui/roll.js';
-import { initDock } from './ui/dock.js';
 import { initHeader } from './sections/header.js';
 import { initHero } from './sections/hero.js';
 import { initStory } from './sections/story.js';
@@ -80,7 +79,6 @@ async function start() {
   initFind();
   initMagnetic();
   initCursor();
-  initDock();
 
   // Headline splitting measures text, so wait for the web fonts (briefly).
   await Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, 1800))]);

@@ -55,7 +55,7 @@ and the footer can drive the ecosystem without the modules importing one another
 | Discovery finding | In the design |
 |---|---|
 | Unclear brand positioning | A full-screen photographic hero states Curated Community Living at once; Our philosophy then explains it word by word (the evidence-led proposition the discovery asked for), each word defined and backed by verified figures |
-| Limited visibility of user journeys | Find a Home and Explore Communities are the hero's two actions and the next two sections; the header, mega menu and section dock reach every part of the page |
+| Limited visibility of user journeys | Find a Home and Explore Communities are the hero's two actions and the next two sections; the always-visible header and its mega menu reach every part of the page |
 | Fragmented property discovery | One search console with a Buy / Rent switch, community, type and bedrooms, replacing today's separate sales and leasing journeys |
 | Disconnected ecosystem storytelling | "Seven businesses. One connected world.": a numbered index of all seven, with a wire from the selected business to its photograph and an orbit that turns to it |
 | Limited community discovery | A horizontal gallery of the five communities in mixed proportions, with location, developments and a link into the search for each |
@@ -79,7 +79,7 @@ scrolling (sticky CSS stages, no scroll hijacking):
 | 08 Closing | An arch window opens to full screen behind the enquiry headline |
 
 Shared micro-interactions: rolling button labels, magnetic calls to action, arrows that pass
-through and return, numbered section labels whose rule draws across, the floating section dock.
+through and return, numbered section labels whose rule draws across.
 
 `prefers-reduced-motion: reduce` (or `?motion=off`) turns all of it off: no sticky stages, no
 reveals, and every element renders in its final state; the gallery and ecosystem still work by
@@ -154,14 +154,14 @@ PAGE_URL=file://$PWD/dist/bloom-homepage.html npm test
 
 `npm test` drives a real browser through the page in seven suites (`node tests/check.cjs <suite>`
 runs one): `desktop` (1440 x 900), `opening` (no loader; the headline is up within 1.5 s),
-`laptop` (1366 x 768 and 1280 x 800: every sticky stage fits the screen and clears the dock),
+`laptop` (1440 x 900, 1536 x 730, 1366 x 768 and 1280 x 800: Find a Home and every sticky stage fit one screen),
 `phone` (390 x 844, touch), `tablet` (834 x 1112, touch), `reducedMotion` and `clipping`. Between them they
 cover the hero layers, header states and scroll spy, the mega menu by mouse and keyboard, the
 mobile menu, every story chapter, Buy / Rent, both dropdowns, bedroom chips, quick starts and the
 demo search, the gallery by scroll, buttons, arrow keys, drag and native swipe, the ecosystem by
 scroll and click with its wire and orbit, the Life frame opening, the counting figures, the
 service pathways and pointer preview, the enquiry panel including validation, the closing screen,
-the dock, and back to top. A `clipping` suite scrolls the whole page at five sizes, down to a
+and back to top. A `clipping` suite scrolls the whole page at five sizes, down to a
 1536 x 730 laptop window, and fails if any line of text or any button is cut off by its container
 (descenders included). They also assert no horizontal overflow, no broken images, no console
 errors, touch targets of at least 40px, and that nothing stays hidden or pinned under reduced

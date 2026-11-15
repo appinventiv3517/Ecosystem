@@ -76,7 +76,7 @@ const toastText = (page) => page.evaluate(() => {
   const toast = document.querySelector('[data-toast]');
   return toast.classList.contains('is-visible') ? toast.textContent.trim() : '';
 });
-/** Everything visible inside a sticky stage ends above the dock at the foot of the screen. */
+/** How far down the screen the visible content of a sticky stage reaches. */
 const stageFits = (page, stage, inner) => page.evaluate(([s, i]) => {
   const box = document.querySelector(s).getBoundingClientRect();
   const deepest = Math.max(...[...document.querySelectorAll(i)].filter((el) => el.offsetParent && getComputedStyle(el).visibility !== 'hidden' && Number(getComputedStyle(el).opacity) > 0.05).map((el) => el.getBoundingClientRect().bottom));
@@ -116,8 +116,6 @@ async function desktop(browser) {
   await wait(page, 2400);
   check('nav link scrolls to its section', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 80));
   check('header turns light past the hero and marks the active section', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-solid') && document.querySelector('[data-nav-item="services"]').classList.contains('is-current')));
-  check('section dock appears and its arch fills with progress', await page.evaluate(() => document.querySelector('[data-dock]').classList.contains('is-visible') && parseFloat(getComputedStyle(document.querySelector('[data-dock-progress]')).getPropertyValue('--progress')) > 0.3));
-  check('dock names the current section', (await page.textContent('[data-dock-name]')).replace(/ /g, ' ') === 'Customer Services', await page.textContent('[data-dock-name]'));
   check('header floats as a capsule', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header__bar')).borderRadius === '999px'));
 
   // Mega menu
@@ -161,7 +159,7 @@ async function desktop(browser) {
     return steps[1].classList.contains('is-active') && Number(steps[0].style.getPropertyValue('--fill')) === 1 && Number(steps[2].style.getPropertyValue('--fill')) === 0;
   }));
   const fitStory = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
-  check('the chapter clears the dock', fitStory.deepest <= fitStory.limit - 60, fitStory);
+  check('the chapter fits the screen', fitStory.deepest <= fitStory.limit, fitStory);
   await page.click('[data-story-go="3"]');
   await wait(page, 2600);
   check('a step jumps to its chapter: the three words together', (await activeTenet()) === 3 && await page.evaluate(() => document.querySelectorAll('.whole__word [data-tenet-fill]').length === 3));
@@ -222,7 +220,7 @@ async function desktop(browser) {
     return p > 0.3 && p < 0.8 && document.querySelector('[data-gallery-now]').textContent === String([...document.querySelectorAll('[data-gcard]')].findIndex((c) => c.classList.contains('is-active')) + 1).padStart(2, '0');
   }));
   check('the photograph shifts inside its frame as the card travels', await page.evaluate(() => new Set([...document.querySelectorAll('[data-gcard-img]')].map((img) => img.style.getPropertyValue('--shift'))).size >= 3));
-  check('every card\'s text and buttons sit on screen, clear of the dock', await page.evaluate(() => [...document.querySelectorAll('[data-gcard].is-active .gcard__actions')].every((a) => a.getBoundingClientRect().bottom <= innerHeight - 70)));
+  check('every card\'s text and buttons sit on screen', await page.evaluate(() => [...document.querySelectorAll('[data-gcard].is-active .gcard__actions')].every((a) => a.getBoundingClientRect().bottom <= innerHeight - 8)));
   let from = await activeCommunity(page);
   const order = ['zayed-city', 'saadiyat-island', 'al-bateen-marina', 'jumeirah-village-circle', 'eastern-mangrove-corniche'];
   await page.click('[data-gallery-next]');
@@ -402,13 +400,7 @@ async function desktop(browser) {
   }));
   check('capsule hugs its contents in the middle of the screen', await page.evaluate(() => { const b = document.querySelector('.site-header__bar').getBoundingClientRect(); return b.width < innerWidth * 0.85 && Math.abs(b.left + b.width / 2 - innerWidth / 2) < 3; }));
 
-  // Section dock
-  await page.click('[data-dock-toggle]');
-  await wait(page, 600);
-  check('dock opens a list of sections', await page.evaluate(() => !document.querySelector('[data-dock-list]').hidden && document.querySelector('[data-dock-toggle]').getAttribute('aria-expanded') === 'true'));
-  await page.click('[data-dock-link="life"]');
-  await wait(page, 2600);
-  check('dock link jumps to its section', await page.evaluate(() => Math.abs(document.querySelector('#life').getBoundingClientRect().top) < 90 && document.querySelector('[data-dock-list]').hidden));
+  check('there is no floating section dock', await page.evaluate(() => !document.querySelector('[data-dock], .dock')));
 
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 900);
@@ -442,18 +434,26 @@ async function opening(browser) {
 }
 
 async function laptop(browser) {
-  for (const [width, height] of [[1366, 768], [1280, 800]]) {
-    console.log(`\nLaptop ${width} x ${height}`);
+  for (const [width, height] of [[1440, 900], [1536, 730], [1366, 768], [1280, 800]]) {
+    console.log(`\nScreen ${width} x ${height}`);
     const { context, page, problems } = await open(browser, { width, height });
     await wait(page, 1500);
     check(`${width}: hero headline and actions fit the first screen`, await page.evaluate(() => [...document.querySelectorAll('.hero__title, .hero__actions .btn')].every((el) => el.getBoundingClientRect().bottom <= innerHeight - 40)));
+    await goTo(page, '#find', 0);
+    const findFold = await page.evaluate(() => {
+      const section = document.querySelector('#find').getBoundingClientRect();
+      const deepest = Math.max(...[...document.querySelectorAll('.find__intro, .qrow, .search__submit, .search__quick > *')].map((el) => el.getBoundingClientRect().bottom));
+      return { top: Math.round(section.top), height: Math.round(section.height), deepest: Math.round(deepest), limit: innerHeight };
+    });
+    check(`${width}: Find a Home sits on one screen, quick starts included`, Math.abs(findFold.top) < 2 && findFold.height <= findFold.limit + 1 && findFold.deepest <= findFold.limit, findFold);
+    await shot(page, `laptop-${width}-find`);
     await toTrack(page, '[data-story]', 0.3);
     const story = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
-    check(`${width}: philosophy chapter fits one screen and clears the dock`, story.deepest <= story.limit - 60, story);
+    check(`${width}: philosophy chapter fits one screen`, story.deepest <= story.limit, story);
     for (const fraction of [0.2, 0.5, 0.8]) {
       await toTrack(page, '[data-gallery-track]', fraction);
       const fit = await stageFits(page, '[data-gallery-stage]', '[data-gcard] .gcard__actions > *, [data-gcard] .gcard__media');
-      check(`${width}: gallery cards clear the dock at ${fraction}`, fit.deepest <= fit.limit - 64, fit);
+      check(`${width}: gallery cards fit the screen at ${fraction}`, fit.deepest <= fit.limit - 8, fit);
     }
     await shot(page, `laptop-${width}-gallery`);
     await toTrack(page, '[data-eco-track]', 0.3);
@@ -625,7 +625,8 @@ const scanClipping = () => {
     range.selectNodeContents(node);
     for (const r of range.getClientRects()) {
       if (r.width < 2 || r.height < 2 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
-      for (let a = el; a && a !== document.body; a = a.parentElement) {
+      // Up to and including <body>, which clips anything pushed past the right edge of the page.
+      for (let a = el; a && a !== document.documentElement; a = a.parentElement) {
         const cs = getComputedStyle(a);
         if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue;
         const b = a.getBoundingClientRect();
@@ -641,7 +642,7 @@ const scanClipping = () => {
 };
 
 async function clipping(browser) {
-  for (const [width, height, touch] of [[1440, 900], [1536, 730], [1280, 800], [834, 1112, true], [390, 844, true]]) {
+  for (const [width, height, touch] of [[1440, 900], [1536, 730], [1366, 768], [1280, 800], [834, 1112, true], [390, 844, true]]) {
     console.log(`\nClipping ${width} x ${height}`);
     const { context, page } = await open(browser, { width, height, touch });
     await wait(page, 2200);
