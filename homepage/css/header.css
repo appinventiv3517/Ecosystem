@@ -1,96 +1,96 @@
-/* 01 · Navigation & header: transparent over the hero, a compact cream bar once the page scrolls. */
+/* 01 · Navigation & header: an editorial bar across the full width of the page.
+   Over the hero it is transparent with cream type and a soft shade behind it; past the hero it
+   turns to cream frosted glass with ink type. Only colours change: the bar never moves, hides or
+   changes size. One red rule slides along its bottom edge to the item in focus, and a hairline of
+   brick red grows along the top edge of the screen as the page is read (js/sections/header.js). */
 
 .site-header {
   --hd-fg: var(--cream);
   --hd-fg-inverse: var(--ink);
+  --hd-rule: var(--cream);
+  --hd-num: #F2C9BE;
   position: fixed;
   inset: 0 0 auto 0;
   padding-top: env(safe-area-inset-top, 0px);
   z-index: var(--z-header);
   color: var(--hd-fg);
-  transition: color var(--dur) var(--ease-out);
+  transition: color 500ms var(--ease-out);
 }
 
-.site-header::before {
+/* The two surfaces cross-fade: a shade over the hero, cream glass everywhere else. */
+.site-header::before,
+.site-header::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(248, 246, 234, 0.92);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
-  border-bottom: 1px solid var(--line);
-  opacity: 0;
-  transition: opacity var(--dur) var(--ease-out);
+  pointer-events: none;
+  transition: opacity 600ms var(--ease-out);
 }
 
-.site-header.is-solid {
-  --hd-fg: var(--ink);
-  --hd-fg-inverse: var(--cream);
-}
-
-/* The full-width bar is gone: once scrolled, the bar itself floats as a capsule. */
 .site-header::before {
-  display: none;
+  background: rgba(248, 246, 234, 0.84);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: 0 1px 0 rgba(29, 26, 23, 0.1);
+  opacity: 0;
 }
 
-.site-header {
-  transition: color var(--dur) var(--ease-out);
+.site-header::after {
+  bottom: -2.5rem;
+  background: linear-gradient(180deg, rgba(14, 13, 12, 0.5) 0%, rgba(14, 13, 12, 0.18) 60%, rgba(14, 13, 12, 0) 100%);
+  opacity: 1;
 }
 
+.site-header.is-solid,
 .site-header.is-menu-open {
   --hd-fg: var(--ink);
   --hd-fg-inverse: var(--cream);
+  --hd-rule: var(--red);
+  --hd-num: var(--red);
 }
 
+.site-header.is-solid::before,
 .site-header.is-menu-open::before {
+  opacity: 1;
+}
+
+.site-header.is-solid::after,
+.site-header.is-menu-open::after {
   opacity: 0;
 }
 
 .site-header__bar {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: clamp(1.5rem, 3vw, 3.5rem);
-  height: var(--header-h);
-  border: 1px solid transparent;
-  /* The capsule never changes size or place; only its surface cross-fades. */
-  transition: background-color 600ms cubic-bezier(0.25, 0.1, 0.25, 1), border-color 600ms cubic-bezier(0.25, 0.1, 0.25, 1),
-    box-shadow 600ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  height: 4.75rem;
 }
 
-/* One shape at every scroll position: a glass capsule floating near the top. Over the hero it
-   is dark glass with cream type; past the hero it turns to light glass. Nothing moves. */
-.site-header .site-header__bar {
-  height: 3.75rem;
-  max-width: min(calc(100% - 2 * max(var(--gutter), 0.75rem)), 82rem);
-  margin-top: 0.75rem;
-  padding-left: 1.5rem;
-  padding-right: 0.4375rem;
-  border-radius: var(--radius-pill);
-  border-color: rgba(248, 246, 234, 0.16);
-  background: rgba(20, 18, 16, 0.32);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  backdrop-filter: blur(20px) saturate(1.4);
-  box-shadow: 0 14px 44px -24px rgba(0, 0, 0, 0.5);
+/* Reading progress, a hairline along the top edge of the screen (the rule under the
+   destinations keeps the bottom edge to itself). */
+.site-header__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--red);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  pointer-events: none;
 }
 
-.site-header.is-solid .site-header__bar,
-.site-header.is-menu-open .site-header__bar {
-  border-color: rgba(221, 211, 189, 0.9);
-  background: rgba(255, 253, 247, 0.82);
-  box-shadow: 0 14px 44px -18px rgba(29, 26, 23, 0.3);
-}
+/* ---------- Brand: the supplied cream and red wordmarks, cross-faded ---------- */
 
-/* Brand: the supplied cream and red wordmarks, cross-faded. */
 .brand {
   position: relative;
   display: block;
+  justify-self: start;
   -webkit-tap-highlight-color: transparent;
-  flex: none;
-  /* The box is taller than the artwork so the wordmark is comfortable to tap;
-     object-fit keeps the mark itself at the width set here. */
-  width: 6.25rem;
+  width: 6.75rem;
   height: 2.75rem;
 }
 
@@ -101,7 +101,7 @@
   height: 100%;
   object-fit: contain;
   object-position: left center;
-  transition: opacity var(--dur) var(--ease-out);
+  transition: opacity 500ms var(--ease-out);
   -webkit-mask-image: linear-gradient(100deg, #000 42%, rgba(0, 0, 0, 0.35) 50%, #000 58%);
   mask-image: linear-gradient(100deg, #000 42%, rgba(0, 0, 0, 0.35) 50%, #000 58%);
   -webkit-mask-size: 320% 100%;
@@ -124,7 +124,7 @@
   opacity: 0;
 }
 
-/* Subtle logo interaction: a soft sheen passes across the wordmark. */
+/* A soft sheen passes across the wordmark on hover. */
 @media (hover: hover) {
   .brand:hover .brand__mark {
     animation: brand-sheen 1100ms var(--ease-out);
@@ -142,160 +142,173 @@
   }
 }
 
-/* Primary navigation */
+/* ---------- Primary navigation: numbered destinations ---------- */
+
 .primary-nav {
   position: relative;
-  margin-inline: auto;
-  padding: 0.3125rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-pill);
-  background: rgba(248, 246, 234, 0.08);
-  transition: background-color 600ms cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.site-header.is-solid .primary-nav,
-.site-header.is-menu-open .primary-nav {
-  border-color: transparent;
-  background: rgba(233, 225, 207, 0.55);
+  align-self: stretch;
+  display: flex;
 }
 
 .primary-nav__list {
-  position: relative;
-  z-index: 1;
   display: flex;
-  align-items: center;
-  gap: 0.125rem;
+  align-items: stretch;
+  gap: clamp(1.25rem, 2.6vw, 2.75rem);
+  counter-reset: nav;
 }
 
 .nav-item {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0 0.3125rem 0 1.25rem;
-  border-radius: var(--radius-pill);
+  gap: 0.25rem;
+}
+
+/* 01, 02, 03, 04 set small and italic ahead of each destination. */
+.nav-item::before {
+  counter-increment: nav;
+  content: counter(nav, decimal-leading-zero);
+  align-self: center;
+  margin-right: 0.45rem;
+  margin-top: -0.55em;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--hd-num);
+  transition: color 500ms var(--ease-out);
 }
 
 .nav-item__link {
   position: relative;
-  padding-block: 0.625rem;
+  padding-block: 0.75rem;
   font-size: 0.9375rem;
   font-weight: 500;
   letter-spacing: 0.005em;
   white-space: nowrap;
-  opacity: 0.86;
-  transition: opacity var(--dur) ease;
+  opacity: 0.8;
+  transition: opacity var(--dur) ease, color var(--dur) ease;
 }
 
 .nav-item.is-current .nav-item__link,
 .nav-item.is-open .nav-item__link,
-.nav-item__link:hover,
+.nav-item.is-lit .nav-item__link,
 .nav-item__link:focus-visible {
   opacity: 1;
+}
+
+.site-header.is-solid .nav-item.is-lit .nav-item__link,
+.site-header.is-solid .nav-item.is-open .nav-item__link {
+  color: var(--red);
 }
 
 .nav-item__toggle {
   display: grid;
   place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  opacity: 0.7;
-  transition: opacity var(--dur) ease, background-color var(--dur) ease;
+  width: 1.5rem;
+  height: 2.75rem;
+  opacity: 0.6;
+  transition: opacity var(--dur) ease;
 }
 
 .nav-item__toggle .icon {
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.8125rem;
+  height: 0.8125rem;
   transition: transform 420ms var(--ease-out);
 }
 
 .nav-item__toggle:hover,
 .nav-item.is-open .nav-item__toggle {
   opacity: 1;
-  background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
 .nav-item.is-open .nav-item__toggle .icon {
   transform: rotate(180deg);
 }
 
-/* One indicator slides between items instead of each item owning an underline. */
+/* One rule slides along the bottom edge of the bar to the item in focus. */
 .primary-nav__indicator {
   position: absolute;
-  top: 0.3125rem;
-  bottom: 0.3125rem;
   left: 0;
+  bottom: 0;
   width: var(--w, 0px);
-  border-radius: var(--radius-pill);
-  background: var(--ivory);
-  box-shadow: 0 4px 14px -6px rgba(29, 26, 23, 0.3);
+  height: 2px;
+  background: var(--hd-rule);
   transform: translateX(var(--x, 0px));
   opacity: var(--o, 0);
-  transition: transform 460ms cubic-bezier(0.25, 1, 0.5, 1), width 460ms cubic-bezier(0.25, 1, 0.5, 1), opacity var(--dur) ease, background-color var(--dur) ease;
+  transition: transform 520ms cubic-bezier(0.25, 1, 0.5, 1), width 520ms cubic-bezier(0.25, 1, 0.5, 1), opacity var(--dur) ease, background-color 500ms ease;
   pointer-events: none;
 }
 
-.site-header:not(.is-solid):not(.is-menu-open) .primary-nav__indicator {
-  background: rgba(248, 246, 234, 0.2);
-  box-shadow: none;
-}
+/* ---------- Tools: language and Enquire ---------- */
 
-/* The item under the highlight takes the darker text on the light pill. */
-.site-header.is-solid .nav-item.is-lit {
-  color: var(--red);
-}
-
-/* Tools */
 .site-header__tools {
+  justify-self: end;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: none;
+  gap: clamp(1rem, 1.8vw, 1.75rem);
 }
 
-.lang {
-  position: relative;
+/* In the bar the language switch is two words, the current one underlined. */
+.site-header__tools .lang {
   display: inline-flex;
-  padding: 3px;
-  border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
-  border-radius: var(--radius-pill);
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0;
+  border: 0;
 }
 
-.lang__option {
+.site-header__tools .lang__pill {
+  display: none;
+}
+
+.site-header__tools .lang__option {
   position: relative;
-  z-index: 1;
-  width: 2.375rem;
-  height: 1.75rem;
+  width: auto;
+  height: 2.75rem;
+  padding-inline: 0.35rem;
+  color: inherit;
+  opacity: 0.6;
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  border-radius: var(--radius-pill);
-  transition: color var(--dur) ease;
+  letter-spacing: 0.1em;
+  transition: opacity var(--dur) ease;
 }
 
-.lang__option.is-active {
-  color: var(--hd-fg-inverse, var(--cream));
+.site-header__tools .lang__option + .lang__option {
+  margin-left: 0.6rem;
 }
 
-.lang__pill {
+.site-header__tools .lang__option + .lang__option::before {
+  content: "/";
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 2.375rem;
-  height: 1.75rem;
-  border-radius: var(--radius-pill);
+  left: -0.5rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.site-header__tools .lang__option::after {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  right: 0.35rem;
+  bottom: 0.65rem;
+  height: 1.5px;
   background: currentColor;
-  transition: transform 520ms var(--ease-out);
+  transform: scaleX(0);
+  transition: transform 420ms var(--ease-out);
 }
 
-.lang.is-nudged .lang__pill {
-  animation: lang-nudge 520ms var(--ease-out);
+.site-header__tools .lang__option.is-active {
+  color: inherit;
+  opacity: 1;
 }
 
-@keyframes lang-nudge {
-  40% {
-    transform: translateX(0.9rem);
-  }
+.site-header__tools .lang__option.is-active::after {
+  transform: none;
+}
+
+.site-header__tools .lang__option:hover {
+  opacity: 1;
 }
 
 .site-header__enquire {
@@ -307,6 +320,8 @@
   --btn-hover-fg: var(--ink);
   --btn-hover-border: var(--cream);
 }
+
+/* ---------- Menu button (smaller screens) ---------- */
 
 .menu-toggle {
   display: none;
@@ -356,7 +371,7 @@
 
 .mega {
   position: absolute;
-  inset: calc(100% + 0.625rem) 0 auto 0;
+  inset: 100% 0 auto 0;
   visibility: hidden;
   pointer-events: none;
 }
@@ -383,12 +398,11 @@
 
 .mega__sheet {
   position: relative;
-  width: min(calc(100% - 2 * max(var(--gutter), 0.75rem)), 82rem);
-  margin-inline: auto;
+  width: 100%;
   background: var(--cream);
   color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-l);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0 0 var(--radius-l) var(--radius-l);
   box-shadow: var(--shadow-lift);
   overflow: hidden;
   transform-origin: 50% 0;
@@ -640,7 +654,8 @@ html:not(.motion) .mobile-menu__panel {
   }
 
   .site-header__bar {
-    justify-content: space-between;
+    grid-template-columns: minmax(0, 1fr) auto;
+    height: 4.5rem;
   }
 
   .menu-toggle {
@@ -676,76 +691,5 @@ html:not(.motion) .mobile-menu__panel {
 
   .site-header__enquire .btn__dot {
     display: none;
-  }
-}
-
-/* ---------- Floating capsule: sheen, current-section dot, squeezed state ---------- */
-
-/* A point of red light keeps travelling round the capsule's edge. */
-@property --nav-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.site-header__bar::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  padding: 1.5px;
-  border-radius: inherit;
-  background: conic-gradient(from var(--nav-angle), transparent 0deg 250deg, rgba(150, 43, 35, 0.7) 320deg, rgba(224, 121, 108, 0.95) 342deg, transparent 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 600ms ease;
-  animation: nav-sheen 7s linear infinite;
-}
-
-.site-header.is-solid .site-header__bar::before {
-  opacity: 1;
-}
-
-@keyframes nav-sheen {
-  to {
-    --nav-angle: 360deg;
-  }
-}
-
-/* The section you are in gets a small dot ahead of its label. */
-.nav-item__link::before {
-  content: "";
-  position: absolute;
-  left: -0.75rem;
-  top: 50%;
-  width: 5px;
-  height: 5px;
-  margin-top: -2.5px;
-  border-radius: 50%;
-  background: var(--red);
-  transform: scale(0);
-  transition: transform 500ms cubic-bezier(0.34, 1.8, 0.64, 1);
-}
-
-.site-header:not(.is-solid):not(.is-menu-open) .nav-item__link::before {
-  background: var(--cream);
-}
-
-.nav-item.is-current .nav-item__link::before {
-  transform: scale(1);
-}
-
-@media (min-width: 1100px) {
-  /* The capsule hugs its contents and sits in the middle of the screen. */
-  .site-header .site-header__bar {
-    width: fit-content;
-    max-width: calc(100% - 2rem);
-    gap: 1.25rem;
-  }
-
-  .site-header .primary-nav {
-    margin-inline: 0;
   }
 }

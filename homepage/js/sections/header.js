@@ -15,16 +15,20 @@ export function initHeader() {
 
   const hero = $('[data-hero]');
   const bar = $('.site-header__bar', header);
+  const progress = $('[data-header-progress]', header);
 
-  /** Past the hero the capsule turns from dark glass to light glass. Only colours change. */
+  /** Past the hero the bar turns from a shade over the photograph to cream glass. Only colours change. */
   function setSolid(on) {
     header.classList.toggle('is-solid', on);
   }
 
-  // The header always stays on screen; past the hero it becomes the floating capsule.
+  // The header always stays on screen, at the same size; past the hero its surface turns solid.
   const onScroll = rafThrottle(() => {
     const y = window.scrollY;
     header.classList.toggle('is-compact', y > 80);
+    // Reading progress: a transform only, so it never touches layout.
+    const range = document.documentElement.scrollHeight - window.innerHeight;
+    if (progress) progress.style.setProperty('--p', range > 0 ? Math.min(1, y / range).toFixed(4) : 0);
     setSolid(!hero || y > hero.offsetHeight - 90);
   });
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -44,7 +48,7 @@ export function initHeader() {
       items.forEach((other) => other.classList.remove('is-lit'));
       return;
     }
-    // The pill slides and stretches behind the whole item, link and chevron together.
+    // The rule slides and stretches under the whole item: number, link and chevron.
     const navBox = nav.getBoundingClientRect();
     const box = item.getBoundingClientRect();
     indicator.style.setProperty('--x', `${box.left - navBox.left - nav.clientLeft}px`);

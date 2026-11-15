@@ -116,7 +116,16 @@ async function desktop(browser) {
   await wait(page, 2400);
   check('nav link scrolls to its section', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 80));
   check('header turns light past the hero and marks the active section', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-solid') && document.querySelector('[data-nav-item="services"]').classList.contains('is-current')));
-  check('header floats as a capsule', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header__bar')).borderRadius === '999px'));
+  check('the nav is a full-width bar with a reading-progress hairline', await page.evaluate(() => {
+    const bar = document.querySelector('.site-header').getBoundingClientRect();
+    const p = parseFloat(getComputedStyle(document.querySelector('[data-header-progress]')).getPropertyValue('--p'));
+    return bar.left === 0 && Math.abs(bar.width - document.documentElement.clientWidth) < 1 && p > 0.3 && p < 1;
+  }));
+  check('a red rule sits under the destination in view', await page.evaluate(() => {
+    const rule = document.querySelector('[data-nav-indicator]').getBoundingClientRect();
+    const item = document.querySelector('[data-nav-item="services"]').getBoundingClientRect();
+    return Math.abs(rule.left - item.left) < 2 && Math.abs(rule.width - item.width) < 2 && getComputedStyle(document.querySelector('[data-nav-indicator]')).backgroundColor === 'rgb(150, 43, 35)';
+  }));
 
   // Mega menu
   await page.hover('[data-nav-item="communities"] .nav-item__link');
@@ -398,7 +407,13 @@ async function desktop(browser) {
     const bar = document.querySelector('.site-header__bar').getBoundingClientRect();
     return bar.top >= 0 && bar.bottom > 0 && getComputedStyle(document.querySelector('.primary-nav')).display !== 'none';
   }));
-  check('capsule hugs its contents in the middle of the screen', await page.evaluate(() => { const b = document.querySelector('.site-header__bar').getBoundingClientRect(); return b.width < innerWidth * 0.85 && Math.abs(b.left + b.width / 2 - innerWidth / 2) < 3; }));
+  check('the bar keeps exactly the same size and place when scrolled', await page.evaluate(async () => {
+    const box = () => JSON.stringify(document.querySelector('.site-header__bar').getBoundingClientRect());
+    const scrolled = box();
+    window.scrollTo(0, 0);
+    await new Promise((r) => setTimeout(r, 700));
+    return box() === scrolled && !document.querySelector('[data-header]').classList.contains('is-solid');
+  }));
 
   check('there is no floating section dock', await page.evaluate(() => !document.querySelector('[data-dock], .dock')));
 
