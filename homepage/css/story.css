@@ -217,6 +217,13 @@
   }
 }
 
+/* Touch screens: a full-height tap target for the link as well as the card. */
+@media (pointer: coarse) {
+  .pcard__link {
+    min-height: 2.75rem;
+  }
+}
+
 /* ---------- Short laptop screens: everything still fits one screen ---------- */
 
 @media (min-width: 1001px) and (max-height: 820px) {
