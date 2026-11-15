@@ -1,8 +1,9 @@
 /* 01 · Navigation & header: an editorial bar across the full width of the page.
-   Over the hero it is transparent with cream type and a soft shade behind it; past the hero it
-   turns to cream frosted glass with ink type. Only colours change: the bar never moves, hides or
-   changes size. One red rule slides along its bottom edge to the item in focus, and a hairline of
-   brick red grows along the top edge of the screen as the page is read (js/sections/header.js). */
+   Over the hero it is transparent with cream type and a soft shade behind it; past the hero a
+   floating capsule of cream glass settles in behind it. The wordmark, links and buttons never
+   move, hide or change size. A red rule marks the section being read (never on the hero), and a
+   hairline of brick red grows along the top edge of the screen as the page is read
+   (js/sections/header.js). */
 
 .site-header {
   --hd-fg: var(--cream);
@@ -17,29 +18,15 @@
   transition: color 500ms var(--ease-out);
 }
 
-/* The two surfaces cross-fade: a shade over the hero, cream glass everywhere else. */
-.site-header::before,
+/* Over the hero: a soft shade behind the bar, the full width of the page. */
 .site-header::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 0 -2.5rem 0;
   z-index: -1;
+  background: linear-gradient(180deg, rgba(14, 13, 12, 0.5) 0%, rgba(14, 13, 12, 0.18) 60%, rgba(14, 13, 12, 0) 100%);
   pointer-events: none;
   transition: opacity 600ms var(--ease-out);
-}
-
-.site-header::before {
-  background: rgba(248, 246, 234, 0.84);
-  -webkit-backdrop-filter: blur(18px) saturate(1.3);
-  backdrop-filter: blur(18px) saturate(1.3);
-  box-shadow: 0 1px 0 rgba(29, 26, 23, 0.1);
-  opacity: 0;
-}
-
-.site-header::after {
-  bottom: -2.5rem;
-  background: linear-gradient(180deg, rgba(14, 13, 12, 0.5) 0%, rgba(14, 13, 12, 0.18) 60%, rgba(14, 13, 12, 0) 100%);
-  opacity: 1;
 }
 
 .site-header.is-solid,
@@ -48,11 +35,6 @@
   --hd-fg-inverse: var(--cream);
   --hd-rule: var(--red);
   --hd-num: var(--red);
-}
-
-.site-header.is-solid::before,
-.site-header.is-menu-open::before {
-  opacity: 1;
 }
 
 .site-header.is-solid::after,
@@ -67,6 +49,37 @@
   align-items: center;
   gap: clamp(1rem, 2.5vw, 2.5rem);
   height: 4.75rem;
+  /* The floating capsule's inset from the content edge, left and right. */
+  --float-side: 1.5rem;
+}
+
+/* Past the hero the bar floats: a capsule of cream glass settles in behind it, held off the edges
+   of the screen. Only this surface animates (opacity and a small transform); the wordmark, links
+   and buttons never move. */
+.site-header__bar::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0.625rem;
+  bottom: 0.625rem;
+  left: calc(max(var(--gutter), env(safe-area-inset-left, 0px)) - var(--float-side));
+  right: calc(max(var(--gutter), env(safe-area-inset-right, 0px)) - var(--float-side));
+  border: 1px solid rgba(221, 211, 189, 0.9);
+  border-radius: var(--radius-pill);
+  background: rgba(252, 250, 242, 0.84);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: 0 18px 48px -22px rgba(29, 26, 23, 0.32);
+  opacity: 0;
+  transform: translateY(-0.5rem) scale(0.985);
+  transition: opacity 500ms var(--ease-out), transform 800ms var(--ease-out);
+  pointer-events: none;
+}
+
+.site-header.is-solid .site-header__bar::before,
+.site-header.is-menu-open .site-header__bar::before {
+  opacity: 1;
+  transform: none;
 }
 
 /* Reading progress, a hairline along the top edge of the screen (the rule under the
@@ -229,9 +242,10 @@
 .primary-nav__indicator {
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: 1rem;
   width: var(--w, 0px);
   height: 2px;
+  border-radius: 2px;
   background: var(--hd-rule);
   transform: translateX(var(--x, 0px));
   opacity: var(--o, 0);
@@ -371,7 +385,7 @@
 
 .mega {
   position: absolute;
-  inset: 100% 0 auto 0;
+  inset: calc(100% - 0.25rem) 0 auto 0;
   visibility: hidden;
   pointer-events: none;
 }
@@ -398,11 +412,12 @@
 
 .mega__sheet {
   position: relative;
-  width: 100%;
+  width: min(calc(100% - 2 * max(calc(var(--gutter) - 1.5rem), 0.5rem)), calc(105rem + 3rem));
+  margin-inline: auto;
   background: var(--cream);
   color: var(--ink);
-  border-bottom: 1px solid var(--line);
-  border-radius: 0 0 var(--radius-l) var(--radius-l);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
   box-shadow: var(--shadow-lift);
   overflow: hidden;
   transform-origin: 50% 0;
@@ -656,6 +671,12 @@ html:not(.motion) .mobile-menu__panel {
   .site-header__bar {
     grid-template-columns: minmax(0, 1fr) auto;
     height: 4.5rem;
+    --float-side: 0.75rem;
+  }
+
+  .site-header__bar::before {
+    top: 0.5rem;
+    bottom: 0.5rem;
   }
 
   .menu-toggle {

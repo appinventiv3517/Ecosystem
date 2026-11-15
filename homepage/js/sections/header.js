@@ -45,7 +45,6 @@ export function initHeader() {
   function moveIndicator(item) {
     if (!item) {
       indicator.style.setProperty('--o', 0);
-      items.forEach((other) => other.classList.remove('is-lit'));
       return;
     }
     // The rule slides and stretches under the whole item: number, link and chevron.
@@ -54,18 +53,15 @@ export function initHeader() {
     indicator.style.setProperty('--x', `${box.left - navBox.left - nav.clientLeft}px`);
     indicator.style.setProperty('--w', `${box.width}px`);
     indicator.style.setProperty('--o', 1);
-    items.forEach((other) => other.classList.toggle('is-lit', other === item));
   }
 
+  // The rule only ever marks the section being read (none on the hero). Pointing at an item
+  // brightens it instead, so nothing is left highlighted once the pointer moves on.
   items.forEach((item) => {
-    item.addEventListener('pointerenter', () => moveIndicator(item));
-    item.addEventListener('focusin', () => moveIndicator(item));
+    item.addEventListener('pointerenter', () => item.classList.add('is-lit'));
+    item.addEventListener('pointerleave', () => item.classList.remove('is-lit'));
   });
-  nav.addEventListener('pointerleave', () => moveIndicator(openItem() || currentItem));
-  nav.addEventListener('focusout', (event) => {
-    if (!nav.contains(event.relatedTarget)) moveIndicator(openItem() || currentItem);
-  });
-  window.addEventListener('resize', rafThrottle(() => moveIndicator(openItem() || currentItem)));
+  window.addEventListener('resize', rafThrottle(() => moveIndicator(currentItem)));
 
   // The section crossing the middle of the viewport owns the active state.
   const spyTargets = new Map();
@@ -89,7 +85,7 @@ export function initHeader() {
       if (active) link.setAttribute('aria-current', 'true');
       else link.removeAttribute('aria-current');
     });
-    if (!nav.matches(':hover') && !state.megaOpen) moveIndicator(currentItem);
+    moveIndicator(currentItem);
   }, { rootMargin: '-45% 0px -54% 0px' });
   spyTargets.forEach((_, section) => spy.observe(section));
 
@@ -125,7 +121,6 @@ export function initHeader() {
     const panel = panels.find((item) => item.dataset.megaPanel === key);
     mega.classList.add('is-open');
     setExpanded();
-    moveIndicator(openItem());
 
     if (motionOK) {
       // macOS-style: the panel fades in while settling a few pixels, its content arrives with it,
@@ -152,7 +147,6 @@ export function initHeader() {
     openKey = null;
     state.megaOpen = false;
     setExpanded();
-    moveIndicator(nav.matches(':hover') ? null : currentItem);
     const finish = () => {
       if (openKey) return;
       mega.classList.remove('is-open');

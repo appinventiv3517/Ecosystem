@@ -78,6 +78,11 @@ scrolling (sticky CSS stages, no scroll hijacking):
 | 07 Customer Services | Rows slide in; hover fills a row with cream and a screenshot follows the pointer |
 | 08 Closing | An arch window opens to full screen behind the enquiry headline |
 
+The navigation bar never moves or changes size. Over the hero it is cream type on a soft shade with
+nothing marked; past the hero a capsule of cream glass settles in behind it (only that surface
+animates), a red rule marks the section being read, and a brick-red hairline along the top edge
+shows reading progress.
+
 Shared micro-interactions: rolling button labels, magnetic calls to action, arrows that pass
 through and return, numbered section labels whose rule draws across.
 
