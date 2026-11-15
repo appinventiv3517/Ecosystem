@@ -125,9 +125,18 @@
   font-variant-numeric: lining-nums proportional-nums;
 }
 
+/* The "+" is set upright in the light weight of DM Sans and raised to the top of the figure:
+   Playfair's italic plus slants until it reads as a cross. */
 .figure__suffix {
-  margin-left: 0.04em;
-  font-style: italic;
+  align-self: flex-start;
+  margin-top: 0.12em;
+  margin-left: 0.06em;
+  font-family: var(--font-body);
+  font-size: 0.56em;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 1;
   color: var(--red);
 }
 
