@@ -29,6 +29,10 @@ function buildOdometer(value) {
     }
     const digit = document.createElement('span');
     digit.className = 'odo__digit';
+    // The window holds an invisible copy of the digit it settles on, so the browser sizes it to
+    // that digit's natural width. Nothing is measured in script, so a page that starts hidden
+    // (or before layout) cannot end up with zero-width windows.
+    digit.dataset.d = char;
     const strip = document.createElement('span');
     strip.className = 'odo__strip';
     // Two runs of 0-9, so every digit spins at least once round before it settles.
@@ -42,16 +46,6 @@ function buildOdometer(value) {
     strips.push({ strip, stop: 10 + Number(char) });
   });
   value.replaceChildren(odo);
-  // Each window is as wide as the digit it settles on, so the number keeps its natural spacing.
-  const probe = document.createElement('span');
-  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
-  value.append(probe);
-  const size = parseFloat(getComputedStyle(value).fontSize) || 16;
-  strips.forEach(({ strip, stop }) => {
-    probe.textContent = String(stop % 10);
-    strip.parentElement.style.width = `${(probe.getBoundingClientRect().width / size).toFixed(3)}em`;
-  });
-  probe.remove();
   if (suffix) {
     const tail = document.createElement('span');
     tail.className = 'figure__suffix';

@@ -138,6 +138,7 @@
 
 /* Each digit is a window onto a strip of 0-9 that rolls to the right number. */
 .odo__digit {
+  position: relative;
   display: inline-block;
   height: 1em;
   overflow: hidden;
@@ -145,7 +146,17 @@
   text-align: center;
 }
 
+/* The settled digit, invisible: it gives the window its natural width. */
+.odo__digit::before {
+  content: attr(data-d);
+  visibility: hidden;
+}
+
 .odo__strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   will-change: transform;

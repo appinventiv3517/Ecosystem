@@ -338,6 +338,7 @@ async function desktop(browser) {
   await wait(page, 3400);
   const figures = await shownFigures();
   check('every figure rolls to its RFP value, and says so to screen readers', figures.map((f) => f.shown).join(' ') === '25,000+ 6,500+ 1,000+ 15 20,000+ 851 8,500+' && figures.every((f) => f.label === f.shown), figures);
+  check('every digit window is sized by the browser (never measured in script), so none can collapse to zero width', await page.evaluate(() => [...document.querySelectorAll('.impact .odo__digit')].every((digit) => !digit.style.width && digit.getBoundingClientRect().width > 5)));
   await page.hover('[data-ledger-cell] >> nth=4');
   await wait(page, 900);
   check('hovering a ledger cell fills it with brick red and brings its photo into colour', await page.evaluate(() => {
