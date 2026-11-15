@@ -130,6 +130,287 @@ async function desktop(browser) {
     const surface = getComputedStyle(document.querySelector('.site-header__bar'), '::before');
     return Number(surface.opacity) > 0.99 && parseFloat(surface.borderTopLeftRadius) > 20 && parseFloat(surface.top) > 4;
   }));
+
+  // Mega menu
+  await page.hover('[data-nav-item="communities"] .nav-item__link');
+  await wait(page, 900);
+  check('mega menu opens on hover', await page.evaluate(() => document.querySelector('[data-mega]').classList.contains('is-open') && !document.querySelector('#mega-communities').hidden));
+  await shot(page, 'desktop-mega');
+  await page.click('#mega-communities a[data-community-jump="al-bateen-marina"]');
+  await wait(page, 3200);
+  check('mega link brings that community to the centre of the gallery', (await activeCommunity(page)) === 'al-bateen-marina', await activeCommunity(page));
+  check('mega menu closes after navigating', await page.evaluate(() => !document.querySelector('[data-mega]').classList.contains('is-open')));
+  await page.mouse.move(700, 600);
+  await page.focus('[data-nav-item="about"] .nav-item__toggle');
+  await page.keyboard.press('Enter');
+  await wait(page, 700);
+  check('mega menu opens from the keyboard and moves focus inside', await page.evaluate(() => !document.querySelector('#mega-about').hidden && document.querySelector('#mega-about').contains(document.activeElement)));
+  await page.keyboard.press('Escape');
+  await wait(page, 700);
+  check('Escape closes the mega menu and returns focus', await page.evaluate(() => !document.querySelector('[data-mega]').classList.contains('is-open') && document.activeElement.classList.contains('nav-item__toggle')));
+
+  // Our philosophy
+  const activeTenet = () => page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].findIndex((t) => t.classList.contains('is-active') && getComputedStyle(t).visibility === 'visible'));
+  await toTrack(page, '[data-story]', 0.05, 2400);
+  await shot(page, 'desktop-story-1');
+  check('philosophy stage holds still on one screen', await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2));
+  check('it opens on "Curated", the word filled with a photograph', (await activeTenet()) === 0 && await page.evaluate(() => {
+    const word = document.querySelector('[data-tenet] .tenet__word');
+    const img = word.querySelector('[data-tenet-fill]');
+    return word.textContent.trim() === 'Curated' && img.complete && img.naturalWidth > 800 && getComputedStyle(word.querySelector('.tenet__ink')).mixBlendMode === 'lighten';
+  }));
+  check('each chapter defines its word and backs it with verified figures', await page.evaluate(() => {
+    const figures = [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.dataset.final || d.textContent.trim());
+    return document.querySelectorAll('.tenet__define').length === 3 && figures.join(' ') === '7 5 15 6,500+ 8,500+';
+  }), await page.evaluate(() => [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.textContent.trim())));
+  await toTrack(page, '[data-story]', 0.4, 2400);
+  await shot(page, 'desktop-story-2');
+  check('scrolling turns to "Community" and its figures count to the RFP values', (await activeTenet()) === 1 && await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')[1].querySelectorAll('[data-tenet-count]')].map((d) => d.textContent).join(' ') === '5 15'));
+  check('only one chapter is visible at a time', await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].filter((t) => getComputedStyle(t).visibility === 'visible').length === 1));
+  check('the step bar marks the chapter and fills with the scroll', await page.evaluate(() => {
+    const steps = [...document.querySelectorAll('[data-story-go]')];
+    return steps[1].classList.contains('is-active') && Number(steps[0].style.getPropertyValue('--fill')) === 1 && Number(steps[2].style.getPropertyValue('--fill')) === 0;
+  }));
+  const fitStory = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
+  check('the chapter fits the screen', fitStory.deepest <= fitStory.limit, fitStory);
+  await page.click('[data-story-go="3"]');
+  await wait(page, 2600);
+  check('a step jumps to its chapter: the three words together', (await activeTenet()) === 3 && await page.evaluate(() => document.querySelectorAll('.whole__word [data-tenet-fill]').length === 3));
+  await shot(page, 'desktop-story-3');
+
+  // Find a Home
+  await goTo(page, '[data-search]', 260);
+  await page.click('.mode__option:has(input[value="rent"])');
+  await wait(page, 1300);
+  check('Find a Home is a photo beside four numbered questions', await page.evaluate(() => {
+    const photo = document.querySelector('[data-find-figure]').getBoundingClientRect();
+    const rows = [...document.querySelectorAll('.qrow')];
+    return rows.length === 4 && rows.map((r) => r.querySelector('.qrow__num').textContent).join(' ') === '01 02 03 04' && photo.left <= 1 && photo.height >= innerHeight - 1 && rows.every((r) => r.getBoundingClientRect().left > photo.right);
+  }));
+  check('Buy / Rent switch updates the search', await page.evaluate(() => document.querySelector('[data-search-label]').textContent === 'Search homes to rent' && !document.querySelector('[data-mode-copy="rent"]').hidden && document.querySelector('[data-mode-word]').textContent === 'Rent'));
+  await page.click('#button-community');
+  await wait(page, 500);
+  await shot(page, 'desktop-search-dropdown');
+  await page.click('#community-al-bateen-marina');
+  await wait(page, 400);
+  check('community dropdown selects with the mouse', await page.evaluate(() => document.querySelector('#value-community').textContent === 'Al Bateen Marina'));
+  await page.focus('#button-type');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await wait(page, 400);
+  check('property type dropdown selects with the keyboard', await page.evaluate(() => document.querySelector('#value-type').textContent === 'Apartment' && document.activeElement.id === 'button-type'));
+  await page.click('.beds__chip:has(input[value="2"])');
+  await page.click('[data-search-submit]');
+  await wait(page, 1700);
+  const summary = await page.textContent('[data-result-summary]');
+  check('search shows a demo result that reflects the choices', summary === 'Apartments to rent in Al Bateen Marina, 2 bedrooms', summary);
+  check('result lists the verified developments', (await page.textContent('.search-result__devs')).includes('Bloom Marina'));
+  await shot(page, 'desktop-search-result');
+  await page.click('.search-result__next .btn >> nth=0');
+  await wait(page, 3000);
+  check('result links through to the community', (await activeCommunity(page)) === 'al-bateen-marina', await activeCommunity(page));
+  await goTo(page, '[data-search]', 260);
+  await page.click('.search__quick .chip >> nth=0');
+  await wait(page, 2000);
+  check('quick start fills and runs the search', (await page.textContent('[data-result-summary]')) === 'Villas to buy in Zayed City');
+  await page.click('[data-search-close]');
+  await wait(page, 900);
+
+  // Communities gallery
+  await toTrack(page, '[data-gallery-track]', 0);
+  await shot(page, 'desktop-gallery-start');
+  check('gallery holds still and starts at the first community', await page.evaluate(() => Math.abs(document.querySelector('[data-gallery-stage]').getBoundingClientRect().top) < 2) && (await activeCommunity(page)) === 'zayed-city', await activeCommunity(page));
+  await toTrack(page, '[data-gallery-track]', 0.55);
+  await shot(page, 'desktop-gallery-mid');
+  check('scrolling slides the rail sideways through the communities', await page.evaluate(() => new DOMMatrix(getComputedStyle(document.querySelector('[data-gallery-rail]')).transform).m41 < -600) && ['al-bateen-marina', 'jumeirah-village-circle'].includes(await activeCommunity(page)), await activeCommunity(page));
+  check('the card in focus is full size and the others are smaller', await page.evaluate(() => [...document.querySelectorAll('[data-gcard]')].every((card) => {
+    const scale = new DOMMatrix(getComputedStyle(card.querySelector('.gcard__media')).transform).a;
+    return card.classList.contains('is-active') ? scale > 0.99 : scale < 0.99;
+  })));
+  check('progress bar and counter follow the gallery', await page.evaluate(() => {
+    const p = parseFloat(getComputedStyle(document.querySelector('[data-gallery-fill]')).getPropertyValue('--p'));
+    return p > 0.3 && p < 0.8 && document.querySelector('[data-gallery-now]').textContent === String([...document.querySelectorAll('[data-gcard]')].findIndex((c) => c.classList.contains('is-active')) + 1).padStart(2, '0');
+  }));
+  check('the photograph shifts inside its frame as the card travels', await page.evaluate(() => new Set([...document.querySelectorAll('[data-gcard-img]')].map((img) => img.style.getPropertyValue('--shift'))).size >= 3));
+  check('every card\'s text and buttons sit on screen', await page.evaluate(() => [...document.querySelectorAll('[data-gcard].is-active .gcard__actions')].every((a) => a.getBoundingClientRect().bottom <= innerHeight - 8)));
+  let from = await activeCommunity(page);
+  const order = ['zayed-city', 'saadiyat-island', 'al-bateen-marina', 'jumeirah-village-circle', 'eastern-mangrove-corniche'];
+  await page.click('[data-gallery-next]');
+  await wait(page, 2400);
+  check('next button moves to the next community', (await activeCommunity(page)) === order[order.indexOf(from) + 1], { from, now: await activeCommunity(page) });
+  from = await activeCommunity(page);
+  await page.focus('[data-gallery-viewport]');
+  await page.keyboard.press('ArrowLeft');
+  await wait(page, 2400);
+  check('gallery responds to arrow keys', (await activeCommunity(page)) === order[order.indexOf(from) - 1], { from, now: await activeCommunity(page) });
+  const scrollBefore = await page.evaluate(() => scrollY);
+  await page.mouse.move(1100, 420);
+  await page.mouse.down();
+  await page.mouse.move(900, 422, { steps: 6 });
+  await page.mouse.move(600, 425, { steps: 6 });
+  await page.mouse.up();
+  await wait(page, 1200);
+  check('dragging the gallery moves it along', (await page.evaluate(() => scrollY)) - scrollBefore > 300);
+  await page.click('[data-gcard].is-active [data-find]');
+  await wait(page, 2200);
+  check('"Find a home" carries the community into the search', await page.evaluate(() => document.querySelector('[data-select="community"] input').value !== '' && document.querySelector('#find').getBoundingClientRect().top < innerHeight * 0.5));
+  await toTrack(page, '[data-gallery-track]', 1);
+  check('the rail ends on its closing panel', await page.evaluate(() => { const box = document.querySelector('.gallery__end').getBoundingClientRect(); return box.right <= innerWidth + 1 && box.left > innerWidth * 0.4; }));
+
+  // Ecosystem
+  await toTrack(page, '[data-eco-track]', 0.02);
+  await shot(page, 'desktop-ecosystem-1');
+  check('ecosystem holds still and starts on Real Estate', await page.evaluate(() => Math.abs(document.querySelector('[data-eco-stage]').getBoundingClientRect().top) < 2) && (await activeVertical(page)) === 'real-estate');
+  const ecoFit = await stageFits(page, '[data-eco-stage]', '[data-eco-stage] .eco__left *, [data-eco-frame]');
+  check('the seven businesses and the photograph fit one laptop screen', ecoFit.deepest <= ecoFit.limit - 4, ecoFit);
+  check('all seven businesses are listed and numbered', await page.evaluate(() => [...document.querySelectorAll('.eco-row__num')].map((n) => n.textContent).join(' ') === '01 02 03 04 05 06 07'));
+  await toTrack(page, '[data-eco-track]', 0.5);
+  await shot(page, 'desktop-ecosystem-2');
+  check('scrolling moves the selection down the list', (await activeVertical(page)) === 'retail', await activeVertical(page));
+  check('the photograph, details and counter follow the selection', await page.evaluate(() => {
+    const image = document.querySelector('[data-eco-img="retail"]');
+    const detail = document.querySelector('#eco-detail-retail');
+    return image.classList.contains('is-active') && Number(getComputedStyle(image).opacity) > 0.95 && Number(getComputedStyle(detail).opacity) > 0.95 && document.querySelector('[data-eco-num]').textContent === '04';
+  }));
+  check('a wire joins the selected business to the photograph', await page.evaluate(() => {
+    const d = document.querySelector('[data-eco-wire-path]').getAttribute('d');
+    const head = document.querySelector('#panel-retail .eco-row__head').getBoundingClientRect();
+    const stage = document.querySelector('[data-eco-stage]').getBoundingClientRect();
+    const y = Number(d.split(' ')[1]);
+    return d.startsWith('M') && Math.abs(stage.top + y - (head.top + head.height / 2)) < 3;
+  }));
+  check('the orbit turns to the business and the ground colour changes', await page.evaluate(() => {
+    const dots = [...document.querySelectorAll('.eco__orbit-dot')];
+    return dots[3].classList.contains('is-on') && dots.filter((d) => d.classList.contains('is-on')).length === 1 && getComputedStyle(document.querySelector('[data-eco]')).getPropertyValue('--eco-bg').trim() === '#22150F';
+  }));
+  await page.click('#panel-landscaping .eco-row__head');
+  await wait(page, 2600);
+  check('clicking a business scrolls to it and selects it', (await activeVertical(page)) === 'landscaping' && await page.evaluate(() => Math.abs(document.querySelector('[data-eco-stage]').getBoundingClientRect().top) < 2));
+
+  // Life at Bloom
+  await toTrack(page, '[data-life-track]', 0.15);
+  await shot(page, 'desktop-life-1');
+  check('life stage holds still with the headline in the middle', await page.evaluate(() => {
+    const title = document.querySelector('.life__title').getBoundingClientRect();
+    return Math.abs(document.querySelector('[data-life-stage]').getBoundingClientRect().top) < 2 && title.top > innerHeight * 0.2 && title.bottom < innerHeight * 0.8;
+  }));
+  check('six photographs from across Bloom drift past at different depths', await page.evaluate(() => {
+    const shots = [...document.querySelectorAll('[data-lshot]')];
+    return shots.length === 6 && new Set(shots.map((s) => Math.round(new DOMMatrix(getComputedStyle(s).transform).m42))).size === 6;
+  }));
+  await toTrack(page, '[data-life-track]', 1, 2000);
+  await shot(page, 'desktop-life-2');
+  check('the last frame opens to fill the screen with its closing line', await page.evaluate(() => {
+    const clip = getComputedStyle(document.querySelector('[data-life-open]')).clipPath;
+    return /^inset\(0(px|%)?( 0(px|%)?)*( round 0px)?\)$/.test(clip.replace(/\s+/g, ' ')) && Number(getComputedStyle(document.querySelector('.life__open-title')).opacity) > 0.95;
+  }));
+
+  // Figures: the band, then the ledger. Each number is read the way a person sees it: for every
+  // odometer window, the digit that sits in the window once it has stopped rolling.
+  const shownFigures = () => page.evaluate(() => [...document.querySelectorAll('.impact .figure__value')].map((value) => {
+    const digits = [...value.querySelectorAll('.odo__digit, .odo__sep, .figure__suffix')].map((part) => {
+      if (!part.classList.contains('odo__digit')) return part.textContent;
+      const top = part.getBoundingClientRect().top;
+      const cell = [...part.querySelectorAll('.odo__strip span')].find((c) => Math.abs(c.getBoundingClientRect().top - top) < 2);
+      return cell ? cell.textContent : '?';
+    });
+    return { label: value.getAttribute('aria-label'), shown: digits.join('') };
+  }));
+  await goTo(page, '[data-impact-band]', 0);
+  await wait(page, 1200);
+  await shot(page, 'desktop-figures-band');
+  check('the band opens to the full width of the screen', await page.evaluate(() => getComputedStyle(document.querySelector('[data-impact-media]')).clipPath.replace(/\s+/g, ' ').startsWith('inset(0') && document.querySelector('[data-impact-media]').getBoundingClientRect().width >= innerWidth - 1));
+  await goTo(page, '.ledger', 200);
+  await wait(page, 3400);
+  const figures = await shownFigures();
+  check('every figure rolls to its RFP value, and says so to screen readers', figures.map((f) => f.shown).join(' ') === '25,000+ 6,500+ 1,000+ 15 20,000+ 851 8,500+' && figures.every((f) => f.label === f.shown), figures);
+  await page.hover('[data-ledger-cell] >> nth=4');
+  await wait(page, 900);
+  check('hovering a ledger cell fills it with brick red and brings its photo into colour', await page.evaluate(() => {
+    const cell = document.querySelectorAll('[data-ledger-cell]')[4];
+    return new DOMMatrix(getComputedStyle(cell, '::before').transform).d > 0.99 && getComputedStyle(cell.querySelector('.ledger__photo img')).filter === 'none';
+  }));
+  await shot(page, 'desktop-figures');
+  await page.click('.impact__aside .btn');
+  await wait(page, 400);
+  check('About Bloom call to action gives demo feedback', (await toastText(page)).includes('About Bloom'));
+
+  // Customer services
+  await goTo(page, '#services', 0);
+  await wait(page, 1200);
+  await shot(page, 'desktop-services');
+  check('six numbered pathways', await page.evaluate(() => document.querySelectorAll('[data-path]').length === 6));
+  await page.hover('#service-super-app .path__row');
+  await page.mouse.move(700, await page.evaluate(() => { const b = document.querySelector('#service-super-app').getBoundingClientRect(); return b.top + b.height / 2 + 4; }), { steps: 4 });
+  await wait(page, 800);
+  check('pointing at an app shows its screenshot by the pointer', await page.evaluate(() => document.querySelector('[data-path-preview]').classList.contains('is-visible') && document.querySelector('[data-path-preview] img').getAttribute('src').includes('super-app')));
+  await shot(page, 'desktop-services-hover');
+  await page.click('#service-community-app .path__row');
+  await wait(page, 500);
+  check('an app pathway opens its app (explained in the prototype)', (await toastText(page)).includes('Bloom Community App'));
+  await page.click('#service-enquiry .path__row');
+  await wait(page, 900);
+  check('"Make an enquiry" opens the enquiry panel', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('input[name="interest"][value="support"]').checked));
+
+  // Enquiry
+  await page.click('.enquiry__submit');
+  await wait(page, 300);
+  check('enquiry form validates required fields', await page.evaluate(() => !document.querySelector('#enquiry-name-error').hidden && !document.querySelector('#enquiry-email-error').hidden && document.activeElement.id === 'enquiry-name'));
+  await page.fill('#enquiry-name', 'Test Visitor');
+  await page.fill('#enquiry-email', 'visitor@example.com');
+  await shot(page, 'desktop-enquiry');
+  await page.click('.enquiry__submit');
+  await wait(page, 500);
+  check('enquiry confirms without sending anything', await page.evaluate(() => !document.querySelector('[data-enquiry-done]').hidden && document.querySelector('[data-enquiry-done]').textContent.includes('Thank you, Test')));
+  await page.keyboard.press('Escape');
+  await wait(page, 900);
+  check('Escape closes the enquiry panel', await page.evaluate(() => !document.querySelector('[data-enquiry]').open && !document.documentElement.classList.contains('is-locked')));
+  await page.click('.site-header__enquire');
+  await wait(page, 800);
+  check('header Enquire button opens the panel', await page.evaluate(() => document.querySelector('[data-enquiry]').open));
+  await page.click('.enquiry__close');
+  await wait(page, 900);
+
+  // Menu link into a service
+  await page.hover('[data-nav-item="services"] .nav-item__link');
+  await wait(page, 800);
+  await page.click('#mega-services a[data-service-jump="construction-updates"]');
+  await wait(page, 1500);
+  check('menu link brings its pathway forward', await page.evaluate(() => { const path = document.querySelector('#service-construction-updates'); const box = path.getBoundingClientRect(); return path.classList.contains('is-called') && box.top > 0 && box.bottom < innerHeight; }));
+
+  // Closing and footer
+  await toTrack(page, '[data-closing]', 1, 1800);
+  await shot(page, 'desktop-closing');
+  check('the closing photograph opens to the whole screen behind the enquiry', await page.evaluate(() => {
+    const box = document.querySelector('[data-closing-window]').getBoundingClientRect();
+    return getComputedStyle(document.querySelector('[data-closing-window]')).clipPath.replace(/\s+/g, ' ').startsWith('inset(0') && box.width >= innerWidth - 1 && document.querySelector('.closing__title').getBoundingClientRect().bottom < innerHeight;
+  }));
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await wait(page, 1800);
+  await shot(page, 'desktop-footer');
+  check('the footer ends on the Bloom wordmark at its own size', await page.evaluate(() => { const mark = document.querySelector('[data-footer-mark] img'); return mark.getBoundingClientRect().width <= 762 && mark.naturalWidth === 762; }));
+  await page.click('.lang--footer [data-lang-option="ar"]');
+  await wait(page, 400);
+  check('language switch explains Arabic is out of scope', (await toastText(page)).includes('Arabic'));
+  await page.click('.footer__link[data-vertical-jump="education"]');
+  await wait(page, 3200);
+  check('footer business link selects it in the ecosystem', (await activeVertical(page)) === 'education', await activeVertical(page));
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await wait(page, 900);
+  await page.click('.footer__top');
+  await wait(page, 4000);
+  check('back to top returns to the hero', (await page.evaluate(() => window.scrollY)) < 5);
+
+  // The nav stays on screen however you scroll
+  await goTo(page, '#about', 0);
+  await page.mouse.move(700, 600);
+  await page.mouse.wheel(0, 500);
+  await wait(page, 900);
+  check('nav stays fully visible while scrolling down', await page.evaluate(() => {
+    const bar = document.querySelector('.site-header__bar').getBoundingClientRect();
+    return bar.top >= 0 && bar.bottom > 0 && getComputedStyle(document.querySelector('.primary-nav')).display !== 'none';
+  }));
   check('the bar keeps exactly the same size and place when scrolled', await page.evaluate(async () => {
     const box = () => JSON.stringify(document.querySelector('.site-header__bar').getBoundingClientRect());
     const scrolled = box();
