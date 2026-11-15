@@ -151,7 +151,7 @@ async function desktop(browser) {
 
   // Our philosophy: one calm screen, three cards, nothing pinned
   await goTo(page, '#story', 0);
-  await wait(page, 1400);
+  await wait(page, 2200);
   await shot(page, 'desktop-story');
   check('philosophy asks one plain question', await page.evaluate(() => document.querySelector('#story-title').textContent.replace(/\s+/g, ' ').trim() === 'What does Curated Community Living mean?'));
   check('three cards explain the three words, in order, each with a plain subtitle', await page.evaluate(() => {
@@ -161,7 +161,7 @@ async function desktop(browser) {
     return cards.length === 3 && titles === 'Curated Community Living' && subtitles.join('|') === 'Planned as a whole|Neighbours close at hand|Looked after, every day';
   }));
   check('each card shows one verified figure', await page.evaluate(() => [...document.querySelectorAll('[data-pcard-fact] strong')].map((n) => n.textContent.trim()).join(' ') === '7 5 8,500+'));
-  check('every card has a described photograph that has loaded', await page.evaluate(() => [...document.querySelectorAll('[data-pcard-media] img')].every((img) => img.complete && img.naturalWidth > 600 && img.alt.length > 20)));
+  check('every card has a described photograph that has loaded', await page.evaluate(() => [...document.querySelectorAll('[data-pcard-media] img')].every((img) => img.complete && img.naturalWidth > 0 && /-(800|900|1000|1400|1600|1800)\.webp$/.test(img.currentSrc) && img.alt.length > 20)));
   check('the cards have risen in, fully visible and side by side', await page.evaluate(() => {
     const cards = [...document.querySelectorAll('[data-pcard]')];
     const boxes = cards.map((card) => card.getBoundingClientRect());

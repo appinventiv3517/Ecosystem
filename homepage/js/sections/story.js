@@ -24,6 +24,11 @@ export function initStory() {
     .from(media, { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.3, stagger: 0.12, clearProps: 'clipPath' }, 0.05)
     .from(photos, { scale: 1.18, duration: 1.6, stagger: 0.12, clearProps: 'transform' }, 0.05);
   bodies.forEach((children, i) => {
-    tl.from(children, { y: 18, autoAlpha: 0, duration: 0.9, stagger: 0.06 }, 0.3 + i * 0.12);
+    const lines = [...children].filter((child) => !child.matches('.pcard__link'));
+    const link = $('.pcard__link', cards[i]);
+    tl.from(lines, { y: 18, autoAlpha: 0, duration: 0.9, stagger: 0.06, clearProps: 'transform,opacity,visibility' }, 0.3 + i * 0.12);
+    // The link only fades: a transform on it would shrink its click area (it stretches over the
+    // whole card) to the link itself while the cards arrive.
+    tl.from(link, { autoAlpha: 0, duration: 0.9, clearProps: 'opacity,visibility' }, 0.55 + i * 0.12);
   });
 }
