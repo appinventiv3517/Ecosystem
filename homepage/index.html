@@ -408,101 +408,107 @@
     </section>
 
     <!-- ============================================================
-         02 · Find a Home
+         02 · Find a Home: a search studio. A full-height photograph on the left holds still
+         while the four numbered questions on the right are answered.
          ============================================================ -->
-    <section class="section find" id="find" data-section="find" aria-labelledby="find-title">
-      <span class="find__ghost" aria-hidden="true" data-drift-x="0.3">Home</span>
-      <div class="wrap find__grid">
-        <div class="find__intro">
-          <p class="sec-label"><span class="sec-label__num">02</span><span class="sec-label__rule"></span>Find a Home</p>
-          <h2 class="display find__title" id="find-title" data-split="lines">Find a place to call <em>home.</em></h2>
-          <div class="find__copy" data-find-copy aria-live="polite">
-            <p class="lede is-active" data-mode-copy="buy">Looking to own? Search apartments, townhouses and villas across Bloom's communities.</p>
-            <p class="lede" data-mode-copy="rent" hidden>Looking to lease? Search apartments, townhouses and villas across Bloom's communities.</p>
+    <section class="find" id="find" data-section="find" aria-labelledby="find-title">
+      <div class="find__split">
+        <div class="find__visual" data-find-figure>
+          <div class="find__photos" data-find-photos>
+            <img class="is-active" data-mode-image="buy" src="assets/img/find-buy-tall-1000.webp" srcset="assets/img/find-buy-tall-640.webp 640w, assets/img/find-buy-tall-1000.webp 1000w" sizes="(max-width: 900px) 100vw, 44vw" width="1000" height="1389" alt="Two-storey villa with arched windows and a landscaped drive (architectural render)" loading="lazy" decoding="async">
+            <img data-mode-image="rent" src="assets/img/find-rent-tall-1000.webp" srcset="assets/img/find-rent-tall-640.webp 640w, assets/img/find-rent-tall-1000.webp 1000w" sizes="(max-width: 900px) 100vw, 44vw" width="1000" height="1389" alt="Low-rise apartment buildings behind palm trees" loading="lazy" decoding="async">
           </div>
+          <span class="find__shade" aria-hidden="true"></span>
+          <p class="find__word" aria-hidden="true"><span class="find__word-mask"><span data-mode-word>Buy</span></span></p>
+          <p class="find__caption" aria-hidden="true"><span>Homes across Abu Dhabi &amp; Dubai</span><span>Five communities</span></p>
         </div>
 
-        <figure class="find__figure" data-reveal="clip" data-find-figure>
-          <div class="find__frame arch">
-            <img class="is-active" data-mode-image="buy" src="assets/img/find-buy-560.webp" srcset="assets/img/find-buy-560.webp 560w, assets/img/find-buy-900.webp 900w" sizes="(max-width: 900px) 60vw, 24vw" width="900" height="1125" alt="Two-storey villa with arched windows and a landscaped drive (architectural render)" loading="lazy">
-            <img data-mode-image="rent" src="assets/img/find-rent-560.webp" srcset="assets/img/find-rent-560.webp 560w, assets/img/find-rent-900.webp 900w" sizes="(max-width: 900px) 60vw, 24vw" width="900" height="1125" alt="Low-rise apartment buildings behind palm trees" loading="lazy">
+        <div class="find__panel">
+          <div class="find__intro">
+            <p class="sec-label"><span class="sec-label__num">02</span><span class="sec-label__rule"></span>Find a Home</p>
+            <h2 class="find__title" id="find-title" data-split="lines">Find a place to call <em>home.</em></h2>
+            <div class="find__copy" data-find-copy aria-live="polite">
+              <p class="find__lede is-active" data-mode-copy="buy">Looking to own? Search apartments, townhouses and villas across Bloom's communities.</p>
+              <p class="find__lede" data-mode-copy="rent" hidden>Looking to lease? Search apartments, townhouses and villas across Bloom's communities.</p>
+            </div>
           </div>
-          <figcaption class="find__badge" aria-hidden="true"><span data-mode-word>Buy</span></figcaption>
-        </figure>
 
-          <form class="search" data-search novalidate data-reveal="rise" aria-label="Find a home">
-            <div class="search__top">
-              <div class="mode" role="radiogroup" aria-label="I want to" data-mode>
-                <label class="mode__option">
-                  <input class="sr-only" type="radio" name="mode" value="buy" checked>
-                  <span>Buy</span>
-                </label>
-                <label class="mode__option">
-                  <input class="sr-only" type="radio" name="mode" value="rent">
-                  <span>Rent</span>
-                </label>
-                <span class="mode__pill" aria-hidden="true"></span>
-              </div>
-              <p class="search__hint">One search, two ways to live with Bloom.</p>
-            </div>
-
-            <div class="search__fields">
-              <div class="select" data-select="community">
-                <span class="select__label" id="label-community">Community</span>
-                <button class="select__button" type="button" id="button-community" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-community value-community">
-                  <svg class="icon select__icon"><use href="#i-pin"/></svg>
-                  <span class="select__value" id="value-community">Any community</span>
-                  <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
-                </button>
-                <ul class="select__list" role="listbox" id="list-community" aria-labelledby="label-community" tabindex="-1" hidden>
-                  <li class="select__option" role="option" id="community-any" data-value="" aria-selected="true"><span>Any community</span></li>
-                  <li class="select__option" role="option" id="community-zayed-city" data-value="zayed-city" aria-selected="false"><span>Zayed City</span><small>Abu Dhabi</small></li>
-                  <li class="select__option" role="option" id="community-saadiyat-island" data-value="saadiyat-island" aria-selected="false"><span>Saadiyat Island</span><small>Abu Dhabi</small></li>
-                  <li class="select__option" role="option" id="community-al-bateen-marina" data-value="al-bateen-marina" aria-selected="false"><span>Al Bateen Marina</span><small>Abu Dhabi</small></li>
-                  <li class="select__option" role="option" id="community-jumeirah-village-circle" data-value="jumeirah-village-circle" aria-selected="false"><span>Jumeirah Village Circle</span><small>Dubai</small></li>
-                  <li class="select__option" role="option" id="community-eastern-mangrove-corniche" data-value="eastern-mangrove-corniche" aria-selected="false"><span>Eastern Mangrove Corniche</span><small>Abu Dhabi</small></li>
-                </ul>
-                <input type="hidden" name="community" value="">
-              </div>
-
-              <div class="select" data-select="type">
-                <span class="select__label" id="label-type">Property type</span>
-                <button class="select__button" type="button" id="button-type" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-type value-type">
-                  <span class="select__value" id="value-type">Any type</span>
-                  <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
-                </button>
-                <ul class="select__list" role="listbox" id="list-type" aria-labelledby="label-type" tabindex="-1" hidden>
-                  <li class="select__option" role="option" id="type-any" data-value="" aria-selected="true"><span>Any type</span></li>
-                  <li class="select__option" role="option" id="type-apartment" data-value="apartment" aria-selected="false"><span>Apartment</span></li>
-                  <li class="select__option" role="option" id="type-townhouse" data-value="townhouse" aria-selected="false"><span>Townhouse</span></li>
-                  <li class="select__option" role="option" id="type-villa" data-value="villa" aria-selected="false"><span>Villa</span></li>
-                  <li class="select__option" role="option" id="type-penthouse" data-value="penthouse" aria-selected="false"><span>Penthouse</span></li>
-                  <li class="select__option" role="option" id="type-hotel-apartment" data-value="hotel-apartment" aria-selected="false"><span>Hotel apartment</span></li>
-                </ul>
-                <input type="hidden" name="type" value="">
-              </div>
-
-              <fieldset class="beds">
-                <legend class="select__label">Bedrooms</legend>
-                <div class="beds__options">
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="" checked><span>Any</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="studio"><span>Studio</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="1"><span>1</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="2"><span>2</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="3"><span>3</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="4"><span>4</span></label>
-                  <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="5+"><span>5+</span></label>
+          <form class="search" data-search novalidate aria-label="Find a home">
+            <ol class="qrows" data-qrows>
+              <li class="qrow qrow--mode">
+                <span class="qrow__num" aria-hidden="true">01</span>
+                <span class="qrow__label" id="label-mode">I want to</span>
+                <div class="mode" role="radiogroup" aria-labelledby="label-mode" data-mode>
+                  <label class="mode__option"><input class="sr-only" type="radio" name="mode" value="buy" checked><span>Buy</span></label>
+                  <label class="mode__option"><input class="sr-only" type="radio" name="mode" value="rent"><span>Rent</span></label>
+                  <span class="mode__pill" aria-hidden="true"></span>
                 </div>
-              </fieldset>
+              </li>
 
-              <button class="btn search__submit" type="submit" data-search-submit data-magnetic>
-                <svg class="icon search__submit-icon"><use href="#i-search"/></svg>
-                <span class="btn__label search__submit-label" data-search-label>Search homes to buy</span>
-              </button>
-            </div>
+              <li class="qrow">
+                <span class="qrow__num" aria-hidden="true">02</span>
+                <div class="select" data-select="community">
+                  <span class="select__label" id="label-community">Community</span>
+                  <button class="select__button" type="button" id="button-community" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-community value-community">
+                    <span class="select__value" id="value-community">Any community</span>
+                    <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
+                  </button>
+                  <ul class="select__list" role="listbox" id="list-community" aria-labelledby="label-community" tabindex="-1" hidden>
+                    <li class="select__option" role="option" id="community-any" data-value="" aria-selected="true"><span>Any community</span></li>
+                    <li class="select__option" role="option" id="community-zayed-city" data-value="zayed-city" aria-selected="false"><span>Zayed City</span><small>Abu Dhabi</small></li>
+                    <li class="select__option" role="option" id="community-saadiyat-island" data-value="saadiyat-island" aria-selected="false"><span>Saadiyat Island</span><small>Abu Dhabi</small></li>
+                    <li class="select__option" role="option" id="community-al-bateen-marina" data-value="al-bateen-marina" aria-selected="false"><span>Al Bateen Marina</span><small>Abu Dhabi</small></li>
+                    <li class="select__option" role="option" id="community-jumeirah-village-circle" data-value="jumeirah-village-circle" aria-selected="false"><span>Jumeirah Village Circle</span><small>Dubai</small></li>
+                    <li class="select__option" role="option" id="community-eastern-mangrove-corniche" data-value="eastern-mangrove-corniche" aria-selected="false"><span>Eastern Mangrove Corniche</span><small>Abu Dhabi</small></li>
+                  </ul>
+                  <input type="hidden" name="community" value="">
+                </div>
+              </li>
+
+              <li class="qrow">
+                <span class="qrow__num" aria-hidden="true">03</span>
+                <div class="select" data-select="type">
+                  <span class="select__label" id="label-type">Property type</span>
+                  <button class="select__button" type="button" id="button-type" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-type value-type">
+                    <span class="select__value" id="value-type">Any type</span>
+                    <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
+                  </button>
+                  <ul class="select__list" role="listbox" id="list-type" aria-labelledby="label-type" tabindex="-1" hidden>
+                    <li class="select__option" role="option" id="type-any" data-value="" aria-selected="true"><span>Any type</span></li>
+                    <li class="select__option" role="option" id="type-apartment" data-value="apartment" aria-selected="false"><span>Apartment</span></li>
+                    <li class="select__option" role="option" id="type-townhouse" data-value="townhouse" aria-selected="false"><span>Townhouse</span></li>
+                    <li class="select__option" role="option" id="type-villa" data-value="villa" aria-selected="false"><span>Villa</span></li>
+                    <li class="select__option" role="option" id="type-penthouse" data-value="penthouse" aria-selected="false"><span>Penthouse</span></li>
+                    <li class="select__option" role="option" id="type-hotel-apartment" data-value="hotel-apartment" aria-selected="false"><span>Hotel apartment</span></li>
+                  </ul>
+                  <input type="hidden" name="type" value="">
+                </div>
+              </li>
+
+              <li class="qrow">
+                <span class="qrow__num" aria-hidden="true">04</span>
+                <fieldset class="beds">
+                  <legend class="select__label">Bedrooms</legend>
+                  <div class="beds__options">
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="" checked><span>Any</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="studio"><span>Studio</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="1"><span>1</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="2"><span>2</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="3"><span>3</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="4"><span>4</span></label>
+                    <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="5+"><span>5+</span></label>
+                  </div>
+                </fieldset>
+              </li>
+            </ol>
+
+            <button class="search__submit" type="submit" data-search-submit>
+              <span class="search__submit-text"><span class="search__submit-label" data-search-label>Search homes to buy</span></span>
+              <span class="search__submit-go" aria-hidden="true"><svg class="icon search__submit-icon"><use href="#i-search"/></svg></span>
+            </button>
 
             <div class="search__quick" data-stagger>
-              <span class="search__quick-label">Try</span>
+              <span class="search__quick-label">Or try</span>
               <button type="button" class="chip" data-find data-mode="buy" data-community="zayed-city" data-type="villa">Villas to buy in Zayed City</button>
               <button type="button" class="chip" data-find data-mode="rent" data-community="jumeirah-village-circle" data-type="apartment">Apartments to rent in JVC</button>
               <button type="button" class="chip" data-find data-mode="rent" data-community="eastern-mangrove-corniche" data-type="townhouse">Townhouses to rent by the mangroves</button>
@@ -520,6 +526,7 @@
               </div>
             </div>
           </form>
+        </div>
       </div>
     </section>
 
@@ -800,48 +807,63 @@
          06 · About Bloom: credibility and impact. Figures as stated in the Website RFP
          ("About Bloom", page 1). To change one, edit data-count, data-suffix and the label.
          ============================================================ -->
-    <section class="section impact" id="about" data-section="about" aria-labelledby="about-title">
-      <div class="wrap">
-        <div class="impact__head">
-          <p class="sec-label"><span class="sec-label__num">06</span><span class="sec-label__rule"></span>About Bloom</p>
-          <h2 class="impact__title" id="about-title" data-split="lines">Thoughtfully building communities. Creating lasting <em>value.</em></h2>
-          <div class="impact__aside">
-            <p class="impact__statement" data-scrub-words>We are a master developer committed to curating premium communities that provide a high standard of living.</p>
-            <button type="button" class="btn btn--outline" data-demo="About Bloom" data-magnetic>
-              <span class="btn__label">About Bloom</span>
-              <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-            </button>
-          </div>
+    <section class="impact" id="about" data-section="about" aria-labelledby="about-title">
+      <div class="wrap impact__head">
+        <p class="sec-label"><span class="sec-label__num">06</span><span class="sec-label__rule"></span>About Bloom</p>
+        <h2 class="impact__title" id="about-title" data-split="lines">Thoughtfully building communities. Creating lasting <em>value.</em></h2>
+        <div class="impact__aside">
+          <p class="impact__statement" data-scrub-words>We are a master developer committed to curating premium communities that provide a high standard of living.</p>
+          <button type="button" class="btn btn--outline" data-demo="About Bloom" data-magnetic>
+            <span class="btn__label">About Bloom</span>
+            <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+          </button>
         </div>
+      </div>
 
-        <dl class="figures" data-figures>
-          <div class="figure figure--hero">
-            <dt class="figure__label"><span class="figure__kind">Real Estate</span>residential units in the pipeline</dt>
-            <dd class="figure__value" data-count="25000" data-suffix="+">25,000+</dd>
+      <div class="impact__band" data-impact-band>
+        <div class="impact__band-media" data-impact-media>
+          <img src="assets/img/about-aerial-1800.webp" srcset="assets/img/about-aerial-1000.webp 1000w, assets/img/about-aerial-1800.webp 1800w" sizes="100vw" width="1800" height="1200" alt="Aerial view of a lakeside town centre at Bloom Living (architectural render)" loading="lazy" decoding="async" data-impact-img>
+          <span class="impact__band-shade" aria-hidden="true"></span>
+        </div>
+        <dl class="impact__band-copy wrap" data-figures>
+          <div class="impact__hero-figure">
+            <dt class="impact__band-label"><span class="ledger__kind">Real Estate</span>residential units in the pipeline</dt>
+            <dd class="figure__value impact__big" data-count="25000" data-suffix="+">25,000+</dd>
           </div>
-          <div class="figure figure--b">
-            <dt class="figure__label"><span class="figure__kind">Real Estate</span>delivered residential units</dt>
+        </dl>
+      </div>
+
+      <div class="wrap">
+        <dl class="ledger" data-figures>
+          <div class="ledger__cell" data-ledger-cell style="--i: 0">
+            <dt class="ledger__label"><span class="ledger__kind">Real Estate</span>delivered residential units</dt>
             <dd class="figure__value" data-count="6500" data-suffix="+">6,500+</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/ecosystem-real-estate-arch-640.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
-          <div class="figure">
-            <dt class="figure__label"><span class="figure__kind">Leasing</span>residential units in the leasing portfolio</dt>
+          <div class="ledger__cell" data-ledger-cell style="--i: 1">
+            <dt class="ledger__label"><span class="ledger__kind">Leasing</span>residential units in the leasing portfolio</dt>
             <dd class="figure__value" data-count="1000" data-suffix="+">1,000+</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/find-rent-560.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
-          <div class="figure">
-            <dt class="figure__label"><span class="figure__kind">Education</span>schools</dt>
+          <div class="ledger__cell" data-ledger-cell style="--i: 2">
+            <dt class="ledger__label"><span class="ledger__kind">Education</span>schools</dt>
             <dd class="figure__value" data-count="15" data-suffix="">15</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/ecosystem-education-arch-640.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
-          <div class="figure">
-            <dt class="figure__label"><span class="figure__kind">Education</span>students</dt>
+          <div class="ledger__cell" data-ledger-cell style="--i: 3">
+            <dt class="ledger__label"><span class="ledger__kind">Education</span>students</dt>
             <dd class="figure__value" data-count="20000" data-suffix="+">20,000+</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/life-2c-460.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
-          <div class="figure">
-            <dt class="figure__label"><span class="figure__kind">Hospitality</span>hotel rooms and serviced apartments</dt>
+          <div class="ledger__cell" data-ledger-cell style="--i: 4">
+            <dt class="ledger__label"><span class="ledger__kind">Hospitality</span>hotel rooms and serviced apartments</dt>
             <dd class="figure__value" data-count="851" data-suffix="">851</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/ecosystem-hospitality-arch-640.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
-          <div class="figure figure--wide">
-            <dt class="figure__label"><span class="figure__kind">Facilities Management</span>units managed by Bloom Facilities Management</dt>
+          <div class="ledger__cell" data-ledger-cell style="--i: 5">
+            <dt class="ledger__label"><span class="ledger__kind">Facilities Management</span>units managed by Bloom Facilities Management</dt>
             <dd class="figure__value" data-count="8500" data-suffix="+">8,500+</dd>
+            <span class="ledger__photo" aria-hidden="true"><img src="assets/img/ecosystem-facilities-arch-640.webp" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
           </div>
         </dl>
         <p class="figures__source">Figures as stated in Bloom's Website RFP.</p>

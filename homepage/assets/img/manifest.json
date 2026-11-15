@@ -241,7 +241,7 @@
         1400
       ],
       "alt": "Two-storey villa with arched windows and a landscaped drive (architectural render)",
-      "used_in": "Find a Home, Buy state",
+      "used_in": "Find a Home, Buy state; Find a Home photo panel",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -255,6 +255,18 @@
             900,
             560
           ]
+        },
+        {
+          "suffix": "-tall",
+          "ratio": 0.72,
+          "focus": [
+            0.55,
+            0.5
+          ],
+          "widths": [
+            1000,
+            640
+          ]
         }
       ]
     },
@@ -267,7 +279,7 @@
         1496
       ],
       "alt": "Low-rise apartment buildings behind palm trees",
-      "used_in": "Find a Home, Rent state",
+      "used_in": "Find a Home, Rent state; Find a Home photo panel",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -280,6 +292,18 @@
           "widths": [
             900,
             560
+          ]
+        },
+        {
+          "suffix": "-tall",
+          "ratio": 0.72,
+          "focus": [
+            0.55,
+            0.5
+          ],
+          "widths": [
+            1000,
+            640
           ]
         }
       ]

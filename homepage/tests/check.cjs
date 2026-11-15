@@ -171,6 +171,11 @@ async function desktop(browser) {
   await goTo(page, '[data-search]', 260);
   await page.click('.mode__option:has(input[value="rent"])');
   await wait(page, 1300);
+  check('Find a Home is a photo beside four numbered questions', await page.evaluate(() => {
+    const photo = document.querySelector('[data-find-figure]').getBoundingClientRect();
+    const rows = [...document.querySelectorAll('.qrow')];
+    return rows.length === 4 && rows.map((r) => r.querySelector('.qrow__num').textContent).join(' ') === '01 02 03 04' && photo.left <= 1 && photo.height >= innerHeight - 1 && rows.every((r) => r.getBoundingClientRect().left > photo.right);
+  }));
   check('Buy / Rent switch updates the search', await page.evaluate(() => document.querySelector('[data-search-label]').textContent === 'Search homes to rent' && !document.querySelector('[data-mode-copy="rent"]').hidden && document.querySelector('[data-mode-word]').textContent === 'Rent'));
   await page.click('#button-community');
   await wait(page, 500);
@@ -290,11 +295,31 @@ async function desktop(browser) {
     return /^inset\(0(px|%)?( 0(px|%)?)*( round 0px)?\)$/.test(clip.replace(/\s+/g, ' ')) && Number(getComputedStyle(document.querySelector('.life__open-title')).opacity) > 0.95;
   }));
 
-  // Figures
-  await goTo(page, '[data-figures]', 300);
-  await wait(page, 3200);
-  const numbers = await page.evaluate(() => [...document.querySelectorAll('.figure__value')].map((item) => item.textContent.trim()));
-  check('figures count up to the RFP values', numbers.join(' ') === '25,000+ 6,500+ 1,000+ 15 20,000+ 851 8,500+', numbers);
+  // Figures: the band, then the ledger. Each number is read the way a person sees it: for every
+  // odometer window, the digit that sits in the window once it has stopped rolling.
+  const shownFigures = () => page.evaluate(() => [...document.querySelectorAll('.impact .figure__value')].map((value) => {
+    const digits = [...value.querySelectorAll('.odo__digit, .odo__sep, .figure__suffix')].map((part) => {
+      if (!part.classList.contains('odo__digit')) return part.textContent;
+      const top = part.getBoundingClientRect().top;
+      const cell = [...part.querySelectorAll('.odo__strip span')].find((c) => Math.abs(c.getBoundingClientRect().top - top) < 2);
+      return cell ? cell.textContent : '?';
+    });
+    return { label: value.getAttribute('aria-label'), shown: digits.join('') };
+  }));
+  await goTo(page, '[data-impact-band]', 0);
+  await wait(page, 1200);
+  await shot(page, 'desktop-figures-band');
+  check('the band opens to the full width of the screen', await page.evaluate(() => getComputedStyle(document.querySelector('[data-impact-media]')).clipPath.replace(/\s+/g, ' ').startsWith('inset(0') && document.querySelector('[data-impact-media]').getBoundingClientRect().width >= innerWidth - 1));
+  await goTo(page, '.ledger', 200);
+  await wait(page, 3400);
+  const figures = await shownFigures();
+  check('every figure rolls to its RFP value, and says so to screen readers', figures.map((f) => f.shown).join(' ') === '25,000+ 6,500+ 1,000+ 15 20,000+ 851 8,500+' && figures.every((f) => f.label === f.shown), figures);
+  await page.hover('[data-ledger-cell] >> nth=4');
+  await wait(page, 900);
+  check('hovering a ledger cell fills it with brick red and brings its photo into colour', await page.evaluate(() => {
+    const cell = document.querySelectorAll('[data-ledger-cell]')[4];
+    return new DOMMatrix(getComputedStyle(cell, '::before').transform).d > 0.99 && getComputedStyle(cell.querySelector('.ledger__photo img')).filter === 'none';
+  }));
   await shot(page, 'desktop-figures');
   await page.click('.impact__aside .btn');
   await wait(page, 400);

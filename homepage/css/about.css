@@ -1,8 +1,11 @@
-/* 06 · About Bloom: credibility and impact. An editorial grid of the RFP figures: the largest
-   one set huge, the rest in an uneven grid whose rules draw across as the numbers count up
-   (js/sections/impact.js). */
+/* 06 · About Bloom: credibility and impact.
+   The statement, then the largest figure set across a full-bleed aerial photograph that opens out
+   as it scrolls in, then the other six figures in a ledger, each with its business's photograph.
+   Numbers roll into place like an odometer (js/sections/impact.js). */
 
 .impact {
+  position: relative;
+  padding-block: var(--section-y);
   background: var(--cream);
   overflow: clip;
 }
@@ -15,7 +18,7 @@
     "title aside";
   gap: 1.75rem clamp(2rem, 6vw, 7rem);
   align-items: end;
-  margin-bottom: clamp(3.5rem, 8vw, 7rem);
+  margin-bottom: clamp(3rem, 7vw, 6rem);
 }
 
 .impact__head .sec-label {
@@ -45,107 +48,227 @@
 .impact__statement {
   font-size: clamp(1.25rem, 1.7vw, 1.625rem);
   line-height: 1.4;
-  letter-spacing: -0.005em;
 }
 
-/* ---------- Figures ---------- */
+/* ---------- The band: one figure across a photograph ---------- */
 
-.figures {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: clamp(1.25rem, 3vw, 3rem);
-  row-gap: clamp(2.5rem, 5vw, 4.5rem);
-}
-
-.figure {
-  --line: 1;
+.impact__band {
   position: relative;
-  grid-column: span 4;
+  display: grid;
+  align-items: end;
+  min-height: clamp(30rem, 82vh, 52rem);
+  color: var(--cream);
+  isolation: isolate;
+}
+
+.impact__band-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.impact__band-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.impact__band-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(14, 13, 12, 0.78) 0%, rgba(14, 13, 12, 0.25) 50%, rgba(14, 13, 12, 0.1) 100%),
+    linear-gradient(90deg, rgba(14, 13, 12, 0.4) 0%, rgba(14, 13, 12, 0) 60%);
+}
+
+.impact__band-copy {
+  padding-bottom: clamp(2.5rem, 7vh, 5rem);
+}
+
+.impact__hero-figure {
   display: flex;
   flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding-top: 1.25rem;
+  gap: 1rem;
 }
 
-.figure::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 1px;
-  background: var(--ink);
-  transform-origin: left;
-  transform: scaleX(var(--line));
+.impact__band-label {
+  max-width: 24rem;
+  font-size: var(--text-lede);
+  line-height: 1.45;
+  color: rgba(248, 246, 234, 0.88);
 }
 
-.figure--hero {
-  grid-column: 1 / span 7;
-  grid-row: span 2;
+.impact__band .ledger__kind {
+  color: var(--cream);
 }
 
-.figure--b {
-  grid-column: 8 / span 5;
-  align-self: end;
+.impact__big {
+  font-size: clamp(5rem, 17vw, 17rem);
+  letter-spacing: -0.045em;
 }
 
-.figure--wide {
-  grid-column: span 8;
+.impact__big .figure__suffix {
+  color: #F2C9BE;
 }
+
+/* ---------- Numbers and the odometer ---------- */
 
 .figure__value {
   display: flex;
   align-items: baseline;
   font-family: var(--font-display);
-  font-size: clamp(3rem, 5.6vw, 6rem);
   font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
-  font-variant-numeric: tabular-nums lining-nums;
-  overflow: hidden;
-  padding-bottom: 0.06em;
-}
-
-.figure--hero .figure__value {
-  font-size: clamp(4.5rem, 13vw, 14rem);
-  color: var(--red);
-}
-
-.figure__number {
-  display: inline-block;
+  line-height: 1;
+  font-variant-numeric: lining-nums proportional-nums;
 }
 
 .figure__suffix {
-  display: inline-block;
   margin-left: 0.04em;
   font-style: italic;
   color: var(--red);
 }
 
-.figure--hero .figure__suffix {
-  color: var(--ink);
+.odo {
+  display: inline-flex;
+  align-items: baseline;
 }
 
-.figure__label {
-  max-width: 22rem;
+/* Each digit is a window onto a strip of 0-9 that rolls to the right number. */
+.odo__digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  line-height: 1;
+  text-align: center;
+}
+
+.odo__strip {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.odo__strip span {
+  display: block;
+  text-align: center;
+  height: 1em;
+  line-height: 1;
+}
+
+.odo__sep {
+  display: inline-block;
+}
+
+/* ---------- The ledger ---------- */
+
+.ledger {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--ink);
+}
+
+.ledger__cell {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  gap: 1.25rem 1rem;
+  min-height: clamp(14rem, 22vw, 18rem);
+  padding: clamp(1.5rem, 2.4vw, 2.25rem);
+  border-bottom: 1px solid var(--line);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ledger__cell:not(:nth-child(3n + 1)) {
+  border-left: 1px solid var(--line);
+}
+
+/* Hover: the cell fills with brick red from the bottom and its photograph comes into colour. */
+.ledger__cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 700ms var(--ease-out);
+}
+
+.ledger__label {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: 15rem;
   font-size: 0.9375rem;
   line-height: 1.45;
   color: var(--text-soft);
+  transition: color 500ms var(--ease-out);
 }
 
-.figure__kind {
+.ledger__kind {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--ink);
+  transition: color 500ms var(--ease-out);
+}
+
+.ledger__cell .figure__value {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  font-size: clamp(3.25rem, 5.4vw, 5.75rem);
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  transition: color 500ms var(--ease-out);
+}
+
+.ledger__photo {
+  grid-column: 2;
+  grid-row: 1;
+  width: clamp(3.5rem, 5vw, 4.75rem);
+  aspect-ratio: 0.8;
+  overflow: hidden;
+  border-radius: 999px 999px 4px 4px;
+  background: var(--sand);
+}
+
+.ledger__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 700ms var(--ease-out), transform 900ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .ledger__cell:hover::before {
+    transform: none;
+  }
+
+  .ledger__cell:hover .ledger__label,
+  .ledger__cell:hover .ledger__kind,
+  .ledger__cell:hover .figure__value,
+  .ledger__cell:hover .figure__suffix {
+    color: var(--cream);
+  }
+
+  .ledger__cell:hover .ledger__photo img {
+    filter: none;
+    transform: scale(1.12);
+  }
 }
 
 .figures__source {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   font-size: var(--text-micro);
   color: var(--text-soft);
 }
@@ -156,22 +279,30 @@
     grid-template-areas: "label" "title" "aside";
   }
 
-  .figure,
-  .figure--b,
-  .figure--wide {
-    grid-column: span 6;
+  .ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .figure--hero {
-    grid-column: 1 / -1;
-    grid-row: auto;
+  .ledger__cell:not(:nth-child(3n + 1)) {
+    border-left: 0;
+  }
+
+  .ledger__cell:nth-child(2n) {
+    border-left: 1px solid var(--line);
   }
 }
 
-@media (max-width: 520px) {
-  .figure,
-  .figure--b,
-  .figure--wide {
-    grid-column: 1 / -1;
+@media (max-width: 560px) {
+  .ledger {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ledger__cell:nth-child(2n) {
+    border-left: 0;
+  }
+
+  .ledger__cell {
+    min-height: 0;
+    padding-inline: 0;
   }
 }

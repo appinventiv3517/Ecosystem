@@ -1,54 +1,39 @@
-/* 03 · Find a Home: one search console for buying and renting. */
+/* 02 · Find a Home: a search studio.
+   Left, a full-height photograph that holds still (CSS sticky) while the section scrolls; it
+   wipes between a home to buy and a home to rent, with the word set large across it.
+   Right, the search as four numbered questions, each answered in place, then the search itself.
+   js/sections/find.js runs the form; the motion is in js/sections/find.js and js/ui/reveal.js. */
 
 .find {
-  z-index: 1;
+  position: relative;
   background: var(--sand);
-  padding-top: clamp(4rem, 8vw, 8rem);
 }
 
-/* The doors section ends in cream; this curve carries it into the sand band. */
-.find::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: var(--radius-l);
-  background: var(--cream);
-  border-radius: 0 0 var(--radius-l) var(--radius-l);
-}
-
-.find__grid {
+.find__split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: clamp(2rem, 6vw, 7rem);
-  align-items: end;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
 }
 
-.find__intro {
-  padding-bottom: clamp(2.5rem, 4vw, 4rem);
-}
+/* ---------- The photograph ---------- */
 
-.find__copy {
-  position: relative;
-  display: grid;
-}
-
-.find__copy .lede {
-  grid-area: 1 / 1;
-}
-
-/* Arch image that changes with Buy / Rent */
-.find__figure {
-  position: relative;
-  width: clamp(13rem, 21vw, 20rem);
-  margin-bottom: -3.5rem;
-}
-
-.find__frame {
-  aspect-ratio: 4 / 5;
+.find__visual {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
   background: var(--beige);
+  color: var(--cream);
 }
 
-.find__frame img {
+.find__photos {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.find__photos img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -57,66 +42,187 @@
   opacity: 0;
 }
 
-.find__frame img.is-active {
+.find__photos img.is-active {
   opacity: 1;
 }
 
-.find__badge {
+.find__shade {
   position: absolute;
-  left: -2.25rem;
-  top: 38%;
-  display: grid;
-  place-items: center;
-  width: 5.5rem;
-  height: 5.5rem;
-  border-radius: 50%;
-  background: var(--red);
-  color: var(--cream);
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 13, 12, 0.42) 0%, rgba(14, 13, 12, 0) 30%),
+    linear-gradient(0deg, rgba(14, 13, 12, 0.62) 0%, rgba(14, 13, 12, 0) 45%);
+  pointer-events: none;
+}
+
+.find__caption {
+  position: absolute;
+  top: calc(var(--header-h) + 1.75rem);
+  left: var(--gutter);
+  right: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: rgba(248, 246, 234, 0.86);
+}
+
+/* "Buy" / "Rent", set large across the foot of the photograph. */
+.find__word {
+  position: absolute;
+  left: calc(var(--gutter) - 0.06em);
+  bottom: clamp(1.5rem, 5vh, 3.5rem);
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.5rem;
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
+  font-size: clamp(5.5rem, min(13vw, 24vh), 14rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
 }
 
-.find__badge span {
+.find__word-mask {
   display: block;
+  overflow: hidden;
+  padding: 0.18em 0.12em 0.26em 0;
+  margin: -0.18em 0 -0.26em;
 }
 
-/* ---------- Console ---------- */
+.find__word-mask > span {
+  display: inline-block;
+}
+
+/* ---------- The panel ---------- */
+
+.find__panel {
+  display: grid;
+  align-content: center;
+  gap: clamp(1.75rem, 4vh, 2.75rem);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + 2.5rem) var(--gutter) 6rem clamp(2rem, 5vw, 6rem);
+}
+
+.find__intro {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.find__title {
+  max-width: 11em;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, min(4.8vw, 8.5vh), 5.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.find__title em {
+  color: var(--red);
+}
+
+.find__copy {
+  display: grid;
+  max-width: 30rem;
+}
+
+.find__lede {
+  grid-area: 1 / 1;
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+/* ---------- The four questions ---------- */
 
 .search {
   position: relative;
-  z-index: 2;
-  grid-column: 1 / -1;
-  padding: clamp(1rem, 1.6vw, 1.75rem);
-  background: var(--ivory);
-  border: 1px solid rgba(221, 211, 189, 0.7);
-  border-radius: var(--radius-l);
-  box-shadow: var(--shadow-lift);
+  display: grid;
+  gap: 1.25rem;
 }
 
-.search__top {
-  display: flex;
+.qrows {
+  border-top: 1px solid var(--ink);
+}
+
+.qrow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: clamp(1rem, 1.4vw, 1.5rem);
+  min-height: clamp(4rem, 8.5vh, 5rem);
+  border-bottom: 1px solid rgba(29, 26, 23, 0.16);
+  isolation: isolate;
 }
 
-.search__hint {
-  font-size: var(--text-small);
-  color: var(--muted);
+/* Answering a question lifts its row onto ivory, with a red rule at the start. */
+.qrow::before {
+  content: "";
+  position: absolute;
+  inset: 0 -1rem;
+  z-index: -1;
+  background: var(--ivory);
+  border-radius: 0.75rem;
+  opacity: 0;
+  transform: scaleY(0.6);
+  transition: opacity 420ms var(--ease-out), transform 520ms var(--ease-out);
 }
 
-/* Buy / Rent switch */
+.qrow:hover::before,
+.qrow:focus-within::before,
+.qrow:has(.select.is-open)::before {
+  opacity: 1;
+  transform: none;
+}
+
+.qrow:has(.select.is-open) {
+  z-index: 5;
+}
+
+.qrow__num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-soft);
+  transition: color 400ms var(--ease-out);
+}
+
+.qrow:hover .qrow__num,
+.qrow:focus-within .qrow__num {
+  color: var(--red);
+}
+
+.qrow__label,
+.select__label {
+  display: block;
+  padding: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  transition: color var(--dur) ease;
+}
+
+.select.is-open .select__label,
+.select.is-filled .select__label {
+  color: var(--red);
+}
+
+/* Question 1: Buy or Rent. */
+.qrow--mode {
+  grid-template-columns: 2.75rem minmax(8rem, 0.55fr) minmax(0, 1fr);
+}
+
 .mode {
   position: relative;
+  justify-self: start;
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
-  padding: 0.25rem;
+  padding: 0.3rem;
   border-radius: var(--radius-pill);
-  background: var(--sand);
+  background: rgba(29, 26, 23, 0.07);
 }
 
 .mode__option {
@@ -124,11 +230,12 @@
   z-index: 1;
   display: grid;
   place-items: center;
-  min-width: 6.5rem;
+  min-width: clamp(5.5rem, 8vw, 7.5rem);
   min-height: 2.75rem;
-  padding-inline: 1.5rem;
+  padding-inline: 1.25rem;
   border-radius: var(--radius-pill);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
   cursor: pointer;
   transition: color 420ms var(--ease-out);
 }
@@ -144,97 +251,39 @@
 
 .mode__pill {
   position: absolute;
-  top: 0.25rem;
-  bottom: 0.25rem;
-  left: 0.25rem;
-  width: calc(50% - 0.25rem);
+  top: 0.3rem;
+  bottom: 0.3rem;
+  left: 0.3rem;
+  width: calc(50% - 0.3rem);
   border-radius: var(--radius-pill);
   background: var(--red);
-  transition: transform 560ms var(--ease-out);
+  transition: transform 620ms var(--ease-out);
 }
 
 .mode:has(input[value="rent"]:checked) .mode__pill {
   transform: translateX(100%);
 }
 
-/* Fields */
-.search__fields {
-  display: flex;
-  align-items: stretch;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-m);
-  background: var(--ivory);
-}
-
-.select,
-.beds {
+/* Questions 2 and 3: a label, then the answer set large. */
+.select {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.55fr) minmax(0, 1fr);
+  align-items: center;
   min-width: 0;
-  margin: 0;
-  padding: 0.875rem clamp(1rem, 1.4vw, 1.5rem) 1rem;
-  border: 0;
-  border-right: 1px solid var(--line);
-  transition: flex-grow 620ms var(--ease-out), background-color var(--dur) ease;
-}
-
-.select:first-child {
-  border-radius: var(--radius-m) 0 0 var(--radius-m);
-}
-
-.select:focus-within,
-.select.is-open {
-  flex-grow: 1.35;
-  background: var(--cream);
-}
-
-.beds {
-  flex-grow: 1.7;
-}
-
-/* A fieldset pins its legend to the top border, ignoring the padding. Floating the legend
-   makes it ordinary content, so "Bedrooms" lines up with the other field labels. */
-.beds > .select__label {
-  float: left;
-  width: 100%;
-}
-
-.select__label {
-  display: block;
-  padding: 0;
-  margin-bottom: 0.25rem;
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color var(--dur) ease;
-}
-
-.select.is-open .select__label,
-.select.is-filled .select__label {
-  color: var(--red);
 }
 
 .select__button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   width: 100%;
-  min-height: 2.25rem;
+  min-height: 3rem;
   text-align: left;
-  font-size: 1.0625rem;
-  font-weight: 500;
-  border-radius: var(--radius-s);
-}
-
-.select__icon {
-  width: 1.125rem;
-  height: 1.125rem;
-  color: var(--red);
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, min(2vw, 3.6vh), 1.875rem);
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
 .select__value {
@@ -243,7 +292,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--muted);
+  padding-block: 0.1em 0.2em;
+  color: var(--text-soft);
 }
 
 .select.is-filled .select__value {
@@ -251,25 +301,243 @@
 }
 
 .select__value.is-changing {
-  animation: value-in 520ms var(--ease-out);
+  animation: value-in 560ms var(--ease-out);
 }
 
 @keyframes value-in {
   from {
     opacity: 0;
-    transform: translateY(0.5rem);
+    transform: translateY(0.6rem);
   }
 }
 
 .select__chevron {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--red);
   transition: transform 480ms var(--ease-out);
 }
 
 .select.is-open .select__chevron {
   transform: rotate(180deg);
 }
+
+/* Question 4: bedrooms. */
+.beds {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0.75rem 0;
+  border: 0;
+}
+
+/* A fieldset pins its legend to the top border; floating it makes it ordinary content. */
+.beds > .select__label {
+  float: left;
+  width: clamp(8rem, 30%, 13rem);
+  padding-top: 0.85rem;
+}
+
+.beds__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.beds__chip {
+  cursor: pointer;
+}
+
+.beds__chip span {
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-inline: 0.875rem;
+  border: 1px solid rgba(29, 26, 23, 0.22);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  font-weight: 600;
+  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, transform 420ms var(--ease-out);
+}
+
+.beds__chip:hover span {
+  border-color: var(--ink);
+}
+
+.beds__chip input:checked + span {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+  animation: chip-pop 420ms var(--ease-out);
+}
+
+.beds__chip input:focus-visible + span {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@keyframes chip-pop {
+  40% {
+    transform: scale(0.9);
+  }
+}
+
+/* ---------- The search button ---------- */
+
+.search__submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0.75rem 0.75rem 0.75rem 2rem;
+  border-radius: var(--radius-pill);
+  background: var(--red);
+  color: var(--cream);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+}
+
+.search__submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: translateX(-101%);
+  transition: transform 640ms var(--ease-out);
+}
+
+.search__submit-text {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.15em;
+}
+
+.search__submit-label {
+  display: inline-block;
+}
+
+.search__submit-go {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--red);
+  transition: transform 640ms var(--ease-out), color var(--dur) ease;
+}
+
+.search__submit-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (hover: hover) {
+  .search__submit:hover::before {
+    transform: none;
+  }
+
+  .search__submit:hover .search__submit-go {
+    transform: rotate(-12deg) scale(1.06);
+    color: var(--ink);
+  }
+}
+
+.search__submit:active {
+  scale: 0.99;
+}
+
+.search.is-searching .search__submit {
+  pointer-events: none;
+}
+
+.search.is-searching .search__submit-icon {
+  animation: search-spin 700ms var(--ease-in-out);
+}
+
+@keyframes search-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A line runs along the questions while the demo search "runs". */
+.search::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.search.is-searching::after {
+  animation: search-line 700ms var(--ease-in-out);
+}
+
+@keyframes search-line {
+  60% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- Quick starts ---------- */
+
+.search__quick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search__quick-label {
+  margin-right: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.chip {
+  min-height: 2.75rem;
+  padding: 0.375rem 1rem;
+  border: 1px solid rgba(29, 26, 23, 0.22);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--ink);
+  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, transform 420ms var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--red);
+  color: var(--red);
+  transform: translateY(-2px);
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Dropdown lists ---------- */
 
 .select__list {
   position: absolute;
@@ -346,155 +614,6 @@
   display: none;
 }
 
-/* Bedrooms */
-.beds__options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  padding-top: 0.125rem;
-}
-
-.beds__chip {
-  cursor: pointer;
-}
-
-.beds__chip span {
-  display: grid;
-  place-items: center;
-  min-width: 2.5rem;
-  min-height: 2.25rem;
-  padding-inline: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  font-size: var(--text-small);
-  font-weight: 600;
-  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, transform 420ms var(--ease-out);
-}
-
-.beds__chip:hover span {
-  border-color: var(--ink);
-}
-
-.beds__chip input:checked + span {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--cream);
-  animation: chip-pop 420ms var(--ease-out);
-}
-
-.beds__chip input:focus-visible + span {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-@keyframes chip-pop {
-  40% {
-    transform: scale(0.9);
-  }
-}
-
-/* Search button */
-.search__submit {
-  flex: none;
-  align-self: center;
-  margin: 0.5rem;
-  min-height: 4rem;
-  padding-inline: 1.5rem 1.75rem;
-  gap: 0.625rem;
-}
-
-.search__submit-icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.search__submit-label {
-  display: inline-block;
-  min-width: 10.5ch;
-}
-
-.search.is-searching .search__submit {
-  pointer-events: none;
-}
-
-.search.is-searching .search__submit-icon {
-  animation: search-spin 700ms var(--ease-in-out);
-}
-
-@keyframes search-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* A line runs across the console while the demo search "runs". */
-.search::after {
-  content: "";
-  position: absolute;
-  left: var(--radius-l);
-  right: var(--radius-l);
-  top: 0;
-  height: 2px;
-  background: var(--red);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-
-.search.is-searching::after {
-  animation: search-line 700ms var(--ease-in-out);
-}
-
-@keyframes search-line {
-  60% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scaleX(1);
-    opacity: 0;
-  }
-}
-
-/* Quick starts */
-.search__quick {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: clamp(1rem, 1.4vw, 1.5rem);
-  /* "Try" starts in line with the field labels above it. */
-  padding-left: calc(clamp(1rem, 1.4vw, 1.5rem) + 1px);
-}
-
-.search__quick-label {
-  margin-right: 0.375rem;
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.chip {
-  min-height: 2.5rem;
-  padding: 0.375rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  font-size: var(--text-small);
-  font-weight: 500;
-  color: var(--ink);
-  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, transform 420ms var(--ease-out);
-}
-
-.chip:hover {
-  border-color: var(--red);
-  color: var(--red);
-  transform: translateY(-2px);
-}
-
-.chip:active {
-  transform: scale(0.97);
-}
 
 /* Result */
 .search-result {
@@ -603,160 +722,75 @@
   font-weight: 600;
 }
 
-/* ---------- Responsive ---------- */
-
-/* Laptop widths: tighten the bedroom chips so they stay on one row beside the selects. */
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .select {
-    flex-grow: 0.85;
-  }
-
-  .beds__options {
-    flex-wrap: nowrap;
-    gap: 0.3125rem;
-  }
-
-  .beds__chip span {
-    min-width: 2.25rem;
-    padding-inline: 0.625rem;
-  }
-
-  .search__submit {
-    padding-inline: 1.25rem 1.5rem;
-  }
+/* In the studio the list opens under the answer, not under the label. */
+.select .select__list {
+  left: auto;
+  right: 0;
+  width: min(100%, 26rem);
+  min-width: 16rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
 }
 
-@media (max-width: 1199px) {
-  .search__fields {
-    flex-wrap: wrap;
-  }
-
-  .select {
-    flex-basis: 40%;
-  }
-
-  .select:nth-child(2) {
-    border-right: 0;
-  }
-
-  .beds {
-    flex-basis: 60%;
-    border-top: 1px solid var(--line);
-    border-right: 0;
-  }
-
-  .search__submit {
-    flex: 1 1 100%;
-    margin: 0;
-    border-radius: 0 0 calc(var(--radius-m) - 1px) calc(var(--radius-m) - 1px);
-  }
+.search-result__head {
+  margin-top: 0.25rem;
 }
 
-@media (max-width: 900px) {
-  .find__grid {
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 899px) {
+  .find__split {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .find__figure {
-    display: none;
+  .find__visual {
+    position: relative;
+    height: min(62vh, 34rem);
   }
 
-  .search__hint {
-    display: none;
+  .find__word {
+    font-size: clamp(4.5rem, 22vw, 9rem);
+  }
+
+  .find__panel {
+    min-height: 0;
+    padding: 2.5rem var(--gutter) 5rem;
   }
 }
 
-@media (max-width: 760px) {
-  .search {
-    padding: 0.875rem;
-    border-radius: var(--radius-m);
+@media (max-width: 560px) {
+  .qrow,
+  .qrow--mode {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    padding-block: 0.75rem;
   }
 
-  .search::after {
-    left: var(--radius-m);
-    right: var(--radius-m);
-  }
-
-  .mode {
-    display: grid;
-    width: 100%;
-  }
-
-  .search__top {
-    margin-bottom: 0.875rem;
+  .qrow--mode .mode {
+    grid-column: 2;
+    margin-top: 0.5rem;
   }
 
   .select {
-    flex-basis: 100%;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .select:first-child {
-    border-radius: var(--radius-m) var(--radius-m) 0 0;
+  .beds > .select__label {
+    float: none;
+    width: auto;
+    padding: 0 0 0.6rem;
   }
 
-  .beds {
-    flex-basis: 100%;
-    border-top: 0;
+  .select .select__list {
+    left: 0;
+    right: auto;
+    width: 100%;
   }
 
-  .beds__chip span {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-  }
-
-  .select__button {
-    min-height: 2.75rem;
-  }
-
-  .select__list {
-    right: 0;
+  .find__caption span + span {
+    display: none;
   }
 
   .search__submit {
-    min-height: 3.75rem;
+    padding-left: 1.5rem;
   }
-
-  .chip {
-    min-height: 2.75rem;
-  }
-}
-
-/* ---------- Editorial frame for the search (redesign) ---------- */
-
-.find {
-  overflow: clip;
-}
-
-.find__intro {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.find__title {
-  font-size: clamp(3rem, 6.6vw, 7.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
-  max-width: 9em;
-}
-
-/* An oversized outlined word that slides across behind the console as the section passes. */
-.find__ghost {
-  position: absolute;
-  right: -0.08em;
-  top: 0.1em;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: clamp(9rem, 26vw, 28rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(150, 43, 35, 0.18);
-  pointer-events: none;
-  user-select: none;
-  will-change: transform;
-}
-
-.find__grid {
-  position: relative;
 }

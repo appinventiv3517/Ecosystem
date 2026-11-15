@@ -197,4 +197,30 @@ export function initFind() {
   });
 
   applyMode(mode(), { animate: false });
+
+  /* ---------- Arrival ---------- */
+
+  if (!motionOK || !figure) return;
+  const section = form.closest('section');
+  // The photograph wipes in from the left as the section arrives, then settles slowly while the
+  // questions scroll past it.
+  gsap.fromTo(figure, { clipPath: 'inset(0% 100% 0% 0%)' }, {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    ease: 'none',
+    scrollTrigger: { trigger: section, start: 'top 85%', end: 'top 15%', scrub: 0.4 },
+  });
+  gsap.fromTo($('[data-find-photos]', figure), { scale: 1.18 }, {
+    scale: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom bottom', scrub: true },
+  });
+  // The questions slide in from the right, one after another.
+  gsap.from($$('.qrow', form), {
+    autoAlpha: 0,
+    x: 60,
+    duration: 1,
+    stagger: 0.09,
+    ease: EASE.out,
+    scrollTrigger: { trigger: form, start: 'top 85%', once: true },
+  });
 }

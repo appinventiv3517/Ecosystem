@@ -70,11 +70,11 @@ scrolling (sticky CSS stages, no scroll hijacking):
 |---|---|
 | Hero | The photograph settles from a slow push-in, the headline rises out of line masks, an arch window wipes open and its outline draws; scrolling away parts the layers at different speeds; a mouse adds slight depth |
 | 01 Our philosophy | Sticky stage in four chapters (Curated, Community, Living, Together): each word is set huge and filled with a photograph that drifts inside the letters; words wipe out and in through masks, definitions rise line by line, figures count up, the arch photograph opens; a step bar fills with the scroll and jumps to a chapter on click |
-| 02 Find a Home | Clip-path wipe between the Buy and Rent photographs, sliding pill, animated dropdowns, an outlined word drifting sideways behind |
+| 02 Find a Home | A search studio: a full-height photograph wipes in from the left and holds still (sticky) beside four numbered questions; Buy / Rent wipes the photograph and swaps the large word on it; rows slide in, lift onto ivory as they are answered, and the dropdowns open in place |
 | 03 Communities | Sticky horizontal rail moved by the scroll (drag and sideways trackpad swipes scroll the page by the same amount); the crop slides inside each frame; the centred card scales up; custom progress. Phones and tablets swipe natively |
 | 04 Ecosystem | Sticky two columns; scroll walks the selection down seven numbered rows; images wipe in from the direction of travel; a wire draws to the photograph; the orbit turns; the ground tint changes |
 | 05 Life at Bloom | Six photographs drift past the headline at different depths, then a doorway-shaped frame opens to the whole screen |
-| 06 About Bloom | Figures rise out of masks and count up as their rules draw across |
+| 06 About Bloom | The largest figure across a full-bleed aerial photograph that opens from an inset card as it scrolls in; the other six in a ledger with their businesses' photographs; every number rolls into place like an odometer; hovering a cell fills it with brick red and brings its photograph into colour |
 | 07 Customer Services | Rows slide in; hover fills a row with cream and a screenshot follows the pointer |
 | 08 Closing | An arch window opens to full screen behind the enquiry headline |
 

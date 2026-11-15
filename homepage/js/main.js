@@ -6,7 +6,7 @@ import { ScrollTrigger, motionOK } from './lib/motion.js';
 import { demoDestination } from './ui/toast.js';
 import { initEnquiry } from './ui/enquiry.js';
 import { initReveals } from './ui/reveal.js';
-import { initMagnetic, initTilt } from './ui/pointer.js';
+import { initMagnetic } from './ui/pointer.js';
 import { initCursor } from './ui/cursor.js';
 import { initRoll } from './ui/roll.js';
 import { initDock } from './ui/dock.js';
@@ -81,7 +81,6 @@ async function start() {
   initMagnetic();
   initCursor();
   initDock();
-  initTilt('[data-find-figure]', 5);
 
   // Headline splitting measures text, so wait for the web fonts (briefly).
   await Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, 1800))]);
