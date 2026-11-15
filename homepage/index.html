@@ -319,93 +319,57 @@
     </section>
 
     <!-- ============================================================
-         01 · Brand story. A sticky stage: the frame changes shape and photograph
-         as you scroll, and the three words of the proposition light up in turn.
+         01 · Our philosophy. One calm screen, nothing pinned: a plain question, a one-line
+         answer, and three cards (Curated, Community, Living), each with a photograph, a plain
+         sentence, one verified figure and a link to the part of the page that shows it.
          ============================================================ -->
     <section class="story" id="story" data-section="story" aria-labelledby="story-title">
-      <div class="story__track" data-story>
-        <div class="story__stage" data-story-stage>
-          <div class="story__top">
+      <div class="story__inner wrap">
+        <header class="story__head">
+          <div class="story__heading">
             <p class="sec-label"><span class="sec-label__num">01</span><span class="sec-label__rule"></span>Our philosophy</p>
-            <h2 class="sr-only" id="story-title">Our philosophy: Curated Community Living, word by word</h2>
-            <ol class="story__steps" data-story-steps aria-label="Chapters">
-              <li><button type="button" class="story__step is-active" data-story-go="0"><span>Curated</span><i><b></b></i></button></li>
-              <li><button type="button" class="story__step" data-story-go="1"><span>Community</span><i><b></b></i></button></li>
-              <li><button type="button" class="story__step" data-story-go="2"><span>Living</span><i><b></b></i></button></li>
-              <li><button type="button" class="story__step" data-story-go="3"><span>Together</span><i><b></b></i></button></li>
-            </ol>
+            <h2 class="story__title" id="story-title" data-split="lines">What does <em>Curated Community Living</em> mean?</h2>
           </div>
-          <div class="story__tenets">
-            <article class="tenet is-active" data-tenet aria-labelledby="tenet-1">
-              <h3 class="tenet__word" id="tenet-1">
-                <span class="tenet__fill" aria-hidden="true"><img src="assets/img/about-aerial-1800.webp" srcset="assets/img/about-aerial-1000.webp 1000w, assets/img/about-aerial-1800.webp 1800w" sizes="100vw" width="1800" height="1200" alt="" loading="lazy" decoding="async" data-tenet-fill></span>
-                <span class="tenet__ink">Curated</span>
-              </h3>
-              <div class="tenet__foot">
-                <div class="tenet__entry">
-                  <p class="tenet__say" data-tenet-line><span class="tenet__num">01</span>/ˈkjʊə·reɪ·tɪd/ <i>adjective</i></p>
-                  <p class="tenet__define" data-tenet-line>Planned as a whole. Homes, schools, streets and services are designed together, by one master developer.</p>
-                </div>
-                <div class="tenet__facts" data-tenet-line><dl><div class="tenet__fact"><dt>businesses working as one</dt><dd data-tenet-count>7</dd></div></dl><p class="tenet__note">Real estate, education, hospitality, retail, healthcare, facilities management and landscaping.</p></div>
-              </div>
-              <figure class="tenet__photo" data-tenet-photo>
-                <span class="tenet__frame"><img src="assets/img/find-buy-900.webp" srcset="assets/img/find-buy-560.webp 560w, assets/img/find-buy-900.webp 900w" sizes="(max-width: 900px) 40vw, 18vw" width="900" height="1125" alt="Two-storey villa with arched windows and a landscaped drive (architectural render)" loading="lazy" decoding="async"></span>
-                <figcaption>Architecture</figcaption>
-              </figure>
-            </article>
-            <article class="tenet" data-tenet aria-labelledby="tenet-2">
-              <h3 class="tenet__word" id="tenet-2">
-                <span class="tenet__fill" aria-hidden="true"><img src="assets/img/community-zayed-city-1400.webp" srcset="assets/img/community-zayed-city-800.webp 800w, assets/img/community-zayed-city-1400.webp 1400w" sizes="100vw" width="1400" height="933" alt="" loading="lazy" decoding="async" data-tenet-fill></span>
-                <span class="tenet__ink">Community</span>
-              </h3>
-              <div class="tenet__foot">
-                <div class="tenet__entry">
-                  <p class="tenet__say" data-tenet-line><span class="tenet__num">02</span>/kəˈmjuː·nə·ti/ <i>noun</i></p>
-                  <p class="tenet__define" data-tenet-line>Neighbours, schools and everyday services close at hand, so a development grows into a place people belong to.</p>
-                </div>
-                <div class="tenet__facts" data-tenet-line><dl><div class="tenet__fact"><dt>communities across Abu Dhabi and Dubai</dt><dd data-tenet-count>5</dd></div><div class="tenet__fact"><dt>schools serving more than 20,000 students</dt><dd data-tenet-count>15</dd></div></dl></div>
-              </div>
-              <figure class="tenet__photo" data-tenet-photo>
-                <span class="tenet__frame"><img src="assets/img/life-2c-700.webp" srcset="assets/img/life-2c-460.webp 460w, assets/img/life-2c-700.webp 658w" sizes="(max-width: 900px) 40vw, 18vw" width="658" height="878" alt="School pupils walking along a palm-shaded lane" loading="lazy" decoding="async"></span>
-                <figcaption>Education</figcaption>
-              </figure>
-            </article>
-            <article class="tenet" data-tenet aria-labelledby="tenet-3">
-              <h3 class="tenet__word" id="tenet-3">
-                <span class="tenet__fill" aria-hidden="true"><img src="assets/img/life-3c-wide-1600.webp" srcset="assets/img/life-3c-wide-900.webp 900w, assets/img/life-3c-wide-1600.webp 1600w" sizes="100vw" width="1600" height="900" alt="" loading="lazy" decoding="async" data-tenet-fill></span>
-                <span class="tenet__ink">Living</span>
-              </h3>
-              <div class="tenet__foot">
-                <div class="tenet__entry">
-                  <p class="tenet__say" data-tenet-line><span class="tenet__num">03</span>/ˈlɪv·ɪŋ/ <i>noun</i></p>
-                  <p class="tenet__define" data-tenet-line>Everyday life, looked after: homes delivered and cared for, with places to stay, dine and unwind close by.</p>
-                </div>
-                <div class="tenet__facts" data-tenet-line><dl><div class="tenet__fact"><dt>residential units delivered</dt><dd data-tenet-count>6,500+</dd></div><div class="tenet__fact"><dt>units managed by Bloom Facilities Management</dt><dd data-tenet-count>8,500+</dd></div></dl></div>
-              </div>
-              <figure class="tenet__photo" data-tenet-photo>
-                <span class="tenet__frame"><img src="assets/img/life-2b-760.webp" srcset="assets/img/life-2b-480.webp 480w, assets/img/life-2b-760.webp 722w" sizes="(max-width: 900px) 40vw, 18vw" width="722" height="1204" alt="Mother and daughter laughing together in a sunlit garden" loading="lazy" decoding="async"></span>
-                <figcaption>Lifestyle</figcaption>
-              </figure>
-            </article>
-            <article class="tenet tenet--whole" data-tenet aria-labelledby="tenet-4">
-              <h3 class="whole__line" id="tenet-4"><span class="whole__word"><span class="whole__fill" aria-hidden="true"><img src="assets/img/about-aerial-1800.webp" srcset="assets/img/about-aerial-1000.webp 1000w, assets/img/about-aerial-1800.webp 1800w" sizes="100vw" width="1800" height="1200" alt="" loading="lazy" decoding="async" data-tenet-fill></span><span class="tenet__ink">Curated</span></span><span class="whole__word"><span class="whole__fill" aria-hidden="true"><img src="assets/img/community-zayed-city-1400.webp" srcset="assets/img/community-zayed-city-800.webp 800w, assets/img/community-zayed-city-1400.webp 1400w" sizes="100vw" width="1400" height="933" alt="" loading="lazy" decoding="async" data-tenet-fill></span><span class="tenet__ink">Community</span></span><span class="whole__word"><span class="whole__fill" aria-hidden="true"><img src="assets/img/life-3c-wide-1600.webp" srcset="assets/img/life-3c-wide-900.webp 900w, assets/img/life-3c-wide-1600.webp 1600w" sizes="100vw" width="1600" height="900" alt="" loading="lazy" decoding="async" data-tenet-fill></span><span class="tenet__ink">Living</span></span></h3>
-              <div class="tenet__foot">
-                <p class="whole__text" data-tenet-line>One idea, carried by seven businesses across five communities. That is what makes a Bloom community.</p>
-                <div class="whole__actions" data-tenet-line>
-                  <a class="btn" href="#ecosystem" data-magnetic>
-                    <span class="btn__label">See the seven businesses</span>
-                    <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                  </a>
-                  <a class="link-arrow" href="#communities">Explore the communities <svg class="icon"><use href="#i-arrow"/></svg></a>
-                </div>
-              </div>
-              <figure class="tenet__photo" data-tenet-photo>
-                <span class="tenet__frame"><img src="assets/img/hero-lake-bridge-portrait-960.webp" width="960" height="1333" alt="Footbridge across a lake at sunset at Bloom Living (architectural render)" loading="lazy" decoding="async"></span>
-                <figcaption>Landscape</figcaption>
-              </figure>
-            </article>
+          <p class="story__lede" data-reveal="fade">Three words sum up how Bloom builds. One idea, carried by seven businesses across five communities.</p>
+        </header>
+        <ol class="story__cards" data-story-cards>
+        <li class="pcard" data-pcard>
+          <figure class="pcard__media" data-pcard-media>
+            <img src="assets/img/about-aerial-1000.webp" srcset="assets/img/about-aerial-1000.webp 1000w, assets/img/about-aerial-1800.webp 1800w" sizes="(max-width: 600px) 92vw, (max-width: 1000px) 40vw, 32vw" width="1800" height="1200" alt="Aerial view of a lakeside town centre at Bloom Living (architectural render)" loading="lazy" decoding="async">
+          </figure>
+          <div class="pcard__body">
+            <p class="pcard__kicker"><span class="pcard__num">01</span>Planned as a whole</p>
+            <h3 class="pcard__title">Curated</h3>
+            <p class="pcard__text">Homes, schools, streets and services are designed together by one master developer, so everything fits.</p>
+            <p class="pcard__fact" data-pcard-fact><strong>7</strong><span>businesses working as one</span></p>
+            <a class="pcard__link" href="#ecosystem">See the seven businesses <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </div>
-        </div>
+        </li>
+        <li class="pcard" data-pcard>
+          <figure class="pcard__media" data-pcard-media>
+            <img src="assets/img/community-zayed-city-800.webp" srcset="assets/img/community-zayed-city-800.webp 800w, assets/img/community-zayed-city-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 1000px) 40vw, 32vw" width="1400" height="933" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" decoding="async">
+          </figure>
+          <div class="pcard__body">
+            <p class="pcard__kicker"><span class="pcard__num">02</span>Neighbours close at hand</p>
+            <h3 class="pcard__title">Community</h3>
+            <p class="pcard__text">Schools, parks and everyday services sit within each community, so a development grows into a place people belong to.</p>
+            <p class="pcard__fact" data-pcard-fact><strong>5</strong><span>communities across Abu Dhabi and Dubai</span></p>
+            <a class="pcard__link" href="#communities">Explore the communities <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </li>
+        <li class="pcard" data-pcard>
+          <figure class="pcard__media" data-pcard-media>
+            <img src="assets/img/life-3c-wide-900.webp" srcset="assets/img/life-3c-wide-900.webp 900w, assets/img/life-3c-wide-1600.webp 1600w" sizes="(max-width: 600px) 92vw, (max-width: 1000px) 40vw, 32vw" width="1600" height="900" alt="Two women talking by a fire pit on a rooftop terrace at dusk (architectural render)" loading="lazy" decoding="async">
+          </figure>
+          <div class="pcard__body">
+            <p class="pcard__kicker"><span class="pcard__num">03</span>Looked after, every day</p>
+            <h3 class="pcard__title">Living</h3>
+            <p class="pcard__text">Homes are cared for long after handover, with places to stay, dine and unwind close by.</p>
+            <p class="pcard__fact" data-pcard-fact><strong>8,500+</strong><span>units managed by Bloom Facilities Management</span></p>
+            <a class="pcard__link" href="#life">See life at Bloom <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </li>
+        </ol>
       </div>
     </section>
 

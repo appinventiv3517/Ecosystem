@@ -149,34 +149,47 @@ async function desktop(browser) {
   await wait(page, 700);
   check('Escape closes the mega menu and returns focus', await page.evaluate(() => !document.querySelector('[data-mega]').classList.contains('is-open') && document.activeElement.classList.contains('nav-item__toggle')));
 
-  // Our philosophy
-  const activeTenet = () => page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].findIndex((t) => t.classList.contains('is-active') && getComputedStyle(t).visibility === 'visible'));
-  await toTrack(page, '[data-story]', 0.05, 2400);
-  await shot(page, 'desktop-story-1');
-  check('philosophy stage holds still on one screen', await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2));
-  check('it opens on "Curated", the word filled with a photograph', (await activeTenet()) === 0 && await page.evaluate(() => {
-    const word = document.querySelector('[data-tenet] .tenet__word');
-    const img = word.querySelector('[data-tenet-fill]');
-    return word.textContent.trim() === 'Curated' && img.complete && img.naturalWidth > 800 && getComputedStyle(word.querySelector('.tenet__ink')).mixBlendMode === 'lighten';
+  // Our philosophy: one calm screen, three cards, nothing pinned
+  await goTo(page, '#story', 0);
+  await wait(page, 1400);
+  await shot(page, 'desktop-story');
+  check('philosophy asks one plain question', await page.evaluate(() => document.querySelector('#story-title').textContent.replace(/\s+/g, ' ').trim() === 'What does Curated Community Living mean?'));
+  check('three cards explain the three words, in order, each with a plain subtitle', await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-pcard]')];
+    const titles = cards.map((card) => card.querySelector('.pcard__title').textContent.trim()).join(' ');
+    const subtitles = cards.map((card) => card.querySelector('.pcard__kicker').textContent.replace(/^\d+/, '').trim());
+    return cards.length === 3 && titles === 'Curated Community Living' && subtitles.join('|') === 'Planned as a whole|Neighbours close at hand|Looked after, every day';
   }));
-  check('each chapter defines its word and backs it with verified figures', await page.evaluate(() => {
-    const figures = [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.dataset.final || d.textContent.trim());
-    return document.querySelectorAll('.tenet__define').length === 3 && figures.join(' ') === '7 5 15 6,500+ 8,500+';
-  }), await page.evaluate(() => [...document.querySelectorAll('[data-tenet-count]')].map((d) => d.textContent.trim())));
-  await toTrack(page, '[data-story]', 0.4, 2400);
-  await shot(page, 'desktop-story-2');
-  check('scrolling turns to "Community" and its figures count to the RFP values', (await activeTenet()) === 1 && await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')[1].querySelectorAll('[data-tenet-count]')].map((d) => d.textContent).join(' ') === '5 15'));
-  check('only one chapter is visible at a time', await page.evaluate(() => [...document.querySelectorAll('[data-tenet]')].filter((t) => getComputedStyle(t).visibility === 'visible').length === 1));
-  check('the step bar marks the chapter and fills with the scroll', await page.evaluate(() => {
-    const steps = [...document.querySelectorAll('[data-story-go]')];
-    return steps[1].classList.contains('is-active') && Number(steps[0].style.getPropertyValue('--fill')) === 1 && Number(steps[2].style.getPropertyValue('--fill')) === 0;
+  check('each card shows one verified figure', await page.evaluate(() => [...document.querySelectorAll('[data-pcard-fact] strong')].map((n) => n.textContent.trim()).join(' ') === '7 5 8,500+'));
+  check('every card has a described photograph that has loaded', await page.evaluate(() => [...document.querySelectorAll('[data-pcard-media] img')].every((img) => img.complete && img.naturalWidth > 600 && img.alt.length > 20)));
+  check('the cards have risen in, fully visible and side by side', await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-pcard]')];
+    const boxes = cards.map((card) => card.getBoundingClientRect());
+    return cards.every((card) => Number(getComputedStyle(card).opacity) > 0.99) && boxes.every((box) => Math.abs(box.top - boxes[0].top) < 2);
   }));
-  const fitStory = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
-  check('the chapter fits the screen', fitStory.deepest <= fitStory.limit, fitStory);
-  await page.click('[data-story-go="3"]');
-  await wait(page, 2600);
-  check('a step jumps to its chapter: the three words together', (await activeTenet()) === 3 && await page.evaluate(() => document.querySelectorAll('.whole__word [data-tenet-fill]').length === 3));
-  await shot(page, 'desktop-story-3');
+  check('nothing in the philosophy is pinned', await page.evaluate(() => [...document.querySelectorAll('#story, #story *')].every((element) => getComputedStyle(element).position !== 'sticky')));
+  const storyFold = await page.evaluate(() => {
+    const section = document.querySelector('#story').getBoundingClientRect();
+    const deepest = Math.max(...[...document.querySelectorAll('[data-pcard]')].map((card) => card.getBoundingClientRect().bottom));
+    return { top: Math.round(section.top), deepest: Math.round(deepest), limit: innerHeight };
+  });
+  check('the whole section reads on one screen', Math.abs(storyFold.top) < 2 && storyFold.deepest <= storyFold.limit, storyFold);
+  check('each card links to the part of the page that shows it, and the whole card is the link', await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-pcard]')];
+    const hrefs = cards.map((card) => card.querySelector('.pcard__link').getAttribute('href')).join(' ');
+    const covered = cards.every((card) => {
+      const box = card.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height * 0.3);
+      return hit && hit.closest('.pcard__link') === card.querySelector('.pcard__link');
+    });
+    return hrefs === '#ecosystem #communities #life' && covered;
+  }));
+  {
+    const box = await page.evaluate(() => { const r = document.querySelectorAll('[data-pcard]')[1].getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.3 }; });
+    await page.mouse.click(box.x, box.y);
+    await wait(page, 2600);
+    check('clicking the Community card goes to the communities', await page.evaluate(() => Math.abs(document.querySelector('#communities').getBoundingClientRect().top) < 90));
+  }
 
   // Find a Home
   await goTo(page, '[data-search]', 260);
@@ -467,9 +480,9 @@ async function laptop(browser) {
     });
     check(`${width}: Find a Home sits on one screen, quick starts included`, Math.abs(findFold.top) < 2 && findFold.height <= findFold.limit + 1 && findFold.deepest <= findFold.limit, findFold);
     await shot(page, `laptop-${width}-find`);
-    await toTrack(page, '[data-story]', 0.3);
-    const story = await stageFits(page, '[data-story-stage]', '[data-tenet].is-active *');
-    check(`${width}: philosophy chapter fits one screen`, story.deepest <= story.limit, story);
+    await goTo(page, '#story', 0);
+    const story = await page.evaluate(() => ({ deepest: Math.round(Math.max(...[...document.querySelectorAll('[data-pcard]')].map((card) => card.getBoundingClientRect().bottom))), limit: innerHeight }));
+    check(`${width}: philosophy and its three cards fit one screen`, story.deepest <= story.limit, story);
     for (const fraction of [0.2, 0.5, 0.8]) {
       await toTrack(page, '[data-gallery-track]', fraction);
       const fit = await stageFits(page, '[data-gallery-stage]', '[data-gcard] .gcard__actions > *, [data-gcard] .gcard__media');
@@ -502,9 +515,12 @@ async function phone(browser) {
   await wait(page, 2400);
   check('menu link closes the menu and scrolls', await page.evaluate(() => document.querySelector('[data-mobile-menu]').hidden && Math.abs(document.querySelector('#communities').getBoundingClientRect().top) < 90 && !document.documentElement.classList.contains('is-locked')));
 
-  await toTrack(page, '[data-story]', 0.5);
+  await goTo(page, '#story', 0);
   await shot(page, 'phone-story');
-  check('philosophy pins on a phone, word clear of its photograph', await page.evaluate(() => { const t = document.querySelector('[data-tenet].is-active'); const w = t.querySelector('.tenet__word, .whole__line').getBoundingClientRect(); const ph = t.querySelector('.tenet__photo').getBoundingClientRect(); return Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2 && w.right <= innerWidth && (ph.height === 0 || ph.bottom <= w.top + 1); }));
+  check('philosophy cards stack on a phone, photograph above the words, inside the screen', await page.evaluate(() => [...document.querySelectorAll('[data-pcard]')].every((card) => {
+    const box = card.getBoundingClientRect();
+    return box.left >= 0 && box.right <= innerWidth && card.querySelector('[data-pcard-media]').getBoundingClientRect().bottom <= card.querySelector('.pcard__title').getBoundingClientRect().top;
+  })));
 
   await goTo(page, '#communities', 0);
   await shot(page, 'phone-communities');
@@ -580,8 +596,11 @@ async function tablet(browser) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
-  await toTrack(page, '[data-story]', 0.5);
-  check('philosophy word fits the tablet screen', await page.evaluate(() => { const w = document.querySelector('[data-tenet].is-active .tenet__word, [data-tenet].is-active .whole__line').getBoundingClientRect(); return w.width > innerWidth * 0.35 && w.right <= innerWidth; }));
+  await goTo(page, '#story', 0);
+  check('philosophy cards sit as rows on a tablet, photograph beside the words', await page.evaluate(() => [...document.querySelectorAll('[data-pcard]')].every((card) => {
+    const box = card.getBoundingClientRect();
+    return box.right <= innerWidth && card.querySelector('[data-pcard-media]').getBoundingClientRect().right <= card.querySelector('.pcard__title').getBoundingClientRect().left;
+  })));
   check('communities swipe natively on a tablet', await page.evaluate(() => getComputedStyle(document.querySelector('[data-gallery-viewport]')).overflowX === 'auto'));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 800);
@@ -599,12 +618,12 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-hero-fade], .tenet__word, .whole__word, [data-tenet-line], [data-tenet-photo], .gcard, .eco-row, .lshot, .life__open-copy > *, .figure__value, .path, .closing__title')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-hero-fade], [data-pcard], [data-pcard-media], .pcard__body > *, .gcard, .eco-row, .lshot, .life__open-copy > *, .figure__value, .path, .closing__title')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).map((el) => el.className));
   check('all content is visible without animation', hidden.length === 0, hidden.slice(0, 8));
-  check('no section is pinned or scroll-jacked', await page.evaluate(() => ['[data-story-stage]', '[data-gallery-stage]', '[data-eco-stage]', '[data-life-stage]', '.closing__stage'].every((sel) => getComputedStyle(document.querySelector(sel)).position !== 'sticky')));
+  check('no section is pinned or scroll-jacked', await page.evaluate(() => ['#story', '[data-gallery-stage]', '[data-eco-stage]', '[data-life-stage]', '.closing__stage'].every((sel) => getComputedStyle(document.querySelector(sel)).position !== 'sticky')));
   await goTo(page, '[data-search]', 200);
   await page.click('[data-search-submit]');
   await wait(page, 400);
