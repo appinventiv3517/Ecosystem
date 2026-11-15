@@ -76,12 +76,34 @@ export function initGallery() {
     gsap.fromTo(nowLabel, { yPercent: forward ? 60 : -60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: EASE.out });
   }
 
+  /**
+   * In pinned mode every card, text and buttons included, must sit inside the stage. On a short
+   * window the photographs shrink (all by the same factor) until the tallest card fits.
+   */
+  function fitCards() {
+    rail.style.setProperty('--fit', '1');
+    const available = viewport.clientHeight - 12;
+    let fit = 1;
+    for (let pass = 0; pass < 3; pass += 1) {
+      let worst = Infinity;
+      cards.forEach((card) => {
+        const media = card.querySelector('.gcard__media').offsetHeight;
+        const body = card.offsetHeight - media;
+        worst = Math.min(worst, (available - body) / media);
+      });
+      if (worst >= 0.999) break;
+      fit = Math.max(0.45, fit * worst);
+      rail.style.setProperty('--fit', fit.toFixed(3));
+    }
+  }
+
   /* ---------- Pinned mode ---------- */
 
   function setPinned() {
     pinned = true;
     rail.style.width = 'max-content';
     const size = () => {
+      fitCards();
       measure();
       track.style.height = `calc(100svh + ${travel}px)`;
     };
@@ -112,6 +134,7 @@ export function initGallery() {
     }
     gsap.set(rail, { clearProps: 'x' });
     rail.style.width = '';
+    rail.style.removeProperty('--fit');
     track.style.height = '';
     pinned = false;
   }

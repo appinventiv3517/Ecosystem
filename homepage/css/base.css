@@ -496,8 +496,11 @@ html.motion [data-split] {
 
 /* SplitText line masks: leave room for descenders and italic overhang. */
 .split-line-mask {
-  padding-bottom: 0.14em;
-  margin-bottom: -0.14em;
+  /* Headline lines rise out of these masks; the padding keeps descenders (g, y, p) whole. */
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-bottom: 0.26em;
+  margin-bottom: -0.26em;
   padding-right: 0.08em;
 }
 

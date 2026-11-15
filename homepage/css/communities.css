@@ -109,10 +109,12 @@
 .gcard {
   --media-h: 46vh;
   --ratio: 1.45;
+  --mh: calc(var(--media-h) * var(--fit, 1));
   flex: none;
   display: grid;
   gap: clamp(0.75rem, 1.6vh, 1.125rem);
-  width: calc(var(--media-h) * var(--ratio));
+  /* Never so narrow that the card's words wrap into a tall block. */
+  width: max(calc(var(--mh) * var(--ratio)), 17rem);
   user-select: none;
 }
 
@@ -123,7 +125,7 @@
 
 .gcard__media {
   position: relative;
-  height: var(--media-h);
+  height: var(--mh);
   overflow: hidden;
   border-radius: 3px;
   background: var(--sand);

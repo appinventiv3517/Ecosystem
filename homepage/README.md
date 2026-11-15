@@ -152,16 +152,18 @@ PAGE_URL=file://$PWD/dist/bloom-homepage.html npm test
 
 ## Checks
 
-`npm test` drives a real browser through the page in six suites (`node tests/check.cjs <suite>`
+`npm test` drives a real browser through the page in seven suites (`node tests/check.cjs <suite>`
 runs one): `desktop` (1440 x 900), `opening` (no loader; the headline is up within 1.5 s),
 `laptop` (1366 x 768 and 1280 x 800: every sticky stage fits the screen and clears the dock),
-`phone` (390 x 844, touch), `tablet` (834 x 1112, touch) and `reducedMotion`. Between them they
+`phone` (390 x 844, touch), `tablet` (834 x 1112, touch), `reducedMotion` and `clipping`. Between them they
 cover the hero layers, header states and scroll spy, the mega menu by mouse and keyboard, the
 mobile menu, every story chapter, Buy / Rent, both dropdowns, bedroom chips, quick starts and the
 demo search, the gallery by scroll, buttons, arrow keys, drag and native swipe, the ecosystem by
 scroll and click with its wire and orbit, the Life frame opening, the counting figures, the
 service pathways and pointer preview, the enquiry panel including validation, the closing screen,
-the dock, and back to top. They also assert no horizontal overflow, no broken images, no console
+the dock, and back to top. A `clipping` suite scrolls the whole page at five sizes, down to a
+1536 x 730 laptop window, and fails if any line of text or any button is cut off by its container
+(descenders included). They also assert no horizontal overflow, no broken images, no console
 errors, touch targets of at least 40px, and that nothing stays hidden or pinned under reduced
 motion.
 

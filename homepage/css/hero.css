@@ -133,8 +133,11 @@
   display: block;
   /* Each line is its own mask; the word rises inside it. */
   overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+  /* Room below the baseline for the descenders of y and g. */
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-bottom: 0.26em;
+  margin-bottom: -0.26em;
 }
 
 .hero__line--indent {

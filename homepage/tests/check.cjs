@@ -2,7 +2,7 @@
 // sizes, exercises every interaction in the brief and reports what passed.
 //
 //   node tests/check.cjs              all suites
-//   node tests/check.cjs desktop      one suite: desktop, opening, laptop, phone, tablet, reducedMotion
+//   node tests/check.cjs desktop      one suite: desktop, opening, laptop, phone, tablet, reducedMotion, clipping
 //   SHOTS=1 node tests/check.cjs      also writes screenshots to tests/output/
 //   PAGE_URL=... node tests/check.cjs runs against another build (see tools/build_artifact.py)
 //
@@ -99,7 +99,7 @@ async function desktop(browser) {
     const box = element.getBoundingClientRect();
     return box.top >= 0 && box.bottom <= innerHeight && Number(getComputedStyle(element.closest('[data-hero-fade]') || element).opacity) > 0.95;
   })));
-  check('the hero words have risen into place', await page.evaluate(() => [...document.querySelectorAll('.hero__word')].every((word) => Math.abs(word.getBoundingClientRect().top - word.parentElement.getBoundingClientRect().top) < 4)));
+  check('the hero words have risen into place', await page.evaluate(() => [...document.querySelectorAll('.hero__word')].every((word) => Math.abs(word.getBoundingClientRect().top - word.parentElement.getBoundingClientRect().top - parseFloat(getComputedStyle(word.parentElement).paddingTop)) < 4)));
   check('the arch window has opened', await page.evaluate(() => /inset\(0(%|px)? /.test(getComputedStyle(document.querySelector('[data-hero-window]')).clipPath)));
   check('header is dark glass over the hero', await page.evaluate(() => !document.querySelector('[data-header]').classList.contains('is-solid')));
   const before = await page.evaluate(() => document.querySelector('[data-hero-window]').getBoundingClientRect().top);
@@ -408,7 +408,7 @@ async function opening(browser) {
   check('the headline is in the page from the first paint', textAtOnce === 'Curated Community Living', textAtOnce);
   await wait(page, 1600);
   check('the headline has risen within a second and a half', await page.evaluate(() => [...document.querySelectorAll('.hero__word')].every((word) => {
-    const offset = word.getBoundingClientRect().top - word.parentElement.getBoundingClientRect().top;
+    const offset = word.getBoundingClientRect().top - word.parentElement.getBoundingClientRect().top - parseFloat(getComputedStyle(word.parentElement).paddingTop);
     return offset < word.offsetHeight * 0.1;
   })));
   check('the proposition and actions are visible by then', await page.evaluate(() => [...document.querySelectorAll('[data-hero-fade]')].every((el) => Number(getComputedStyle(el).opacity) > 0.9)));
@@ -576,6 +576,62 @@ async function reducedMotion(browser) {
   await context.close();
 }
 
+/**
+ * No text is cut off: for every visible line of text, its glyph box (which for Playfair includes
+ * the descenders of g and y) must sit inside every clipping ancestor it overlaps. Sideways cuts
+ * in the communities rail are its intended edges; Life at Bloom captions drift through the stage
+ * edge on purpose.
+ */
+const scanClipping = () => {
+  const out = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (!node.textContent.trim()) continue;
+    const el = node.parentElement;
+    if (!el || el.closest('[aria-hidden="true"], script, style, [hidden], dialog:not([open]), .sr-only, .cursor, .lshot')) continue;
+    let hidden = false;
+    for (let a = el; a; a = a.parentElement) {
+      const cs = getComputedStyle(a);
+      if (cs.visibility === 'hidden' || cs.display === 'none' || Number(cs.opacity) < 0.05) { hidden = true; break; }
+    }
+    if (hidden) continue;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    for (const r of range.getClientRects()) {
+      if (r.width < 2 || r.height < 2 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
+      for (let a = el; a && a !== document.body; a = a.parentElement) {
+        const cs = getComputedStyle(a);
+        if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue;
+        const b = a.getBoundingClientRect();
+        if (!(r.right > b.left && r.left < b.right && r.bottom > b.top && r.top < b.bottom)) break;
+        const sideways = a.closest('[data-gallery-viewport]') ? 0 : Math.max(r.right - b.right, b.left - r.left);
+        const cut = Math.max(r.bottom - b.bottom, b.top - r.top, sideways);
+        if (cut > 1.5) out.push(`${node.textContent.trim().slice(0, 24)} (${Math.round(cut)}px, ${String(a.className).slice(0, 24)})`);
+        break;
+      }
+    }
+  }
+  return out;
+};
+
+async function clipping(browser) {
+  for (const [width, height, touch] of [[1440, 900], [1536, 730], [1280, 800], [834, 1112, true], [390, 844, true]]) {
+    console.log(`\nClipping ${width} x ${height}`);
+    const { context, page } = await open(browser, { width, height, touch });
+    await wait(page, 2200);
+    const total = await page.evaluate(() => document.documentElement.scrollHeight);
+    const cut = new Set();
+    for (let y = 0; y < total; y += Math.round(height * 0.45)) {
+      await page.evaluate((v) => window.scrollTo(0, v), y);
+      await wait(page, 1300);
+      (await page.evaluate(scanClipping)).forEach((item) => cut.add(item));
+    }
+    check(`${width}: no text or button is cut off anywhere on the page`, cut.size === 0, [...cut].slice(0, 8));
+    await context.close();
+  }
+}
+
 (async () => {
   await ensureServer();
   if (SHOTS) fs.mkdirSync(OUT, { recursive: true });
@@ -583,7 +639,7 @@ async function reducedMotion(browser) {
   const browser = await chromium.launch(proxy ? { proxy: { server: proxy, bypass: 'localhost,127.0.0.1' } } : {});
   try {
     const only = process.argv[2];
-    const suites = { desktop, opening, laptop, phone, tablet, reducedMotion };
+    const suites = { desktop, opening, laptop, phone, tablet, reducedMotion, clipping };
     for (const [name, suite] of Object.entries(suites)) {
       if (!only || only === name) await suite(browser);
     }

@@ -170,7 +170,8 @@ html:not(.motion) .tenet + .tenet {
 
 .tenet__ink {
   display: block;
-  padding: 0.02em 0.04em 0.1em 0;
+  /* Deep enough below the baseline for the descenders of y and g. */
+  padding: 0.04em 0.06em 0.27em 0;
   background: var(--story-bg);
   color: #000;
   mix-blend-mode: lighten;

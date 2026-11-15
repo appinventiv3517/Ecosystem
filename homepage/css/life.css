@@ -57,8 +57,10 @@ html.motion .life__head {
 .life__line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.1em;
-  margin-bottom: -0.1em;
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-bottom: 0.26em;
+  margin-bottom: -0.26em;
 }
 
 .life__line > span {
