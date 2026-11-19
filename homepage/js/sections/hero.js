@@ -1,5 +1,5 @@
 // Hero, "Bloom World": Bloom's seven businesses as seven arches travelling round a tilted
-// orbit, with the proposition at its centre. The arch at the front of the orbit is in focus;
+// orbit, with the name Bloom World at its centre. The arch at the front of the orbit is in focus;
 // the world turns to the next business every few seconds, follows a drag (with momentum),
 // tilts towards the pointer, and swings outwards as you scroll on into the glimpses below.
 //
@@ -10,7 +10,7 @@
 import { $, $$, clamp, emit, finePointer } from '../lib/dom.js';
 import { gsap, ScrollTrigger, motionOK } from '../lib/motion.js';
 
-const STEP_SECONDS = 3.4; // how long each business stays at the front before the world turns
+const STEP_SECONDS = 3; // how long each business stays at the front before the world turns
 const TURN_SECONDS = 1.5;
 const BACK = 0.6; // scale of an arch at the far side of the orbit
 
@@ -44,7 +44,7 @@ export function initHero() {
   if (!hero || !world) return { start() {} };
 
   if (motionOK) {
-    $('[data-hero-title]', hero).setAttribute('aria-label', 'Curated Community Living');
+    $('[data-hero-title]', hero).setAttribute('aria-label', 'Bloom World');
     $$('.hero__word', hero).forEach((word) => {
       splitLetters(word);
       word.setAttribute('aria-hidden', 'true');
@@ -104,7 +104,7 @@ export function initHero() {
       const bottom = top + Math.min(height * 0.2, 170);
       cy = (top + bottom) / 2;
       ry = (bottom - top) / 2;
-      titleSize = Math.min(width * 0.13, 56);
+      titleSize = Math.min(width * 0.155, 64);
       copyTop = bottom + ph / 2 + 64;
       copyBottom = 20;
     } else {
@@ -115,7 +115,8 @@ export function initHero() {
       cy = (topRoom + bottomRoom) / 2;
       ry = (bottomRoom - topRoom) / 2;
       rx = Math.min(width / 2 - pw * 0.62 - 12, width * (tall ? 0.4 : 0.42));
-      titleSize = clamp(Math.min(width * (tall ? 0.085 : 0.06), height * 0.092, rx * 0.17), 44, 132);
+      // Two words on one line, so the name can be set large.
+      titleSize = clamp(Math.min(width * (tall ? 0.11 : 0.085), height * 0.13, rx * 0.24), 52, 168);
       // The proposition fills the hollow of the orbit: below the far arches, above the near one.
       copyTop = cy - ry + (ph * BACK) / 2 + 22;
       copyBottom = height - (cy + ry - ph * 0.55) + 16;
@@ -272,7 +273,10 @@ export function initHero() {
     });
 
     if (motionOK && directClick) {
+      // The world keeps turning on its own; it waits only while the pointer rests on an arch.
       button.addEventListener('pointerenter', () => {
+        hovering = true;
+        autoCall?.kill();
         if (dragging) return;
         orbs[i].classList.add('is-hover');
         world.classList.add('has-hover');
@@ -280,6 +284,8 @@ export function initHero() {
         gsap.to($('img', button), { scale: 1.08, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
       });
       button.addEventListener('pointerleave', () => {
+        hovering = false;
+        schedule();
         orbs[i].classList.remove('is-hover');
         world.classList.remove('has-hover');
         gsap.to(arch[i], { lift: 0, duration: 0.9, ease: 'power3.out', overwrite: 'auto' });
@@ -333,17 +339,6 @@ export function initHero() {
       window.addEventListener('pointermove', move, { passive: true });
       window.addEventListener('pointerup', up);
       window.addEventListener('pointercancel', up);
-    });
-
-    world.addEventListener('pointerenter', (event) => {
-      if (event.pointerType !== 'mouse') return;
-      hovering = true;
-      autoCall?.kill();
-    });
-    world.addEventListener('pointerleave', (event) => {
-      if (event.pointerType !== 'mouse') return;
-      hovering = false;
-      schedule();
     });
 
     // The world leans towards the pointer and tilts as it moves up and down; the headline

@@ -114,7 +114,7 @@ async function desktop(browser) {
 
   // Hero: Welcome to Bloom World
   check('hero headline is dark on cream and readable', await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).backgroundColor === 'rgb(248, 246, 234)' && getComputedStyle(document.querySelector('.hero__title')).color === 'rgb(29, 26, 23)'));
-  check('the hero welcomes you to Bloom World', (await page.textContent('[data-hero-eyebrow]')).replace(/\s+/g, ' ').trim() === 'Welcome to Bloom World');
+  check('the hero welcomes you to Bloom World', (await page.textContent('[data-hero-eyebrow]')).trim() === 'Welcome to' && await page.evaluate(() => document.querySelector('[data-hero-title]').getAttribute('aria-label') === 'Bloom World' && document.querySelector('.hero__title').textContent.replace(/\s+/g, ' ').trim() === 'Bloom World'));
   check('all seven businesses are on screen, each named', await page.evaluate(() => {
     const names = ['Real Estate', 'Education', 'Hospitality', 'Retail', 'Healthcare', 'Facilities Management', 'Landscaping'];
     const orbs = [...document.querySelectorAll('[data-orb]')];
@@ -140,9 +140,11 @@ async function desktop(browser) {
       return blocks.every((t) => inner.right < t.left || inner.left > t.right || inner.bottom < t.top || inner.top > t.bottom);
     });
   }));
+  // With the pointer over the hero (but not on an arch) the world keeps turning.
+  await page.mouse.move(720, 300);
   const firstFocus = await frontOrb(page);
-  await wait(page, 5400);
-  check('the world turns to the next business on its own', (await frontOrb(page)) !== firstFocus);
+  await wait(page, 5000);
+  check('the world turns on its own, even with the pointer over the hero', (await frontOrb(page)) !== firstFocus);
   await page.hover('[data-orb][data-id="retail"] .orb__btn', { force: true });
   await wait(page, 900);
   check('pointing at a business names its brand and steps the others back', await page.evaluate(() => document.querySelector('[data-world]').classList.contains('has-hover') && Number(getComputedStyle(document.querySelector('[data-orb][data-id="retail"] .orb__brand')).opacity) > 0.95));
