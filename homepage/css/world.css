@@ -11,22 +11,11 @@
   color: var(--cream);
 }
 
-/* Scroll room: one stretch per business, and one for the day coming together. */
-html.motion .glimpses__track {
-  height: calc(100vh + 8 * 62vh);
-  height: calc(100svh + 8 * 62svh);
-}
-
 .glimpses__stage {
   position: relative;
   height: 100vh;
   height: 100svh;
   min-height: 36rem;
-}
-
-html.motion .glimpses__stage {
-  position: sticky;
-  top: 0;
 }
 
 .glimpses__window {
@@ -293,8 +282,9 @@ html.motion .glimpses__stage {
   }
 }
 
-.moment__go {
-  color: var(--cream);
+/* Each business's own website. */
+.moment__site {
+  margin-top: 0.25rem;
 }
 
 .moment__actions {
@@ -596,9 +586,6 @@ html:not(.motion) .dial__sun {
     font-size: 0.75rem;
   }
 
-  .moment__go {
-    display: none;
-  }
 
   .dial {
     justify-self: stretch;
@@ -646,5 +633,87 @@ html:not(.motion) .dial__sun {
   .dial__stop {
     width: 2.5rem;
     height: 2.5rem;
+  }
+}
+
+/* ---------- Pause, and the wait before the next business ---------- */
+
+.dial__pause {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0.25rem 0.875rem 0.25rem 0.625rem;
+  border: 1px solid rgba(248, 246, 234, 0.32);
+  border-radius: var(--radius-pill);
+  background: rgba(14, 13, 12, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cream);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+
+.dial__pause .icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+@media (hover: hover) {
+  .dial__pause:hover {
+    background: var(--cream);
+    color: var(--ink);
+  }
+}
+
+/* A ring fills round the active stop while the day waits on it. */
+.dial__dot {
+  position: relative;
+}
+
+.glimpses.is-playing.is-counting .dial__stop.is-active .dial__dot::after {
+  content: "";
+  position: absolute;
+  inset: -0.4rem;
+  border-radius: 50%;
+  background: conic-gradient(var(--cream) calc(var(--fill, 0) * 1turn), transparent 0);
+  -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%);
+  mask: radial-gradient(circle, transparent 58%, #000 60%);
+  animation: dial-fill var(--hold, 4s) linear forwards;
+}
+
+@property --fill {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes dial-fill {
+  to {
+    --fill: 1;
+  }
+}
+
+/* Phones: a round icon button, clear of the website button beside it. */
+@media (max-width: 760px) {
+  .dial__pause {
+    right: 0;
+    bottom: calc(100% + 0.25rem);
+    width: 2.5rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .dial__pause span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 }

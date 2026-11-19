@@ -1,13 +1,14 @@
 // Glimpses of Bloom World: one illustrative day that passes through all seven businesses.
 //
-// On scroll the stage holds still (position: sticky inside a tall track). As it arrives, an
-// arch opens onto the scene; then the sun travels a dial from morning to evening, stopping at
-// each business. At every stop the scene and its story change and the dial draws the links
-// from that business to the others it works with. The links stay drawn as the day goes on,
-// so by evening the seven are visibly one connected web, and a last step says so.
+// As the section arrives an arch opens onto the scene. The day then plays on its own: the sun
+// travels a dial from morning to evening, stopping a few seconds at each business. At every
+// stop the scene and its story change and the dial draws the links from that business to the
+// others it works with. The links stay drawn as the day goes on, so by evening the seven are
+// visibly one connected web; a last step says so, then the day starts again. It waits while
+// the pointer or focus is on the story or dial, and has a pause button.
 //
-// Without motion (or reduced motion) the stage is an ordinary section and the dial's stops
-// work as tabs. Clicks anywhere on the page reach a business through the bloom:world event.
+// Without motion (or reduced motion) nothing plays: the dial's stops work as tabs.
+// Clicks anywhere on the page reach a business through the bloom:world event.
 
 import { $, $$, clamp, listen, scrollToTarget } from '../lib/dom.js';
 import { gsap, ScrollTrigger, motionOK, EASE } from '../lib/motion.js';
@@ -16,14 +17,12 @@ const SVG_W = 1000;
 const ARC = { cx: 500, cy: 290, rx: 470, ry: 250 };
 const FIRST = 168; // degrees round the arc of the first and last stops
 const LAST = 12;
+const HOLD = 4.2; // seconds on each business
+const HOLD_ALL = 6; // seconds on "all seven, together" before the day starts again
 
 const point = (deg) => {
   const rad = (deg * Math.PI) / 180;
   return { x: ARC.cx + ARC.rx * Math.cos(rad), y: ARC.cy - ARC.ry * Math.sin(rad) };
-};
-const smooth = (t) => {
-  const x = clamp(t, 0, 1);
-  return x * x * (3 - 2 * x);
 };
 
 export function initWorld() {
@@ -40,13 +39,11 @@ export function initWorld() {
   const scenes = $$('[data-scene]', section);
   const ids = stops.map((stop) => stop.dataset.id);
   const COUNT = stops.length; // seven businesses
-  const STEPS = COUNT + 1; // and the closing "all together" step
   const angles = ids.map((_, k) => FIRST - ((FIRST - LAST) * k) / (COUNT - 1));
   const points = angles.map(point);
 
   let current = -1;
   let shownScene = scenes.find((scene) => scene.classList.contains('is-active'));
-  const proxy = { p: 0 };
 
   /* ---------- The dial ---------- */
 
@@ -176,25 +173,58 @@ export function initWorld() {
       }
     }
 
-    if (!motionOK) drawSun(Math.min(k, COUNT - 1));
     return previous;
   }
 
-  /* ---------- Scroll ---------- */
+  /* ---------- Playing the day ---------- */
 
-  const progressOf = (k) => (k + 0.4) / STEPS;
+  const pause = $('[data-glimpse-pause]', section);
+  let timer = null;
+  let inView = false;
+  let held = false; // pointer on the story or dial, or focus inside them
+  let paused = false; // the visitor pressed pause
+
+  /** Glide the sun to stop s. */
+  function sunTo(s) {
+    gsap.to(sunAt, { s: Math.min(s, COUNT - 1), duration: 1.1, ease: EASE.inOut, overwrite: true, onUpdate: () => drawSun(sunAt.s) });
+  }
+  const sunAt = { s: 0 };
+
+  function show(k) {
+    setMoment(k);
+    if (motionOK) sunTo(k);
+    else drawSun(Math.min(k, COUNT - 1));
+  }
+
+  function schedule() {
+    timer?.kill();
+    timer = null;
+    section.classList.toggle('is-playing', motionOK && inView && !held && !paused);
+    if (!motionOK || !inView || held || paused || document.hidden) return;
+    // Each business stays for a few seconds; the day ends on all seven, then starts again.
+    const wait = current >= COUNT ? HOLD_ALL : HOLD;
+    section.style.setProperty('--hold', `${wait}s`);
+    restartProgress();
+    timer = gsap.delayedCall(wait, () => {
+      show(current >= COUNT ? 0 : current + 1);
+      schedule();
+    });
+  }
+
+  /** Restart the thin line that fills under the active stop while it waits. */
+  function restartProgress() {
+    section.classList.remove('is-counting');
+    void section.offsetWidth;
+    section.classList.add('is-counting');
+  }
 
   function goTo(id) {
     const k = id === 'all' ? COUNT : ids.indexOf(id);
     if (k < 0) return;
-    if (!motionOK) {
-      setMoment(k, { animate: false });
-      scrollToTarget(section);
-      return;
-    }
-    const top = track.getBoundingClientRect().top + window.scrollY;
-    const room = track.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: top + room * progressOf(k), behavior: 'smooth' });
+    show(k);
+    const box = section.getBoundingClientRect();
+    if (Math.abs(box.top) > 4) scrollToTarget(section);
+    schedule();
   }
 
   listen('bloom:world', ({ id }) => goTo(id));
@@ -211,31 +241,47 @@ export function initWorld() {
 
   setMoment(0, { animate: false });
   drawSun(0);
-  if (!motionOK) return;
+  if (!motionOK) {
+    if (pause) pause.hidden = true;
+    return;
+  }
 
-  section.classList.add('is-scrolled');
+  // The day waits while you read or use the story and the dial, and when you press pause.
+  $$('[data-glimpse-story], [data-dial]', section).forEach((area) => {
+    area.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      held = true;
+      schedule();
+    });
+    area.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      held = false;
+      schedule();
+    });
+    area.addEventListener('focusin', () => { held = true; schedule(); });
+    area.addEventListener('focusout', (event) => {
+      if (area.contains(event.relatedTarget)) return;
+      held = false;
+      schedule();
+    });
+  });
+  pause?.addEventListener('click', () => {
+    paused = !paused;
+    pause.setAttribute('aria-pressed', String(paused));
+    $('[data-pause-label]', pause).textContent = paused ? 'Play the day' : 'Pause the day';
+    $('use', pause).setAttribute('href', paused ? '#i-play' : '#i-pause');
+    schedule();
+  });
+  document.addEventListener('visibilitychange', schedule);
 
-  // The day follows the scroll, eased so the sun glides rather than jumps.
-  const follow = () => {
-    const f = proxy.p * STEPS;
-    const k = Math.floor(f);
-    // The sun rests on a stop for most of its stretch of scroll, then glides on to the next.
-    const s = Math.min(k + smooth((f - k - 0.62) / 0.38), COUNT - 1);
-    drawSun(s);
-  };
-
+  // Plays only while the section is on screen.
   ScrollTrigger.create({
-    trigger: track,
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => {
-      const p = self.progress;
-      setMoment(clamp(Math.floor(p * STEPS), 0, STEPS - 1));
-      gsap.to(proxy, { p, duration: 0.6, ease: 'power3.out', overwrite: true, onUpdate: follow });
-    },
-    onLeaveBack: () => {
-      setMoment(0);
-      gsap.to(proxy, { p: 0, duration: 0.6, ease: 'power3.out', overwrite: true, onUpdate: follow });
+    trigger: section,
+    start: 'top 60%',
+    end: 'bottom 40%',
+    onToggle: (self) => {
+      inView = self.isActive;
+      schedule();
     },
   });
 

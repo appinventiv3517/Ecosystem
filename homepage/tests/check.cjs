@@ -64,14 +64,10 @@ const activeCommunity = (page) => page.evaluate(() => document.querySelector('.c
 const activeVertical = (page) => page.evaluate(() => document.querySelector('.eco-index__item[aria-current="true"]')?.dataset.vertical);
 const activeMoment = (page) => page.evaluate(() => document.querySelector('.moment.is-active')?.dataset.moment);
 const frontOrb = (page) => page.evaluate(() => document.querySelector('[data-orb].is-focus')?.dataset.id);
-/** Scroll to a point in the day of Bloom World: step 0 is 07:00, step 7 the closing "all together". */
-const toWorldStep = async (page, step) => {
-  await page.evaluate((s) => {
-    const track = document.querySelector('[data-glimpse-track]');
-    const top = track.getBoundingClientRect().top + scrollY;
-    window.scrollTo({ top: top + (track.offsetHeight - innerHeight) * ((s + 0.4) / 8), behavior: 'instant' });
-  }, step);
-  await wait(page, 1600);
+/** Bring the glimpses of Bloom World to the top of the screen. */
+const toWorld = async (page) => {
+  await page.evaluate(() => window.scrollTo({ top: document.querySelector('#world').getBoundingClientRect().top + scrollY, behavior: 'instant' }));
+  await wait(page, 1400);
 };
 /** Scroll to a point in the Bloom book: step 0 is the closed cover (desktop) or first page (phone). */
 const toBookStep = async (page, step) => {
@@ -154,7 +150,8 @@ async function desktop(browser) {
   check('scrolling swings the world open and lifts the headline away', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05 && [...document.querySelectorAll('[data-orb]')].every((orb) => Number(getComputedStyle(orb).opacity) < 0.15)));
 
   // Glimpses of Bloom World
-  await toWorldStep(page, 0);
+  await page.mouse.move(1300, 120);
+  await toWorld(page);
   await shot(page, 'desktop-world');
   check('glimpses: the day opens at home with Real Estate', (await activeMoment(page)) === 'real-estate' && await page.evaluate(() => document.querySelector('[data-stop="0"]').classList.contains('is-active')));
   check('glimpses: the stage, story and dial fit one laptop screen', await page.evaluate(() => {
@@ -164,25 +161,43 @@ async function desktop(browser) {
     return Math.abs(stage.top) < 2 && stage.height <= innerHeight + 1 && bottom('.glimpses__head, .moment.is-active') <= innerHeight && bottom('[data-dial], .dial__label') <= innerHeight - 64;
   }));
   check('glimpses: the links from home to the businesses it works with are drawn', await page.evaluate(() => document.querySelectorAll('.dial__link.is-live').length === 3));
-  for (let i = 0; i < 4; i += 1) {
-    await page.mouse.move(1000, 400);
-    await page.mouse.wheel(0, 320);
-    await wait(page, 400);
-  }
-  await wait(page, 1600);
-  const moved = await activeMoment(page);
-  check('glimpses: scrolling moves through the day while the stage holds still', !['real-estate', undefined].includes(moved) && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2), moved);
+  check('glimpses: each business has a button to its own website', await page.evaluate(() => {
+    const site = document.querySelector('#moment-real-estate .moment__site');
+    return site.href === 'https://bloomholding.com/what-we-do/properties' && site.target === '_blank' && site.rel.includes('noopener')
+      && document.querySelectorAll('a.moment__site[target="_blank"]').length === 5 && document.querySelectorAll('button.moment__site[data-demo]').length === 2;
+  }));
+  await wait(page, 4300);
+  check('glimpses: the day moves on to the next business by itself', (await activeMoment(page)) === 'education', await activeMoment(page));
+  await page.hover('.moment.is-active .moment__text');
+  const held = await activeMoment(page);
+  await wait(page, 5000);
+  check('glimpses: the day waits while you read the story', (await activeMoment(page)) === held);
+  await page.mouse.move(1300, 120);
+  await page.click('[data-glimpse-pause]');
+  await page.mouse.move(1300, 120);
+  const pausedAt = await activeMoment(page);
+  await wait(page, 5000);
+  check('glimpses: the pause button stops the day', (await activeMoment(page)) === pausedAt && (await page.getAttribute('[data-glimpse-pause]', 'aria-pressed')) === 'true');
+  await page.click('[data-glimpse-pause]');
+  await page.mouse.move(1300, 120);
   await page.click('[data-stop="6"]');
-  await wait(page, 2600);
+  await page.mouse.move(1300, 120);
+  await wait(page, 1500);
   check('glimpses: a stop on the dial jumps to that business', (await activeMoment(page)) === 'hospitality' && await page.evaluate(() => document.querySelector('.scene.is-active').dataset.scene === 'hospitality' && document.querySelector('[data-stop="6"]').getAttribute('aria-current') === 'step'));
   check('glimpses: earlier links stay drawn as the day goes on', await page.evaluate(() => document.querySelectorAll('.dial__link.is-known').length >= 8));
-  await page.click('.moment.is-active .moment__link >> nth=0');
-  await wait(page, 2600);
-  check('glimpses: "connects with" jumps to the linked business', (await activeMoment(page)) === 'retail', await activeMoment(page));
-  check('glimpses: stand-in photography is labelled', await page.evaluate(() => document.querySelector('.scene.is-active .scene__tag')?.textContent.includes('Stand-in')));
-  await toWorldStep(page, 7);
+  await wait(page, 4000);
   await shot(page, 'desktop-world-all');
   check('glimpses: the day ends with all seven connected', (await activeMoment(page)) === 'all' && await page.evaluate(() => document.querySelector('#world').classList.contains('is-all')));
+  await page.click('[data-stop="3"]');
+  await page.mouse.move(1300, 120);
+  await wait(page, 1500);
+  check('glimpses: stand-in photography is labelled and the website button says it is to come', await page.evaluate(() => document.querySelector('.scene.is-active .scene__tag')?.textContent.includes('Stand-in') && document.querySelector('#moment-retail .moment__site').textContent.includes('to come')));
+  await page.click('.moment.is-active .moment__link >> nth=0');
+  await page.mouse.move(1300, 120);
+  await wait(page, 1500);
+  check('glimpses: "connects with" jumps to the linked business', (await activeMoment(page)) === 'real-estate', await activeMoment(page));
+  await page.evaluate(() => document.dispatchEvent(new CustomEvent('bloom:world', { detail: { id: 'all' } })));
+  await wait(page, 1500);
   await page.click('#moment-all a[href="#find"]');
   await wait(page, 2400);
   check('glimpses: "Find your place" leads on to the property search', await page.evaluate(() => Math.abs(document.querySelector('#find').getBoundingClientRect().top) < 90));
@@ -434,7 +449,7 @@ await wait(page, 1600);
   await wait(page, 900);
   await page.click('[data-orb][data-id="education"] .orb__btn', { force: true });
   await wait(page, 2800);
-  check('clicking a business in the hero opens it in the glimpses of Bloom World', (await activeMoment(page)) === 'education' && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2), await activeMoment(page));
+  check('clicking a business in the hero opens it in the glimpses of Bloom World', (await activeMoment(page)) === 'education' && await page.evaluate(() => Math.abs(document.querySelector('#world').getBoundingClientRect().top) < 4), await activeMoment(page));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 900);
   const before = await frontOrb(page);
@@ -495,9 +510,8 @@ async function phone(browser) {
   await wait(page, 2800);
   check('phone: the caption opens that business in the glimpses', (await activeMoment(page)) === phoneFront, { phoneFront, moment: await activeMoment(page) });
   await shot(page, 'phone-world');
-  await page.evaluate(() => window.scrollBy({ top: innerHeight * 1.3, behavior: 'instant' }));
-  await wait(page, 1800);
-  check('phone: scrolling moves through the day while the stage holds still', (await activeMoment(page)) !== phoneFront && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2));
+  await wait(page, 3000);
+  check('phone: the day moves on by itself', (await activeMoment(page)) !== phoneFront);
   check('phone: the story and dial fit the screen', await page.evaluate(() => Math.max(...[...document.querySelectorAll('.moment.is-active, [data-dial]')].map((el) => el.getBoundingClientRect().bottom)) <= innerHeight - 56));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 600);
@@ -595,8 +609,10 @@ async function tablet(browser) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
-  await toWorldStep(page, 3);
-  check('scrolling moves through the day on a tablet', (await activeMoment(page)) === 'retail', await activeMoment(page));
+  await toWorld(page);
+  await page.tap('[data-stop="3"]');
+  await wait(page, 1500);
+  check('a stop on the dial opens that business on a tablet', (await activeMoment(page)) === 'retail', await activeMoment(page));
   await goTo(page, '#ecosystem', 0);
   await toBookStep(page, 3);
   check('scrolling turns the book on a tablet', (await activeVertical(page)) === 'hospitality');

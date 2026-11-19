@@ -10,8 +10,8 @@
 import { $, $$, clamp, emit, finePointer } from '../lib/dom.js';
 import { gsap, ScrollTrigger, motionOK } from '../lib/motion.js';
 
-const STEP_SECONDS = 3; // how long each business stays at the front before the world turns
-const TURN_SECONDS = 1.5;
+const STEP_SECONDS = 1.8; // how long each business stays at the front before the world turns
+const TURN_SECONDS = 1.1;
 const BACK = 0.6; // scale of an arch at the far side of the orbit
 
 /** Wrap every letter of the element's text in its own span, keeping inner tags such as <em>. */
