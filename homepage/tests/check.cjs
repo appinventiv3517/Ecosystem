@@ -274,7 +274,7 @@ async function desktop(browser) {
   check('featured: "Homes to buy here" searches that community', (await page.textContent('[data-result-summary]')).startsWith('Homes to buy in Eastern Mangrove Corniche'), await page.textContent('[data-result-summary]'));
   await page.click('.dev[data-dev="bloom-gardens"] [data-dev-enquire]');
   await wait(page, 900);
-  check('featured: "Register interest" opens the enquiry about that development', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('[data-enquiry]').textContent.includes('About: Bloom Gardens') && document.querySelector('input[name="interest"][value="buy"]').checked));
+  check('featured: "Enquire" opens the enquiry about that development', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('[data-enquiry]').textContent.includes('About: Bloom Gardens') && document.querySelector('input[name="interest"][value="buy"]').checked));
   await page.click('.enquiry__close');
   await wait(page, 900);
   check('the launch slot says plainly that launches are to come', (await page.textContent('.dev--launch')).includes('Launch details to come from Bloom'));

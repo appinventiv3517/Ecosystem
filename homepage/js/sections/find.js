@@ -76,13 +76,12 @@ export function initFind() {
       if (active && animate && motionOK) gsap.fromTo(copy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: EASE.soft });
     });
 
-    // Pathways: the chosen one is marked; its tick pops in.
+    // Pathways: the chosen word comes forward and its rule draws across; the other recedes.
     paths.forEach((path) => {
       const active = path.dataset.path === value;
       path.classList.toggle('is-active', active);
       if (active && animate && motionOK) {
-        gsap.fromTo($('.path__tick', path), { scale: 0.4, rotate: -30 }, { scale: 1, rotate: 0, duration: 0.6, ease: 'back.out(2)' });
-        gsap.fromTo($('img', path), { scale: 1.14 }, { scale: 1.04, duration: 1.2, ease: EASE.out });
+        gsap.fromTo($('.path__title', path), { yPercent: 18, autoAlpha: 0.4 }, { yPercent: 0, autoAlpha: 1, duration: 0.8, ease: EASE.out, clearProps: 'all' });
       }
     });
 

@@ -301,7 +301,9 @@ html.is-locked .dock {
 
 /* ---------- Arch outlines drifting behind the search ---------- */
 
+/* The outlines sat behind the old pathway tiles; the Buy / Rent words need the space clear. */
 .find__arches {
+  display: none;
   position: absolute;
   right: -3vw;
   top: 4%;
