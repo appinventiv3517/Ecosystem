@@ -44,25 +44,33 @@ tools/build_images.py   downloads and crops the photographs
 tests/check.cjs         the browser checks
 ```
 
-Sections talk to each other through page events (`bloom:find`, `bloom:community`,
-`bloom:vertical`, `bloom:service`, `bloom:enquire`), so a community card can drive the search
-and the footer can drive the ecosystem without the modules importing one another.
+The page opens in the order the RFP asks for: **Welcome to Bloom World** (the hero),
+**Glimpses of Bloom World** (`#world`, an illustrative day through all seven businesses), then
+**Find Your Property** (`#find`), followed by communities, the ecosystem book, life at Bloom,
+customer services, about and the footer.
+
+Sections talk to each other through page events (`bloom:find`, `bloom:world`,
+`bloom:community`, `bloom:vertical`, `bloom:service`, `bloom:enquire`), so a hero arch can open
+its business in the glimpses, a featured development can drive the search and the footer can
+drive the ecosystem without the modules importing one another.
 
 ## How the design answers the discovery
 
 | Discovery finding | In the design |
 |---|---|
-| Unclear brand positioning | Hero states Curated Community Living over Bloom's own photography; three floating arches show education, hospitality and landscaping from the first screen; the About section carries the master-developer statement and the RFP figures |
-| Limited visibility of user journeys | "Where would you like to begin?" puts the four destinations — and the audience each serves — directly under the hero, before any scrolling of the page's body |
-| Fragmented property discovery | One search console with a Buy / Rent switch, community, type and bedrooms, replacing today's separate sales and leasing journeys |
-| Disconnected ecosystem storytelling | The seven businesses orbit one centre; selecting one draws its connection into Curated Community Living and swaps the image and copy |
+| Unclear brand positioning | The hero welcomes you to Bloom World: all seven businesses travel one orbit around "Curated Community Living", each named, with its brand under the one at the front; the About section carries the master-developer statement and the RFP figures |
+| Limited visibility of user journeys | The hero's two actions (Find a Home, Explore Bloom World), every hero arch, and the header's four destinations lead straight into the page; the day in the glimpses ends on "Find your place in Bloom World" |
+| Fragmented property discovery | Find Your Property: two big Buy and Rent pathways drive one search (community, type, bedrooms, and a budget that changes with the pathway), with featured developments that search or register interest in one click |
+| Disconnected ecosystem storytelling | Glimpses of Bloom World: one illustrative day, 07:00 to 20:00, passes through all seven businesses; a dial draws each business's links to the others, and by evening they are one visible web |
 | Limited community discovery | A draggable editorial gallery of the five communities; each card names its Bloom developments and links straight into the search for that community |
 | Customer service discoverability | A full section, not a footer link: say what you need to do and the matching pathway highlights |
 
 ## Motion
 
-Different techniques per section, on purpose: a masked arch opening for the page load,
-staggered word reveals in the hero, a clip-path wipe for Buy / Rent and the ecosystem images,
+Different techniques per section, on purpose: a masked arch opening for the page load that
+flies three arches onto the Bloom World orbit, a draggable orbit that turns, tilts and leans
+towards the pointer, an arch-shaped window that opens onto the glimpses, a sun that travels the
+day while the dial draws its links, a pop and tilt on the Buy / Rent pathways,
 drag with inertia in the carousel, a pinned scroll sequence for Life at Bloom, counting figures
 in About, and a scrubbed reveal in the footer.
 
@@ -91,8 +99,18 @@ Placeholder or unverified, and marked as such on the page:
   seven, so both appear, with one line of sample copy, no brand name, a "Sample copy and
   temporary image" tag, and a stand-in photograph (a Bloom Living town-centre render and a
   Bloom Living landscape render) noted in the image manifest.
-- **Life at Bloom chapter titles and copy**, and the audience labels on the four doors: written
-  for this prototype from the discovery deck's audience work, not supplied by Bloom.
+- **Life at Bloom chapter titles and copy**: written for this prototype from the discovery
+  deck's audience work, not supplied by Bloom.
+- **Glimpses of Bloom World.** The day, its times and its moments are illustrative and say so
+  ("An illustrative day in a Bloom community"). Each business's description reuses the copy
+  already on the page; the figures are the RFP's. The Retail and Healthcare scenes carry a
+  "Stand-in image" label.
+- **Featured developments.** Bloom Living, Bloom Gardens and Soho Square, with the communities
+  the page already pairs them with, under a "Placeholder selection" tag until Bloom chooses what
+  to feature. Their photographs come from the matching pages on bloomholding.com. The launch slot
+  holds no launch: it says "Launch details to come from Bloom" and offers launch updates.
+- **Budget ranges** in the search (AED, buy and yearly rent) are filter options for the
+  prototype, not prices of any Bloom home.
 - **Arabic.** The EN/AR switch is present and explains that the prototype is English only.
 - Every destination outside the homepage (community pages, business pages, the apps, legal
   pages) says so when activated, rather than linking nowhere.

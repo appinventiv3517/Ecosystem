@@ -483,7 +483,7 @@
         1200
       ],
       "alt": "Villas with terracotta roofs behind flowering bougainvillea",
-      "used_in": "Ecosystem, Real Estate; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Real Estate; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -520,6 +520,18 @@
           "widths": [
             1100,
             640
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
           ]
         }
       ]
@@ -533,7 +545,7 @@
         1010
       ],
       "alt": "Two pupils in school gowns under a colonnade",
-      "used_in": "Ecosystem, Education; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Education; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -570,6 +582,18 @@
           "widths": [
             1100,
             640
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
           ]
         }
       ]
@@ -583,7 +607,7 @@
         1066
       ],
       "alt": "Hotel bedroom with a view over a marina",
-      "used_in": "Ecosystem, Hospitality; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Hospitality; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -621,6 +645,18 @@
             1100,
             640
           ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
+          ]
         }
       ]
     },
@@ -633,7 +669,7 @@
         1124
       ],
       "alt": "Evening plaza with outdoor dining below apartment buildings (architectural render)",
-      "used_in": "Ecosystem, Retail; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Retail; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "temporary: Bloom Living town-centre render standing in until Bloom supplies retail photography",
       "variants": [
         {
@@ -671,6 +707,18 @@
             1100,
             640
           ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
+          ]
         }
       ]
     },
@@ -683,7 +731,7 @@
         1333
       ],
       "alt": "People walking a planted path through a residential community (architectural render)",
-      "used_in": "Ecosystem, Healthcare; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Healthcare; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "temporary: Bloom Living landscape render standing in until Bloom supplies healthcare photography",
       "variants": [
         {
@@ -721,6 +769,18 @@
             1100,
             640
           ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
+          ]
         }
       ]
     },
@@ -733,7 +793,7 @@
         1333
       ],
       "alt": "Three Bloom facilities team members walking through a landscaped walkway",
-      "used_in": "Ecosystem, Facilities Management; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Facilities Management; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -770,6 +830,18 @@
           "widths": [
             1100,
             640
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
           ]
         }
       ]
@@ -783,7 +855,7 @@
         1079
       ],
       "alt": "Landscaper laying turf beside planted beds, seen from above",
-      "used_in": "Ecosystem, Landscaping; hero wheel card; ecosystem skyline arch",
+      "used_in": "Ecosystem, Landscaping; hero wheel card; ecosystem skyline arch; Bloom World glimpses, full-bleed scene",
       "status": "Bloom photography from bloomholding.com",
       "variants": [
         {
@@ -820,6 +892,18 @@
           "widths": [
             1100,
             640
+          ]
+        },
+        {
+          "suffix": "-wide",
+          "ratio": 1.6,
+          "focus": [
+            0.5,
+            0.5
+          ],
+          "widths": [
+            1600,
+            900
           ]
         }
       ]

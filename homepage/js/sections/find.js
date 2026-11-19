@@ -1,5 +1,6 @@
-// Find a Home: the Buy / Rent switch, custom dropdowns, bedroom chips, quick starts
-// and a demo result. No inventory is loaded or implied: the result explains itself.
+// Find Your Property: Buy and Rent pathways, custom dropdowns, bedroom chips, a budget that
+// follows the pathway, quick starts, featured developments and a demo result.
+// No inventory is loaded or implied: the result explains itself.
 
 import { $, $$, emit, listen, scrollToTarget } from '../lib/dom.js';
 import { gsap, motionOK, EASE } from '../lib/motion.js';
@@ -14,11 +15,13 @@ const TYPE_PLURAL = {
   'hotel-apartment': 'Hotel apartments',
 };
 
+const BUDGET_TEXT = { buy: 'budget', rent: 'yearly rent' };
+
 const BEDS_TEXT = {
   '': '',
   studio: ', studio',
   1: ', 1 bedroom',
-  '5+': ', 5 or more bedrooms',
+  '4+': ', 4 or more bedrooms',
 };
 
 export function initFind() {
@@ -29,16 +32,41 @@ export function initFind() {
   const summary = $('[data-result-summary]', form);
   const next = $('[data-result-next]', form);
   const submitLabel = $('[data-search-label]', form);
-  const figure = $('[data-find-figure]');
-  const selects = Object.fromEntries($$('[data-select]', form).map((root) => [root.dataset.select, new Select(root)]));
+  const paths = $$('[data-path]');
+  const modeInputs = $$('input[name="mode"]');
+  const devs = $$('[data-dev]');
+  const selects = Object.fromEntries($$('[data-select]', form).map((root) => [root.dataset.select, new Select(root, {
+    onChange: root.dataset.select === 'community' ? (value) => matchDevelopments(value) : undefined,
+  })]));
 
-  const mode = () => form.elements.mode.value;
+  const mode = () => modeInputs.find((input) => input.checked)?.value || 'buy';
+  const budget = () => selects[`budget-${mode()}`];
+
+  /* ---------- Featured developments ---------- */
+
+  /** Light up the developments in the chosen community; the others step back. */
+  function matchDevelopments(community) {
+    devs.forEach((dev) => {
+      const match = Boolean(community) && dev.dataset.community === community;
+      dev.classList.toggle('is-match', match);
+      dev.classList.toggle('is-muted', Boolean(community) && !match);
+    });
+  }
+
+  devs.forEach((dev) => {
+    const name = $('.dev__name', dev).textContent;
+    const enquire = $('[data-dev-enquire]', dev);
+    if (enquire) enquire.dataset.note = name;
+    $('[data-dev-search]', dev)?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      emit('bloom:find', { community: dev.dataset.community, type: '', run: true });
+    });
+  });
 
   /* ---------- Buy / Rent ---------- */
 
   function applyMode(value, { animate = true } = {}) {
     const label = value === 'rent' ? 'Search homes to rent' : 'Search homes to buy';
-    const word = value === 'rent' ? 'Rent' : 'Buy';
 
     // Supporting line
     $$('[data-mode-copy]').forEach((copy) => {
@@ -48,36 +76,30 @@ export function initFind() {
       if (active && animate && motionOK) gsap.fromTo(copy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: EASE.soft });
     });
 
-    // Arch image: the new photograph wipes up over the old one.
-    if (figure) {
-      const images = $$('[data-mode-image]', figure);
-      const incoming = images.find((image) => image.dataset.modeImage === value);
-      const outgoing = images.find((image) => image !== incoming);
-      const badgeWord = $('[data-mode-word]', figure);
-      if (animate && motionOK) {
-        gsap.killTweensOf(images);
-        gsap.set(outgoing, { zIndex: 1 });
-        gsap.set(incoming, { zIndex: 2, opacity: 1 });
-        gsap.fromTo(incoming, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.2 }, {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          scale: 1,
-          duration: 1.1,
-          ease: EASE.inOut,
-          onComplete: () => {
-            outgoing.classList.remove('is-active');
-            incoming.classList.add('is-active');
-            gsap.set(images, { clearProps: 'opacity,zIndex,clipPath' });
-          },
-        });
-        gsap.timeline()
-          .to(badgeWord, { yPercent: -130, duration: 0.3, ease: 'power2.in' })
-          .add(() => (badgeWord.textContent = word))
-          .fromTo(badgeWord, { yPercent: 130 }, { yPercent: 0, duration: 0.55, ease: EASE.out });
-      } else {
-        images.forEach((image) => image.classList.toggle('is-active', image === incoming));
-        badgeWord.textContent = word;
+    // Pathways: the chosen one is marked; its tick pops in.
+    paths.forEach((path) => {
+      const active = path.dataset.path === value;
+      path.classList.toggle('is-active', active);
+      if (active && animate && motionOK) {
+        gsap.fromTo($('.path__tick', path), { scale: 0.4, rotate: -30 }, { scale: 1, rotate: 0, duration: 0.6, ease: 'back.out(2)' });
+        gsap.fromTo($('img', path), { scale: 1.14 }, { scale: 1.04, duration: 1.2, ease: EASE.out });
       }
-    }
+    });
+
+    // Budget: buying and renting are priced differently, so each has its own ranges.
+    $$('[data-budget]', form).forEach((field) => {
+      const active = field.dataset.budget === value;
+      field.hidden = !active;
+      if (active && animate && motionOK) gsap.fromTo(field, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: EASE.out, clearProps: 'all' });
+    });
+
+    // Featured developments: their search buttons and enquiries follow the pathway.
+    devs.forEach((dev) => {
+      const label = $('[data-dev-label]', dev);
+      if (label) label.textContent = value === 'rent' ? 'Homes to rent here' : 'Homes to buy here';
+      const enquire = $('[data-dev-enquire]', dev);
+      if (enquire) enquire.dataset.interest = value;
+    });
 
     // Button label rolls to the new intent.
     if (animate && motionOK) {
@@ -90,7 +112,7 @@ export function initFind() {
     }
   }
 
-  $$('input[name="mode"]', form).forEach((input) => {
+  modeInputs.forEach((input) => {
     input.addEventListener('change', () => {
       applyMode(input.value);
       closeResult();
@@ -105,7 +127,8 @@ export function initFind() {
     const what = `${TYPE_PLURAL[selects.type.value]} to ${mode()}`;
     const where = community ? `in ${selects.community.label}` : 'across all Bloom communities';
     const bedrooms = beds in BEDS_TEXT ? BEDS_TEXT[beds] : `, ${beds} bedrooms`;
-    return { community, text: `${what} ${where}${bedrooms}`, html: `<b>${what}</b> ${where}${bedrooms}` };
+    const price = budget().value ? `, ${BUDGET_TEXT[mode()]} ${budget().label.replace(/^Up to/, 'up to')}` : '';
+    return { community, text: `${what} ${where}${bedrooms}${price}`, html: `<b>${what}</b> ${where}${bedrooms}${price}` };
   }
 
   function button(label, className = 'btn btn--small') {
@@ -177,15 +200,18 @@ export function initFind() {
     $('[data-search-submit]', form).focus({ preventScroll: true });
   });
 
-  /* ---------- Prefill from elsewhere (menu, quick starts, community cards) ---------- */
+  /* ---------- Prefill from elsewhere (menu, quick starts, community and development cards) ---------- */
 
   listen('bloom:find', ({ mode: nextMode, community, type, beds, run, scroll = true }) => {
     closeResult();
     if (nextMode && nextMode !== mode()) {
-      form.querySelector(`input[name="mode"][value="${nextMode}"]`).checked = true;
+      modeInputs.find((input) => input.value === nextMode).checked = true;
       applyMode(nextMode);
     }
-    if (community !== undefined) selects.community.set(community);
+    if (community !== undefined) {
+      selects.community.set(community);
+      matchDevelopments(community);
+    }
     if (type !== undefined) selects.type.set(type);
     if (beds !== undefined) {
       const chip = form.querySelector(`input[name="beds"][value="${beds}"]`);

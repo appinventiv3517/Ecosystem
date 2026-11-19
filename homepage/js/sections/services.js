@@ -1,7 +1,7 @@
 // Customer Services: the three Bloom apps, and a way to get them, as a grid of tiles.
 // Tiles rise in one after another as the section arrives; a soft light follows the pointer
 // across each tile and the tile leans towards it; a glint sweeps across them in turn (CSS).
-// Links from the menu, the intents or the footer bring the right app's tile forward.
+// Links from the menu or the footer bring the right app's tile forward.
 
 import { $, $$, emit, finePointer, listen, scrollToTarget } from '../lib/dom.js';
 import { gsap, ScrollTrigger, motionOK, EASE } from '../lib/motion.js';

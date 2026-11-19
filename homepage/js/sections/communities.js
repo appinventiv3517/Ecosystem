@@ -258,7 +258,7 @@ export function initCommunities() {
   stage.addEventListener('focusin', stopAuto);
   document.addEventListener('visibilitychange', syncAuto);
 
-  /* ---------- Jump here from the menu, the intents or a search result ---------- */
+  /* ---------- Jump here from the menu, a search result or a featured development ---------- */
 
   listen('bloom:community', ({ id }) => {
     const index = copies.findIndex((copy) => copy.dataset.community === id);

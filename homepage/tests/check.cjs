@@ -62,6 +62,17 @@ const goTo = async (page, selector, offset = 120) => {
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 const activeCommunity = (page) => page.evaluate(() => document.querySelector('.community.is-active')?.dataset.community);
 const activeVertical = (page) => page.evaluate(() => document.querySelector('.eco-index__item[aria-current="true"]')?.dataset.vertical);
+const activeMoment = (page) => page.evaluate(() => document.querySelector('.moment.is-active')?.dataset.moment);
+const frontOrb = (page) => page.evaluate(() => document.querySelector('[data-orb].is-focus')?.dataset.id);
+/** Scroll to a point in the day of Bloom World: step 0 is 07:00, step 7 the closing "all together". */
+const toWorldStep = async (page, step) => {
+  await page.evaluate((s) => {
+    const track = document.querySelector('[data-glimpse-track]');
+    const top = track.getBoundingClientRect().top + scrollY;
+    window.scrollTo({ top: top + (track.offsetHeight - innerHeight) * ((s + 0.4) / 8), behavior: 'instant' });
+  }, step);
+  await wait(page, 1600);
+};
 /** Scroll to a point in the Bloom book: step 0 is the closed cover (desktop) or first page (phone). */
 const toBookStep = async (page, step) => {
   await page.evaluate((s) => {
@@ -98,24 +109,85 @@ const toastText = (page) => page.evaluate(() => {
 async function desktop(browser) {
   console.log('\nDesktop 1440 x 900');
   const { context, page, problems } = await open(browser, { width: 1440, height: 900 });
-  await wait(page, 2600); // the wheel blooms open on arrival
+  await wait(page, 2600); // the world opens on arrival
   await shot(page, 'desktop-hero');
 
-  // Header and scrolling
+  // Hero: Welcome to Bloom World
   check('hero headline is dark on cream and readable', await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).backgroundColor === 'rgb(248, 246, 234)' && getComputedStyle(document.querySelector('.hero__title')).color === 'rgb(29, 26, 23)'));
-  check('the wheel shows at least five arches on screen', await page.evaluate(() => [...document.querySelectorAll('[data-petal]')].filter((petal) => { const box = petal.getBoundingClientRect(); return getComputedStyle(petal).opacity > 0.9 && box.width > 150 && box.right > 0 && box.left < innerWidth && box.top < innerHeight; }).length >= 5));
-  check('the arch in focus sits at the top, centred and named', await page.evaluate(() => { const petal = document.querySelector('[data-petal].is-focus'); const box = petal.getBoundingClientRect(); return Math.abs(box.left + box.width / 2 - innerWidth / 2) < 4 && box.top < innerHeight * 0.2 && getComputedStyle(petal.querySelector('.petal__label')).opacity > 0.95; }));
-  check('the headline sits clear of the arches', await page.evaluate(() => { const title = document.querySelector('.hero__title').getBoundingClientRect(); return [...document.querySelectorAll('[data-petal]')].every((petal) => { const box = petal.querySelector('img').getBoundingClientRect(); const inner = { left: box.left + box.width * 0.3, right: box.right - box.width * 0.3, top: box.top + box.height * 0.3, bottom: box.bottom - box.height * 0.3 }; return inner.right < title.left || inner.left > title.right || inner.bottom < title.top || inner.top > title.bottom; }); }));
-  const firstFocus = await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id);
-  await wait(page, 5600);
-  check('the wheel turns to the next arch on its own', (await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id)) !== firstFocus);
-  await page.evaluate(() => window.scrollTo({ top: innerHeight, behavior: 'instant' }));
+  check('the hero welcomes you to Bloom World', (await page.textContent('[data-hero-eyebrow]')).replace(/\s+/g, ' ').trim() === 'Welcome to Bloom World');
+  check('all seven businesses are on screen, each named', await page.evaluate(() => {
+    const names = ['Real Estate', 'Education', 'Hospitality', 'Retail', 'Healthcare', 'Facilities Management', 'Landscaping'];
+    const orbs = [...document.querySelectorAll('[data-orb]')];
+    return orbs.length === 7 && names.every((name) => orbs.some((orb) => {
+      const box = orb.getBoundingClientRect();
+      const label = orb.querySelector('.orb__label');
+      const tag = label.getBoundingClientRect();
+      return orb.dataset.name === name && Number(getComputedStyle(orb).opacity) > 0.9 && box.left >= 0 && box.right <= innerWidth && box.top >= 0
+        && Number(getComputedStyle(label).opacity) > 0.5 && tag.bottom <= innerHeight && tag.width > 40;
+    }));
+  }));
+  check('the business at the front is centred, largest and shows its brand', await page.evaluate(() => {
+    const orb = document.querySelector('[data-orb].is-focus');
+    const box = orb.getBoundingClientRect();
+    const widest = Math.max(...[...document.querySelectorAll('[data-orb]')].map((o) => o.getBoundingClientRect().width));
+    return Math.abs(box.left + box.width / 2 - innerWidth / 2) < 4 && box.top > innerHeight * 0.5 && box.width === widest && Number(getComputedStyle(orb.querySelector('.orb__brand')).opacity) > 0.95;
+  }));
+  check('the headline and buttons sit clear of the arches', await page.evaluate(() => {
+    const blocks = [...document.querySelectorAll('.hero__title, [data-hero-actions] .btn')].map((el) => el.getBoundingClientRect());
+    return [...document.querySelectorAll('[data-orb] .orb__body')].every((body) => {
+      const b = body.getBoundingClientRect();
+      const inner = { left: b.left + b.width * 0.15, right: b.right - b.width * 0.15, top: b.top + b.height * 0.15, bottom: b.bottom - b.height * 0.15 };
+      return blocks.every((t) => inner.right < t.left || inner.left > t.right || inner.bottom < t.top || inner.top > t.bottom);
+    });
+  }));
+  const firstFocus = await frontOrb(page);
+  await wait(page, 5400);
+  check('the world turns to the next business on its own', (await frontOrb(page)) !== firstFocus);
+  await page.hover('[data-orb][data-id="retail"] .orb__btn', { force: true });
+  await wait(page, 900);
+  check('pointing at a business names its brand and steps the others back', await page.evaluate(() => document.querySelector('[data-world]').classList.contains('has-hover') && Number(getComputedStyle(document.querySelector('[data-orb][data-id="retail"] .orb__brand')).opacity) > 0.95));
+  await page.mouse.move(700, 880);
+  await page.evaluate(() => window.scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }));
   await wait(page, 2200);
-  check('scrolling opens the wheel outwards and lifts the headline away', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05 && [...document.querySelectorAll('[data-petal]')].every((petal) => { const box = petal.getBoundingClientRect(); return box.bottom < innerHeight * 0.55 || box.top > innerHeight || box.left > innerWidth * 0.6 || box.right < innerWidth * 0.4 || getComputedStyle(petal).opacity < 0.05; })));
+  check('scrolling swings the world open and lifts the headline away', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-content]')).opacity < 0.05 && [...document.querySelectorAll('[data-orb]')].every((orb) => Number(getComputedStyle(orb).opacity) < 0.15)));
+
+  // Glimpses of Bloom World
+  await toWorldStep(page, 0);
+  await shot(page, 'desktop-world');
+  check('glimpses: the day opens at home with Real Estate', (await activeMoment(page)) === 'real-estate' && await page.evaluate(() => document.querySelector('[data-stop="0"]').classList.contains('is-active')));
+  check('glimpses: the stage, story and dial fit one laptop screen', await page.evaluate(() => {
+    const stage = document.querySelector('[data-glimpse-stage]').getBoundingClientRect();
+    const bottom = (selector) => Math.max(...[...document.querySelectorAll(selector)].filter((el) => el.offsetParent).map((el) => el.getBoundingClientRect().bottom));
+    // The story sits to the left of the section dock; the dial, centred, must clear it.
+    return Math.abs(stage.top) < 2 && stage.height <= innerHeight + 1 && bottom('.glimpses__head, .moment.is-active') <= innerHeight && bottom('[data-dial], .dial__label') <= innerHeight - 64;
+  }));
+  check('glimpses: the links from home to the businesses it works with are drawn', await page.evaluate(() => document.querySelectorAll('.dial__link.is-live').length === 3));
+  for (let i = 0; i < 4; i += 1) {
+    await page.mouse.move(1000, 400);
+    await page.mouse.wheel(0, 320);
+    await wait(page, 400);
+  }
+  await wait(page, 1600);
+  const moved = await activeMoment(page);
+  check('glimpses: scrolling moves through the day while the stage holds still', !['real-estate', undefined].includes(moved) && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2), moved);
+  await page.click('[data-stop="6"]');
+  await wait(page, 2600);
+  check('glimpses: a stop on the dial jumps to that business', (await activeMoment(page)) === 'hospitality' && await page.evaluate(() => document.querySelector('.scene.is-active').dataset.scene === 'hospitality' && document.querySelector('[data-stop="6"]').getAttribute('aria-current') === 'step'));
+  check('glimpses: earlier links stay drawn as the day goes on', await page.evaluate(() => document.querySelectorAll('.dial__link.is-known').length >= 8));
+  await page.click('.moment.is-active .moment__link >> nth=0');
+  await wait(page, 2600);
+  check('glimpses: "connects with" jumps to the linked business', (await activeMoment(page)) === 'retail', await activeMoment(page));
+  check('glimpses: stand-in photography is labelled', await page.evaluate(() => document.querySelector('.scene.is-active .scene__tag')?.textContent.includes('Stand-in')));
+  await toWorldStep(page, 7);
+  await shot(page, 'desktop-world-all');
+  check('glimpses: the day ends with all seven connected', (await activeMoment(page)) === 'all' && await page.evaluate(() => document.querySelector('#world').classList.contains('is-all')));
+  await page.click('#moment-all a[href="#find"]');
+  await wait(page, 2400);
+  check('glimpses: "Find your place" leads on to the property search', await page.evaluate(() => Math.abs(document.querySelector('#find').getBoundingClientRect().top) < 90));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 1500);
   await page.click('.primary-nav a[href="#services"]');
-  await wait(page, 1600);
+  await wait(page, 2600); // a long way down: the glimpses add several screens of scroll
   check('nav link scrolls to its section', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 80));
   check('header turns solid and marks the active section', await page.evaluate(() => document.querySelector('[data-header]').classList.contains('is-solid') && document.querySelector('[data-nav-item="services"]').classList.contains('is-current')));
   check('section dock appears and its arch fills with progress', await page.evaluate(() => document.querySelector('[data-dock]').classList.contains('is-visible') && parseFloat(getComputedStyle(document.querySelector('[data-dock-progress]')).getPropertyValue('--progress')) > 0.3));
@@ -140,17 +212,21 @@ async function desktop(browser) {
   await wait(page, 700);
   check('Escape closes the mega menu and returns focus', await page.evaluate(() => !document.querySelector('[data-mega]').classList.contains('is-open') && document.activeElement.classList.contains('nav-item__toggle')));
 
-  // Find a Home
-  await goTo(page, '[data-search]', 260);
-  await page.click('.mode__option:has(input[value="rent"])');
+  // Find Your Property
+  check('Find Your Property fits one laptop screen', await fitsOneScreen(page, 'find'));
+  check('featured developments sit clear of the section dock', await page.evaluate(() => Math.max(...[...document.querySelectorAll('.dev')].map((d) => d.getBoundingClientRect().bottom)) <= innerHeight - 64));
+  await shot(page, 'desktop-find');
+  await page.click('.path[data-path="rent"]');
   await wait(page, 1300);
-  check('Buy / Rent switch updates the search', await page.evaluate(() => document.querySelector('[data-search-label]').textContent === 'Search homes to rent' && !document.querySelector('[data-mode-copy="rent"]').hidden && document.querySelector('[data-mode-word]').textContent === 'Rent'));
+  check('Rent pathway switches the search to renting', await page.evaluate(() => document.querySelector('[data-search-label]').textContent === 'Search homes to rent' && !document.querySelector('[data-mode-copy="rent"]').hidden && document.querySelector('.path[data-path="rent"]').classList.contains('is-active') && !document.querySelector('.path[data-path="buy"]').classList.contains('is-active')));
+  check('the budget changes to yearly rent ranges', await page.evaluate(() => !document.querySelector('[data-budget="rent"]').hidden && document.querySelector('[data-budget="buy"]').hidden));
+  check('featured developments offer homes to rent', await page.evaluate(() => [...document.querySelectorAll('[data-dev-label]')].every((label) => label.textContent === 'Homes to rent here')));
   await page.click('#button-community');
   await wait(page, 500);
   await shot(page, 'desktop-search-dropdown');
   await page.click('#community-al-bateen-marina');
   await wait(page, 400);
-  check('community dropdown selects with the mouse', await page.evaluate(() => document.querySelector('#value-community').textContent === 'Al Bateen Marina' && document.querySelector('#list-community').hidden === false || document.querySelector('#value-community').textContent === 'Al Bateen Marina'));
+  check('community dropdown selects with the mouse', await page.evaluate(() => document.querySelector('#value-community').textContent === 'Al Bateen Marina'));
   await page.focus('#button-type');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowDown');
@@ -158,10 +234,14 @@ async function desktop(browser) {
   await wait(page, 400);
   check('property type dropdown selects with the keyboard', await page.evaluate(() => document.querySelector('#value-type').textContent === 'Apartment' && document.activeElement.id === 'button-type'));
   await page.click('.beds__chip:has(input[value="2"])');
+  await page.click('#button-budget-rent');
+  await wait(page, 400);
+  await page.click('#budget-rent-2');
+  await wait(page, 300);
   await page.click('[data-search-submit]');
   await wait(page, 1700);
   const summary = await page.textContent('[data-result-summary]');
-  check('search shows a demo result that reflects the choices', summary === 'Apartments to rent in Al Bateen Marina, 2 bedrooms', summary);
+  check('search shows a demo result that reflects the choices', summary === 'Apartments to rent in Al Bateen Marina, 2 bedrooms, yearly rent AED 80K to 150K', summary);
   check('result lists the verified developments', (await page.textContent('.search-result__devs')).includes('Bloom Marina'));
   await shot(page, 'desktop-search-result');
   await page.click('.search-result__next .btn >> nth=0');
@@ -171,6 +251,16 @@ async function desktop(browser) {
   await page.click('.search__quick .chip >> nth=0');
   await wait(page, 2000);
   check('quick start fills and runs the search', (await page.textContent('[data-result-summary]')) === 'Villas to buy in Zayed City');
+  check('featured: the chosen community\'s development comes forward', await page.evaluate(() => document.querySelector('.dev[data-dev="bloom-living"]').classList.contains('is-match') && document.querySelector('.dev[data-dev="soho-square"]').classList.contains('is-muted')));
+  await page.click('.dev[data-dev="bloom-gardens"] [data-dev-search]');
+  await wait(page, 2000);
+  check('featured: "Homes to buy here" searches that community', (await page.textContent('[data-result-summary]')).startsWith('Homes to buy in Eastern Mangrove Corniche'), await page.textContent('[data-result-summary]'));
+  await page.click('.dev[data-dev="bloom-gardens"] [data-dev-enquire]');
+  await wait(page, 900);
+  check('featured: "Register interest" opens the enquiry about that development', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('[data-enquiry]').textContent.includes('About: Bloom Gardens') && document.querySelector('input[name="interest"][value="buy"]').checked));
+  await page.click('.enquiry__close');
+  await wait(page, 900);
+  check('the launch slot says plainly that launches are to come', (await page.textContent('.dev--launch')).includes('Launch details to come from Bloom'));
 
   // Communities stage
   const order = ['zayed-city', 'saadiyat-island', 'al-bateen-marina', 'jumeirah-village-circle', 'eastern-mangrove-corniche'];
@@ -217,20 +307,6 @@ async function desktop(browser) {
   await page.click('.community.is-active [data-find]');
   await wait(page, 1800);
   check('"Find a home here" carries the community into the search', await page.evaluate((id) => document.querySelector('[data-select="community"] input').value === id, reached));
-
-  // Intent section
-  await goTo(page, '[data-intents]', 120);
-  await page.hover('.intent[data-intent="services"] .intent__row');
-  await wait(page, 1400);
-  check('pointing at an intent previews its destination', await page.evaluate(() => !document.querySelector('[data-intent-panel="services"]').hidden && document.querySelector('[data-intent-image="services"]').classList.contains('is-active') && document.querySelector('.intent[data-intent="services"]').classList.contains('is-active')));
-  await shot(page, 'desktop-intents');
-  await page.click('[data-intent-panel="services"] a[data-service-jump="super-app"]');
-  await wait(page, 1800);
-  check('intent quick link leads to that service', await page.evaluate(() => { const tile = document.querySelector('#service-super-app'); const box = tile.getBoundingClientRect(); return tile.classList.contains('is-called') && box.top >= 0 && box.bottom <= innerHeight; }));
-  await goTo(page, '[data-intents]', 120);
-  await page.click('.intent[data-intent="communities"] .intent__row');
-  await wait(page, 1600);
-  check('intent line goes to its section', await page.evaluate(() => Math.abs(document.querySelector('#communities').getBoundingClientRect().top) < 80));
 
   // Motion layer
   check('buttons carry a rolling label', await page.evaluate(() => document.querySelectorAll('.btn .roll__inner').length > 5 && document.querySelector('.site-header__enquire .roll').getBoundingClientRect().height < 30));
@@ -353,26 +429,20 @@ await wait(page, 1600);
 
   // Hero controls
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
-  await wait(page, 600);
-  // Pick the business two steps round to the right and click it: it turns to the top.
-  const target = await page.evaluate(() => { const petals = [...document.querySelectorAll('[data-petal]')]; const now = petals.findIndex((petal) => petal.classList.contains('is-focus')); const next = petals.findIndex((petal, i) => i > now && petal.dataset.kind === 'business' && i - now <= 3); return next; });
-  await page.click(`[data-petal] >> nth=${target}`, { force: true });
-  await wait(page, 1700);
-  check('clicking an arch turns it to the top', await page.evaluate((i) => document.querySelectorAll('[data-petal]')[i].classList.contains('is-focus'), target));
-  const business = await page.evaluate((i) => document.querySelectorAll('[data-petal]')[i].dataset.id, target);
-  await page.click(`[data-petal] >> nth=${target}`, { force: true });
-  await wait(page, 2200);
-  check('clicking the arch in focus opens that business in the ecosystem', (await activeVertical(page)) === business && await page.evaluate(() => { const box = document.querySelector('#ecosystem').getBoundingClientRect(); return box.top < innerHeight * 0.5 && box.bottom > innerHeight * 0.5; }));
+  await wait(page, 900);
+  await page.click('[data-orb][data-id="education"] .orb__btn', { force: true });
+  await wait(page, 2800);
+  check('clicking a business in the hero opens it in the glimpses of Bloom World', (await activeMoment(page)) === 'education' && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2), await activeMoment(page));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 900);
-  const before = await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id);
-  await page.mouse.move(1000, 260);
+  const before = await frontOrb(page);
+  await page.mouse.move(1100, 450);
   await page.mouse.down();
-  await page.mouse.move(820, 262, { steps: 6 });
-  await page.mouse.move(600, 265, { steps: 6 });
+  await page.mouse.move(900, 452, { steps: 6 });
+  await page.mouse.move(650, 455, { steps: 6 });
   await page.mouse.up();
   await wait(page, 2000);
-  check('dragging turns the wheel', (await page.evaluate(() => document.querySelector('[data-petal].is-focus').dataset.id)) !== before);
+  check('dragging turns the world', (await frontOrb(page)) !== before);
   await page.click('.hero__actions a[href="#find"]');
   await wait(page, 1600);
   check('hero "Find a Home" scrolls to the search', await page.evaluate(() => document.querySelector('#find').getBoundingClientRect().top < 120));
@@ -413,12 +483,20 @@ async function phone(browser) {
   await wait(page, 2600);
   await shot(page, 'phone-hero');
   check('phone: headline and both buttons fit on the first screen', await page.evaluate(() => [...document.querySelectorAll('.hero__title, [data-hero-actions] .btn')].every((element) => { const box = element.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && box.bottom <= innerHeight; })));
-  check('phone: three arches show across the top', await page.evaluate(() => [...document.querySelectorAll('[data-petal]')].filter((petal) => { const box = petal.getBoundingClientRect(); return getComputedStyle(petal).opacity > 0.9 && box.right > 40 && box.left < innerWidth - 40 && box.top < innerHeight * 0.45; }).length >= 3));
-  await goTo(page, '[data-intents]', 90);
-  check('each intent shows its own picture on a phone', await page.evaluate(() => [...document.querySelectorAll('.intent__thumb')].every((thumb) => thumb.getBoundingClientRect().width > 40)));
-  await page.tap('.intent[data-intent="services"] .intent__row');
+  check('phone: the seven businesses sit above the headline', await page.evaluate(() => {
+    const title = document.querySelector('.hero__title').getBoundingClientRect();
+    return [...document.querySelectorAll('[data-orb]')].filter((orb) => { const box = orb.getBoundingClientRect(); return Number(getComputedStyle(orb).opacity) > 0.9 && box.left >= 0 && box.right <= innerWidth && box.bottom < title.top; }).length === 7;
+  }));
+  check('phone: the caption names the business at the front', await page.evaluate(() => document.querySelector('[data-caption-name]').textContent === document.querySelector('[data-orb].is-focus').dataset.name));
+  const phoneFront = await frontOrb(page);
+  await page.tap('.world__caption-go');
+  await wait(page, 2800);
+  check('phone: the caption opens that business in the glimpses', (await activeMoment(page)) === phoneFront, { phoneFront, moment: await activeMoment(page) });
+  await shot(page, 'phone-world');
+  await page.evaluate(() => window.scrollBy({ top: innerHeight * 1.3, behavior: 'instant' }));
   await wait(page, 1800);
-  check('intent line takes you to its section on a phone', await page.evaluate(() => Math.abs(document.querySelector('#services').getBoundingClientRect().top) < 90));
+  check('phone: scrolling moves through the day while the stage holds still', (await activeMoment(page)) !== phoneFront && await page.evaluate(() => Math.abs(document.querySelector('[data-glimpse-stage]').getBoundingClientRect().top) < 2));
+  check('phone: the story and dial fit the screen', await page.evaluate(() => Math.max(...[...document.querySelectorAll('.moment.is-active, [data-dial]')].map((el) => el.getBoundingClientRect().bottom)) <= innerHeight - 56));
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await wait(page, 600);
   check('desktop navigation is replaced by the menu button', await page.evaluate(() => getComputedStyle(document.querySelector('.primary-nav')).display === 'none' && getComputedStyle(document.querySelector('[data-menu-toggle]')).display !== 'none'));
@@ -442,8 +520,9 @@ async function phone(browser) {
   const after = await activeCommunity(page);
   check('stage swipes to the next community', after !== before && after !== undefined, { before, after });
 
-  await goTo(page, '[data-search]', 90);
-  await page.tap('.mode__option:has(input[value="rent"])');
+  await goTo(page, '[data-mode]', 90);
+  await shot(page, 'phone-find');
+  await page.tap('.path[data-path="rent"]');
   await page.tap('#button-community');
   await wait(page, 500);
   await page.tap('#community-jumeirah-village-circle');
@@ -495,7 +574,7 @@ await wait(page, 1600);
   await wait(page, 1500);
   await shot(page, 'phone-footer');
 
-  const small = await page.evaluate(() => [...document.querySelectorAll('a, button, label.beds__chip, label.mode__option')].filter((element) => {
+  const small = await page.evaluate(() => [...document.querySelectorAll('a, button, label.beds__chip, label.path')].filter((element) => {
     const box = element.getBoundingClientRect();
     return box.width > 0 && box.height > 0 && (box.height < 40 || box.width < 40) && getComputedStyle(element).visibility === 'visible' && !element.closest('[hidden]');
   }).map((element) => `${element.className || element.tagName} ${Math.round(element.getBoundingClientRect().width)}x${Math.round(element.getBoundingClientRect().height)}`));
@@ -510,10 +589,12 @@ async function tablet(browser) {
   const { context, page, problems } = await open(browser, { width: 834, height: 1112, touch: true });
   await shot(page, 'tablet-hero');
 
-  for (const id of ['begin', 'find', 'communities', 'ecosystem', 'life', 'services', 'about']) {
+  for (const id of ['world', 'find', 'communities', 'ecosystem', 'life', 'services', 'about']) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
+  await toWorldStep(page, 3);
+  check('scrolling moves through the day on a tablet', (await activeMoment(page)) === 'retail', await activeMoment(page));
   await goTo(page, '#ecosystem', 0);
   await toBookStep(page, 3);
   check('scrolling turns the book on a tablet', (await activeVertical(page)) === 'hospitality');
@@ -533,11 +614,15 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce', query: '' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion') && !document.querySelector('[data-intro]')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, .community:not([hidden]), .intent__line, .app-tile, .stat__value, .eco-item, .chapter__text')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-orb], .moment.is-active, [data-glimpse-ui], .community:not([hidden]), .app-tile, .stat__value, .eco-item, .chapter__text')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).length);
   check('all content is visible without animation', hidden === 0, hidden);
+  await goTo(page, '#world', 0);
+  await page.click('[data-stop="5"]');
+  await wait(page, 400);
+  check('glimpses work as tabs without motion', (await activeMoment(page)) === 'landscaping' && await page.evaluate(() => !document.querySelector('#moment-landscaping').hidden && document.querySelector('#moment-real-estate').hidden && document.querySelector('.scene.is-active').dataset.scene === 'landscaping'));
   await goTo(page, '[data-search]', 200);
   await page.click('[data-search-submit]');
   await wait(page, 400);

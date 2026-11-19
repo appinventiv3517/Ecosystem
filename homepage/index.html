@@ -12,13 +12,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=DM+Sans:wght@400..700&display=swap">
 
-  <link rel="preload" as="image" href="assets/img/ecosystem-real-estate-card-560.webp" imagesrcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" imagesizes="(max-width: 760px) 40vw, 22vw">
+  <link rel="preload" as="image" href="assets/img/ecosystem-real-estate-card-560.webp" imagesrcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" imagesizes="(max-width: 760px) 30vw, 16vw">
 
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/begin.css">
+  <link rel="stylesheet" href="css/world.css">
   <link rel="stylesheet" href="css/find.css">
   <link rel="stylesheet" href="css/communities.css">
   <link rel="stylesheet" href="css/ecosystem.css">
@@ -72,13 +72,13 @@
     <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 3.5v10.8a3.7 3.7 0 1 1-3.7-3.7M14 3.5c.3 2.6 2 4.3 4.5 4.6"/></symbol>
   </svg>
 
-  <!-- Brand-led intro: three arches rise while the page loads, then bloom open into the hero wheel -->
+  <!-- Brand-led intro: three arches rise while the page loads, then fly to the front of the Bloom World orbit -->
   <div class="intro" data-intro aria-hidden="true">
     <img class="intro__mark" src="assets/brand/wordmark-red.png" alt="" width="762" height="237" data-intro-mark>
     <div class="intro__arches">
-      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/hero-lakeside-villas-card-560.webp" alt="" width="560" height="757"></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/ecosystem-landscape-card-560.webp" alt="" width="560" height="757"></span>
       <span class="intro__arch intro__arch--centre" data-intro-arch><img src="assets/img/ecosystem-real-estate-card-560.webp" alt="" width="560" height="757"></span>
-      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/community-al-bateen-card-560.webp" alt="" width="560" height="757"></span>
+      <span class="intro__arch intro__arch--side" data-intro-arch><img src="assets/img/ecosystem-education-card-560.webp" alt="" width="560" height="757"></span>
     </div>
     <p class="intro__words" data-intro-words><span>Curated</span><i></i><span>Community</span><i></i><span>Living</span></p>
     <div class="intro__count"><span data-intro-count>0</span><small>%</small></div>
@@ -288,233 +288,215 @@
 
     <div class="opening">
       <!-- ============================================================
-           02 · Immersive hero
+           02 · Hero: Welcome to Bloom World
            ============================================================ -->
-      <section class="hero" id="top" data-section="hero" data-hero aria-label="Curated Community Living">
-        <!-- The bloom: Bloom's seven businesses and its communities set on a slowly turning wheel of arches.
-             The arch at the top is the one in focus; drag, click or let it turn on its own. -->
-        <div class="bloom" data-bloom data-cursor="Drag">
-          <div class="bloom__glow" aria-hidden="true"></div>
-          <svg class="bloom__dial" aria-hidden="true" data-bloom-dial></svg>
-          <div class="bloom__petals" role="group" aria-label="Bloom's businesses and communities" data-bloom-petals>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="real-estate" aria-label="Real Estate: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-real-estate-card-560.webp" srcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" fetchpriority="high" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 01</small>Real Estate</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="community" data-id="al-bateen-marina" aria-label="Al Bateen Marina: explore this community">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/community-al-bateen-card-560.webp" srcset="assets/img/community-al-bateen-card-560.webp 560w, assets/img/community-al-bateen-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
-                <span class="petal__label"><small>Community</small>Al Bateen Marina</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="education" aria-label="Education: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-education-card-560.webp" srcset="assets/img/ecosystem-education-card-560.webp 560w, assets/img/ecosystem-education-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 02</small>Education</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="community" data-id="zayed-city" aria-label="Zayed City: explore this community">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/community-zayed-city-card-560.webp" srcset="assets/img/community-zayed-city-card-560.webp 560w, assets/img/community-zayed-city-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Community</small>Zayed City</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="hospitality" aria-label="Hospitality: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-hospitality-card-560.webp" srcset="assets/img/ecosystem-hospitality-card-560.webp 560w, assets/img/ecosystem-hospitality-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 03</small>Hospitality</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="community" data-id="saadiyat-island" aria-label="Saadiyat Island: explore this community">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/community-saadiyat-card-560.webp" srcset="assets/img/community-saadiyat-card-560.webp 560w, assets/img/community-saadiyat-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Community</small>Saadiyat Island</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="retail" aria-label="Retail: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-retail-card-560.webp" srcset="assets/img/ecosystem-retail-card-560.webp 560w, assets/img/ecosystem-retail-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 04</small>Retail</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="life" data-id="life" aria-label="Life at Bloom: see life at Bloom">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/life-3b-card-560.webp" srcset="assets/img/life-3b-card-560.webp 560w, assets/img/life-3b-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Everyday</small>Life at Bloom</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="healthcare" aria-label="Healthcare: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-healthcare-card-560.webp" srcset="assets/img/ecosystem-healthcare-card-560.webp 560w, assets/img/ecosystem-healthcare-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 05</small>Healthcare</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="community" data-id="jumeirah-village-circle" aria-label="Jumeirah Village Circle: explore this community">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/community-jvc-card-560.webp" srcset="assets/img/community-jvc-card-560.webp 560w, assets/img/community-jvc-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Community</small>Jumeirah Village Circle</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="facilities-management" aria-label="Facilities Management: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-facilities-card-560.webp" srcset="assets/img/ecosystem-facilities-card-560.webp 560w, assets/img/ecosystem-facilities-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 06</small>Facilities Management</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="community" data-id="eastern-mangrove-corniche" aria-label="Eastern Mangrove Corniche: explore this community">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/community-eastern-mangrove-card-560.webp" srcset="assets/img/community-eastern-mangrove-card-560.webp 560w, assets/img/community-eastern-mangrove-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false">
-                <span class="petal__label"><small>Community</small>Eastern Mangrove Corniche</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="business" data-id="landscaping" aria-label="Landscaping: see this business">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/ecosystem-landscape-card-560.webp" srcset="assets/img/ecosystem-landscape-card-560.webp 560w, assets/img/ecosystem-landscape-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
-                <span class="petal__label"><small>Business 07</small>Landscaping</span>
-              </span>
-            </button>
-            <button class="petal" type="button" data-petal data-kind="life" data-id="life" aria-label="Bloom Living: see life at Bloom">
-              <span class="petal__body" data-petal-body>
-                <img src="assets/img/hero-lakeside-villas-card-560.webp" srcset="assets/img/hero-lakeside-villas-card-560.webp 560w, assets/img/hero-lakeside-villas-card-900.webp 900w" sizes="(max-width: 760px) 40vw, 22vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false">
-                <span class="petal__label"><small>Everyday</small>Bloom Living</span>
-              </span>
-            </button>
-          </div>
+      <section class="hero" id="top" data-section="hero" data-hero aria-labelledby="hero-title">
+        <!-- Bloom World: the seven businesses as arches travelling round one orbit, with the
+             proposition at its centre. The arch at the front is in focus; drag, click or let it turn. -->
+        <div class="world" data-world data-cursor="Drag">
+          <div class="world__glow" aria-hidden="true"></div>
+          <svg class="world__orbits" aria-hidden="true" data-world-orbits></svg>
+          <ul class="world__orbs" aria-label="The seven businesses of Bloom World" data-world-orbs>
+            <li class="orb" data-orb data-id="real-estate" data-name="Real Estate" data-brand="Bloom Properties">
+              <button class="orb__btn" type="button" aria-label="Real Estate, Bloom Properties: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-real-estate-card-560.webp" srcset="assets/img/ecosystem-real-estate-card-560.webp 560w, assets/img/ecosystem-real-estate-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" fetchpriority="high" loading="eager" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">01</span><span class="orb__name">Real Estate</span><span class="orb__brand">Bloom Properties</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="education" data-name="Education" data-brand="Bloom Education">
+              <button class="orb__btn" type="button" aria-label="Education, Bloom Education: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-education-card-560.webp" srcset="assets/img/ecosystem-education-card-560.webp 560w, assets/img/ecosystem-education-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">02</span><span class="orb__name">Education</span><span class="orb__brand">Bloom Education</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="hospitality" data-name="Hospitality" data-brand="Bloom Hospitality">
+              <button class="orb__btn" type="button" aria-label="Hospitality, Bloom Hospitality: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-hospitality-card-560.webp" srcset="assets/img/ecosystem-hospitality-card-560.webp 560w, assets/img/ecosystem-hospitality-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">03</span><span class="orb__name">Hospitality</span><span class="orb__brand">Bloom Hospitality</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="retail" data-name="Retail" data-brand="Part of Bloom Holding">
+              <button class="orb__btn" type="button" aria-label="Retail, Part of Bloom Holding: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-retail-card-560.webp" srcset="assets/img/ecosystem-retail-card-560.webp 560w, assets/img/ecosystem-retail-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">04</span><span class="orb__name">Retail</span><span class="orb__brand">Part of Bloom Holding</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="healthcare" data-name="Healthcare" data-brand="Part of Bloom Holding">
+              <button class="orb__btn" type="button" aria-label="Healthcare, Part of Bloom Holding: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-healthcare-card-560.webp" srcset="assets/img/ecosystem-healthcare-card-560.webp 560w, assets/img/ecosystem-healthcare-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">05</span><span class="orb__name">Healthcare</span><span class="orb__brand">Part of Bloom Holding</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="facilities-management" data-name="Facilities Management" data-brand="Bloom Facilities Management">
+              <button class="orb__btn" type="button" aria-label="Facilities Management, Bloom Facilities Management: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-facilities-card-560.webp" srcset="assets/img/ecosystem-facilities-card-560.webp 560w, assets/img/ecosystem-facilities-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">06</span><span class="orb__name">Facilities Management</span><span class="orb__brand">Bloom Facilities Management</span></span>
+              </button>
+            </li>
+            <li class="orb" data-orb data-id="landscaping" data-name="Landscaping" data-brand="Bloom Landscape">
+              <button class="orb__btn" type="button" aria-label="Landscaping, Bloom Landscape: see it in Bloom World">
+                <span class="orb__body"><img src="assets/img/ecosystem-landscape-card-560.webp" srcset="assets/img/ecosystem-landscape-card-560.webp 560w, assets/img/ecosystem-landscape-card-900.webp 900w" sizes="(max-width: 760px) 30vw, 16vw" width="900" height="1216" alt="" loading="eager" decoding="async" draggable="false"></span>
+                <span class="orb__label" aria-hidden="true"><span class="orb__num">07</span><span class="orb__name">Landscaping</span><span class="orb__brand">Bloom Landscape</span></span>
+              </button>
+            </li>
+          </ul>
         </div>
 
         <div class="hero__copy" data-hero-content>
-          <p class="hero__eyebrow" data-hero-eyebrow><span class="hero__pulse" aria-hidden="true"></span>A diversified master developer · Abu Dhabi &amp; Dubai</p>
-          <h1 class="hero__title" data-hero-title>
+          <p class="hero__eyebrow" data-hero-eyebrow><span class="hero__pulse" aria-hidden="true"></span>Welcome to <b>Bloom World</b></p>
+          <h1 class="hero__title" id="hero-title" data-hero-title>
             <span class="hero__line"><span class="hero__word">Curated</span></span>
             <span class="hero__line"><span class="hero__word">Community</span> <span class="hero__word"><em>Living</em></span></span>
           </h1>
-          <p class="hero__lede" data-hero-lede>Discover thoughtfully curated places, experiences and communities that bring everyday living together.</p>
+          <p class="hero__lede" data-hero-lede>Homes, schools, hotels, shops, care, facilities and landscapes: seven Bloom businesses, curated into one connected world.</p>
           <div class="hero__actions" data-hero-actions>
             <a class="btn" href="#find" data-magnetic>
               <span class="btn__label">Find a Home</span>
               <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
             </a>
-            <a class="btn btn--outline" href="#communities" data-magnetic>
-              <span class="btn__label">Explore Communities</span>
+            <a class="btn btn--outline" href="#world" data-magnetic>
+              <span class="btn__label">Explore Bloom World</span>
               <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
             </a>
           </div>
+        </div>
+
+        <!-- Phones show one business at a time at the front of the world: this names it. -->
+        <div class="world__caption" data-world-caption aria-live="polite">
+          <p class="world__caption-text"><span class="world__caption-num" data-caption-num>01</span><b data-caption-name>Real Estate</b><span data-caption-brand>Bloom Properties</span></p>
+          <a class="world__caption-go" href="#world" data-caption-go data-world-jump="real-estate"><span>See Real Estate in Bloom World</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
       </section>
       <div class="hero-runway" aria-hidden="true"></div>
 
       <!-- ============================================================
-           Intent-led entry: four reasons to visit, one per primary destination
+           Glimpses of Bloom World: one illustrative day through all seven businesses.
+           On scroll the stage holds still, an arch opens onto the day, and the sun travels
+           the dial from business to business, drawing the links between them.
            ============================================================ -->
-      <section class="begin" id="begin" data-section="begin" aria-labelledby="begin-title">
-        <div class="wrap begin__grid" data-intents>
-          <div class="begin__head">
-            <p class="eyebrow" data-reveal="fade">Start here</p>
-            <h2 class="begin__title" id="begin-title" data-split="lines">Where would you like to <em>begin?</em></h2>
-            <p class="begin__hint" data-reveal="fade">Four ways into Bloom. Choose the one that matches why you're here.</p>
-          </div>
+      <section class="glimpses on-dark" id="world" data-section="world" aria-labelledby="world-title">
+        <div class="glimpses__track" data-glimpse-track>
+          <div class="glimpses__stage" data-glimpse-stage>
+            <div class="glimpses__window" data-glimpse-window>
+              <div class="glimpses__media" data-glimpse-media>
+            <figure class="scene is-active" data-scene="real-estate"><img src="assets/img/ecosystem-real-estate-wide-900.webp" srcset="assets/img/ecosystem-real-estate-wide-900.webp 900w, assets/img/ecosystem-real-estate-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Villas with terracotta roofs behind flowering bougainvillea" loading="eager" decoding="async" draggable="false"></figure>
+            <figure class="scene" data-scene="education"><img src="assets/img/ecosystem-education-wide-900.webp" srcset="assets/img/ecosystem-education-wide-900.webp 900w, assets/img/ecosystem-education-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Two pupils in school gowns under a colonnade" loading="lazy" decoding="async" draggable="false"></figure>
+            <figure class="scene" data-scene="facilities-management"><img src="assets/img/ecosystem-facilities-wide-900.webp" srcset="assets/img/ecosystem-facilities-wide-900.webp 900w, assets/img/ecosystem-facilities-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Three Bloom facilities team members walking through a landscaped walkway" loading="lazy" decoding="async" draggable="false"></figure>
+            <figure class="scene" data-scene="retail"><img src="assets/img/ecosystem-retail-wide-900.webp" srcset="assets/img/ecosystem-retail-wide-900.webp 900w, assets/img/ecosystem-retail-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Evening plaza with outdoor dining below apartment buildings (architectural render)" loading="lazy" decoding="async" draggable="false"><figcaption class="scene__tag">Stand-in image: Bloom Living render until Bloom supplies photography</figcaption></figure>
+            <figure class="scene" data-scene="healthcare"><img src="assets/img/ecosystem-healthcare-wide-900.webp" srcset="assets/img/ecosystem-healthcare-wide-900.webp 900w, assets/img/ecosystem-healthcare-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="People walking a planted path through a residential community (architectural render)" loading="lazy" decoding="async" draggable="false"><figcaption class="scene__tag">Stand-in image: Bloom Living render until Bloom supplies photography</figcaption></figure>
+            <figure class="scene" data-scene="landscaping"><img src="assets/img/ecosystem-landscape-wide-900.webp" srcset="assets/img/ecosystem-landscape-wide-900.webp 900w, assets/img/ecosystem-landscape-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Landscaper laying turf beside planted beds, seen from above" loading="lazy" decoding="async" draggable="false"></figure>
+            <figure class="scene" data-scene="hospitality"><img src="assets/img/ecosystem-hospitality-wide-900.webp" srcset="assets/img/ecosystem-hospitality-wide-900.webp 900w, assets/img/ecosystem-hospitality-wide-1600.webp 1600w" sizes="100vw" width="1600" height="1000" alt="Hotel bedroom with a view over a marina" loading="lazy" decoding="async" draggable="false"></figure>
+                <figure class="scene" data-scene="all"><img src="assets/img/hero-lakeside-villas-1600.webp" srcset="assets/img/hero-lakeside-villas-1600.webp 1600w, assets/img/hero-lakeside-villas-2400.webp 2400w" sizes="100vw" width="2400" height="1359" alt="Villas along a landscaped lake at Bloom Living (architectural render)" loading="lazy" decoding="async" draggable="false"></figure>
+                <div class="glimpses__shade" aria-hidden="true"></div>
+              </div>
 
-          <div class="intents-wrap">
-          <span class="intents__marker" aria-hidden="true" data-intent-marker></span>
-          <ol class="intents" data-intent-list>
-            <li class="intent is-active" data-intent="home">
-              <a class="intent__row" href="#find" data-cursor="Open">
-                <span class="intent__num">01</span>
-                <span class="intent__body">
-                  <span class="intent__who">Buying or renting</span>
-                  <span class="intent__text"><span class="intent__line">I'm looking for a <em>home</em></span></span>
-                </span>
-                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/find-buy-560.webp" alt="" width="400" height="500" loading="lazy"></span>
-                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="sr-only">Go to Find a Home</span>
-              </a>
-            </li>
-            <li class="intent" data-intent="communities">
-              <a class="intent__row" href="#communities" data-cursor="Open">
-                <span class="intent__num">02</span>
-                <span class="intent__body">
-                  <span class="intent__who">Choosing where to live</span>
-                  <span class="intent__text"><span class="intent__line">I'm exploring <em>communities</em></span></span>
-                </span>
-                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/hero-lake-bridge-portrait-960.webp" alt="" width="400" height="500" loading="lazy"></span>
-                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="sr-only">Go to Explore Communities</span>
-              </a>
-            </li>
-            <li class="intent" data-intent="services">
-              <a class="intent__row" href="#services" data-cursor="Open">
-                <span class="intent__num">03</span>
-                <span class="intent__body">
-                  <span class="intent__who">Residents, owners, partners</span>
-                  <span class="intent__text"><span class="intent__line">I'm already with <em>Bloom</em></span></span>
-                </span>
-                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/ecosystem-facilities-520.webp" alt="" width="400" height="500" loading="lazy"></span>
-                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="sr-only">Go to Customer Services</span>
-              </a>
-            </li>
-            <li class="intent" data-intent="about">
-              <a class="intent__row" href="#about" data-cursor="Open">
-                <span class="intent__num">04</span>
-                <span class="intent__body">
-                  <span class="intent__who">Investors, partners, visitors</span>
-                  <span class="intent__text"><span class="intent__line">I'm getting to know <em>Bloom</em></span></span>
-                </span>
-                <span class="intent__thumb arch" aria-hidden="true"><img src="assets/img/hero-marina-portrait-820.webp" alt="" width="400" height="500" loading="lazy"></span>
-                <span class="intent__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-                <span class="sr-only">Go to About Bloom</span>
-              </a>
-            </li>
-          </ol>
-          </div>
+              <div class="glimpses__ui wrap" data-glimpse-ui>
+                <header class="glimpses__head">
+                  <p class="eyebrow">Glimpses of Bloom World</p>
+                  <h2 class="glimpses__title" id="world-title">One day. Seven businesses. One connected <em>life.</em></h2>
+                  <p class="glimpses__note">An illustrative day in a Bloom community</p>
+                </header>
 
-          <aside class="intent-view" data-intent-view aria-label="Preview">
-            <div class="intent-view__frame arch" data-intent-frame>
-              <img class="intent-view__img is-active" data-intent-image="home" src="assets/img/find-buy-900.webp" alt="Two-storey villa with arched windows (architectural render)" width="800" height="1000" loading="lazy">
-              <img class="intent-view__img" data-intent-image="communities" src="assets/img/hero-lake-bridge-portrait-960.webp" alt="Footbridge across a lake at sunset at Bloom Living (architectural render)" width="800" height="1000" loading="lazy">
-              <img class="intent-view__img" data-intent-image="services" src="assets/img/ecosystem-facilities-800.webp" alt="Bloom facilities team walking through a landscaped walkway" width="800" height="1000" loading="lazy">
-              <img class="intent-view__img" data-intent-image="about" src="assets/img/hero-marina-portrait-820.webp" alt="Marina-side buildings lit at dusk" width="800" height="1000" loading="lazy">
-              <span class="intent-view__stamp" aria-hidden="true"><span data-intent-num>01</span><i></i>04</span>
+                <div class="glimpses__story" aria-live="polite" data-glimpse-story>
+              <article class="moment is-active" id="moment-real-estate" data-moment="real-estate" data-links="facilities-management landscaping education">
+                <p class="moment__time"><span class="moment__clock">07:00</span><span>Morning, at home</span></p>
+                <h3 class="moment__name"><span class="moment__num">01</span>Real Estate</h3>
+                <p class="moment__brand">Bloom Properties</p>
+                <p class="moment__text">The day starts in a Bloom home: an apartment, townhouse or villa in a community planned around everyday life.</p>
+                <p class="moment__fact"><strong>6,500+</strong> residential units delivered</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="facilities-management">Facilities Management</button></li><li><button type="button" class="moment__link" data-world-jump="landscaping">Landscaping</button></li><li><button type="button" class="moment__link" data-world-jump="education">Education</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Bloom Properties">Explore Bloom Properties <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-education" data-moment="education" data-links="real-estate landscaping healthcare" hidden>
+                <p class="moment__time"><span class="moment__clock">07:45</span><span>The school run</span></p>
+                <h3 class="moment__name"><span class="moment__num">02</span>Education</h3>
+                <p class="moment__brand">Bloom Education</p>
+                <p class="moment__text">Schools anchor Bloom’s communities, from Brighton College to Bloom World Academy, so learning stays close to home.</p>
+                <p class="moment__fact"><strong>15</strong> schools serving more than 20,000 students</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="real-estate">Real Estate</button></li><li><button type="button" class="moment__link" data-world-jump="landscaping">Landscaping</button></li><li><button type="button" class="moment__link" data-world-jump="healthcare">Healthcare</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Bloom Education">Explore Bloom Education <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-facilities-management" data-moment="facilities-management" data-links="real-estate hospitality retail" hidden>
+                <p class="moment__time"><span class="moment__clock">10:00</span><span>Everything working</span></p>
+                <h3 class="moment__name"><span class="moment__num">03</span>Facilities Management</h3>
+                <p class="moment__brand">Bloom Facilities Management</p>
+                <p class="moment__text">Behind the scenes, community and facilities management keeps homes, buildings and shared spaces running day to day.</p>
+                <p class="moment__fact"><strong>8,500+</strong> units managed</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="real-estate">Real Estate</button></li><li><button type="button" class="moment__link" data-world-jump="hospitality">Hospitality</button></li><li><button type="button" class="moment__link" data-world-jump="retail">Retail</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Bloom Facilities Management">Explore Bloom Facilities Management <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-retail" data-moment="retail" data-links="real-estate hospitality facilities-management" hidden>
+                <p class="moment__time"><span class="moment__clock">13:00</span><span>Lunch around the corner</span></p>
+                <h3 class="moment__name"><span class="moment__num">04</span>Retail</h3>
+                <p class="moment__brand">Part of Bloom Holding</p>
+                <p class="moment__text">Shops, cafés and everyday conveniences bring a community’s streets to life, a short walk from home.</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="real-estate">Real Estate</button></li><li><button type="button" class="moment__link" data-world-jump="hospitality">Hospitality</button></li><li><button type="button" class="moment__link" data-world-jump="facilities-management">Facilities Management</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Retail">Explore Retail <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-healthcare" data-moment="healthcare" data-links="real-estate education landscaping" hidden>
+                <p class="moment__time"><span class="moment__clock">16:00</span><span>Care, close by</span></p>
+                <h3 class="moment__name"><span class="moment__num">05</span>Healthcare</h3>
+                <p class="moment__brand">Part of Bloom Holding</p>
+                <p class="moment__text">Care and wellbeing, close to where people live, as part of the same connected community.</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="real-estate">Real Estate</button></li><li><button type="button" class="moment__link" data-world-jump="education">Education</button></li><li><button type="button" class="moment__link" data-world-jump="landscaping">Landscaping</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Healthcare">Explore Healthcare <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-landscaping" data-moment="landscaping" data-links="real-estate education hospitality" hidden>
+                <p class="moment__time"><span class="moment__clock">18:30</span><span>An evening walk</span></p>
+                <h3 class="moment__name"><span class="moment__num">06</span>Landscaping</h3>
+                <p class="moment__brand">Bloom Landscape</p>
+                <p class="moment__text">The parks, streets and gardens between the buildings are designed, built and cared for by Bloom Landscape.</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="real-estate">Real Estate</button></li><li><button type="button" class="moment__link" data-world-jump="education">Education</button></li><li><button type="button" class="moment__link" data-world-jump="hospitality">Hospitality</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Bloom Landscape">Explore Bloom Landscape <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+              <article class="moment" id="moment-hospitality" data-moment="hospitality" data-links="retail landscaping facilities-management" hidden>
+                <p class="moment__time"><span class="moment__clock">20:00</span><span>Guests in town</span></p>
+                <h3 class="moment__name"><span class="moment__num">07</span>Hospitality</h3>
+                <p class="moment__brand">Bloom Hospitality</p>
+                <p class="moment__text">When family visits, there is a place for them too: Marriott Downtown, The Abu Dhabi EDITION and Bloom Arjaan by Rotana.</p>
+                <p class="moment__fact"><strong>851</strong> hotel rooms and serviced apartments</p>
+                <div class="moment__connects"><span class="moment__connects-label">Connects with</span><ul><li><button type="button" class="moment__link" data-world-jump="retail">Retail</button></li><li><button type="button" class="moment__link" data-world-jump="landscaping">Landscaping</button></li><li><button type="button" class="moment__link" data-world-jump="facilities-management">Facilities Management</button></li></ul></div>
+                <button type="button" class="link-arrow moment__go" data-demo="Bloom Hospitality">Explore Bloom Hospitality <svg class="icon"><use href="#i-arrow"/></svg></button>
+              </article>
+                  <article class="moment moment--all" id="moment-all" data-moment="all" data-links="" hidden>
+                    <p class="moment__time"><span class="moment__clock">24/7</span><span>All seven, together</span></p>
+                    <h3 class="moment__name moment__name--all">Curated Community <em>Living</em></h3>
+                    <p class="moment__text">Each business makes the others better: homes, schools, hotels, shops, care, facilities and landscapes, working as one. That is Bloom World.</p>
+                    <div class="moment__actions">
+                      <a class="btn btn--light btn--small" href="#find"><span class="btn__label">Find your place in Bloom World</span><span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span></a>
+                      <a class="link-arrow" href="#ecosystem">Meet the seven businesses <svg class="icon"><use href="#i-arrow"/></svg></a>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="dial" data-dial>
+                  <svg class="dial__svg" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true" data-dial-svg></svg>
+                  <ol class="dial__stops" aria-label="A day in Bloom World" data-dial-stops>
+              <li><button type="button" class="dial__stop dial__stop--left is-active" data-stop="0" data-id="real-estate" aria-controls="moment-real-estate" aria-current="step"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">07:00</span><span class="dial__name">Real Estate</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--left" data-stop="1" data-id="education" aria-controls="moment-education"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">07:45</span><span class="dial__name">Education</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--top" data-stop="2" data-id="facilities-management" aria-controls="moment-facilities-management"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">10:00</span><span class="dial__name">Facilities Management</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--top" data-stop="3" data-id="retail" aria-controls="moment-retail"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">13:00</span><span class="dial__name">Retail</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--top" data-stop="4" data-id="healthcare" aria-controls="moment-healthcare"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">16:00</span><span class="dial__name">Healthcare</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--right" data-stop="5" data-id="landscaping" aria-controls="moment-landscaping"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">18:30</span><span class="dial__name">Landscaping</span></span></button></li>
+              <li><button type="button" class="dial__stop dial__stop--right" data-stop="6" data-id="hospitality" aria-controls="moment-hospitality"><span class="dial__dot" aria-hidden="true"></span><span class="dial__label"><span class="dial__time">20:00</span><span class="dial__name">Hospitality</span></span></button></li>
+                  </ol>
+                  <span class="dial__sun" aria-hidden="true" data-dial-sun></span>
+                </div>
+              </div>
             </div>
-            <div class="intent-view__panels" aria-live="polite">
-              <div class="intent-view__panel" data-intent-panel="home">
-                <p class="intent-view__dest">Find a Home</p>
-                <p class="intent-view__blurb">One search for buying and renting, across every Bloom community.</p>
-                <ul class="intent-view__links"><li><a href="#find" data-find data-mode="buy">Buy a home<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#find" data-find data-mode="rent">Rent a home<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
-              </div>
-              <div class="intent-view__panel" data-intent-panel="communities" hidden>
-                <p class="intent-view__dest">Explore Communities</p>
-                <p class="intent-view__blurb">Five communities across Abu Dhabi and Dubai, each with its own character.</p>
-                <ul class="intent-view__links"><li><a href="#communities" data-community-jump="zayed-city">Zayed City<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#communities" data-community-jump="saadiyat-island">Saadiyat Island<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#communities" data-community-jump="jumeirah-village-circle">Jumeirah Village Circle<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
-              </div>
-              <div class="intent-view__panel" data-intent-panel="services" hidden>
-                <p class="intent-view__dest">Customer Services</p>
-                <p class="intent-view__blurb">Service requests, payments, construction updates and more, in one place.</p>
-                <ul class="intent-view__links"><li><a href="#services" data-service-jump="community-app">Community App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#services" data-service-jump="super-app">Super App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#services" data-service-jump="partners-app">Partners App<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
-              </div>
-              <div class="intent-view__panel" data-intent-panel="about" hidden>
-                <p class="intent-view__dest">About Bloom</p>
-                <p class="intent-view__blurb">Seven businesses, one idea: Curated Community Living.</p>
-                <ul class="intent-view__links"><li><a href="#ecosystem" >The ecosystem<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#life" >Life at Bloom<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li><li><a href="#about" >Bloom in numbers<svg class="icon"><use href="#i-arrow-ne"/></svg></a></li></ul>
-              </div>
-            </div>
-          </aside>
+          </div>
         </div>
-      </section>
-    </div>
       </section>
     </div>
 
     <!-- ============================================================
-         03 · Find a Home
+         03 · Find Your Property: Buy and Rent pathways, one search, featured developments
          ============================================================ -->
     <section class="section find" id="find" data-section="find" aria-labelledby="find-title">
       <svg class="find__arches" viewBox="0 0 400 600" aria-hidden="true"><path data-drift="-0.18" d="M20 600V220a180 180 0 0 1 360 0v380"/><path data-drift="0.12" d="M90 600V250a110 110 0 0 1 220 0v350"/></svg>
       <div class="wrap find__grid">
-        <div class="find__intro section-head">
-          <p class="eyebrow" data-reveal="fade">Find a Home</p>
+        <div class="find__intro">
+          <p class="eyebrow" data-reveal="fade">Find Your Property</p>
           <h2 class="display" id="find-title" data-split="lines">Find a place to call <em>home.</em></h2>
           <div class="find__copy" data-find-copy aria-live="polite">
             <p class="lede is-active" data-mode-copy="buy">Looking to own? Search apartments, townhouses and villas across Bloom's communities.</p>
@@ -522,30 +504,32 @@
           </div>
         </div>
 
-        <figure class="find__figure" data-reveal="clip" data-find-figure>
-          <div class="find__frame arch">
-            <img class="is-active" data-mode-image="buy" src="assets/img/find-buy-560.webp" srcset="assets/img/find-buy-560.webp 560w, assets/img/find-buy-900.webp 900w" sizes="(max-width: 900px) 60vw, 24vw" width="900" height="1125" alt="Two-storey villa with arched windows and a landscaped drive (architectural render)" loading="lazy">
-            <img data-mode-image="rent" src="assets/img/find-rent-560.webp" srcset="assets/img/find-rent-560.webp 560w, assets/img/find-rent-900.webp 900w" sizes="(max-width: 900px) 60vw, 24vw" width="900" height="1125" alt="Low-rise apartment buildings behind palm trees" loading="lazy">
-          </div>
-          <figcaption class="find__badge" aria-hidden="true"><span data-mode-word>Buy</span></figcaption>
-        </figure>
+        <!-- The two pathways are the search's Buy / Rent choice, made big. -->
+        <fieldset class="paths" data-mode data-reveal="rise">
+          <legend class="sr-only">I want to</legend>
+          <label class="path" data-path="buy">
+            <input class="sr-only" type="radio" name="mode" value="buy" form="find-form" checked>
+            <span class="path__media"><img src="assets/img/find-buy-560.webp" srcset="assets/img/find-buy-560.webp 560w, assets/img/find-buy-900.webp 900w" sizes="(max-width: 760px) 45vw, 18vw" width="900" height="1125" alt="" loading="lazy"></span>
+            <span class="path__body">
+              <span class="path__kicker">Pathway 01</span>
+              <span class="path__title">Buy a home</span>
+              <span class="path__text">Own an apartment, townhouse or villa in a Bloom community.</span>
+            </span>
+            <span class="path__tick" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+          </label>
+          <label class="path" data-path="rent">
+            <input class="sr-only" type="radio" name="mode" value="rent" form="find-form">
+            <span class="path__media"><img src="assets/img/find-rent-560.webp" srcset="assets/img/find-rent-560.webp 560w, assets/img/find-rent-900.webp 900w" sizes="(max-width: 760px) 45vw, 18vw" width="900" height="1125" alt="" loading="lazy"></span>
+            <span class="path__body">
+              <span class="path__kicker">Pathway 02</span>
+              <span class="path__title">Rent a home</span>
+              <span class="path__text">Lease an apartment, townhouse or villa in a Bloom community.</span>
+            </span>
+            <span class="path__tick" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+          </label>
+        </fieldset>
 
-        <form class="search" data-search novalidate data-reveal="rise" aria-label="Find a home">
-          <div class="search__top">
-            <div class="mode" role="radiogroup" aria-label="I want to" data-mode>
-              <label class="mode__option">
-                <input class="sr-only" type="radio" name="mode" value="buy" checked>
-                <span>Buy</span>
-              </label>
-              <label class="mode__option">
-                <input class="sr-only" type="radio" name="mode" value="rent">
-                <span>Rent</span>
-              </label>
-              <span class="mode__pill" aria-hidden="true"></span>
-            </div>
-            <p class="search__hint">One search, two ways to live with Bloom.</p>
-          </div>
-
+        <form class="search" id="find-form" data-search novalidate data-reveal="rise" aria-label="Find a home">
           <div class="search__fields">
             <div class="select" data-select="community">
               <span class="select__label" id="label-community">Community</span>
@@ -564,7 +548,6 @@
               </ul>
               <input type="hidden" name="community" value="">
             </div>
-
             <div class="select" data-select="type">
               <span class="select__label" id="label-type">Property type</span>
               <button class="select__button" type="button" id="button-type" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-type value-type">
@@ -581,7 +564,6 @@
               </ul>
               <input type="hidden" name="type" value="">
             </div>
-
             <fieldset class="beds">
               <legend class="select__label">Bedrooms</legend>
               <div class="beds__options">
@@ -590,10 +572,39 @@
                 <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="1"><span>1</span></label>
                 <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="2"><span>2</span></label>
                 <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="3"><span>3</span></label>
-                <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="4"><span>4</span></label>
-                <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="5+"><span>5+</span></label>
+                <label class="beds__chip"><input class="sr-only" type="radio" name="beds" value="4+"><span>4+</span></label>
               </div>
             </fieldset>
+            <div class="select select--budget" data-select="budget-buy" data-budget="buy">
+              <span class="select__label" id="label-budget-buy">Budget</span>
+              <button class="select__button" type="button" id="button-budget-buy" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-budget-buy value-budget-buy">
+                <span class="select__value" id="value-budget-buy">Any budget</span>
+                <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
+              </button>
+              <ul class="select__list" role="listbox" id="list-budget-buy" aria-labelledby="label-budget-buy" tabindex="-1" hidden>
+                <li class="select__option" role="option" id="budget-buy-0" data-value="" aria-selected="true"><span>Any budget</span></li>
+                <li class="select__option" role="option" id="budget-buy-1" data-value="0-1.5m" aria-selected="false"><span>Up to AED 1.5M</span></li>
+                <li class="select__option" role="option" id="budget-buy-2" data-value="1.5m-3m" aria-selected="false"><span>AED 1.5M to 3M</span></li>
+                <li class="select__option" role="option" id="budget-buy-3" data-value="3m-5m" aria-selected="false"><span>AED 3M to 5M</span></li>
+                <li class="select__option" role="option" id="budget-buy-4" data-value="5m+" aria-selected="false"><span>AED 5M and above</span></li>
+              </ul>
+              <input type="hidden" name="budget-buy" value="">
+            </div>
+            <div class="select select--budget" data-select="budget-rent" data-budget="rent" hidden>
+              <span class="select__label" id="label-budget-rent">Yearly rent</span>
+              <button class="select__button" type="button" id="button-budget-rent" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="label-budget-rent value-budget-rent">
+                <span class="select__value" id="value-budget-rent">Any budget</span>
+                <svg class="icon select__chevron"><use href="#i-chevron"/></svg>
+              </button>
+              <ul class="select__list" role="listbox" id="list-budget-rent" aria-labelledby="label-budget-rent" tabindex="-1" hidden>
+                <li class="select__option" role="option" id="budget-rent-0" data-value="" aria-selected="true"><span>Any budget</span></li>
+                <li class="select__option" role="option" id="budget-rent-1" data-value="0-80k" aria-selected="false"><span>Up to AED 80K</span></li>
+                <li class="select__option" role="option" id="budget-rent-2" data-value="80k-150k" aria-selected="false"><span>AED 80K to 150K</span></li>
+                <li class="select__option" role="option" id="budget-rent-3" data-value="150k-250k" aria-selected="false"><span>AED 150K to 250K</span></li>
+                <li class="select__option" role="option" id="budget-rent-4" data-value="250k+" aria-selected="false"><span>AED 250K and above</span></li>
+              </ul>
+              <input type="hidden" name="budget-rent" value="">
+            </div>
 
             <button class="btn search__submit" type="submit" data-search-submit data-magnetic>
               <svg class="icon search__submit-icon"><use href="#i-search"/></svg>
@@ -620,6 +631,60 @@
             </div>
           </div>
         </form>
+
+        <div class="featured" data-featured>
+          <div class="featured__head">
+            <h3 class="featured__title">Featured developments</h3>
+            <span class="tag tag--demo">Placeholder selection</span>
+            <button type="button" class="link-arrow featured__all" data-demo="All Bloom developments">All developments <svg class="icon"><use href="#i-arrow"/></svg></button>
+          </div>
+          <ul class="featured__list" data-stagger>
+          <li class="dev" data-dev="bloom-living" data-community="zayed-city" style="--i: 0">
+            <span class="dev__media arch"><img src="assets/img/hero-lakeside-villas-card-560.webp" width="560" height="757" alt="Villas along a landscaped lake at Bloom Living (architectural render)" loading="lazy" decoding="async"></span>
+            <div class="dev__body">
+              <p class="dev__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Zayed City</p>
+              <h4 class="dev__name">Bloom Living</h4>
+              <div class="dev__actions">
+                <button type="button" class="dev__search" data-dev-search data-community="zayed-city"><span data-dev-label>Homes to buy here</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                <button type="button" class="dev__enquire" data-open-enquiry data-interest="buy" data-dev-enquire>Register interest</button>
+              </div>
+            </div>
+          </li>
+          <li class="dev" data-dev="bloom-gardens" data-community="eastern-mangrove-corniche" style="--i: 1">
+            <span class="dev__media arch"><img src="assets/img/community-eastern-mangrove-card-560.webp" width="560" height="757" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" decoding="async"></span>
+            <div class="dev__body">
+              <p class="dev__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Eastern Mangrove Corniche</p>
+              <h4 class="dev__name">Bloom Gardens</h4>
+              <div class="dev__actions">
+                <button type="button" class="dev__search" data-dev-search data-community="eastern-mangrove-corniche"><span data-dev-label>Homes to buy here</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                <button type="button" class="dev__enquire" data-open-enquiry data-interest="buy" data-dev-enquire>Register interest</button>
+              </div>
+            </div>
+          </li>
+          <li class="dev" data-dev="soho-square" data-community="saadiyat-island" style="--i: 2">
+            <span class="dev__media arch"><img src="assets/img/community-saadiyat-card-560.webp" width="560" height="757" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" decoding="async"></span>
+            <div class="dev__body">
+              <p class="dev__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Saadiyat Island</p>
+              <h4 class="dev__name">Soho Square</h4>
+              <div class="dev__actions">
+                <button type="button" class="dev__search" data-dev-search data-community="saadiyat-island"><span data-dev-label>Homes to buy here</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                <button type="button" class="dev__enquire" data-open-enquiry data-interest="buy" data-dev-enquire>Register interest</button>
+              </div>
+            </div>
+          </li>
+          <li class="dev dev--launch" style="--i: 3">
+            <span class="dev__media dev__media--launch arch" aria-hidden="true"><svg class="icon"><use href="#i-arrow-ne"/></svg></span>
+            <div class="dev__body">
+              <p class="dev__place">Launches</p>
+              <h4 class="dev__name">Next launch</h4>
+              <p class="dev__note">Launch details to come from Bloom.</p>
+              <div class="dev__actions">
+                <button type="button" class="dev__enquire" data-open-enquiry data-interest="buy" data-note="Launch updates">Get launch updates</button>
+              </div>
+            </div>
+          </li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -1249,7 +1314,7 @@
   <div class="cursor" aria-hidden="true" data-cursor-el><span class="cursor__ring"><span class="cursor__label" data-cursor-label></span></span><span class="cursor__dot"></span></div>
   <nav class="dock" aria-label="Page sections" data-dock>
     <ol class="dock__list" id="dock-list" data-dock-list hidden>
-      <li><a href="#begin" data-dock-link="begin"><span>01</span>Start here</a></li>
+      <li><a href="#world" data-dock-link="world"><span>01</span>Bloom World</a></li>
       <li><a href="#find" data-dock-link="find"><span>02</span>Find a Home</a></li>
       <li><a href="#communities" data-dock-link="communities"><span>03</span>Explore Communities</a></li>
       <li><a href="#ecosystem" data-dock-link="ecosystem"><span>04</span>Bloom Ecosystem</a></li>
@@ -1261,7 +1326,7 @@
     <button type="button" class="dock__toggle" aria-expanded="false" aria-controls="dock-list" data-dock-toggle>
       <svg class="dock__arch" viewBox="0 0 24 30" aria-hidden="true"><path class="dock__arch-track" d="M3 29V12a9 9 0 0 1 18 0v17"/><path class="dock__arch-fill" pathLength="1" d="M3 29V12a9 9 0 0 1 18 0v17" data-dock-progress/></svg>
       <span class="dock__num" data-dock-num>01</span>
-      <span class="dock__name"><span data-dock-name>Start here</span></span>
+      <span class="dock__name"><span data-dock-name>Bloom World</span></span>
       <span class="sr-only">, show all sections</span>
       <svg class="icon dock__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
     </button>

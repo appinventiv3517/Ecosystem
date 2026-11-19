@@ -1,7 +1,7 @@
 // Page-load sequence. Three arches rise from the floor while a counter runs to 100 and the
-// proposition is spelled out word by word. When loading is done the three arches fly up and
-// become the top of the hero wheel, the rest of the wheel blooms open around them like
-// petals, the wordmark settles into the header and the headline letters rise.
+// proposition is spelled out word by word. When loading is done the three arches fly to the
+// front of the Bloom World orbit, the other businesses travel out round it, the wordmark
+// settles into the header and the headline letters rise.
 
 import { $, $$, imageReady } from '../lib/dom.js';
 import { gsap, motionOK, EASE } from '../lib/motion.js';
@@ -9,7 +9,7 @@ import { gsap, motionOK, EASE } from '../lib/motion.js';
 const root = document.documentElement;
 const SMOOTH = 'power3.out';
 
-/** Entrance for the header and the hero's words. The wheel has its own opening (hero.js). */
+/** Entrance for the header and the hero's words. The orbit has its own opening (hero.js). */
 function contentTimeline({ withBrand = true } = {}) {
   const timeline = gsap.timeline();
   const bar = $('.site-header__bar');
@@ -27,7 +27,7 @@ function contentTimeline({ withBrand = true } = {}) {
   return timeline;
 }
 
-/** Plays the loader. Resolves true when it has also bloomed the hero wheel open. */
+/** Plays the loader. Resolves true when it has also opened the hero orbit. */
 export async function playIntro(hero) {
   const overlay = $('[data-intro]');
   if (!motionOK) {
@@ -53,7 +53,7 @@ export async function playIntro(hero) {
 
   const content = contentTimeline({ withBrand: false }).pause();
   gsap.set(brand, { autoAlpha: 0 });
-  // The wheel waits folded shut, its top three arches hidden until the loader's arches land there.
+  // The orbit waits folded shut, its front three arches hidden until the loader's arches land there.
   hero.fold();
   gsap.set(arches, { scaleY: 0 });
   gsap.set(archImages, { yPercent: 30, scale: 1.3 });
@@ -80,8 +80,8 @@ export async function playIntro(hero) {
   await gsap.to(counter, { value: 100, duration: 0.45, ease: 'power1.inOut', onUpdate: show }).then();
   mark.style.animation = 'none';
 
-  // Lift each arch out of its row and send it to the arch of the wheel it becomes.
-  const corner = window.innerWidth < 761 ? 16 : 22;
+  // Lift each arch out of its row and send it to the arch of the orbit it becomes.
+  const corner = window.innerWidth < 761 ? 14 : 22;
   const flights = arches.map((arch, i) => {
     const from = arch.getBoundingClientRect();
     const to = hero.landing(hero.flown[i]);
@@ -104,7 +104,7 @@ export async function playIntro(hero) {
       .to(mark, { x: toMark.left - fromMark.left, y: toMark.top - fromMark.top, scale: toMark.width / fromMark.width, duration: 1.25, ease: 'power3.inOut' }, 0.1)
       .add(() => root.classList.remove('is-locked'), 0.9)
       .add(content.play(), 0.5)
-      // The rest of the wheel unfolds from behind the top arch as the three arrive.
+      // The rest of the orbit unfolds from behind the front arch as the three arrive.
       .add(hero.open(), 1.05)
       .add(() => {
         hero.reveal();

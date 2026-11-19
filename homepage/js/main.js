@@ -13,7 +13,7 @@ import { initDock } from './ui/dock.js';
 import { playIntro } from './sections/intro.js';
 import { initHeader } from './sections/header.js';
 import { initHero } from './sections/hero.js';
-import { initIntents } from './sections/begin.js';
+import { initWorld } from './sections/world.js';
 import { initFind } from './sections/find.js';
 import { initCommunities } from './sections/communities.js';
 import { initEcosystem } from './sections/ecosystem.js';
@@ -28,13 +28,14 @@ window.__bloomStarted = true;
  * One click handler for everything that navigates within the page.
  * Markup declares intent with data attributes:
  *   data-find (+ data-mode / data-community / data-type)  prefill the search and go to it
+ *   data-world-jump  go to that business in the glimpses of Bloom World
  *   data-community-jump, data-vertical-jump, data-service-jump  go to that item in its section
- *   data-open-enquiry (+ data-interest)  open the enquiry panel
+ *   data-open-enquiry (+ data-interest, data-note)  open the enquiry panel
  *   data-demo="Label"  a destination outside this prototype: explain instead of navigating
  */
 function initActions() {
   document.addEventListener('click', (event) => {
-    const target = event.target.closest('a[href^="#"], [data-find], [data-open-enquiry], [data-demo]');
+    const target = event.target.closest('a[href^="#"], [data-find], [data-open-enquiry], [data-demo], [data-world-jump]');
     if (!target) return;
     const data = target.dataset;
 
@@ -48,7 +49,7 @@ function initActions() {
     emit('bloom:navigate');
 
     if ('openEnquiry' in data) {
-      emit('bloom:enquire', { interest: data.interest, trigger: target });
+      emit('bloom:enquire', { interest: data.interest, note: data.note, trigger: target });
     } else if ('find' in data) {
       emit('bloom:find', {
         mode: data.mode,
@@ -59,6 +60,8 @@ function initActions() {
         run: Boolean(target.closest('.search__quick')),
         scroll: !target.closest('.search'),
       });
+    } else if (data.worldJump) {
+      emit('bloom:world', { id: data.worldJump });
     } else if (data.communityJump) {
       emit('bloom:community', { id: data.communityJump });
     } else if (data.verticalJump) {
@@ -77,7 +80,7 @@ async function start() {
   initEnquiry();
   initHeader();
   const hero = initHero();
-  initIntents();
+  initWorld();
   initFind();
   initCommunities();
   initEcosystem();
@@ -86,10 +89,9 @@ async function start() {
   initAbout();
   initFooter();
   initMagnetic();
-  initTilt('[data-intent-frame]', 4);
+  initTilt('[data-path]', 4);
   initCursor();
   initDock();
-  initTilt('[data-find-figure]', 5);
 
   // Headline splitting measures text, so wait for the web fonts (briefly).
   await Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, 1800))]);

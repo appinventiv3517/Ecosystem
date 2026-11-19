@@ -1,17 +1,18 @@
-// Hero, "the bloom": Bloom's seven businesses and its communities as arches on a great wheel
-// rising over the cream. The arch at twelve o'clock is in focus and shows its name. The wheel
-// turns to the next arch every few seconds, follows a drag (with momentum), leans towards the
-// pointer, and opens outwards as you scroll on. Clicking the arch in focus goes to that
-// business or community further down the page; clicking any other arch turns it to the top.
+// Hero, "Bloom World": Bloom's seven businesses as seven arches travelling round a tilted
+// orbit, with the proposition at its centre. The arch at the front of the orbit is in focus;
+// the world turns to the next business every few seconds, follows a drag (with momentum),
+// tilts towards the pointer, and swings outwards as you scroll on into the glimpses below.
 //
-// Every arch is placed by one render function from a few numbers (rotation, lean, spread),
-// so all of those motions combine smoothly instead of fighting over the same transform.
+// Every arch is placed by one render function from a few numbers (rotation, lean, tilt,
+// spread), so all of those motions combine smoothly instead of fighting over one transform.
+// Only transform and opacity change per frame.
 
-import { $, $$, clamp, emit, finePointer, scrollToTarget } from '../lib/dom.js';
+import { $, $$, clamp, emit, finePointer } from '../lib/dom.js';
 import { gsap, ScrollTrigger, motionOK } from '../lib/motion.js';
 
-const STEP_SECONDS = 3.6; // how long each arch stays in focus before the wheel turns
-const TURN_SECONDS = 1.6;
+const STEP_SECONDS = 3.4; // how long each business stays at the front before the world turns
+const TURN_SECONDS = 1.5;
+const BACK = 0.6; // scale of an arch at the far side of the orbit
 
 /** Wrap every letter of the element's text in its own span, keeping inner tags such as <em>. */
 function splitLetters(element) {
@@ -35,12 +36,12 @@ function splitLetters(element) {
 }
 
 const wrap180 = (angle) => ((((angle + 180) % 360) + 360) % 360) - 180;
-const SVG = 'http://www.w3.org/2000/svg';
+const ellipsePath = (cx, cy, rx, ry) => `M${(cx - rx).toFixed(1)} ${cy.toFixed(1)}a${rx.toFixed(1)} ${ry.toFixed(1)} 0 1 0 ${(rx * 2).toFixed(1)} 0a${rx.toFixed(1)} ${ry.toFixed(1)} 0 1 0 ${(-rx * 2).toFixed(1)} 0`;
 
 export function initHero() {
   const hero = $('[data-hero]');
-  const bloom = $('[data-bloom]', hero || document);
-  if (!hero || !bloom) return { start() {} };
+  const world = $('[data-world]', hero || document);
+  if (!hero || !world) return { start() {} };
 
   if (motionOK) {
     $('[data-hero-title]', hero).setAttribute('aria-label', 'Curated Community Living');
@@ -50,21 +51,23 @@ export function initHero() {
     });
   }
 
-  const petals = $$('[data-petal]', bloom);
-  const dial = $('[data-bloom-dial]', bloom);
+  const orbs = $$('[data-orb]', world);
+  const buttons = orbs.map((orb) => $('button', orb));
+  const orbits = $('[data-world-orbits]', world);
   const copy = $('[data-hero-content]', hero);
-  const count = petals.length;
+  const caption = $('[data-world-caption]', hero);
+  const count = orbs.length;
   const STEP = 360 / count;
 
-  // rot: the wheel's turn. lean: a small extra turn towards the pointer. spread: how far the
-  // wheel has opened outwards on scroll. turn: the extra rotation that comes with scrolling.
-  const state = { rot: 0, lean: 0, spread: 0, turn: 0, dial: 1, sats: 0 };
-  // Per arch: b is how far it has bloomed out from the top (0 = folded behind the top arch),
-  // o its opacity, lift how far it rises out of the wheel on hover.
-  const arch = petals.map(() => ({ b: 1, o: 1, lift: 0 }));
-  const geo = { cx: 0, cy: 0, r: 0, ri: 0, pw: 0, ph: 0 };
-  let dialSpin = null;
-  let satellites = null;
+  // rot: the world's turn. lean: a small extra turn towards the pointer. tilt: how far the
+  // orbit leans back (1 = as measured). spread: how far it has swung open on scroll.
+  const state = { rot: 0, lean: 0, tilt: 1, spread: 0, turn: 0, rings: 1, sat: 0 };
+  // Per arch: b is how far it has fanned out from the front (0 = tucked behind the front arch),
+  // o its opacity, lift how far it rises on hover.
+  const arch = orbs.map(() => ({ b: 1, o: 1, lift: 0 }));
+  const geo = { cx: 0, cy: 0, rx: 0, ry: 0, pw: 0, ph: 0, phone: false };
+  let ring = null;
+  let sats = [];
   let focused = -1;
   let inView = true;
   let hovering = false;
@@ -78,73 +81,84 @@ export function initHero() {
     const width = hero.clientWidth;
     const height = hero.clientHeight;
     const phone = width < 761;
-    // Portrait tablets: more height than width to fill, so bigger arches and a larger headline.
     const tall = !phone && height > width * 1.15;
     const bar = $('.site-header__bar');
     const headerBottom = bar ? bar.getBoundingClientRect().bottom : 80;
+    const label = phone ? 0 : 64; // room for the name (and brand) under the front arch
 
-    let ph = clamp(Math.min(height * 0.31, width * 0.21), 150, 340);
-    if (phone) ph = clamp(Math.min(width * 0.46, height * 0.23), 140, 220);
-    else if (tall) ph = clamp(Math.min(height * 0.24, width * 0.33), 180, 320);
-    const pw = ph * 0.74;
-    const top = headerBottom + (phone ? 24 : 36);
-    // Wide enough to frame the headline, and never so tight that the arches crowd each other.
-    const r = Math.max(phone ? width * 0.95 : width * (tall ? 0.62 : 0.44), pw * 2.6);
-    Object.assign(geo, { cx: width / 2, cy: top + ph / 2 + r, r, ri: r - ph / 2 - (phone ? 14 : 22), pw, ph });
+    let ph;
+    let cx = width / 2;
+    let cy;
+    let rx;
+    let ry;
+    let titleSize;
+    let copyTop;
+    let copyBottom;
 
-    let titleSize = clamp(Math.min(geo.ri * 0.17, height * 0.092), 44, 150);
-    if (phone) titleSize = Math.min(width * 0.155, 68);
-    else if (tall) titleSize = Math.min(width * 0.095, 96);
-    const copyTop = top + ph * 1.1 + (phone ? 16 : 22);
+    if (phone) {
+      // On phones the world sits above the proposition, like a planet over the horizon.
+      ph = clamp(Math.min(width * 0.27, height * 0.135), 92, 124);
+      const pw = ph * 0.76;
+      rx = width / 2 - pw * 0.5 - 10;
+      const top = headerBottom + 12 + (ph * BACK) / 2;
+      const bottom = top + Math.min(height * 0.2, 170);
+      cy = (top + bottom) / 2;
+      ry = (bottom - top) / 2;
+      titleSize = Math.min(width * 0.13, 56);
+      copyTop = bottom + ph / 2 + 64;
+      copyBottom = 20;
+    } else {
+      ph = clamp(Math.min(height * (tall ? 0.15 : 0.21), width * (tall ? 0.2 : 0.14)), 116, 240);
+      const pw = ph * 0.76;
+      const topRoom = headerBottom + 14 + (ph * BACK) / 2;
+      const bottomRoom = height - 10 - label - ph * 0.55;
+      cy = (topRoom + bottomRoom) / 2;
+      ry = (bottomRoom - topRoom) / 2;
+      rx = Math.min(width / 2 - pw * 0.62 - 12, width * (tall ? 0.4 : 0.42));
+      titleSize = clamp(Math.min(width * (tall ? 0.085 : 0.06), height * 0.092, rx * 0.17), 44, 132);
+      // The proposition fills the hollow of the orbit: below the far arches, above the near one.
+      copyTop = cy - ry + (ph * BACK) / 2 + 22;
+      copyBottom = height - (cy + ry - ph * 0.55) + 16;
+    }
+    const pw = ph * 0.76;
+    Object.assign(geo, { cx, cy, rx, ry, pw, ph, phone });
+
     const vars = {
-      '--cx': `${geo.cx}px`, '--cy': `${geo.cy}px`, '--r': `${geo.r}px`, '--ri': `${geo.ri}px`,
+      '--cx': `${cx}px`, '--cy': `${cy}px`, '--rx': `${rx}px`, '--ry': `${ry}px`,
       '--pw': `${pw}px`, '--ph': `${ph}px`, '--title-fs': `${titleSize}px`,
-      '--copy-top': `${copyTop}px`,
-      '--gy': `${(copyTop + height) / 2}px`, '--gr': `${Math.min(geo.ri * 1.05, width * 0.5)}px`,
+      '--copy-top': `${copyTop}px`, '--copy-bottom': `${copyBottom}px`,
     };
     Object.entries(vars).forEach(([name, value]) => hero.style.setProperty(name, value));
-    buildDial();
+    buildOrbits();
     render();
   }
 
-  /**
-   * The dial: a bezel of tick marks around the outside of the arches that turns with the
-   * wheel, and beyond it a dashed orbit with two red satellites drifting round.
-   */
-  function buildDial() {
-    const { cx, cy, r, ph } = geo;
-    const bezel = r + ph / 2 + 16;
-    const ticks = [];
-    const perStep = 4;
-    for (let i = 0; i < count * perStep; i += 1) {
-      const major = i % perStep === 0;
-      const angle = (i * STEP) / perStep;
-      const rad = (angle * Math.PI) / 180;
-      const outer = bezel + (major ? 14 : 7);
-      ticks.push(`<line ${major ? 'class="is-major" ' : ''}x1="${(cx + bezel * Math.sin(rad)).toFixed(1)}" y1="${(cy - bezel * Math.cos(rad)).toFixed(1)}" x2="${(cx + outer * Math.sin(rad)).toFixed(1)}" y2="${(cy - outer * Math.cos(rad)).toFixed(1)}"/>`);
-    }
-    const orbit = bezel + 30;
-    dial.innerHTML = `
-      <circle class="bloom__orbit bloom__orbit--outer" cx="${cx}" cy="${cy}" r="${(bezel - 2).toFixed(1)}"/>
-      <g data-dial-spin><g class="bloom__ticks">${ticks.join('')}</g></g>
-      <circle class="bloom__orbit" cx="${cx}" cy="${cy}" r="${orbit.toFixed(1)}"/>
-      <g data-dial-sats>
-        <circle class="bloom__dot" cx="${cx}" cy="${(cy - orbit).toFixed(1)}" r="3.5"/>
-        <circle class="bloom__dot" cx="${cx}" cy="${(cy + orbit).toFixed(1)}" r="2.5" opacity="0.6"/>
-      </g>`;
-    dialSpin = $('[data-dial-spin]', dial);
-    satellites = $('[data-dial-sats]', dial);
+  /** The orbit lines: the path the arches travel, a wider faint ring, and two red satellites. */
+  function buildOrbits() {
+    const { cx, cy, rx, ry } = geo;
+    orbits.innerHTML = `
+      <g data-ring>
+        <path class="world__ring world__ring--outer" d="${ellipsePath(cx, cy, rx * 1.16, ry * 1.2)}"/>
+        <path class="world__ring" d="${ellipsePath(cx, cy, rx, ry)}"/>
+        <path class="world__ring world__ring--inner" d="${ellipsePath(cx, cy, rx * 0.78, ry * 0.7)}"/>
+      </g>
+      <circle class="world__sat" r="3.5" data-sat/>
+      <circle class="world__sat world__sat--small" r="2.5" data-sat/>`;
+    ring = $('[data-ring]', orbits);
+    sats = $$('[data-sat]', orbits);
   }
 
   /* ---------- Rendering ---------- */
 
   function render() {
-    const { cx, cy, r, pw, ph } = geo;
-    const radius = r * (1 + state.spread * 0.55);
+    const { cx, cy, pw, ph } = geo;
+    const open = 1 + state.spread * 0.7;
+    const rx = geo.rx * open;
+    const ry = geo.ry * open * state.tilt;
     let nearest = 0;
     let nearestAngle = 999;
 
-    petals.forEach((petal, i) => {
+    orbs.forEach((orb, i) => {
       const a = arch[i];
       const angle = wrap180(i * STEP + state.rot + state.turn + state.lean) * a.b;
       const away = Math.abs(angle);
@@ -152,39 +166,56 @@ export function initHero() {
         nearestAngle = away;
         nearest = i;
       }
-      const focus = Math.max(0, 1 - away / STEP);
-      const scale = (0.88 + 0.24 * focus) * (0.82 + 0.18 * a.b);
-      const reach = radius - (1 - a.b) * r * 0.1 + a.lift;
       const rad = (angle * Math.PI) / 180;
-      const x = cx + reach * Math.sin(rad) - pw / 2;
-      const y = cy - reach * Math.cos(rad) - ph / 2;
-      // Arches fade as they sink below the horizon of the wheel.
-      const visible = clamp((118 - away) / 22, 0, 1) * a.o;
+      const depth = (Math.cos(rad) + 1) / 2; // 1 at the front, 0 at the far side
+      const focus = Math.max(0, 1 - away / STEP);
+      const scale = (BACK + (1 - BACK) * depth) * (1 + 0.1 * focus) * (0.8 + 0.2 * a.b);
+      const x = cx + rx * Math.sin(rad) - pw / 2;
+      const y = cy + ry * Math.cos(rad) - ph / 2 - a.lift;
 
-      petal.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${angle.toFixed(3)}deg) scale(${scale.toFixed(4)})`;
-      petal.style.opacity = visible.toFixed(3);
-      petal.style.visibility = visible > 0.01 ? '' : 'hidden';
-      petal.style.zIndex = String(400 - Math.round(away * 2));
-      petal.style.setProperty('--f', (focus * focus * (3 - 2 * focus)).toFixed(3));
+      orb.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+      orb.style.opacity = (a.o * (1 - state.spread * 0.9)).toFixed(3);
+      orb.style.visibility = a.o > 0.01 ? '' : 'hidden';
+      orb.style.zIndex = String(10 + Math.round(depth * 100));
+      orb.style.setProperty('--d', depth.toFixed(3));
+      orb.style.setProperty('--f', (focus * focus * (3 - 2 * focus)).toFixed(3));
+      // Names stay readable at the far side: they shrink a little with distance, not as much as the arch.
+      orb.style.setProperty('--ls', ((0.86 + 0.14 * depth) / scale).toFixed(4));
     });
 
-    if (dialSpin) {
-      const s = 1 + state.spread * 0.55;
-      const turn = state.rot + state.turn + state.lean;
-      dialSpin.setAttribute('transform', `translate(${cx} ${cy}) rotate(${turn.toFixed(3)}) scale(${s.toFixed(4)}) translate(${-cx} ${-cy})`);
-      satellites.setAttribute('transform', `rotate(${state.sats.toFixed(2)} ${cx} ${cy})`);
-      dial.style.opacity = String(state.dial * (1 - state.spread));
+    if (ring) {
+      ring.setAttribute('transform', `translate(${cx} ${cy}) scale(${open.toFixed(4)} ${(open * state.tilt).toFixed(4)}) translate(${-cx} ${-cy})`);
+      orbits.style.opacity = String(state.rings * (1 - state.spread));
+      sats.forEach((sat, k) => {
+        const t = ((state.sat + k * 180) * Math.PI) / 180;
+        const sx = 1.16 - k * 0.38;
+        const sy = 1.2 - k * 0.5;
+        sat.setAttribute('cx', (cx + rx * sx * Math.sin(t)).toFixed(1));
+        sat.setAttribute('cy', (cy + ry * sy * Math.cos(t)).toFixed(1));
+      });
     }
 
     if (nearest !== focused) {
       focused = nearest;
-      petals.forEach((petal, i) => petal.classList.toggle('is-focus', i === nearest));
+      orbs.forEach((orb, i) => orb.classList.toggle('is-focus', i === nearest));
+      updateCaption();
     }
+  }
+
+  function updateCaption() {
+    if (!caption) return;
+    const orb = orbs[focused];
+    $('[data-caption-num]', caption).textContent = String(focused + 1).padStart(2, '0');
+    $('[data-caption-name]', caption).textContent = orb.dataset.name;
+    $('[data-caption-brand]', caption).textContent = orb.dataset.brand;
+    const go = $('[data-caption-go]', caption);
+    go.dataset.worldJump = orb.dataset.id;
+    $('span', go).textContent = `See ${orb.dataset.name} in Bloom World`;
   }
 
   /* ---------- Turning ---------- */
 
-  /** The unwrapped step the wheel is on: rot = -position * STEP. */
+  /** The unwrapped step the world is on: rot = -position * STEP. */
   const position = () => -state.rot / STEP;
 
   function schedule() {
@@ -204,7 +235,7 @@ export function initHero() {
     autoCall?.kill();
   }
 
-  /** Turn the shortest way round so arch i sits at the top. */
+  /** Turn the shortest way round so arch i comes to the front. */
   function bring(i, duration = 1.2) {
     const now = position();
     const delta = wrap180((i - now) * STEP) / STEP;
@@ -212,56 +243,59 @@ export function initHero() {
   }
 
   function activate(i) {
-    const petal = petals[i];
-    const { kind, id } = petal.dataset;
     emit('bloom:navigate');
-    if (kind === 'business') emit('bloom:vertical', { id });
-    else if (kind === 'community') emit('bloom:community', { id });
-    else scrollToTarget('#life');
+    emit('bloom:world', { id: orbs[i].dataset.id });
   }
 
   /* ---------- Interaction ---------- */
 
   let suppressClick = false;
+  // With a mouse every arch is labelled, so a click goes straight there. On touch the
+  // first tap brings an arch to the front and names it; a tap on the front arch goes there.
+  const directClick = finePointer();
 
-  petals.forEach((petal, i) => {
-    petal.addEventListener('click', (event) => {
+  buttons.forEach((button, i) => {
+    button.addEventListener('click', (event) => {
       event.preventDefault();
       if (suppressClick) return;
-      if (i === focused && Math.abs(wrap180(i * STEP + state.rot)) < STEP * 0.35) activate(i);
+      if (directClick || i === focused) activate(i);
       else bring(i);
     });
-    petal.addEventListener('focus', () => {
+    button.addEventListener('focus', () => {
       if (i !== focused) bring(i, 0.9);
     });
-    petal.addEventListener('keydown', (event) => {
+    button.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
       event.preventDefault();
       const next = (i + (event.key === 'ArrowRight' ? 1 : -1) + count) % count;
-      petals[next].focus({ preventScroll: true });
+      buttons[next].focus({ preventScroll: true });
     });
 
-    if (motionOK && finePointer()) {
-      petal.addEventListener('pointerenter', () => {
+    if (motionOK && directClick) {
+      button.addEventListener('pointerenter', () => {
         if (dragging) return;
-        gsap.to(arch[i], { lift: geo.ph * 0.07, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
-        gsap.to($('img', petal), { scale: 1.06, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
+        orbs[i].classList.add('is-hover');
+        world.classList.add('has-hover');
+        gsap.to(arch[i], { lift: geo.ph * 0.08, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
+        gsap.to($('img', button), { scale: 1.08, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
       });
-      petal.addEventListener('pointerleave', () => {
+      button.addEventListener('pointerleave', () => {
+        orbs[i].classList.remove('is-hover');
+        world.classList.remove('has-hover');
         gsap.to(arch[i], { lift: 0, duration: 0.9, ease: 'power3.out', overwrite: 'auto' });
-        gsap.to($('img', petal), { scale: 1, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
+        gsap.to($('img', button), { scale: 1, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
       });
     }
   });
 
   if (motionOK) {
-    // Drag (or swipe) the wheel round; let go and it glides on and settles on an arch.
+    // Drag (or swipe) the world round; let go and it glides on and settles on a business.
     let startX = 0;
     let startRot = 0;
     let samples = [];
-    const degPerPixel = () => STEP / (geo.pw * 1.15);
+    const degPerPixel = () => STEP / (geo.pw * 1.4);
 
-    bloom.addEventListener('pointerdown', (event) => {
+    world.addEventListener('pointerdown', (event) => {
       if (event.button !== 0 || !opened) return;
       startX = event.clientX;
       startRot = state.rot;
@@ -270,10 +304,10 @@ export function initHero() {
         const dx = e.clientX - startX;
         if (!dragging && Math.abs(dx) > 6) {
           dragging = true;
-          bloom.classList.add('is-dragging');
+          world.classList.add('is-dragging');
           gsap.killTweensOf(state, 'rot');
           autoCall?.kill();
-          petals.forEach((_, i) => gsap.to(arch[i], { lift: 0, duration: 0.4, overwrite: 'auto' }));
+          orbs.forEach((_, i) => gsap.to(arch[i], { lift: 0, duration: 0.4, overwrite: 'auto' }));
         }
         if (!dragging) return;
         state.rot = startRot + dx * degPerPixel();
@@ -286,14 +320,14 @@ export function initHero() {
         window.removeEventListener('pointercancel', up);
         if (!dragging) return;
         dragging = false;
-        bloom.classList.remove('is-dragging');
+        world.classList.remove('is-dragging');
         suppressClick = true;
         setTimeout(() => { suppressClick = false; }, 0);
         const first = samples[0];
         const last = samples[samples.length - 1];
         const seconds = Math.max((last.t - first.t) / 1000, 0.016);
         const velocity = ((last.x - first.x) / seconds) * degPerPixel(); // degrees per second
-        const projected = state.rot + clamp(velocity, -900, 900) * 0.32;
+        const projected = state.rot + clamp(velocity, -700, 700) * 0.3;
         turnTo(Math.round(-projected / STEP), clamp(0.9 + Math.abs(velocity) / 1500, 0.9, 1.8), 'power3.out');
       };
       window.addEventListener('pointermove', move, { passive: true });
@@ -301,29 +335,34 @@ export function initHero() {
       window.addEventListener('pointercancel', up);
     });
 
-    bloom.addEventListener('pointerenter', (event) => {
+    world.addEventListener('pointerenter', (event) => {
       if (event.pointerType !== 'mouse') return;
       hovering = true;
       autoCall?.kill();
     });
-    bloom.addEventListener('pointerleave', (event) => {
+    world.addEventListener('pointerleave', (event) => {
       if (event.pointerType !== 'mouse') return;
       hovering = false;
       schedule();
     });
 
-    // The wheel leans a few degrees towards the pointer; the headline drifts the other way.
+    // The world leans towards the pointer and tilts as it moves up and down; the headline
+    // drifts gently the other way, so the scene has depth.
     if (finePointer()) {
       const lean = gsap.quickTo(state, 'lean', { duration: 1.4, ease: 'power3.out' });
+      const tilt = gsap.quickTo(state, 'tilt', { duration: 1.6, ease: 'power3.out' });
       const copyX = gsap.quickTo(copy, 'x', { duration: 1.4, ease: 'power3.out' });
       hero.addEventListener('pointermove', (event) => {
         if (dragging) return;
         const nx = event.clientX / window.innerWidth - 0.5;
-        lean(nx * 5);
-        copyX(nx * -14);
+        const ny = event.clientY / window.innerHeight - 0.5;
+        lean(nx * 6);
+        tilt(1 + ny * 0.07);
+        copyX(nx * -12);
       });
       hero.addEventListener('pointerleave', () => {
         lean(0);
+        tilt(1);
         copyX(0);
       });
     }
@@ -340,13 +379,13 @@ export function initHero() {
 
     // Draw every frame only while the hero is on screen.
     const tick = () => {
-      state.sats += gsap.ticker.deltaRatio() * 0.06;
+      state.sat += gsap.ticker.deltaRatio() * 0.08;
       render();
     };
     ScrollTrigger.create({
       trigger: '.opening',
       start: 'top bottom',
-      end: () => `top+=${window.innerHeight * 1.9} top`,
+      end: () => `top+=${window.innerHeight * 1.7} top`,
       onToggle: (self) => {
         inView = self.isActive;
         if (inView) gsap.ticker.add(tick);
@@ -358,56 +397,56 @@ export function initHero() {
     document.addEventListener('visibilitychange', schedule);
   }
 
-  window.addEventListener('resize', () => {
-    measure();
-  });
+  window.addEventListener('resize', measure);
   measure();
 
   /**
-   * As you scroll on, the wheel turns and opens outwards past the edges of the screen while
-   * the headline lifts away; then the next section slides up over it.
+   * As you scroll on, the proposition lifts away and the world swings open past the edges of
+   * the screen, still turning while the glimpses of Bloom World rise over it in their arch.
    */
   function buildRunway() {
     gsap.timeline({
-      scrollTrigger: { trigger: hero, start: 'top top', end: () => `+=${window.innerHeight}`, scrub: 1, invalidateOnRefresh: true },
+      // Measured on the wrapper: the hero itself is sticky, so its own position moves with the scroll.
+      scrollTrigger: { trigger: hero.parentElement, start: 'top top', end: () => `+=${window.innerHeight * 1.5}`, scrub: 1, invalidateOnRefresh: true },
     })
-      .fromTo(state, { spread: 0, turn: 0 }, { spread: 1, turn: -STEP * 2.5, ease: 'power1.in' }, 0)
-      .fromTo(copy, { y: 0, autoAlpha: 1, scale: 1 }, { y: () => -window.innerHeight * 0.14, autoAlpha: 0, scale: 0.94, ease: 'none' }, 0);
+      .fromTo(state, { spread: 0, turn: 0 }, { spread: 1, turn: -STEP * 2, ease: 'power1.inOut', duration: 1 }, 0)
+      .fromTo(copy, { y: 0, autoAlpha: 1, scale: 1 }, { y: () => -window.innerHeight * 0.12, autoAlpha: 0, scale: 0.95, ease: 'none', duration: 0.45 }, 0);
   }
 
   /* ---------- Opening ---------- */
 
-  /** The three arches the loader flies in: the top one and its two neighbours. */
+  /** The three arches the loader flies in: the front one and its two neighbours. */
   const flown = [count - 1, 0, 1];
 
-  /** Fold the wheel shut before the loader hands over: everything tucked behind the top arch. */
+  /** Fold the world shut before the loader hands over: everything tucked behind the front arch. */
   function fold() {
     arch.forEach((a, i) => {
       a.b = flown.includes(i) ? 1 : 0;
       a.o = 0;
     });
-    state.dial = 0;
+    state.rings = 0;
     render();
   }
 
   /** Where arch i will sit once open, for the loader's arches to fly to. */
   function landing(i) {
-    const { cx, cy, r, pw, ph } = geo;
+    const { cx, cy, rx, ry, pw, ph } = geo;
     const angle = wrap180(i * STEP);
-    const scale = 0.88 + 0.24 * Math.max(0, 1 - Math.abs(angle) / STEP);
     const rad = (angle * Math.PI) / 180;
+    const depth = (Math.cos(rad) + 1) / 2;
+    const scale = (BACK + (1 - BACK) * depth) * (1 + 0.1 * Math.max(0, 1 - Math.abs(angle) / STEP));
     const width = pw * scale;
     const height = ph * scale;
     return {
-      left: cx + r * Math.sin(rad) - width / 2,
-      top: cy - r * Math.cos(rad) - height / 2,
+      left: cx + rx * Math.sin(rad) - width / 2,
+      top: cy + ry * Math.cos(rad) - height / 2,
       width,
       height,
-      rotation: angle,
+      rotation: 0,
     };
   }
 
-  /** Bloom open: the folded arches fan out from behind the top one, nearest first. */
+  /** Open the world: the tucked arches travel out round the orbit, nearest first. */
   function open() {
     const timeline = gsap.timeline({
       onComplete: () => {
@@ -417,19 +456,20 @@ export function initHero() {
     });
     if (!motionOK) {
       arch.forEach((a) => Object.assign(a, { b: 1, o: 1 }));
-      state.dial = 1;
+      state.rings = 1;
       render();
       opened = true;
       return timeline;
     }
-    const order = petals.map((_, i) => i).filter((i) => !flown.includes(i))
+    const order = orbs.map((_, i) => i).filter((i) => !flown.includes(i))
       .sort((p, q) => Math.abs(wrap180(p * STEP)) - Math.abs(wrap180(q * STEP)));
     order.forEach((i, n) => {
-      const delay = Math.floor(n / 2) * 0.09;
-      timeline.to(arch[i], { o: 1, duration: 0.35, ease: 'power1.out' }, delay);
-      timeline.to(arch[i], { b: 1, duration: 1.9, ease: 'expo.out' }, delay);
+      const delay = Math.floor(n / 2) * 0.12;
+      timeline.to(arch[i], { o: 1, duration: 0.4, ease: 'power1.out' }, delay);
+      timeline.to(arch[i], { b: 1, duration: 2, ease: 'expo.out' }, delay);
     });
-    timeline.fromTo(state, { dial: 0 }, { dial: 1, duration: 1.4, ease: 'power2.out' }, 0.2);
+    timeline.fromTo(state, { rings: 0 }, { rings: 1, duration: 1.4, ease: 'power2.out' }, 0.2);
+    timeline.add(() => world.classList.add('is-open'), 0.6);
     return timeline;
   }
 
@@ -448,10 +488,12 @@ export function initHero() {
       if (motionOK) buildRunway();
       if (bloomed) {
         opened = true;
+        world.classList.add('is-open');
         schedule();
         return;
       }
       if (!motionOK) {
+        world.classList.add('is-open');
         open();
         return;
       }

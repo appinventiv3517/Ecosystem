@@ -1,0 +1,650 @@
+/* Glimpses of Bloom World: one illustrative day through all seven businesses.
+   The stage holds still while you scroll (sticky inside a tall track); an arch-shaped window
+   opens onto the scene as it arrives, then the sun travels the dial from business to business
+   and the dial draws the links between them. js/sections/world.js drives it. */
+
+.glimpses {
+  --accent-on-dark: #E0796C;
+  position: relative;
+  z-index: 2;
+  background: var(--cream);
+  color: var(--cream);
+}
+
+/* Scroll room: one stretch per business, and one for the day coming together. */
+html.motion .glimpses__track {
+  height: calc(100vh + 8 * 62vh);
+  height: calc(100svh + 8 * 62svh);
+}
+
+.glimpses__stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 36rem;
+}
+
+html.motion .glimpses__stage {
+  position: sticky;
+  top: 0;
+}
+
+.glimpses__window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--black);
+  will-change: clip-path;
+}
+
+/* ---------- The scene ---------- */
+
+.glimpses__media {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scene.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transform-origin: 60% 50%;
+}
+
+.scene__tag {
+  position: absolute;
+  z-index: 3;
+  right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  top: calc(var(--header-h) + 1.25rem);
+  max-width: 17rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(248, 246, 234, 0.3);
+  border-radius: var(--radius-pill);
+  background: rgba(14, 13, 12, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: rgba(248, 246, 234, 0.86);
+}
+
+/* Shade for legible type on the left and along the foot, where the story and dial sit. */
+.glimpses__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(14, 13, 12, 0.8) 0%, rgba(14, 13, 12, 0.5) 34%, rgba(14, 13, 12, 0.08) 62%, rgba(14, 13, 12, 0) 100%),
+    linear-gradient(0deg, rgba(14, 13, 12, 0.72) 0%, rgba(14, 13, 12, 0.18) 38%, rgba(14, 13, 12, 0) 55%),
+    linear-gradient(180deg, rgba(14, 13, 12, 0.45) 0%, rgba(14, 13, 12, 0) 24%);
+  pointer-events: none;
+}
+
+/* ---------- Words and dial over the scene ---------- */
+
+.glimpses__ui {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 31rem) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "head head"
+    "story dial";
+  column-gap: clamp(2rem, 5vw, 5rem);
+  padding-top: calc(var(--header-h) + clamp(0.75rem, 3vh, 2.25rem));
+  padding-bottom: clamp(1.5rem, 4.5vh, 2.75rem);
+}
+
+.glimpses__head {
+  grid-area: head;
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.glimpses__title {
+  max-width: 17em;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+.glimpses__title em {
+  color: var(--accent-on-dark);
+}
+
+.glimpses__note {
+  font-size: 0.8125rem;
+  color: rgba(248, 246, 234, 0.7);
+}
+
+/* ---------- The story of each moment ---------- */
+
+.glimpses__story {
+  grid-area: story;
+  align-self: end;
+  display: grid;
+}
+
+.moment {
+  grid-area: 1 / 1;
+  align-self: end;
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.moment[hidden] {
+  display: none;
+}
+
+.moment__time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: rgba(248, 246, 234, 0.78);
+}
+
+.moment__clock {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent-on-dark);
+}
+
+.moment__name {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.2vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.moment__num {
+  padding-top: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent-on-dark);
+}
+
+.moment__name--all {
+  display: block;
+  max-width: 9em;
+}
+
+.moment__name--all em {
+  color: var(--accent-on-dark);
+}
+
+.moment__brand {
+  margin-top: -0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: rgba(248, 246, 234, 0.62);
+}
+
+.moment__text {
+  max-width: 29rem;
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+  line-height: 1.55;
+  color: rgba(248, 246, 234, 0.88);
+  text-wrap: pretty;
+}
+
+.moment__fact {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+  font-size: 0.875rem;
+  color: rgba(248, 246, 234, 0.8);
+}
+
+.moment__fact strong {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--cream);
+}
+
+.moment__connects {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.moment__connects-label {
+  margin-right: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 246, 234, 0.6);
+}
+
+.moment__connects ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.moment__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(248, 246, 234, 0.32);
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--cream);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+
+.moment__link::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--accent-on-dark);
+}
+
+@media (hover: hover) {
+  .moment__link:hover {
+    border-color: var(--cream);
+    background: var(--cream);
+    color: var(--ink);
+  }
+}
+
+.moment__go {
+  color: var(--cream);
+}
+
+.moment__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 0.5rem;
+  color: var(--cream);
+}
+
+/* ---------- The dial: the sun's path through the day ---------- */
+
+.dial {
+  grid-area: dial;
+  align-self: end;
+  justify-self: end;
+  position: relative;
+  width: min(100%, 50rem);
+  aspect-ratio: 1000 / 300;
+  /* Room under the dial for the section dock. */
+  margin-bottom: 4.25rem;
+  container-type: inline-size;
+}
+
+.dial__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.dial__arc {
+  fill: none;
+  stroke: rgba(248, 246, 234, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+  vector-effect: non-scaling-stroke;
+}
+
+.dial__arc--day {
+  stroke: var(--cream);
+  stroke-width: 1.5;
+  stroke-dasharray: none;
+}
+
+.dial__link {
+  fill: none;
+  stroke: rgba(248, 246, 234, 0);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 700ms var(--ease-out), stroke-width 700ms var(--ease-out);
+}
+
+.dial__link.is-known {
+  stroke: rgba(248, 246, 234, 0.3);
+}
+
+.dial__link.is-live {
+  stroke: var(--accent-on-dark);
+  stroke-width: 1.75;
+  stroke-dasharray: 5 6;
+  animation: dial-flow 1.6s linear infinite;
+}
+
+.glimpses.is-all .dial__link {
+  stroke: rgba(224, 121, 108, 0.85);
+  stroke-width: 1.5;
+}
+
+@keyframes dial-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+.dial__stops {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dial__stops li {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.dial__stop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  translate: -50% -50%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.dial__dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 1.5px solid rgba(248, 246, 234, 0.75);
+  border-radius: 50%;
+  background: rgba(14, 13, 12, 0.6);
+  transition: background var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+
+.dial__stop.is-passed .dial__dot {
+  background: var(--cream);
+  border-color: var(--cream);
+}
+
+.dial__stop.is-active .dial__dot {
+  background: var(--red);
+  border-color: var(--cream);
+  transform: scale(1.35);
+  box-shadow: 0 0 0 0.375rem rgba(150, 43, 35, 0.35);
+}
+
+/* Names and times sit outside the arch, leaving the inside to the links: beside the stops on
+   the steep sides of the arc, above the one at the top. */
+.dial__label {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  gap: 0.05rem;
+  white-space: nowrap;
+  pointer-events: none;
+  translate: 0 -50%;
+}
+
+.dial__stop--left .dial__label {
+  right: calc(100% - 0.25rem);
+  justify-items: end;
+  text-align: right;
+}
+
+.dial__stop--right .dial__label {
+  left: calc(100% - 0.25rem);
+  justify-items: start;
+}
+
+.dial__stop--top .dial__label {
+  top: auto;
+  bottom: calc(100% - 0.375rem);
+  left: 50%;
+  justify-items: center;
+  translate: -50% 0;
+}
+
+.dial__time,
+.dial__name {
+  transition: color var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out);
+}
+
+.dial__time {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 1.1;
+  color: rgba(248, 246, 234, 0.6);
+}
+
+.dial__name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: rgba(248, 246, 234, 0.72);
+}
+
+.dial__stop.is-active .dial__time {
+  color: var(--accent-on-dark);
+}
+
+.dial__stop.is-active .dial__name {
+  color: var(--cream);
+  font-weight: 700;
+}
+
+@media (hover: hover) {
+  .dial__stop:hover .dial__dot {
+    transform: scale(1.3);
+    border-color: var(--cream);
+  }
+
+  .dial__stop:hover .dial__name {
+    color: var(--cream);
+  }
+}
+
+.dial__stop:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* The sun: a warm glow that travels the arc as the day goes on. */
+.dial__sun {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: -0.75rem 0 0 -0.75rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF4DA 0%, #F2C98F 45%, rgba(242, 201, 143, 0) 72%);
+  box-shadow: 0 0 2.5rem 0.75rem rgba(242, 201, 143, 0.35);
+  pointer-events: none;
+  will-change: transform;
+}
+
+html:not(.motion) .dial__sun {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+/* ---------- Smaller laptops and tablets ---------- */
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .glimpses__ui {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "head"
+      "story"
+      "dial";
+    row-gap: 1.5rem;
+  }
+
+  .dial {
+    justify-self: center;
+    width: min(100%, 44rem);
+    margin-bottom: 4.5rem;
+  }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 760px) {
+  .glimpses__ui {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "head"
+      "story"
+      "dial";
+    row-gap: 0.75rem;
+    padding-top: calc(var(--header-h) + 0.5rem);
+    padding-bottom: 0.5rem;
+  }
+
+  .glimpses__head {
+    gap: 0.5rem;
+  }
+
+  .glimpses__title {
+    font-size: 1.75rem;
+  }
+
+  .glimpses__shade {
+    background:
+      linear-gradient(0deg, rgba(14, 13, 12, 0.86) 0%, rgba(14, 13, 12, 0.55) 45%, rgba(14, 13, 12, 0.1) 70%),
+      linear-gradient(180deg, rgba(14, 13, 12, 0.6) 0%, rgba(14, 13, 12, 0) 30%);
+  }
+
+  .scene__tag {
+    top: auto;
+    bottom: 13.5rem;
+    max-width: 13rem;
+    font-size: 0.625rem;
+  }
+
+  .moment {
+    gap: 0.5rem;
+  }
+
+  .moment__name {
+    font-size: 2.125rem;
+  }
+
+  .moment__text {
+    font-size: 0.875rem;
+  }
+
+  .moment__fact strong {
+    font-size: 1.375rem;
+  }
+
+  .moment__link {
+    min-height: 1.875rem;
+    font-size: 0.75rem;
+  }
+
+  .moment__go {
+    display: none;
+  }
+
+  .dial {
+    justify-self: stretch;
+    width: 100%;
+    margin-bottom: 4.25rem;
+  }
+
+  .dial__label {
+    display: none;
+  }
+
+  .dial__stop {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+@media (max-width: 760px) and (max-height: 44rem) {
+  .glimpses__note,
+  .moment__connects {
+    display: none;
+  }
+}
+
+@media (max-height: 47rem) and (min-width: 761px) {
+  .glimpses__note {
+    display: none;
+  }
+
+  .moment {
+    gap: 0.5rem;
+  }
+
+  .moment__name {
+    font-size: clamp(2rem, 3.6vw, 3.25rem);
+  }
+}
+
+/* Touch screens: every control in the story and on the dial is at least 40px. */
+@media (pointer: coarse) {
+  .moment__link {
+    min-height: 2.5rem;
+  }
+
+  .dial__stop {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

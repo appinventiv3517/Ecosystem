@@ -174,7 +174,7 @@ export function initEcosystem() {
 
   indexItems.forEach((button, i) => button.addEventListener('click', () => goTo(i)));
 
-  // From the menu, the hero wheel or the footer: turn to that business.
+  // From the menu, the glimpses or the footer: turn to that business.
   listen('bloom:vertical', ({ id }) => {
     if (ids.includes(id)) goTo(ids.indexOf(id));
   });
