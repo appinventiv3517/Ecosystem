@@ -83,8 +83,9 @@ async function start() {
   initWorld();
   initFind();
   initCommunities();
-  initEcosystem();
-  initLife();
+  // The ecosystem book and Life at Bloom are hidden for now; their scripts wait until they return.
+  if (!document.getElementById('ecosystem')?.hidden) initEcosystem();
+  if (!document.getElementById('life')?.hidden) initLife();
   initServices();
   initAbout();
   initFooter();
