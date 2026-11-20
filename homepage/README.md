@@ -109,6 +109,10 @@ Placeholder or unverified, and marked as such on the page:
   the page already pairs them with, under a "Placeholder selection" tag until Bloom chooses what
   to feature. Their photographs come from the matching pages on bloomholding.com. The launch slot
   holds no launch: it says "Launch details to come from Bloom" and offers launch updates.
+- **Awards & announcements.** Every award, figure and headline is taken from bloomholding.com
+  (Who We Are, Awards; and the Media Centre), read 20 Nov 2026, and the cards link to the press
+  releases. Award names are shortened from Bloom's own wording. Bloom's site lists no upcoming
+  announcements, so the "Coming up" card holds none and offers news by enquiry instead.
 - **Budget ranges** in the search (AED, buy and yearly rent) are filter options for the
   prototype, not prices of any Bloom home.
 - **Arabic.** The EN/AR switch is present and explains that the prototype is English only.

@@ -264,6 +264,24 @@ async function desktop(browser) {
   await wait(page, 900);
   check('the launch slot says plainly that launches are to come', (await page.textContent('.dev--launch')).includes('Launch details to come from Bloom'));
 
+  // Awards & announcements
+  check('awards and announcements follow Find Your Property', await page.evaluate(() => document.querySelector('#find').nextElementSibling?.id === 'recognition'));
+  check('awards and announcements fit one laptop screen', await fitsOneScreen(page, 'recognition'));
+  await wait(page, 2400);
+  await shot(page, 'desktop-recognition');
+  check('awards: the figures count up to Bloom\'s published values', (await page.evaluate(() => [...document.querySelectorAll('#recognition .stat__value')].map((v) => v.textContent.trim()).join(' '))) === '4 11th');
+  check('awards: five recent awards, each with its awarding body', await page.evaluate(() => [...document.querySelectorAll('.award')].length === 5 && [...document.querySelectorAll('.award')].every((a) => a.querySelector('.award__year').textContent.trim() && a.querySelector('.award__body').textContent.trim())));
+  check('announcements link to Bloom\'s press releases in a new tab', await page.evaluate(() => {
+    const links = [...document.querySelectorAll('a.news__link')];
+    return links.length === 3 && links.every((a) => a.href.startsWith('https://bloomholding.com/press-releases/') && a.target === '_blank' && a.rel.includes('noopener'));
+  }));
+  check('announcements sit clear of the section dock', await page.evaluate(() => Math.max(...[...document.querySelectorAll('.news')].map((n) => n.getBoundingClientRect().bottom)) <= innerHeight - 64));
+  await page.click('.news--next .news__more');
+  await wait(page, 900);
+  check('"Coming up" offers Bloom news through the enquiry panel', await page.evaluate(() => document.querySelector('[data-enquiry]').open && document.querySelector('[data-enquiry]').textContent.includes('About: Announcements from Bloom')));
+  await page.click('.enquiry__close');
+  await wait(page, 900);
+
   // Communities stage
   const order = ['zayed-city', 'saadiyat-island', 'al-bateen-marina', 'jumeirah-village-circle', 'eastern-mangrove-corniche'];
   const nextOf = (id, step = 1) => order[(order.indexOf(id) + step + order.length) % order.length];
@@ -352,9 +370,9 @@ await wait(page, 1600);
   await wait(page, 900);
 
   // About and footer
-  await goTo(page, '.stats', 300);
+  await goTo(page, '#about .stats', 300);
   await wait(page, 2800);
-  const numbers = await page.evaluate(() => [...document.querySelectorAll('.stat__value')].map((item) => item.textContent.trim()));
+  const numbers = await page.evaluate(() => [...document.querySelectorAll('#about .stat__value')].map((item) => item.textContent.trim()));
   check('figures count up to the RFP values', numbers.join(' ') === '6,500+ 25,000+ 1,000+ 15 851 8,500+', numbers);
   await shot(page, 'desktop-about');
   await page.click('.about__actions .btn');
@@ -519,7 +537,7 @@ await wait(page, 1600);
   await page.tap('.enquiry__close');
   await wait(page, 900);
 
-  await goTo(page, '.stats', 200);
+  await goTo(page, '#about .stats', 200);
   await wait(page, 2600);
   await shot(page, 'phone-about');
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
@@ -541,7 +559,7 @@ async function tablet(browser) {
   const { context, page, problems } = await open(browser, { width: 834, height: 1112, touch: true });
   await shot(page, 'tablet-hero');
 
-  for (const id of ['world', 'find', 'communities', 'services', 'about']) {
+  for (const id of ['world', 'find', 'recognition', 'communities', 'services', 'about']) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
