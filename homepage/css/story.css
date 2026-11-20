@@ -184,13 +184,16 @@ html.motion .story__stage {
 /* The line runs from the first dot to the last: half a stop in from each edge. */
 .story__rail {
   --stop: 2.75rem;
+  --dot: 0.75rem;
+  --dot-top: 0.75rem; /* space above each dot inside its button */
 }
 
 .rail__line {
   position: absolute;
   left: calc(max(var(--gutter), env(safe-area-inset-left, 0px)) + var(--stop) / 2);
   right: calc(max(var(--gutter), env(safe-area-inset-right, 0px)) + var(--stop) / 2);
-  top: 1.25rem;
+  /* On the dots' centre line: the rail's top padding, less the stop's pull-up, plus half a dot. */
+  top: calc(1.25rem - 1.375rem + var(--dot-top) + var(--dot) / 2 - 0.5px);
   height: 1px;
   background: rgba(248, 246, 234, 0.2);
 }
@@ -222,7 +225,7 @@ html:not(.motion) .rail__line i {
   gap: 0.625rem;
   width: var(--stop);
   margin-top: -1.375rem;
-  padding: 0.75rem 0 0;
+  padding: var(--dot-top) 0 0;
   border: 0;
   background: none;
   color: var(--cream);
@@ -230,8 +233,8 @@ html:not(.motion) .rail__line i {
 }
 
 .rail__dot {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: var(--dot);
+  height: var(--dot);
   border: 1.5px solid rgba(248, 246, 234, 0.6);
   border-radius: 50%;
   background: var(--black);
