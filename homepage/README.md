@@ -113,6 +113,9 @@ Placeholder or unverified, and marked as such on the page:
   (Who We Are, Awards; and the Media Centre), read 20 Nov 2026, and the cards link to the press
   releases. Award names are shortened from Bloom's own wording. Bloom's site lists no upcoming
   announcements, so the "Coming up" card holds none and offers news by enquiry instead.
+- **Our Story.** Nine milestones from the timeline on bloomholding.com/who-we-are (read
+  20 Nov 2026), using only entries whose year Bloom's text states. The photographs are Bloom's
+  and illustrate each business; not all of them show the project named.
 - **Budget ranges** in the search (AED, buy and yearly rent) are filter options for the
   prototype, not prices of any Bloom home.
 - **Arabic.** The EN/AR switch is present and explains that the prototype is English only.

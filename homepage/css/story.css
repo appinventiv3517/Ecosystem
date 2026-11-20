@@ -1,0 +1,345 @@
+/* Our Story: Bloom's timeline, above About. The stage holds still while scrolling moves the
+   years past (js/sections/story.js). Dark ink, so it reads apart from the red Customer
+   Services above and the cream About below; arch frames as everywhere else on the page. */
+
+.story {
+  --accent-on-dark: #E0796C;
+  position: relative;
+  z-index: 2;
+  margin-top: calc(var(--radius-l) * -1);
+  border-radius: var(--radius-l) var(--radius-l) 0 0;
+  background:
+    radial-gradient(60% 55% at 78% 40%, rgba(150, 43, 35, 0.22), rgba(150, 43, 35, 0) 70%),
+    var(--black);
+  overflow: clip;
+}
+
+/* Scroll room: a stretch of scroll for each year. */
+html.motion .story__track {
+  height: calc(100vh + (var(--count, 9) - 1) * 42vh);
+  height: calc(100svh + (var(--count, 9) - 1) * 42svh);
+}
+
+.story__stage {
+  display: grid;
+  /* One column the width of the screen: the reel of years scrolls inside it, never widens it. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vh, 2rem);
+  padding-block: var(--section-y);
+}
+
+html.motion .story__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  min-height: 36rem;
+  padding: calc(var(--header-h) + clamp(0.75rem, 3vh, 2rem)) 0 clamp(5.5rem, 11vh, 6.5rem);
+}
+
+/* ---------- Heading, with the year in focus large and faint behind it ---------- */
+
+.story__head {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.story__title {
+  position: relative;
+  z-index: 1;
+  max-width: 14em;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+}
+
+.story__title {
+  text-wrap: balance;
+}
+
+.story__title em {
+  color: var(--accent-on-dark);
+  white-space: nowrap;
+}
+
+.story__ghost {
+  position: absolute;
+  right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  top: -0.15em;
+  font-family: var(--font-display);
+  font-size: clamp(7rem, 17vw, 16rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: rgba(248, 246, 234, 0.06);
+  pointer-events: none;
+  font-variant-numeric: lining-nums;
+}
+
+/* ---------- The years ---------- */
+
+.story__viewport {
+  min-height: 0;
+  overflow: hidden;
+  overflow: clip;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+}
+
+.story__reel {
+  display: flex;
+  align-items: center;
+  gap: clamp(3rem, 7vw, 7rem);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  will-change: transform;
+}
+
+.moment-y {
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: min(66vw, 62rem);
+  opacity: 0.22;
+  transition: opacity 700ms var(--ease-out);
+}
+
+.moment-y.is-active {
+  opacity: 1;
+}
+
+.moment-y__text {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.moment-y__year {
+  font-family: var(--font-display);
+  font-size: clamp(3.75rem, 8vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  font-variant-numeric: lining-nums;
+}
+
+.moment-y__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--accent-on-dark);
+}
+
+.moment-y__body {
+  max-width: 30rem;
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+  line-height: 1.55;
+  color: rgba(248, 246, 234, 0.78);
+  text-wrap: pretty;
+}
+
+/* The photograph in an arch, Bloom's motif. */
+.moment-y__frame {
+  position: relative;
+  display: block;
+  width: clamp(10rem, 17vw, 16rem);
+  aspect-ratio: 0.74;
+  max-height: 46vh;
+  overflow: hidden;
+  border-radius: 999px 999px 1.25rem 1.25rem;
+  background: rgba(248, 246, 234, 0.08);
+  box-shadow: 0 0 0 0.3125rem rgba(248, 246, 234, 0.08);
+}
+
+.moment-y__frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.12);
+  transition: transform 1.4s var(--ease-out);
+}
+
+.moment-y.is-active .moment-y__frame img {
+  transform: scale(1);
+}
+
+/* ---------- The rail ---------- */
+
+.story__rail {
+  position: relative;
+  padding-top: 1.25rem;
+}
+
+.rail__line {
+  position: absolute;
+  left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  top: 1.25rem;
+  height: 1px;
+  background: rgba(248, 246, 234, 0.2);
+}
+
+.rail__line i {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+html:not(.motion) .rail__line i {
+  transform: scaleX(1);
+}
+
+.rail__stops {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rail__stop {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.625rem;
+  min-width: 2.75rem;
+  margin-top: -1.375rem;
+  padding: 0.75rem 0 0;
+  border: 0;
+  background: none;
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.rail__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1.5px solid rgba(248, 246, 234, 0.6);
+  border-radius: 50%;
+  background: var(--black);
+  transition: background var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+
+.rail__stop.is-passed .rail__dot {
+  border-color: var(--cream);
+  background: var(--cream);
+}
+
+.rail__stop.is-active .rail__dot {
+  border-color: var(--cream);
+  background: var(--red);
+  transform: scale(1.4);
+  box-shadow: 0 0 0 0.375rem rgba(150, 43, 35, 0.35);
+}
+
+.rail__year {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  color: rgba(248, 246, 234, 0.5);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.rail__stop.is-active .rail__year {
+  color: var(--cream);
+}
+
+@media (hover: hover) {
+  .rail__stop:hover .rail__dot {
+    transform: scale(1.3);
+    border-color: var(--cream);
+  }
+
+  .rail__stop:hover .rail__year {
+    color: var(--cream);
+  }
+}
+
+.rail__stop:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+/* ---------- Without motion: an ordinary list of years ---------- */
+
+html:not(.motion) .story__reel {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3rem;
+}
+
+html:not(.motion) .moment-y {
+  width: auto;
+  opacity: 1;
+}
+
+html:not(.motion) .story__rail,
+html:not(.motion) .story__ghost {
+  display: none;
+}
+
+/* ---------- Short laptop screens ---------- */
+
+@media (max-height: 50rem) and (min-width: 761px) {
+  .moment-y__year {
+    font-size: clamp(3.25rem, 6.5vw, 5.75rem);
+  }
+
+  .moment-y__frame {
+    max-height: 40vh;
+  }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 760px) {
+  .moment-y {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    width: 80vw;
+  }
+
+  .moment-y__frame {
+    order: -1;
+    width: 8.5rem;
+    max-height: 28vh;
+  }
+
+  .moment-y__year {
+    font-size: 3.75rem;
+  }
+
+  .story__ghost {
+    display: none;
+  }
+
+  /* Nine years across a phone: dots only, with the year in focus named. */
+  .rail__year {
+    position: absolute;
+    top: 100%;
+    opacity: 0;
+    white-space: nowrap;
+  }
+
+  .rail__stop.is-active .rail__year {
+    opacity: 1;
+  }
+
+  .rail__stop {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+}

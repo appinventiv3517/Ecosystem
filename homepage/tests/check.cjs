@@ -369,6 +369,37 @@ await wait(page, 1600);
   await page.click('.enquiry__close');
   await wait(page, 900);
 
+  // Our Story: scrolling down moves through the years
+  const storyYear = () => page.evaluate(() => document.querySelector('.moment-y.is-active .moment-y__year').textContent.trim());
+  const toStory = async (f) => {
+    await page.evaluate((x) => { const t = document.querySelector('[data-story-track]'); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY + (t.offsetHeight - innerHeight) * x, behavior: 'instant' }); }, f);
+    await wait(page, 1600);
+  };
+  check('Our Story sits just above About Bloom', await page.evaluate(() => document.querySelector('#about').previousElementSibling?.id === 'story'));
+  await toStory(0);
+  check('story: it starts in 2008 with the heading and rail on screen', (await storyYear()) === '2008' && await page.evaluate(() => {
+    const inView = (sel) => { const r = document.querySelector(sel).getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight; };
+    return inView('.story__title') && inView('.rail__stops') && Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2;
+  }));
+  for (let i = 0; i < 6; i += 1) {
+    await page.mouse.move(700, 450);
+    await page.mouse.wheel(0, 300);
+    await wait(page, 350);
+  }
+  await wait(page, 1400);
+  const scrolledTo = await storyYear();
+  check('story: scrolling down moves on through the years while the stage holds still', !['2008', undefined].includes(scrolledTo) && await page.evaluate(() => Math.abs(document.querySelector('[data-story-stage]').getBoundingClientRect().top) < 2), scrolledTo);
+  check('story: the year in focus sits in view, the faint year behind matches it', await page.evaluate(() => {
+    const active = document.querySelector('.moment-y.is-active').getBoundingClientRect();
+    return active.left >= 0 && active.left < innerWidth / 2 && document.querySelector('[data-story-ghost]').textContent.trim() === document.querySelector('.moment-y.is-active .moment-y__year').textContent.trim();
+  }));
+  await page.click('[data-story-go="6"]');
+  await wait(page, 2600);
+  check('story: a year on the rail jumps to it', (await storyYear()) === '2022' && await page.evaluate(() => document.querySelector('[data-story-go="6"]').getAttribute('aria-current') === 'step'), await storyYear());
+  await toStory(1);
+  await shot(page, 'desktop-story');
+  check('story: the timeline ends in 2026', (await storyYear()) === '2026');
+
   // About and footer
   await goTo(page, '#about .stats', 300);
   await wait(page, 2800);
@@ -559,7 +590,7 @@ async function tablet(browser) {
   const { context, page, problems } = await open(browser, { width: 834, height: 1112, touch: true });
   await shot(page, 'tablet-hero');
 
-  for (const id of ['world', 'find', 'recognition', 'communities', 'services', 'about']) {
+  for (const id of ['world', 'find', 'recognition', 'communities', 'services', 'story', 'about']) {
     await goTo(page, `#${id}`, 0);
     await shot(page, `tablet-${id}`);
   }
@@ -583,7 +614,7 @@ async function reducedMotion(browser) {
   console.log('\nReduced motion');
   const { context, page, problems } = await open(browser, { width: 1280, height: 800, reducedMotion: 'reduce', query: '' });
   check('animated mode is off', await page.evaluate(() => !document.documentElement.classList.contains('motion') && !document.querySelector('[data-intro]')));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-orb], .moment.is-active, [data-glimpse-ui], .community:not([hidden]), .app-tile, .stat__value')].filter((element) => {
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal], [data-split], .hero__word, [data-orb], .moment.is-active, [data-glimpse-ui], .community:not([hidden]), .app-tile, .stat__value, .moment-y, .story__head')].filter((element) => {
     const style = getComputedStyle(element);
     return style.visibility === 'hidden' || Number(style.opacity) < 0.99;
   }).length);
@@ -596,6 +627,7 @@ async function reducedMotion(browser) {
   await page.click('[data-search-submit]');
   await wait(page, 400);
   check('search still works', (await page.textContent('[data-result-summary]')) === 'Homes to buy across all Bloom communities');
+  check('Our Story is a plain list of every year without motion', await page.evaluate(() => [...document.querySelectorAll('.moment-y')].every((m) => getComputedStyle(m).opacity === '1') && getComputedStyle(document.querySelector('.story__rail')).display === 'none'));
   check('no console errors or failed requests', problems.length === 0, problems);
   await context.close();
 }

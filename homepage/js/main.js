@@ -19,6 +19,7 @@ import { initCommunities } from './sections/communities.js';
 import { initEcosystem } from './sections/ecosystem.js';
 import { initLife } from './sections/life.js';
 import { initServices } from './sections/services.js';
+import { initStory } from './sections/story.js';
 import { initAbout } from './sections/about.js';
 import { initFooter } from './sections/footer.js';
 
@@ -87,6 +88,7 @@ async function start() {
   if (!document.getElementById('ecosystem')?.hidden) initEcosystem();
   if (!document.getElementById('life')?.hidden) initLife();
   initServices();
+  initStory();
   initAbout();
   initFooter();
   initMagnetic();
