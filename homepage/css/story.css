@@ -35,7 +35,7 @@ html.motion .story__stage {
   height: 100vh;
   height: 100svh;
   min-height: 36rem;
-  padding: calc(var(--header-h) + clamp(0.75rem, 3vh, 2rem)) 0 clamp(5.5rem, 11vh, 6.5rem);
+  padding: calc(var(--header-h) + clamp(0.75rem, 3vh, 2rem)) 0 calc(var(--radius-l) + clamp(4rem, 8vh, 5rem));
 }
 
 /* ---------- Heading, with the year in focus large and faint behind it ---------- */
@@ -181,10 +181,15 @@ html.motion .story__stage {
   padding-top: 1.25rem;
 }
 
+/* The line runs from the first dot to the last: half a stop in from each edge. */
+.story__rail {
+  --stop: 2.75rem;
+}
+
 .rail__line {
   position: absolute;
-  left: max(var(--gutter), env(safe-area-inset-left, 0px));
-  right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  left: calc(max(var(--gutter), env(safe-area-inset-left, 0px)) + var(--stop) / 2);
+  right: calc(max(var(--gutter), env(safe-area-inset-right, 0px)) + var(--stop) / 2);
   top: 1.25rem;
   height: 1px;
   background: rgba(248, 246, 234, 0.2);
@@ -215,7 +220,7 @@ html:not(.motion) .rail__line i {
   display: grid;
   justify-items: center;
   gap: 0.625rem;
-  min-width: 2.75rem;
+  width: var(--stop);
   margin-top: -1.375rem;
   padding: 0.75rem 0 0;
   border: 0;
@@ -338,8 +343,11 @@ html:not(.motion) .story__ghost {
     opacity: 1;
   }
 
+  .story__rail {
+    --stop: 2.5rem;
+  }
+
   .rail__stop {
-    min-width: 2.5rem;
     min-height: 2.5rem;
   }
 }

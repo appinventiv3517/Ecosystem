@@ -106,16 +106,26 @@ async function start() {
     window.addEventListener('load', () => ScrollTrigger.refresh());
     // When content above a scroll-driven section grows or shrinks (a search result opening,
     // say), measure the scroll positions again so the book and the pinned stages stay in step.
+    // A refresh in the middle of a smooth scroll (a menu link, say) would stop it short, so it
+    // waits until the page has stopped moving.
     let lastHeight = document.body.offsetHeight;
+    let lastScroll = 0;
     let pending = 0;
-    new ResizeObserver(() => {
-      const height = document.body.offsetHeight;
-      if (Math.abs(height - lastHeight) < 2) return;
+    window.addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });
+    const refreshWhenStill = () => {
       clearTimeout(pending);
       pending = setTimeout(() => {
+        if (performance.now() - lastScroll < 250) {
+          refreshWhenStill();
+          return;
+        }
         ScrollTrigger.refresh();
         lastHeight = document.body.offsetHeight;
       }, 200);
+    };
+    new ResizeObserver(() => {
+      if (Math.abs(document.body.offsetHeight - lastHeight) < 2) return;
+      refreshWhenStill();
     }).observe(document.body);
   }
 

@@ -402,7 +402,8 @@ html.motion .app-tile__glint {
     min-height: 40rem;
     max-height: 68rem;
     padding-top: calc(var(--header-h) + 0.5rem);
-    padding-bottom: clamp(1rem, 2.4vh, 2rem);
+    /* Our Story slides up over the last 2rem (its rounded top), so the tiles stop short of it. */
+    padding-bottom: calc(var(--radius-l) + clamp(1rem, 2.4vh, 2rem));
   }
 
   .services__inner {

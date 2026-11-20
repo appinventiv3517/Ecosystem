@@ -1,43 +1,188 @@
-/* 09 · Footer: an enquiry prompt, the full directory, and the proposition set large. */
+/* 09 · Footer: the invitation inside Bloom's arch, the seven businesses of Bloom World as small
+   arches, the directory, and the name set large at the very foot, cut by the page edge. */
 
 .footer {
   position: relative;
-  z-index: 2;
+  z-index: 4;
   margin-top: calc(var(--radius-l) * -1);
-  padding-top: clamp(4.5rem, 9vw, 9rem);
+  padding-top: clamp(4rem, 8vw, 7rem);
   border-radius: var(--radius-l) var(--radius-l) 0 0;
   overflow: hidden;
+  overflow: clip;
 }
 
+/* About slides up over the end of Our Story, and the footer over About. */
 .about {
+  z-index: 3;
+  margin-top: calc(var(--radius-l) * -1);
+  border-radius: var(--radius-l) var(--radius-l) 0 0;
   padding-bottom: calc(var(--section-y) + var(--radius-l));
 }
 
-.footer__cta {
+/* ---------- The invitation, inside an arch ---------- */
+
+.footer__invite {
   display: grid;
-  gap: var(--stack-m);
-  justify-items: start;
-  padding-bottom: clamp(3.5rem, 7vw, 7rem);
-  border-bottom: 1px solid var(--line-on-dark);
+  justify-items: center;
+}
+
+.footer__arch {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  width: min(100%, 60rem);
+  padding: clamp(6rem, 11vw, 9.5rem) clamp(1.5rem, 5vw, 5rem) clamp(2.75rem, 5vw, 4rem);
+  overflow: hidden;
+  border-radius: 999px 999px var(--radius-l) var(--radius-l);
+  background:
+    radial-gradient(70% 60% at 50% 0%, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 70%),
+    var(--red);
+  color: var(--cream);
+  text-align: center;
+  isolation: isolate;
+}
+
+.footer__arch-lines {
+  position: absolute;
+  inset: 12% 0 0;
+  z-index: -1;
+  width: 100%;
+  height: 88%;
+  fill: none;
+  stroke: rgba(248, 246, 234, 0.16);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.footer__arch .eyebrow {
+  color: var(--cream);
 }
 
 .footer__headline {
   max-width: 13em;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+.footer__headline em {
+  font-style: italic;
+  color: var(--cream);
 }
 
 .footer__cta-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 1rem 2rem;
   margin-top: 0.5rem;
 }
 
+.footer__cta-actions .btn--light {
+  --btn-hover-bg: var(--ink);
+  --btn-hover-border: var(--ink);
+}
+
+/* ---------- The seven businesses ---------- */
+
+.footer__world {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: clamp(3rem, 5vw, 4.5rem) clamp(2.5rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--line-on-dark);
+}
+
+.footer__world .footer__heading {
+  margin: 0;
+  text-align: center;
+}
+
+.footer__biz-list {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__link.footer__biz {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+
+.footer__biz::before {
+  display: none;
+}
+
+.footer__biz-arch {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 8.5rem;
+  aspect-ratio: 0.74;
+  overflow: hidden;
+  border-radius: 999px 999px 0.875rem 0.875rem;
+  background: rgba(248, 246, 234, 0.08);
+  box-shadow: 0 0 0 0.25rem rgba(248, 246, 234, 0.06);
+  transition: box-shadow 520ms var(--ease-out), transform 700ms var(--ease-out);
+}
+
+.footer__biz-arch img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.75) brightness(0.85);
+  transition: transform 1.2s var(--ease-out), filter 700ms var(--ease-out);
+}
+
+.footer__biz-name {
+  font-family: var(--font-display);
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+  line-height: 1.2;
+  color: rgba(248, 246, 234, 0.88);
+  transition: color var(--dur) ease;
+}
+
+.footer__link.footer__biz:hover,
+.footer__link.footer__biz:focus-visible {
+  transform: none;
+}
+
+@media (hover: hover) {
+  .footer__biz:hover .footer__biz-arch {
+    transform: translateY(-6px);
+    box-shadow: 0 0 0 0.25rem var(--red);
+  }
+
+  .footer__biz:hover .footer__biz-arch img {
+    transform: scale(1.08);
+    filter: none;
+  }
+
+  .footer__biz:hover .footer__biz-name {
+    color: #E0796C;
+  }
+}
+
+/* ---------- Directory ---------- */
+
 .footer__grid {
   display: grid;
-  grid-template-columns: minmax(12rem, 1.3fr) repeat(3, minmax(0, 1fr)) minmax(0, 1.25fr);
+  grid-template-columns: minmax(12rem, 1.2fr) repeat(2, minmax(0, 1fr)) minmax(0, 1.3fr);
   gap: clamp(2rem, 3.5vw, 4rem);
-  padding-block: clamp(3rem, 5vw, 5rem);
+  padding-block: clamp(2.75rem, 4.5vw, 4.5rem);
 }
 
 .footer__brand {
@@ -127,21 +272,21 @@
   color: var(--muted-on-dark);
 }
 
-/* The proposition, large */
+/* ---------- The name, large, cut by the foot of the page ---------- */
+
 .footer__statement {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0 0.25em;
-  padding-block: clamp(1rem, 2vw, 2rem) clamp(1.5rem, 3vw, 3rem);
-  border-top: 1px solid var(--line-on-dark);
+  justify-content: center;
+  gap: 0 0.18em;
+  margin: clamp(1rem, 2vw, 2rem) 0 -0.2em;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 9.6vw, 11.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(248, 246, 234, 0.34);
+  font-size: clamp(3.5rem, 15.5vw, 17rem);
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: rgba(248, 246, 234, 0.07);
   user-select: none;
+  pointer-events: none;
 }
 
 .footer__statement span {
@@ -149,8 +294,8 @@
 }
 
 .footer__statement em {
-  color: var(--red);
-  -webkit-text-stroke: 0;
+  font-style: italic;
+  color: rgba(150, 43, 35, 0.75);
 }
 
 /* Base row */
@@ -258,12 +403,41 @@
     align-items: center;
   }
 
-  .footer__col--contact {
-    grid-column: span 2;
+  .footer__biz-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 1.75rem;
   }
 }
 
 @media (max-width: 760px) {
+  .footer__arch {
+    padding-top: 5.5rem;
+  }
+
+  /* The businesses scroll sideways. */
+  .footer__biz-list {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 6.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+  }
+
+  .footer__biz-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .footer__biz-list li {
+    scroll-snap-align: start;
+  }
+
+  .footer__biz-name {
+    font-size: 0.875rem;
+  }
+
   .footer__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2.25rem 1.5rem;
@@ -292,11 +466,6 @@
 
   .footer__link::before {
     display: none;
-  }
-
-  .footer__statement {
-    justify-content: flex-start;
-    font-size: clamp(2.75rem, 15vw, 5rem);
   }
 
   .footer__base {

@@ -1352,17 +1352,35 @@
        ============================================================ -->
   <footer class="footer on-dark" id="footer" data-section="footer" data-footer>
     <div class="wrap">
-      <div class="footer__cta">
-        <p class="eyebrow" data-reveal="fade">Make an enquiry</p>
-        <h2 class="display footer__headline" data-split="lines">Let's find your place in a Bloom <em>community.</em></h2>
-        <div class="footer__cta-actions" data-reveal="fade">
-          <button type="button" class="btn btn--light" data-open-enquiry data-magnetic>
-            <span class="btn__label">Make an enquiry</span>
-            <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
-          </button>
-          <a class="link-arrow" href="tel:80025666">Call 800 Bloom (25666) <svg class="icon"><use href="#i-arrow"/></svg></a>
+      <!-- The invitation, inside Bloom's arch -->
+      <div class="footer__invite">
+        <div class="footer__arch" data-footer-arch>
+          <svg class="footer__arch-lines" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><path d="M40 300V200a160 160 0 0 1 320 0v100"/><path d="M90 300V210a110 110 0 0 1 220 0v90"/></svg>
+          <p class="eyebrow" data-reveal="fade">Make an enquiry</p>
+          <h2 class="footer__headline" data-split="lines">Let's find your place in Bloom <em>World.</em></h2>
+          <div class="footer__cta-actions">
+            <button type="button" class="btn btn--light" data-open-enquiry data-magnetic>
+              <span class="btn__label">Make an enquiry</span>
+              <span class="btn__dot"><svg class="icon"><use href="#i-arrow"/></svg></span>
+            </button>
+            <a class="link-arrow" href="tel:80025666">Call 800 Bloom (25666) <svg class="icon"><use href="#i-arrow"/></svg></a>
+          </div>
         </div>
       </div>
+
+      <!-- The seven businesses, each a small arch that opens it in the glimpses of Bloom World -->
+      <nav class="footer__world" aria-label="The businesses of Bloom World">
+        <p class="footer__heading">The businesses of Bloom World</p>
+        <ul class="footer__biz-list" data-stagger>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="real-estate"><span class="footer__biz-arch"><img src="assets/img/ecosystem-real-estate-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Real Estate</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="education"><span class="footer__biz-arch"><img src="assets/img/ecosystem-education-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Education</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="hospitality"><span class="footer__biz-arch"><img src="assets/img/ecosystem-hospitality-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Hospitality</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="retail"><span class="footer__biz-arch"><img src="assets/img/ecosystem-retail-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Retail</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="healthcare"><span class="footer__biz-arch"><img src="assets/img/ecosystem-healthcare-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Healthcare</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="facilities-management"><span class="footer__biz-arch"><img src="assets/img/ecosystem-facilities-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Facilities Management</span></a></li>
+          <li><a class="footer__link footer__biz" href="#world" data-world-jump="landscaping"><span class="footer__biz-arch"><img src="assets/img/ecosystem-landscape-card-560.webp" width="560" height="757" alt="" loading="lazy" decoding="async"></span><span class="footer__biz-name">Landscaping</span></a></li>
+        </ul>
+      </nav>
 
       <div class="footer__grid" data-footer-grid>
         <div class="footer__brand">
@@ -1380,23 +1398,12 @@
         <nav class="footer__col" aria-label="Explore">
           <h3 class="footer__heading">Explore</h3>
           <ul>
+            <li><a class="footer__link" href="#world">Bloom World</a></li>
             <li><a class="footer__link" href="#find">Find a Home</a></li>
+            <li><a class="footer__link" href="#recognition">Awards &amp; News</a></li>
             <li><a class="footer__link" href="#communities">Explore Communities</a></li>
-            <li><a class="footer__link" href="#services">Customer Services</a></li>
+            <li><a class="footer__link" href="#story">Our Story</a></li>
             <li><a class="footer__link" href="#about">About Bloom</a></li>
-          </ul>
-        </nav>
-
-        <nav class="footer__col" aria-label="Businesses">
-          <h3 class="footer__heading">Businesses</h3>
-          <ul>
-            <li><a class="footer__link" href="#world" data-world-jump="real-estate">Real Estate</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="education">Education</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="hospitality">Hospitality</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="retail">Retail</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="healthcare">Healthcare</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="facilities-management">Facilities Management</a></li>
-            <li><a class="footer__link" href="#world" data-world-jump="landscaping">Landscaping</a></li>
           </ul>
         </nav>
 
@@ -1427,8 +1434,6 @@
         </div>
       </div>
 
-      <p class="footer__statement" aria-hidden="true" data-footer-statement><span>Curated</span> <span>Community</span> <span><em>Living</em></span></p>
-
       <div class="footer__base">
         <ul class="footer__social" aria-label="Bloom on social media" data-stagger>
           <li><a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener" aria-label="Instagram (opens in a new tab)"><svg class="icon"><use href="#i-instagram"/></svg></a></li>
@@ -1447,6 +1452,9 @@
         <a class="footer__top" href="#top"><span>Back to top</span><svg class="icon"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
+
+    <!-- The name, set as large as the page allows and cut by its edge -->
+    <p class="footer__statement" aria-hidden="true" data-footer-statement><span>Bloom</span> <span><em>World</em></span></p>
   </footer>
 
   <!-- Enquiry panel -->
