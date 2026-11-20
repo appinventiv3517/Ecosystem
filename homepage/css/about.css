@@ -7,30 +7,36 @@
 
 .about__grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-  column-gap: clamp(2rem, 6vw, 7rem);
-  row-gap: clamp(2.5rem, 5vw, 5rem);
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "intro figure"
+    "story figure"
+    "stats stats"
+    "source source";
+  column-gap: clamp(2rem, 5vw, 5rem);
+  row-gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
 }
 
 .about__intro {
-  grid-column: 1 / -1;
+  grid-area: intro;
 }
 
 .about__intro .display {
   max-width: 13.5em;
+  font-size: clamp(2.25rem, 3.6vw, 3.5rem);
 }
 
 .about__story {
+  grid-area: story;
   display: grid;
-  gap: var(--stack-m);
+  gap: 1.25rem;
   justify-items: start;
-  align-self: center;
 }
 
 .about__statement {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.3vw, 2.25rem);
+  font-size: clamp(1.25rem, 1.7vw, 1.625rem);
   line-height: 1.24;
   letter-spacing: -0.01em;
   text-wrap: pretty;
@@ -45,12 +51,16 @@
 
 /* Vaulted frame with a slow parallax image */
 .about__figure {
+  grid-area: figure;
+  align-self: stretch;
   position: relative;
+  margin: 0;
 }
 
 .about__frame {
   position: relative;
-  aspect-ratio: 16 / 10;
+  height: 100%;
+  min-height: 18rem;
   overflow: hidden;
   border-radius: clamp(8rem, 18vw, 20rem) clamp(8rem, 18vw, 20rem) var(--radius-m) var(--radius-m);
   background: var(--sand);
@@ -68,11 +78,29 @@
 
 /* Figures */
 .stats {
-  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: clamp(1.5rem, 4vw, 5rem);
   margin: 0;
+}
+
+.about .stats {
+  grid-area: stats;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  margin-top: clamp(0.5rem, 1.5vw, 1.25rem);
+}
+
+.about .stat {
+  padding-block: clamp(1rem, 1.6vw, 1.5rem) 0.5rem;
+}
+
+.about .stat__value {
+  font-size: clamp(2.25rem, 3.6vw, 3.75rem);
+}
+
+.about .stat__label {
+  font-size: 0.875rem;
 }
 
 .stat {
@@ -130,8 +158,8 @@
 }
 
 .stats__source {
-  grid-column: 1 / -1;
-  margin-top: -1rem;
+  grid-area: source;
+  margin-top: 0;
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
   font-size: var(--text-small);
@@ -140,9 +168,32 @@
 
 /* ---------- Responsive ---------- */
 
+@media (max-width: 1100px) {
+  .about .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 0.5rem;
+  }
+}
+
 @media (max-width: 900px) {
   .about__grid {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "figure"
+      "story"
+      "stats"
+      "source";
+  }
+
+  .about__frame {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .about .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .about__figure {
