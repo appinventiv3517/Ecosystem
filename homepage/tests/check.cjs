@@ -151,7 +151,7 @@ async function desktop(browser) {
     return site.href === 'https://bloomholding.com/what-we-do/properties' && site.target === '_blank' && site.rel.includes('noopener')
       && document.querySelectorAll('a.moment__site[target="_blank"]').length === 5 && document.querySelectorAll('button.moment__site[data-demo]').length === 2;
   }));
-  await wait(page, 4300);
+  await wait(page, 3300); // one business is shown for 2.8 seconds
   check('glimpses: the day moves on to the next business by itself', (await activeMoment(page)) === 'education', await activeMoment(page));
   await page.hover('.moment.is-active .moment__text');
   const held = await activeMoment(page);

@@ -17,8 +17,8 @@ const SVG_W = 1000;
 const ARC = { cx: 500, cy: 290, rx: 470, ry: 250 };
 const FIRST = 168; // degrees round the arc of the first and last stops
 const LAST = 12;
-const HOLD = 4.2; // seconds on each business
-const HOLD_ALL = 6; // seconds on "all seven, together" before the day starts again
+const HOLD = 2.8; // seconds on each business
+const HOLD_ALL = 4; // seconds on "all seven, together" before the day starts again
 
 const point = (deg) => {
   const rad = (deg * Math.PI) / 180;
@@ -159,7 +159,7 @@ export function initWorld() {
         gsap.set(sceneIn, { zIndex: 2, autoAlpha: 0 });
         if (sceneOut) gsap.set(sceneOut, { zIndex: 1 });
         gsap.to(sceneIn, {
-          autoAlpha: 1, duration: 1, ease: 'power2.inOut',
+          autoAlpha: 1, duration: 0.7, ease: 'power2.inOut',
           onComplete: () => {
             sceneOut?.classList.remove('is-active');
             gsap.set([sceneIn, sceneOut].filter(Boolean), { clearProps: 'zIndex,opacity,visibility' });
@@ -186,7 +186,7 @@ export function initWorld() {
 
   /** Glide the sun to stop s. */
   function sunTo(s) {
-    gsap.to(sunAt, { s: Math.min(s, COUNT - 1), duration: 1.1, ease: EASE.inOut, overwrite: true, onUpdate: () => drawSun(sunAt.s) });
+    gsap.to(sunAt, { s: Math.min(s, COUNT - 1), duration: 0.8, ease: EASE.inOut, overwrite: true, onUpdate: () => drawSun(sunAt.s) });
   }
   const sunAt = { s: 0 };
 
