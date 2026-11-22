@@ -459,9 +459,10 @@ await wait(page, 1600);
   await page.mouse.up();
   await wait(page, 2000);
   check('dragging turns the world', (await frontOrb(page)) !== before);
-  await page.click('.hero__actions a[href="#find"]');
+  check('the hero has one call to action, Explore Bloom World, as the primary button', await page.evaluate(() => { const b = [...document.querySelectorAll('[data-hero-actions] .btn')]; return b.length === 1 && b[0].getAttribute('href') === '#world' && !b[0].classList.contains('btn--outline') && b[0].textContent.includes('Explore Bloom World'); }));
+  await page.click('.hero__actions a[href="#world"]');
   await wait(page, 1600);
-  check('hero "Find a Home" scrolls to the search', await page.evaluate(() => document.querySelector('#find').getBoundingClientRect().top < 120));
+  check('hero "Explore Bloom World" scrolls to the glimpses', await page.evaluate(() => Math.abs(document.querySelector('#world').getBoundingClientRect().top) < 120));
 
   check('no horizontal overflow', (await overflow(page)) === 0, await overflow(page));
   const broken = await page.evaluate(() => [...document.images].filter((image) => image.complete && !image.naturalWidth && image.getAttribute('src')).map((image) => image.getAttribute('src')));
@@ -498,7 +499,7 @@ async function phone(browser) {
   const { context, page, problems } = await open(browser, { width: 390, height: 844, touch: true });
   await wait(page, 2600);
   await shot(page, 'phone-hero');
-  check('phone: headline and both buttons fit on the first screen', await page.evaluate(() => [...document.querySelectorAll('.hero__title, [data-hero-actions] .btn')].every((element) => { const box = element.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && box.bottom <= innerHeight; })));
+  check('phone: headline and the button fit on the first screen', await page.evaluate(() => [...document.querySelectorAll('.hero__title, [data-hero-actions] .btn')].every((element) => { const box = element.getBoundingClientRect(); return box.left >= 0 && box.right <= innerWidth && box.bottom <= innerHeight; })));
   check('phone: the seven businesses sit above the headline', await page.evaluate(() => {
     const title = document.querySelector('.hero__title').getBoundingClientRect();
     return [...document.querySelectorAll('[data-orb]')].filter((orb) => { const box = orb.getBoundingClientRect(); return Number(getComputedStyle(orb).opacity) > 0.9 && box.left >= 0 && box.right <= innerWidth && box.bottom < title.top; }).length === 7;
