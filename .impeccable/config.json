@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "bloom-world/src/index.html"
+        ],
+        "createdAt": "2026-11-23T21:32:03.748Z",
+        "reason": "Claude: src/index.html is an unstyled build template ({{STYLES}} placeholder); the built bloom-world/index.html sets h1 up to 4.4rem and .display up to 4.6rem against 1rem body"
+      }
+    ]
+  }
+}

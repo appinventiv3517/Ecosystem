@@ -1,0 +1,2317 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bloom World</title>
+<meta name="description" content="Bloom World: seven Bloom businesses running one connected community across Abu Dhabi and Dubai. Homepage design prototype for review.">
+<meta name="theme-color" content="#922A22">
+<style>
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("assets/fonts/bricolage-grotesque-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("assets/fonts/bricolage-grotesque-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Readex Pro"; font-style: normal; font-weight: 160 700; font-display: swap; src: url("assets/fonts/readex-pro-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Readex Pro"; font-style: normal; font-weight: 160 700; font-display: swap; src: url("assets/fonts/readex-pro-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Readex Pro"; font-style: normal; font-weight: 160 700; font-display: swap; src: url("assets/fonts/readex-pro-arabic.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
+
+:root {
+  /* the site */
+  --site: #e7c48a;
+  --site-deep: #d6a964;
+  --site-line: #b98a45;
+  --paper: #fff8ec;
+  --ink: #1d1830;
+  --ink-soft: #463d55;
+  --red: #922a22;
+  --red-deep: #73201a;
+  --red-tint: #f6d9d3;
+  /* zoning */
+  --re: #f0a431;
+  --edu: #3b74cc;
+  --hosp: #ec6a51;
+  --retail: #d94c84;
+  --health: #2aa889;
+  --fm: #586683;
+  --land: #5da246;
+  --water: #2bb1c3;
+  --water-deep: #0e6676;
+  --night: #161d3d;
+  --blueprint: #1d4c9c;
+
+  --display: "Bricolage Grotesque", "Readex Pro", system-ui, sans-serif;
+  --text: "Readex Pro", system-ui, sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --r: 18px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --section-y: clamp(80px, 11vw, 150px);
+  --shadow: 0 18px 40px -18px rgb(45 25 5 / 0.45), 0 3px 8px -2px rgb(45 25 5 / 0.18);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--site);
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--red);
+  overflow-x: hidden;
+}
+::selection { background: var(--ink); color: var(--re); }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 6px; }
+.services :focus-visible, .awards :focus-visible, .story :focus-visible, .footer :focus-visible, .communities :focus-visible { outline-color: var(--paper); }
+html { scrollbar-color: var(--red) var(--site); }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--site); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius: 12px; border: 3px solid var(--site); }
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-underline-offset: 0.22em; text-decoration-thickness: 1.5px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; text-wrap: balance; font-variation-settings: "wdth" 100; }
+.display { font-size: clamp(2.3rem, 5.2vw, 4.6rem); }
+.h3 { font: 700 1.25rem/1.3 var(--display); letter-spacing: -0.015em; }
+.ic { width: 1.25em; height: 1.25em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ic-sm { width: 0.95em; height: 0.95em; vertical-align: -0.1em; margin-inline-start: 0.3em; }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { width: min(1320px, 100% - 2 * var(--gutter)); margin-inline: auto; }
+.skip { position: absolute; inset-inline-start: 16px; top: -80px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 10px; }
+.skip:focus { top: 12px; }
+.muted-note { font-size: 0.85rem; opacity: 0.78; }
+.link-u { background: none; border: 0; padding: 0; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; cursor: pointer; display: inline-flex; align-items: center; }
+.link-u:hover { text-decoration-thickness: 3px; }
+
+/* ---------------------------------------------------------------- buttons */
+.btn {
+  --bg: var(--ink); --fg: var(--paper);
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55em;
+  min-height: 48px; padding: 0 1.35em; border-radius: 999px; border: 2px solid transparent;
+  background: var(--bg); color: var(--fg); font-weight: 600; text-decoration: none; white-space: nowrap;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.btn .ic { transition: transform 0.3s var(--ease); }
+.btn:hover .ic:last-child { transform: translateX(3px); }
+[dir="rtl"] .btn:hover .ic:last-child { transform: translateX(-3px) scaleX(-1); }
+[dir="rtl"] .btn .ic use[href="#i-arrow"] { transform-origin: center; }
+.btn:active { transform: translateY(1px); }
+.btn-red { --bg: var(--red); --fg: #fff; }
+.btn-red:hover { --bg: var(--red-deep); }
+.btn-ink { --bg: var(--ink); --fg: var(--paper); }
+.btn-ink:hover { --bg: #000; }
+.btn-paper { --bg: var(--paper); --fg: var(--red); }
+.btn-paper:hover { --bg: #fff; }
+.btn-ghost { --bg: transparent; --fg: var(--ink); border-color: currentColor; }
+.btn-ghost:hover { --bg: var(--ink); --fg: var(--paper); border-color: var(--ink); }
+.btn-line { --bg: transparent; --fg: var(--paper); border-color: color-mix(in srgb, var(--paper) 55%, transparent); }
+.btn-line:hover { border-color: var(--paper); }
+.btn-sm { min-height: 40px; padding: 0 1.1em; font-size: 0.92rem; }
+.btn-lg { min-height: 58px; padding: 0 1.8em; font-size: 1.08rem; }
+.btn-block { width: 100%; }
+.round-btn {
+  width: 46px; height: 46px; border-radius: 50%; display: inline-grid; place-items: center;
+  border: 2px solid currentColor; background: transparent; color: inherit; transition: background-color 0.2s, color 0.2s;
+}
+.round-btn:hover { background: var(--paper); color: var(--water-deep); border-color: var(--paper); }
+.round-light:hover { color: var(--night); }
+
+/* ---------------------------------------------------------------- header */
+.site-header { position: fixed; inset: 12px 0 auto; z-index: 50; pointer-events: none; }
+.bar {
+  pointer-events: auto;
+  width: min(1320px, 100% - 2 * var(--gutter)); margin-inline: auto;
+  display: flex; align-items: center; gap: 18px;
+  background: var(--paper); border-radius: 999px; padding: 8px 8px 8px 22px;
+  box-shadow: 0 10px 30px -14px rgb(45 25 5 / 0.5), 0 0 0 1.5px rgb(29 24 48 / 0.08);
+}
+[dir="rtl"] .bar { padding: 8px 22px 8px 8px; }
+.brand img { width: 92px; height: auto; }
+.nav { display: flex; gap: 4px; margin-inline: auto; }
+.nav a { text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 10px 14px; border-radius: 999px; transition: background-color 0.2s; }
+.nav a:hover, .nav a[aria-current="true"] { background: color-mix(in srgb, var(--site) 55%, var(--paper)); }
+.bar-end { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; }
+.nav + .bar-end { margin-inline-start: 0; }
+.lang { display: flex; border: 1.5px solid rgb(29 24 48 / 0.18); border-radius: 999px; padding: 3px; }
+.lang-btn { border: 0; background: none; min-width: 38px; height: 32px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; }
+.lang-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.menu-btn { display: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--site); place-items: center; }
+.mobile-menu { pointer-events: auto; width: min(1320px, 100% - 2 * var(--gutter)); margin: 8px auto 0; background: var(--paper); border-radius: 22px; padding: 10px; box-shadow: var(--shadow); display: grid; }
+.mobile-menu[hidden] { display: none; }
+.mobile-menu a { padding: 14px 16px; text-decoration: none; font-weight: 600; font-size: 1.1rem; border-radius: 12px; display: flex; gap: 10px; align-items: center; }
+.mobile-menu a:hover { background: var(--site); }
+.mobile-call { color: var(--red); }
+
+/* ---------------------------------------------------------------- hero: the living masterplan */
+.hero { position: relative; height: max(100svh, 720px); min-height: 640px; overflow: hidden; background: var(--site); isolation: isolate; }
+.plan { position: absolute; inset: 0; }
+.plan-svg { width: 100%; height: 100%; display: block; }
+.plan-svg text { font-family: var(--text); }
+
+.g-site { fill: var(--site); }
+.grid-dot { fill: var(--site-line); opacity: 0.45; }
+.hatch-line { stroke: var(--site-line); stroke-width: 1; opacity: 0.35; }
+.beyond-lot { fill: none; stroke: var(--site-line); stroke-width: 1.5; stroke-dasharray: 5 5; opacity: 0.6; }
+.road { fill: var(--paper); }
+.road-minor { opacity: 0.9; }
+.road-line { stroke: var(--site-deep); stroke-width: 2; stroke-dasharray: 14 12; }
+.roundabout-in { fill: var(--land); }
+.zone { stroke-width: 2.5; stroke-dasharray: 9 7; transition: stroke-width 0.3s var(--ease); }
+.zone.z-re { fill: color-mix(in srgb, var(--re) 62%, var(--site)); stroke: color-mix(in srgb, var(--re) 70%, var(--ink)); }
+.zone.z-edu { fill: color-mix(in srgb, var(--edu) 50%, var(--site)); stroke: var(--edu); }
+.zone.z-hosp { fill: color-mix(in srgb, var(--hosp) 55%, var(--site)); stroke: var(--hosp); }
+.zone.z-retail { fill: color-mix(in srgb, var(--retail) 50%, var(--site)); stroke: var(--retail); }
+.zone.z-health { fill: color-mix(in srgb, var(--health) 55%, var(--site)); stroke: var(--health); }
+.zone.z-fm { fill: color-mix(in srgb, var(--fm) 48%, var(--site)); stroke: var(--fm); }
+.zone.z-land { fill: color-mix(in srgb, var(--land) 55%, var(--site)); stroke: var(--land); }
+.roof { fill: var(--paper); }
+.roof-accent.z-edu, .cross.z-health { fill: var(--edu); }
+.cross.z-health { fill: var(--health); }
+.roof-accent.z-hosp { fill: var(--hosp); }
+.roof-accent.z-fm { fill: var(--fm); }
+.courtyard { fill: color-mix(in srgb, var(--land) 45%, var(--paper)); }
+.lot { fill: color-mix(in srgb, var(--land) 30%, var(--site)); }
+.villa-roof { fill: #d9744a; }
+.villa-ridge { stroke: #b55a36; stroke-width: 2; }
+.pool { fill: var(--water); }
+.pool-ripple { fill: none; stroke: #fff; stroke-width: 1.6; opacity: 0.7; }
+.lounger { fill: var(--paper); }
+.track { fill: #c8573b; }
+.pitch { fill: var(--land); }
+.pitch-line { stroke: #fff; stroke-width: 2; opacity: 0.85; }
+.kid { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.promenade { fill: color-mix(in srgb, var(--paper) 70%, var(--retail)); }
+.awning-a { fill: #fff; }
+.awning-b { fill: var(--retail); }
+.umbrella circle { fill: var(--paper); stroke: var(--retail); stroke-width: 2; }
+.umbrella path { stroke: var(--retail); stroke-width: 1.5; }
+.parking { fill: color-mix(in srgb, var(--ink) 12%, var(--paper)); }
+.park-lawn { fill: color-mix(in srgb, var(--land) 60%, var(--site)); }
+.water { fill: var(--water); }
+.water-edge { fill: none; stroke: color-mix(in srgb, var(--water) 60%, #fff); stroke-width: 5; opacity: 0.8; }
+.ripple { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+.bridge { fill: #a26a3a; }
+.park-path { fill: none; stroke: var(--paper); stroke-width: 7; stroke-linecap: round; opacity: 0.9; }
+.playground circle { fill: var(--re); }
+.playground path { stroke: var(--paper); stroke-width: 3; }
+.tree-canopy { fill: #3d8a35; }
+.tree-light { fill: #6dbb4f; }
+.palm path { stroke: #2f7a32; stroke-width: 3; stroke-linecap: round; fill: none; }
+.palm circle { fill: #7a5530; }
+.yard { fill: color-mix(in srgb, var(--fm) 22%, var(--paper)); }
+.solar-cell { fill: #2b3a63; }
+.van rect:first-child { fill: var(--paper); stroke: var(--fm); stroke-width: 2; }
+.car rect:first-child { fill: var(--red); }
+.car-b rect:first-child { fill: var(--edu); }
+.car-c rect:first-child { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.van-car rect:first-child { fill: var(--fm); }
+.car-glass { fill: #21304f; opacity: 0.85; }
+.boat path { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
+.boat-b path { fill: var(--re); }
+.walker { fill: var(--ink); }
+.north circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
+.north path { fill: var(--ink); }
+.north text { font: 700 13px var(--text); fill: var(--ink); }
+.lamp { fill: #ffd77a; opacity: 0; transition: opacity 0.8s var(--ease); }
+.plan[data-night="1"] .lamp { opacity: 1; filter: drop-shadow(0 0 5px #ffcf5c); }
+.tint { fill: transparent; mix-blend-mode: multiply; pointer-events: none; transition: fill 1.2s var(--ease); }
+
+.plot { cursor: pointer; outline: none; transition: opacity 0.45s var(--ease), filter 0.45s var(--ease); }
+.plot-label rect { fill: var(--paper); stroke: rgb(29 24 48 / 0.15); stroke-width: 1.5; transition: fill 0.25s; }
+.plot-label text { font: 600 14px var(--text); fill: var(--ink); }
+.plot-label .dot.z-re { fill: var(--re); } .plot-label .dot.z-edu { fill: var(--edu); } .plot-label .dot.z-hosp { fill: var(--hosp); }
+.plot-label .dot.z-retail { fill: var(--retail); } .plot-label .dot.z-health { fill: var(--health); } .plot-label .dot.z-fm { fill: var(--fm); } .plot-label .dot.z-land { fill: var(--land); }
+.plot:hover .zone, .plot:focus-visible .zone, .plot.is-on .zone { stroke-width: 5; stroke-dasharray: none; }
+.plot:hover .plot-label rect, .plot.is-on .plot-label rect { fill: var(--ink); }
+.plot:hover .plot-label text, .plot.is-on .plot-label text { fill: var(--paper); }
+.plot:focus-visible .plot-label rect { stroke: var(--red); stroke-width: 3; }
+.plan.has-active .plot:not(.is-on):not(.is-linked) { opacity: 0.42; filter: saturate(0.5); }
+.conn { fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round; }
+.conn-flow { fill: none; stroke: var(--paper); stroke-width: 2; stroke-dasharray: 2 12; stroke-linecap: round; animation: flow 1.1s linear 4; }
+.conn-end { fill: var(--red); stroke: var(--paper); stroke-width: 3; transform-box: fill-box; transform-origin: center; }
+.conn-ring { fill: none; stroke: var(--red); stroke-width: 2.5; opacity: 0; animation: ring 1.8s var(--ease) 3; transform-box: fill-box; transform-origin: center; }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+@keyframes ring { 0% { transform: scale(0.6); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
+
+.title-block {
+  position: absolute; z-index: 3; inset-inline-start: var(--gutter); top: 104px; bottom: 96px;
+  width: min(430px, 36vw); display: flex; flex-direction: column; gap: 14px; justify-content: space-between;
+}
+.tb-sheet { background: var(--paper); border-radius: var(--r); padding: 28px 28px 26px; box-shadow: var(--shadow); border: 2px solid var(--ink); }
+.title-block h1 { font-size: clamp(2.6rem, 4.6vw, 4.4rem); }
+.h1-world { color: var(--red); display: inline-block; }
+.tb-lede { margin-top: 14px; font-size: 1.08rem; color: var(--ink-soft); max-width: 34ch; }
+.legend-search { background: var(--ink); color: var(--paper); border-radius: var(--r); padding: 22px; display: grid; gap: 12px; box-shadow: var(--shadow); }
+.legend-title { font: 700 1.3rem/1.1 var(--display); letter-spacing: -0.02em; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: rgb(255 255 255 / 0.1); border-radius: 999px; padding: 4px; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.seg span { display: grid; place-items: center; height: 38px; border-radius: 999px; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
+.seg input:checked + span { background: var(--paper); color: var(--ink); }
+.seg input:focus-visible + span { outline: 3px solid var(--re); outline-offset: 1px; }
+.legend-search .field { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 10px; }
+.legend-search .field-label { font-size: 0.85rem; color: color-mix(in srgb, var(--paper) 78%, transparent); }
+.legend-search select { background-color: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.22); color: var(--paper); }
+.legend-search select option { color: var(--ink); }
+.legend-search .btn-red:focus-visible { outline-color: var(--re); }
+
+.day-clock {
+  position: absolute; z-index: 3; bottom: 26px; inset-inline-start: calc(var(--gutter) + min(430px, 36vw) + 28px); inset-inline-end: var(--gutter);
+  display: flex; align-items: center; gap: 10px; background: var(--paper); border-radius: 999px; padding: 6px; box-shadow: var(--shadow); border: 2px solid var(--ink);
+}
+.clock-play { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--ink); color: var(--paper); display: grid; place-items: center; flex: none; }
+.clock-play .ic { width: 18px; height: 18px; }
+.clock-play .ic-play { fill: currentColor; display: none; }
+.clock-play[aria-pressed="false"] .ic-play { display: block; }
+.clock-play[aria-pressed="false"] .ic-pause { display: none; }
+.clock-track { display: flex; flex: 1; overflow-x: auto; scrollbar-width: none; gap: 2px; }
+.clock-track::-webkit-scrollbar { display: none; }
+.hour { flex: 1; min-width: 74px; border: 0; background: none; border-radius: 999px; padding: 6px 8px; display: grid; line-height: 1.1; text-align: center; transition: background-color 0.25s, color 0.25s; }
+.hour b { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; }
+.hour small { font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; }
+.hour:hover { background: color-mix(in srgb, var(--site) 50%, var(--paper)); }
+.hour[aria-selected="true"] { background: var(--z, var(--ink)); color: #fff; }
+.hour[aria-selected="true"] small { color: rgb(255 255 255 / 0.9); }
+.hour[data-biz="re"] { --z: color-mix(in srgb, var(--re) 52%, var(--ink)); }
+.hour[data-biz="edu"] { --z: var(--edu); } .hour[data-biz="hosp"] { --z: #c74a33; } .hour[data-biz="retail"] { --z: #b9366b; }
+.hour[data-biz="health"] { --z: #1d7f67; } .hour[data-biz="fm"] { --z: var(--fm); } .hour[data-biz="land"] { --z: #3f7d2d; } .hour[data-biz="all"] { --z: var(--red); }
+.plan-note { position: absolute; z-index: 2; inset-inline-end: var(--gutter); top: 96px; font-size: 0.78rem; background: color-mix(in srgb, var(--paper) 85%, transparent); padding: 4px 10px; border-radius: 999px; }
+.plan-hint { font-weight: 600; }
+
+.plot-card {
+  position: absolute; z-index: 4; width: min(340px, calc(100% - 32px)); background: var(--paper); border-radius: var(--r);
+  padding: 20px 20px 18px; box-shadow: var(--shadow); border: 2px solid var(--ink); display: grid; gap: 8px;
+  transform-origin: var(--ox, 0) var(--oy, 0);
+}
+.plot-card[hidden] { display: none; }
+.plot-card.is-in { animation: card-in 0.42s var(--ease); }
+@keyframes card-in { from { opacity: 0; transform: scale(0.92) translateY(6px); } }
+.card-close { position: absolute; inset-inline-end: 10px; top: 10px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: color-mix(in srgb, var(--site) 45%, var(--paper)); display: grid; place-items: center; }
+.card-close:hover { background: var(--site); }
+.card-time { font-size: 0.85rem; color: var(--ink-soft); padding-inline-end: 40px; }
+.card-hour { font: 700 0.95rem var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
+.card-name { font: 800 1.7rem/1 var(--display); letter-spacing: -0.03em; padding-inline-end: 30px; }
+.card-name::before { content: ""; display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; background: var(--zc, var(--red)); margin-inline-end: 0.3em; vertical-align: 0.08em; }
+.card-operator { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); }
+.card-text { font-size: 0.95rem; }
+.card-stat { font: 700 1.05rem var(--display); color: var(--red); }
+.card-stat:empty { display: none; }
+.card-links { display: grid; gap: 6px; margin-top: 2px; }
+.card-links-label { font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); }
+.card-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-biz { border: 1.5px solid var(--ink); background: none; border-radius: 999px; padding: 5px 11px 5px 9px; font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.chip-biz i { width: 9px; height: 9px; border-radius: 50%; background: var(--zc); }
+.chip-biz:hover { background: var(--ink); color: var(--paper); }
+.card-visit { font-weight: 600; font-size: 0.9rem; display: inline-flex; gap: 6px; align-items: center; margin-top: 2px; }
+.card-visit:empty { display: none; }
+.card-visit.is-soon { text-decoration: none; color: var(--ink-soft); font-weight: 500; pointer-events: none; }
+
+/* ---------------------------------------------------------------- shared form controls */
+.field { display: grid; gap: 6px; }
+.field-label { font-size: 0.85rem; font-weight: 600; }
+.field-label em { font-style: normal; font-weight: 400; opacity: 0.8; }
+select, input:not([type="radio"]), textarea {
+  width: 100%; min-height: 46px; border-radius: 12px; border: 2px solid rgb(29 24 48 / 0.2); background: var(--paper);
+  padding: 0 14px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+textarea { padding: 12px 14px; resize: vertical; }
+select { appearance: none; padding-inline-end: 40px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-size: 18px; background-position: right 12px center; }
+[dir="rtl"] select { background-position: left 12px center; }
+select:hover, input:not([type="radio"]):hover, textarea:hover { border-color: rgb(29 24 48 / 0.45); }
+select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-visible { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 40%, transparent); }
+::placeholder { color: var(--ink-soft); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips label { position: relative; }
+.chips input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.chips span { display: inline-grid; place-items: center; min-width: 44px; height: 40px; padding: 0 14px; border-radius: 999px; border: 2px solid rgb(29 24 48 / 0.22); font-weight: 600; font-size: 0.92rem; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+.chips label:hover span { border-color: var(--ink); }
+.chips input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.chips input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- find a home (residential zone) */
+.find { background: var(--re); padding-block: var(--section-y); position: relative; }
+.find .wrap { position: relative; }
+.find-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
+.find-intro { font-size: 1.15rem; max-width: 42ch; }
+.search { background: var(--paper); border-radius: 26px; padding: clamp(18px, 2.4vw, 30px); box-shadow: var(--shadow); border: 2px solid var(--ink); display: grid; gap: 22px; }
+.mode { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mode-opt { position: relative; }
+.mode-opt input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.mode-face { display: grid; gap: 2px; padding: 16px 20px; border-radius: 16px; border: 2px dashed rgb(29 24 48 / 0.35); transition: background-color 0.25s, border-color 0.25s, color 0.25s; }
+.mode-face strong { font: 800 1.9rem/1 var(--display); letter-spacing: -0.03em; }
+.mode-face small { font-size: 0.9rem; color: var(--ink-soft); }
+.mode-opt:hover .mode-face { border-color: var(--ink); }
+.mode-opt input:checked + .mode-face { background: var(--ink); border-style: solid; border-color: var(--ink); color: var(--paper); }
+.mode-opt input:checked + .mode-face small { color: color-mix(in srgb, var(--paper) 80%, transparent); }
+.mode-opt input:focus-visible + .mode-face { outline: 3px solid var(--red); outline-offset: 3px; }
+.search-fields { display: grid; grid-template-columns: 1.3fr 1fr auto 1fr auto; gap: 14px; align-items: end; }
+.beds { border: 0; padding: 0; margin: 0; }
+.beds .chips span { min-width: 40px; padding: 0 10px; height: 46px; }
+.search-go { min-height: 50px; }
+.try { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.try-label { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); margin-inline-end: 4px; }
+.try-chip { border: 0; background: color-mix(in srgb, var(--re) 30%, var(--paper)); border-radius: 999px; padding: 9px 14px; font-size: 0.9rem; font-weight: 500; transition: background-color 0.2s; }
+.try-chip:hover { background: var(--re); }
+.result { display: flex; gap: 14px; align-items: flex-start; background: color-mix(in srgb, var(--land) 18%, var(--paper)); border: 2px solid var(--land); border-radius: 16px; padding: 16px 18px; }
+.result[hidden] { display: none; }
+.result .ic { color: #2f6b22; width: 26px; height: 26px; margin-top: 2px; }
+.result-q { font-weight: 700; font-size: 1.05rem; }
+.result-note { font-size: 0.92rem; color: var(--ink-soft); }
+.result.is-in { animation: card-in 0.4s var(--ease); }
+.parcels-head { display: flex; align-items: baseline; gap: 14px; margin: 64px 0 18px; }
+.parcels { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.parcel-hit {
+  position: relative; display: grid; grid-template-rows: auto auto auto 1fr; gap: 6px; height: 100%; width: 100%; text-align: start;
+  text-decoration: none; color: inherit; background: var(--paper); border: 2.5px dashed var(--ink); border-radius: 20px; padding: 10px 10px 18px;
+  transition: border-style 0.2s, background-color 0.2s;
+}
+.parcel-hit:hover { border-style: solid; }
+.parcel-media { display: block; aspect-ratio: 4 / 3; border-radius: 13px; overflow: hidden; margin-bottom: 8px; background: var(--site); }
+.parcel-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.parcel-hit:hover .parcel-media img { transform: scale(1.06); }
+.parcel-tag, .parcel-name, .parcel-cta { padding-inline: 8px; }
+.parcel-tag { font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); }
+.parcel-name { font: 800 1.45rem/1.05 var(--display); letter-spacing: -0.025em; }
+.parcel-cta { align-self: end; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--red); margin-top: 8px; }
+.parcel-cta .ic { transition: transform 0.3s var(--ease); }
+.parcel-hit:hover .parcel-cta .ic { transform: translateX(4px); }
+.parcel-reserved .parcel-hit { background: color-mix(in srgb, var(--paper) 82%, var(--re)); }
+.parcel-reserved .parcel-name { font: 600 1.05rem/1.3 var(--text); letter-spacing: 0; }
+.parcel-empty { display: grid; place-items: center; aspect-ratio: 4 / 3; border-radius: 13px; margin-bottom: 8px; background: repeating-linear-gradient(-45deg, transparent 0 10px, rgb(29 24 48 / 0.12) 10px 12px); }
+.stamp-reserved { font: 800 1.3rem var(--display); color: var(--red); border: 3px solid var(--red); border-radius: 10px; padding: 4px 14px; transform: rotate(-8deg); letter-spacing: 0.02em; text-transform: uppercase; transition: transform 0.35s var(--ease); }
+.parcel-reserved .parcel-hit:hover .stamp-reserved { transform: rotate(-2deg) scale(1.08); }
+
+/* ---------------------------------------------------------------- communities (the coast) */
+.communities { background: var(--water-deep); color: var(--paper); padding-block: var(--section-y); }
+.comm-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
+.comm-head p { font-size: 1.1rem; color: color-mix(in srgb, var(--paper) 88%, var(--water)); max-width: 44ch; }
+.comm-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 22px; align-items: stretch; }
+.coast-col { display: grid; gap: 14px; align-content: start; }
+.coast { position: relative; border-radius: 26px; overflow: hidden; border: 2px solid var(--paper); background: var(--site); }
+.comm-legend { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.comm-legend button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; border: 2px solid rgb(255 255 255 / 0.45); background: none; color: var(--paper); font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+[dir="rtl"] .comm-legend button { padding: 0 6px 0 14px; }
+.comm-legend b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--water-deep); font: 800 0.85rem var(--display); }
+.comm-legend button:hover { border-color: var(--paper); }
+.comm-legend button[aria-current="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.comm-legend button[aria-current="true"] b { background: var(--red); color: #fff; }
+.coast-svg { width: 100%; height: auto; display: block; }
+.sea { fill: var(--water); }
+.sea-wave { fill: none; stroke: #fff; stroke-width: 1.2; opacity: 0.25; }
+.land { fill: var(--site); }
+.island { fill: var(--site); stroke: color-mix(in srgb, var(--water) 50%, #fff); stroke-width: 3; }
+.mangrove { fill: var(--land); }
+.route { fill: none; stroke: var(--red); stroke-width: 3; stroke-dasharray: 8 8; }
+.route-car rect { fill: var(--red); }
+.dhow path { fill: #8a5a32; }
+.dhow .sail { fill: var(--paper); }
+.city { font: 800 26px var(--display); fill: var(--ink); letter-spacing: -0.02em; }
+.sea-name { font: 500 18px var(--text); fill: #fff; letter-spacing: 0.18em; opacity: 0.8; }
+.scale path { stroke: var(--ink); stroke-width: 2; fill: none; }
+.scale text { font: 500 13px var(--text); fill: var(--ink); }
+.coast .north circle { fill: var(--paper); }
+
+.pins { position: absolute; inset: 0; }
+.pin {
+  position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -100%);
+  border: 0; background: none; padding: 0; display: grid; justify-items: center; gap: 4px; color: var(--ink);
+}
+[dir="rtl"] .pin { left: var(--x); }
+.pin-head {
+  order: 2; position: relative; width: 38px; height: 38px; border-radius: 50%; background: var(--paper); border: 2.5px solid var(--ink);
+  display: grid; place-items: center; font: 800 1rem/1 var(--display); color: var(--ink);
+  box-shadow: 0 6px 12px -4px rgb(0 0 0 / 0.4); transition: background-color 0.25s, color 0.25s, transform 0.35s var(--ease);
+}
+.pin-head::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 12px; height: 12px; background: inherit; border: inherit; border-width: 0 2.5px 2.5px 0; transform: translateX(-50%) rotate(45deg); z-index: -1; }
+.pin-name { order: 1; background: var(--paper); border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: 0.78rem; white-space: nowrap; box-shadow: 0 4px 10px -4px rgb(0 0 0 / 0.35); opacity: 0; transform: translateY(4px); transition: opacity 0.25s, transform 0.3s var(--ease); pointer-events: none; }
+.pin { padding-bottom: 8px; }
+.pin:hover .pin-name, .pin:focus-visible .pin-name, .pin[aria-selected="true"] .pin-name { opacity: 1; transform: none; }
+.pin:hover .pin-head { transform: translateY(-3px); }
+.pin[aria-selected="true"] .pin-head { background: var(--red); color: #fff; transform: scale(1.18); }
+.pin[aria-selected="true"] { z-index: 2; }
+.pin:focus-visible { outline: none; }
+.pin:focus-visible .pin-head { outline: 3px solid var(--paper); outline-offset: 3px; }
+.pin.is-drop .pin-head { animation: drop 0.7s var(--ease) backwards; }
+@keyframes drop { from { transform: translateY(-60px); opacity: 0; } 60% { opacity: 1; } }
+
+.comm-panel { background: var(--paper); color: var(--ink); border-radius: 26px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.comm-media { aspect-ratio: 16 / 10; overflow: hidden; background: var(--site); }
+.comm-media img { width: 100%; height: 100%; object-fit: cover; }
+.comm-body { padding: 22px 24px 22px; display: grid; gap: 10px; align-content: start; }
+.comm-where { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--water-deep); }
+.comm-name { font: 800 clamp(1.8rem, 2.6vw, 2.5rem)/1 var(--display); letter-spacing: -0.035em; }
+.comm-line { font-size: 1.05rem; }
+.comm-devs { font-size: 0.9rem; color: var(--ink-soft); }
+.comm-devs strong { color: var(--ink); }
+.comm-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.comm-step { display: flex; align-items: center; gap: 12px; margin-top: 8px; color: var(--water-deep); }
+.comm-step .round-btn:hover { background: var(--water-deep); color: var(--paper); border-color: var(--water-deep); }
+.comm-count { font: 700 1rem var(--display); font-variant-numeric: tabular-nums; }
+.comm-panel.is-swap .comm-media img { animation: swap-img 0.6s var(--ease); }
+.comm-panel.is-swap .comm-body > * { animation: swap-txt 0.5s var(--ease) backwards; }
+.comm-panel.is-swap .comm-body > :nth-child(2) { animation-delay: 0.04s; }
+.comm-panel.is-swap .comm-body > :nth-child(3) { animation-delay: 0.08s; }
+@keyframes swap-img { from { clip-path: inset(0 0 0 100%); } }
+[dir="rtl"] .comm-panel.is-swap .comm-media img { animation-name: swap-img-rtl; }
+@keyframes swap-img-rtl { from { clip-path: inset(0 100% 0 0); } }
+@keyframes swap-txt { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------------------------------------------------------------- life (landscape zone) */
+.life { background: var(--land); padding-block: var(--section-y); }
+.life .display { max-width: 15ch; margin-bottom: 40px; }
+.strips { display: flex; gap: 14px; height: clamp(420px, 52vw, 580px); }
+.strip { position: relative; flex: 1; min-width: 0; border-radius: 22px; overflow: hidden; background: var(--ink); transition: flex-grow 0.7s var(--ease); }
+.strip.is-open { flex-grow: 3.2; }
+.strip-btn { position: absolute; inset: 0; border: 0; padding: 0; background: none; width: 100%; text-align: start; color: #fff; }
+.strip-btn img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease), filter 0.6s var(--ease); filter: saturate(0.85) brightness(0.85); }
+.strip.is-open .strip-btn img { filter: none; }
+.strip:not(.is-open) .strip-btn:hover img { transform: scale(1.05); filter: none; }
+.strip-btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(18 14 32 / 0.82), rgb(18 14 32 / 0) 55%); }
+.strip-title { position: absolute; z-index: 1; inset-inline: 22px; bottom: 22px; font: 800 1.5rem/1.05 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.strip.is-open .strip-title { bottom: 74px; font-size: clamp(1.6rem, 2.4vw, 2.3rem); }
+.strip:not(.is-open) .strip-title { writing-mode: vertical-rl; transform: rotate(180deg); inset-inline: auto; inset-inline-start: 18px; bottom: 22px; }
+[dir="rtl"] .strip:not(.is-open) .strip-title { transform: none; }
+.strip-text { position: absolute; z-index: 1; inset-inline: 22px; bottom: 22px; color: #fff; max-width: 40ch; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.5s var(--ease); }
+.strip.is-open .strip-text { opacity: 1; transform: none; transition-delay: 0.25s; }
+
+/* ---------------------------------------------------------------- services (Bloom red) */
+.services { background: var(--red); color: #fff; padding-block: var(--section-y); }
+.svc-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
+.svc-head p { font-size: 1.1rem; color: #fbe3df; max-width: 40ch; }
+.svc-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
+.who { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.who-label { font: 800 1.5rem var(--display); letter-spacing: -0.02em; margin-inline-end: 6px; }
+.who-btn { border: 2px solid rgb(255 255 255 / 0.55); background: transparent; color: #fff; border-radius: 999px; min-height: 48px; padding: 0 20px; font-weight: 600; font-size: 1rem; transition: background-color 0.25s, color 0.25s, border-color 0.25s; }
+.who-btn:hover { border-color: #fff; }
+.who-btn[aria-selected="true"] { background: #fff; color: var(--red); border-color: #fff; }
+.app-panel { background: var(--paper); color: var(--ink); border-radius: 26px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden; min-height: 340px; }
+.app-media { background: color-mix(in srgb, var(--red) 12%, var(--paper)); display: grid; place-items: center; padding: 18px; overflow: hidden; }
+.app-media img { width: 100%; height: auto; border-radius: 14px; }
+.app-panel.is-swap .app-media img { animation: app-in 0.55s var(--ease); }
+@keyframes app-in { from { opacity: 0; transform: translateY(26px) rotate(-2deg); } }
+.app-body { padding: 26px; display: grid; gap: 14px; align-content: start; }
+.app-name { font: 800 clamp(1.6rem, 2.3vw, 2.1rem)/1 var(--display); letter-spacing: -0.03em; }
+.app-feats { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.app-feats li { display: flex; gap: 10px; align-items: center; font-weight: 500; }
+.app-feats li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); flex: none; }
+.app-panel.is-swap .app-feats li { animation: swap-txt 0.45s var(--ease) backwards; }
+.app-panel.is-swap .app-feats li:nth-child(2) { animation-delay: 0.05s; }
+.app-panel.is-swap .app-feats li:nth-child(3) { animation-delay: 0.1s; }
+.app-panel.is-swap .app-feats li:nth-child(4) { animation-delay: 0.15s; }
+.app-panel.is-swap .app-feats li:nth-child(5) { animation-delay: 0.2s; }
+.stores { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.store { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--paper); border-radius: 14px; padding: 8px 16px 8px 12px; text-decoration: none; font-weight: 700; line-height: 1.1; transition: background-color 0.2s; }
+.store:hover { background: #000; }
+.store small { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.85; }
+.store .ic { width: 26px; height: 26px; }
+.talk { background: var(--red-deep); border-radius: 26px; padding: 26px; display: grid; gap: 10px; align-content: start; border: 2px solid rgb(255 255 255 / 0.25); }
+.talk-num { display: inline-flex; align-items: center; gap: 10px; font: 800 clamp(1.5rem, 2.2vw, 2rem)/1.1 var(--display); letter-spacing: -0.02em; text-decoration: none; }
+.talk-num:hover { text-decoration: underline; }
+.talk-alt { color: #f5d3cd; font-size: 0.92rem; }
+.talk-links { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-top: 12px; }
+
+/* ---------------------------------------------------------------- awards (blueprint) */
+.awards { background: var(--blueprint); color: #fff; padding-block: var(--section-y); position: relative; overflow: hidden; }
+.awards::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
+.awards .wrap { position: relative; }
+.awards-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 48px; }
+.awards-head p { font-size: 1.1rem; color: #dbe6fb; }
+.awards-head .link-u { color: #fff; }
+.stamps { list-style: none; padding: 0; margin: 0 0 72px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.stamp {
+  --rot: -6deg; --c: #fff;
+  aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--c); display: grid; place-content: center; text-align: center; gap: 6px; padding: 16%;
+  position: relative; transform: rotate(var(--rot)); transition: transform 0.45s var(--ease); color: var(--c);
+}
+.stamp::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; border: 1.5px dashed var(--c); opacity: 0.7; }
+.stamp:hover { transform: rotate(0deg) scale(1.05); }
+.stamp-year { font: 800 1.9rem/1 var(--display); letter-spacing: -0.02em; }
+.stamp strong { font: 700 0.92rem/1.3 var(--display); text-wrap: balance; }
+.stamp-org { font-size: 0.72rem; line-height: 1.3; text-wrap: balance; }
+.s-1 { --rot: -8deg; --c: #ffd27a; } .s-2 { --rot: 5deg; } .s-3 { --rot: -3deg; --c: #9fe3c9; } .s-4 { --rot: 7deg; --c: #ffcbc0; } .s-5 { --rot: -5deg; }
+.news-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 14px; border-bottom: 2px solid rgb(255 255 255 / 0.5); }
+.news-head .link-u { color: #fff; }
+.news-list { list-style: none; padding: 0; margin: 0; }
+.news-list li { border-bottom: 1.5px solid rgb(255 255 255 / 0.28); }
+.news-list a, .news-next { display: grid; grid-template-columns: 130px 1fr auto; gap: 18px; align-items: center; padding: 20px 6px; text-decoration: none; transition: background-color 0.25s, padding 0.35s var(--ease); border-radius: 10px; }
+.news-list a:hover { background: rgb(255 255 255 / 0.1); padding-inline: 16px; }
+.news-list time { font-weight: 600; color: #cfdcf7; font-variant-numeric: tabular-nums; }
+.news-t { font: 700 clamp(1.05rem, 1.6vw, 1.3rem)/1.25 var(--display); letter-spacing: -0.01em; }
+.news-next { grid-template-columns: 1fr auto; color: #cfdcf7; }
+.news-next .news-t { font-weight: 500; font-family: var(--text); font-size: 1rem; }
+.news-next .link-u { color: #fff; }
+
+/* ---------------------------------------------------------------- story (night plan) */
+.story { background: var(--night); color: #fff; padding-block: var(--section-y); }
+.story .display { max-width: 14ch; margin-bottom: 44px; }
+.story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.growth { margin: 0; }
+.growth-svg { width: 100%; height: auto; border-radius: 22px; border: 2px solid rgb(255 255 255 / 0.25); display: block; }
+.growth figcaption { font-size: 0.85rem; color: #b9c0e0; margin-top: 10px; }
+.night-ground { fill: #10163a; }
+.night-grid { stroke: #2a3470; stroke-width: 1; }
+.night-road { stroke: #3a4480; stroke-width: 10; fill: none; }
+.g-zone { stroke-width: 2; stroke-dasharray: 6 5; }
+.g-zone.z-re { fill: color-mix(in srgb, var(--re) 30%, #10163a); stroke: var(--re); }
+.g-zone.z-edu { fill: color-mix(in srgb, var(--edu) 35%, #10163a); stroke: #7aa6ec; }
+.g-zone.z-land { fill: color-mix(in srgb, var(--land) 30%, #10163a); stroke: var(--land); }
+.g-zone.z-hosp { fill: color-mix(in srgb, var(--hosp) 30%, #10163a); stroke: var(--hosp); }
+.g-villa { fill: #e9a66a; }
+.g-bld { fill: #e8e6f2; }
+.g-track { fill: none; stroke: #c8573b; stroke-width: 8; }
+.g-water, .g-pool { fill: #1f8ea0; }
+.g-island { fill: #3b3a56; }
+.g-light { fill: #ffd77a; filter: drop-shadow(0 0 3px #ffcf5c); }
+.grow { opacity: 0.16; filter: grayscale(1); transform: scale(0.97); transform-box: fill-box; transform-origin: center; transition: opacity 0.6s var(--ease), transform 0.7s var(--ease), filter 0.6s; }
+.grow.is-built { opacity: 1; transform: none; filter: none; }
+.grow.is-new .g-zone { stroke: #fff; stroke-width: 3; }
+.story-text { display: grid; gap: 12px; align-content: start; }
+.story-year { font: 800 clamp(4.4rem, 9vw, 6rem)/0.9 var(--display); letter-spacing: -0.04em; color: var(--re); font-variant-numeric: tabular-nums; }
+.story-t { font: 800 clamp(1.6rem, 2.4vw, 2.2rem)/1.05 var(--display); letter-spacing: -0.025em; }
+.story-d { color: #d4d8ee; font-size: 1.05rem; max-width: 46ch; }
+.story-photo { margin-top: 10px; border-radius: 18px; overflow: hidden; aspect-ratio: 16 / 10; max-width: 440px; background: #22294d; }
+.story-photo img { width: 100%; height: 100%; object-fit: cover; }
+.story-text.is-swap > * { animation: swap-txt 0.5s var(--ease) backwards; }
+.story-text.is-swap > :nth-child(2) { animation-delay: 0.05s; }
+.story-text.is-swap > :nth-child(3) { animation-delay: 0.1s; }
+.story-text.is-swap > :nth-child(4) { animation-delay: 0.15s; }
+.scrub { display: flex; align-items: center; gap: 18px; margin-top: 44px; }
+.scrub .round-btn { flex: none; }
+.scrub .ic-play { fill: currentColor; }
+.scrub .ic-pause { display: none; }
+.scrub.is-playing .ic-play { display: none; }
+.scrub.is-playing .ic-pause { display: block; }
+.scrub-track { flex: 1; display: grid; gap: 10px; }
+.scrub-years { list-style: none; padding: 0; margin: 0 11px; display: flex; justify-content: space-between; font-size: 0.85rem; color: #b9c0e0; font-variant-numeric: tabular-nums; }
+.scrub-years li { width: 0; display: flex; justify-content: center; white-space: nowrap; }
+.scrub-years li.is-on { color: var(--re); font-weight: 700; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; background: transparent; cursor: pointer; }
+input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 6px; background: linear-gradient(to right, var(--re) var(--p, 0%), #2f3a72 var(--p, 0%)); }
+[dir="rtl"] input[type="range"]::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--re) var(--p, 0%), #2f3a72 var(--p, 0%)); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; border-radius: 50%; background: var(--re); border: 4px solid var(--night); box-shadow: 0 0 0 2px var(--re); }
+input[type="range"]::-moz-range-track { height: 6px; border-radius: 6px; background: #2f3a72; }
+input[type="range"]::-moz-range-progress { height: 6px; border-radius: 6px; background: var(--re); }
+input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--re); border: 4px solid var(--night); box-shadow: 0 0 0 2px var(--re); }
+input[type="range"]:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+
+/* ---------------------------------------------------------------- about (area schedule on the site) */
+.about { background: var(--site); padding-block: var(--section-y); }
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: start; }
+.about-lede { font-size: 1.15rem; margin-top: 22px; max-width: 46ch; }
+.about-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 28px; }
+.schedule { background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; padding: 8px 22px 18px; box-shadow: var(--shadow); }
+.schedule table { width: 100%; border-collapse: collapse; }
+.schedule caption { text-align: start; font: 700 1.1rem var(--display); padding: 14px 0 10px; }
+.schedule th, .schedule td { text-align: start; padding: 12px 8px; border-top: 1.5px solid rgb(29 24 48 / 0.14); vertical-align: middle; }
+.schedule thead th { font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); border-top: 2px solid var(--ink); }
+.schedule tbody th { font-weight: 600; white-space: nowrap; }
+.schedule tbody td:last-child { color: var(--ink-soft); font-size: 0.92rem; }
+.schedule .num { font: 800 clamp(1.6rem, 2.6vw, 2.3rem)/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.schedule tbody tr { transition: background-color 0.2s; }
+.schedule tbody tr:hover { background: color-mix(in srgb, var(--site) 30%, var(--paper)); }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-inline-end: 10px; vertical-align: 0; }
+.sw.z-re { background: var(--re); } .sw.z-edu { background: var(--edu); } .sw.z-hosp { background: var(--hosp); } .sw.z-retail { background: var(--retail); }
+.sw.z-health { background: var(--health); } .sw.z-fm { background: var(--fm); } .sw.z-land { background: var(--land); }
+.source { font-size: 0.82rem; color: var(--ink-soft); margin-top: 10px; }
+
+/* ---------------------------------------------------------------- footer: title block */
+.footer { background: var(--ink); color: var(--paper); padding-block: var(--section-y) 32px; }
+.close-cta { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 28px; align-items: end; padding-bottom: 64px; }
+.close-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.tblock { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.2fr 1.4fr; border: 2px solid color-mix(in srgb, var(--paper) 60%, transparent); border-radius: 16px; overflow: hidden; }
+.tb-cell { padding: 22px; border-inline-end: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); display: grid; gap: 8px; align-content: start; font-size: 0.92rem; }
+.tb-cell:last-child { border-inline-end: 0; }
+.tb-cell a, .tb-link { text-decoration: none; color: color-mix(in srgb, var(--paper) 85%, var(--site)); background: none; border: 0; padding: 0; text-align: start; font-size: inherit; }
+.tb-cell a:hover, .tb-link:hover { color: #fff; text-decoration: underline; }
+.tb-brand img { width: 120px; }
+.tb-brand p { color: var(--site); font-weight: 600; }
+.biz-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; color: color-mix(in srgb, var(--paper) 85%, var(--site)); }
+.biz-list .sw { width: 10px; height: 10px; margin-inline-end: 8px; }
+.tb-h { font: 700 0.82rem var(--text); color: var(--site); margin-bottom: 4px; }
+address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--site)); margin-bottom: 6px; }
+.tb-drawing { gap: 0; padding: 0; }
+.tb-row { display: grid; grid-template-columns: 70px 1fr; gap: 10px; padding: 12px 18px; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); font-size: 0.85rem; }
+.tb-row span { color: var(--site); }
+.tb-row strong { font-weight: 500; }
+.tb-social { display: flex; flex-wrap: wrap; gap: 14px; }
+.tb-scale { width: 200px; margin: 14px 18px; }
+.tb-scale path { stroke: var(--paper); stroke-width: 1.5; fill: none; }
+.tb-scale rect { fill: var(--paper); }
+.tb-scale text { font: 500 10px var(--text); fill: var(--site); }
+.legal { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 24px; font-size: 0.85rem; color: color-mix(in srgb, var(--paper) 80%, var(--site)); }
+.legal a { text-decoration: none; }
+.legal a:hover { text-decoration: underline; }
+.to-top { margin-inline-start: auto; display: inline-flex; gap: 6px; align-items: center; }
+.to-top .ic { transform: rotate(180deg); }
+
+/* ---------------------------------------------------------------- enquiry dialog */
+.enquiry { width: min(520px, calc(100% - 24px)); max-height: calc(100svh - 24px); border: 2px solid var(--ink); border-radius: 26px; padding: 0; background: var(--paper); color: var(--ink); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6); overflow: auto; }
+.enquiry::backdrop { background: rgb(22 29 61 / 0.55); backdrop-filter: blur(3px); }
+.enquiry[open] { animation: card-in 0.4s var(--ease); }
+.enq-close-form { position: sticky; top: 0; height: 0; z-index: 2; }
+.enq-close-form .card-close { top: 14px; inset-inline-end: 14px; }
+.enq-form { display: grid; gap: 16px; padding: 30px; }
+.enq-form[hidden] { display: none; }
+.enq-title { font: 800 2rem/1 var(--display); letter-spacing: -0.03em; padding-inline-end: 40px; }
+.enq-interest { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.err { display: none; color: var(--red); font-size: 0.85rem; font-weight: 500; }
+.field.is-bad .err { display: block; }
+.field.is-bad input { border-color: var(--red); }
+.enq-note { font-size: 0.82rem; color: var(--ink-soft); text-align: center; }
+.enq-done { padding: 40px 30px 34px; display: grid; gap: 14px; justify-items: start; outline: none; }
+.enq-done[hidden] { display: none; }
+.enq-stamp { width: 96px; height: 96px; fill: none; stroke: var(--land); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; transform: rotate(-10deg); }
+.enq-stamp circle:nth-child(2) { stroke-dasharray: 4 5; stroke-width: 2; }
+.enq-done.is-in .enq-stamp { animation: stamp 0.55s var(--ease); }
+@keyframes stamp { from { transform: rotate(-30deg) scale(1.8); opacity: 0; } }
+
+.toast { position: fixed; z-index: 60; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 14px; box-shadow: var(--shadow); font-size: 0.92rem; max-width: calc(100% - 32px); }
+.toast[hidden] { display: none; }
+.toast.is-in { animation: toast-in 0.35s var(--ease); }
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } }
+
+/* ---------------------------------------------------------------- responsive */
+@media (max-width: 1180px) {
+  .nav a { padding: 10px 9px; font-size: 0.9rem; }
+  .search-fields { grid-template-columns: 1fr 1fr; }
+  .search-fields .beds { grid-column: 1 / -1; order: 3; }
+  .search-fields .search-go { grid-column: 1 / -1; order: 5; }
+  .search-fields > label:nth-of-type(3) { order: 4; grid-column: 1 / -1; }
+  .parcels { grid-template-columns: repeat(2, 1fr); }
+  .stamps { grid-template-columns: repeat(3, 1fr); }
+  .tblock { grid-template-columns: 1fr 1fr 1fr; }
+  .tb-brand { grid-column: 1 / -1; border-inline-end: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
+  .tb-drawing { grid-column: 1 / -1; border-top: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
+  .tb-cell:nth-child(4) { border-inline-end: 0; }
+}
+@media (max-width: 1100px) {
+  .nav { display: none; }
+  .menu-btn { display: grid; }
+  .bar-end { margin-inline-start: auto; }
+}
+@media (max-width: 1100px) {
+  .hero { height: auto; min-height: 0; padding-top: 86px; display: flex; flex-direction: column; }
+  .plan { position: relative; inset: auto; order: 4; }
+  .plan-svg { height: auto; aspect-ratio: 1060 / 940; }
+  .title-block { position: static; order: 1; width: auto; margin: 0 16px 14px; display: contents; }
+  .tb-sheet { order: 1; margin: 0 16px 14px; padding: 22px; }
+  .legend-search { order: 2; margin: 0 16px 14px; padding: 18px; gap: 10px; }
+  .legend-search .legend-title { display: none; }
+  .day-clock { position: relative; order: 3; inset: auto; margin: 0 16px 12px; }
+  .plan-note { position: static; order: 5; align-self: flex-start; margin: 10px 16px 22px; background: var(--paper); }
+  .tb-sheet, .legend-search, .day-clock, .plot-card, .plan-note { margin-inline: var(--gutter); }
+}
+@media (max-width: 860px) {
+  .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 12px 16px 0; }
+  .find-head, .comm-head, .svc-head, .awards-head, .close-cta { grid-template-columns: 1fr; }
+  .comm-grid, .svc-grid, .story-grid, .about-grid { grid-template-columns: minmax(0, 1fr); }
+  .app-panel { grid-template-columns: 1fr; }
+  .strips { flex-direction: column; height: auto; }
+  .strip, .strip.is-open { flex: none; height: auto; }
+  .strip-btn { position: relative; display: block; height: 230px; }
+  .strip:not(.is-open) .strip-title, .strip .strip-title, .strip.is-open .strip-title { writing-mode: horizontal-tb; transform: none; inset-inline: 20px; bottom: 18px; font-size: 1.5rem; }
+  .strip .strip-text, .strip.is-open .strip-text { position: static; opacity: 1; transform: none; padding: 14px 20px 18px; max-width: none; }
+  .strip .strip-btn img { filter: none; }
+  .stamps { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .news-list a, .news-next { grid-template-columns: 1fr auto; }
+  .news-list time { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .btn-sm[data-enquire] { display: none; }
+  .mode { grid-template-columns: 1fr 1fr; }
+  .mode-face { padding: 12px 14px; }
+  .mode-face strong { font-size: 1.5rem; }
+  .mode-face small { display: none; }
+  .search-fields { grid-template-columns: 1fr; }
+  .parcels { grid-template-columns: 1fr; }
+  .stamp-year { font-size: 1.5rem; }
+  .stamp strong { font-size: 0.8rem; }
+  .stamp-org { display: none; }
+  .tblock { grid-template-columns: 1fr; }
+  .tb-cell { border-inline-end: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
+  .tb-cell:nth-child(4) { border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
+  .tb-drawing { border-top: 0; }
+  .scrub-years li:nth-child(even) { visibility: hidden; }
+  .legend-search .field { grid-template-columns: 1fr; gap: 6px; }
+  .comm-actions .btn { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.15s !important; }
+  .conn-flow { animation: none; }
+}
+
+/* pin labels near the map's right edge open toward the middle */
+.pin-end .pin-name { translate: -38% 0; }
+[dir="rtl"] .pin-end .pin-name { translate: -38% 0; }
+@media (max-width: 560px) {
+  .display { font-size: clamp(2rem, 9vw, 2.6rem); hyphens: auto; }
+  .pin-name { font-size: 0.7rem; }
+}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4.5-2.2 1.4a11 11 0 0 0 5.8 5.8l1.4-2.2 4.5 1.5v3a2 2 0 0 1-2 2A16.5 16.5 0 0 1 4.5 5.5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-phone-dev" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></symbol>
+</svg>
+
+<header class="site-header" id="site-header">
+  <div class="bar">
+    <a class="brand" href="#top" aria-label="Bloom World, back to the top">
+      <img src="assets/img/bloom-wordmark-red.png" alt="Bloom" width="96" height="30">
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#find" data-i18n="nav.find">Find a Home</a>
+      <a href="#communities" data-i18n="nav.communities">Communities</a>
+      <a href="#services" data-i18n="nav.services">Customer Services</a>
+      <a href="#story" data-i18n="nav.story">Our Story</a>
+      <a href="#about" data-i18n="nav.about">About Bloom</a>
+    </nav>
+    <div class="bar-end">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-btn" data-lang="ar" aria-pressed="false" lang="ar">عربي</button>
+      </div>
+      <button type="button" class="btn btn-red btn-sm" data-enquire data-i18n="cta.enquire">Enquire</button>
+      <button type="button" class="menu-btn" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><svg class="ic"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile" hidden>
+    <a href="#find" data-i18n="nav.find">Find a Home</a>
+    <a href="#communities" data-i18n="nav.communities">Communities</a>
+    <a href="#services" data-i18n="nav.services">Customer Services</a>
+    <a href="#story" data-i18n="nav.story">Our Story</a>
+    <a href="#about" data-i18n="nav.about">About Bloom</a>
+    <a href="tel:80025666" class="mobile-call"><svg class="ic"><use href="#i-phone"/></svg> 800 Bloom (25666)</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ================================================================ HERO: the living masterplan -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="plan" id="plan" data-hour="0">
+    <svg class="plan-svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-labelledby="plan-title plan-desc">
+<title id="plan-title">Illustrative masterplan of a Bloom community</title>
+<desc id="plan-desc">Seven plots, one for each Bloom business: homes, a school, a hotel, a high street, a clinic, a facilities depot and a park around a lagoon. Select a plot to see the businesses it works with.</desc>
+<defs>
+  <filter id="sun" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow id="sun-shadow" dx="-7" dy="6" stdDeviation="2.5" flood-color="#4a3413" flood-opacity=".32"/>
+  </filter>
+  <filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="5"/></filter>
+  <pattern id="awning" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="awning-a"/><rect width="5" height="10" class="awning-b"/></pattern>
+  <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" class="grid-dot"/></pattern>
+  <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" class="hatch-line"/></pattern>
+  <pattern id="solar" width="12" height="8" patternUnits="userSpaceOnUse"><rect width="11" height="7" class="solar-cell"/></pattern>
+</defs>
+<rect class="g-site" width="1600" height="1000"/>
+<rect fill="url(#dots)" width="1600" height="1000"/>
+<g class="beyond">
+<rect x="40" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="40" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="118" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="196" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="274" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="352" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="248" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="352" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="560" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="664" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="768" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="430" y="872" width="62" height="78" rx="4" class="beyond-lot"/>
+<rect x="0" y="0" width="540" height="1000" fill="url(#hatch)" opacity=".5"/>
+</g>
+<g class="roads">
+<rect x="0" y="458" width="1600" height="44" class="road"/>
+<rect x="784" y="0" width="32" height="1000" class="road"/>
+<rect x="1284" y="0" width="32" height="1000" class="road"/>
+<rect x="816" y="258" width="468" height="24" class="road road-minor"/>
+<line x1="0" y1="480" x2="1600" y2="480" class="road-line"/>
+<line x1="800" y1="0" x2="800" y2="1000" class="road-line"/>
+<line x1="1300" y1="0" x2="1300" y2="1000" class="road-line"/>
+<g class="roundabout"><circle cx="800" cy="480" r="38" class="road"/><circle cx="800" cy="480" r="18" class="roundabout-in"/></g>
+<g class="roundabout"><circle cx="1300" cy="480" r="38" class="road"/><circle cx="1300" cy="480" r="18" class="roundabout-in"/></g>
+</g>
+<g class="plot" data-biz="edu" tabindex="0" role="button" aria-label="Education plot: Bloom Education">
+<rect class="zone z-edu" x="576" y="70" width="198" height="374" rx="18"/>
+<g class="bld" filter="url(#sun)"><rect class="roof" x="598" y="88" width="154" height="38" rx="4"/><rect class="roof" x="598" y="126" width="40" height="64" rx="4"/><rect class="roof" x="712" y="126" width="40" height="64" rx="4"/><rect class="roof-accent z-edu" x="598" y="88" width="154" height="9" rx="3"/></g>
+<g class="tree" transform="translate(675 160)"><circle r="15" class="tree-canopy"/><circle r="6.8" cx="-3.8" cy="-3.8" class="tree-light"/></g>
+<rect class="track" x="600" y="214" width="150" height="212" rx="75"/>
+<rect class="pitch" x="618" y="236" width="114" height="168" rx="57"/>
+<line class="pitch-line" x1="618" y1="320" x2="732" y2="320"/><circle class="pitch-line" cx="675" cy="320" r="20" fill="none"/>
+<circle class="kid" cx="650" cy="290" r="3.6"><animate attributeName="cx" values="650;672;642;650" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="290;274;302;290" dur="6s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="700" cy="350" r="3.6"><animate attributeName="cx" values="700;722;692;700" dur="6s" repeatCount="indefinite"/><animate attributeName="cy" values="350;334;362;350" dur="7s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="660" cy="370" r="3.6"><animate attributeName="cx" values="660;682;652;660" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="370;354;382;370" dur="8s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="705" cy="280" r="3.6"><animate attributeName="cx" values="705;727;697;705" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="280;264;292;280" dur="9s" repeatCount="indefinite"/></circle>
+<circle class="lamp" cx="620" cy="200" r="5"/>
+<circle class="lamp" cx="730" cy="200" r="5"/>
+<g class="plot-label" transform="translate(625.8 191)"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g>
+</g>
+<g class="plot" data-biz="retail" tabindex="0" role="button" aria-label="Retail plot: shops and cafés">
+<rect class="zone z-retail" x="830" y="70" width="440" height="176" rx="18"/>
+<rect class="promenade" x="846" y="146" width="408" height="26" rx="13"/>
+<g class="bld" filter="url(#sun)">
+<rect class="roof" x="850" y="88" width="50" height="50" rx="4"/><rect x="850" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="850" y="180" width="50" height="50" rx="4"/><rect x="850" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="907" y="88" width="50" height="50" rx="4"/><rect x="907" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="907" y="180" width="50" height="50" rx="4"/><rect x="907" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="964" y="88" width="50" height="50" rx="4"/><rect x="964" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="964" y="180" width="50" height="50" rx="4"/><rect x="964" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1021" y="88" width="50" height="50" rx="4"/><rect x="1021" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1021" y="180" width="50" height="50" rx="4"/><rect x="1021" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1078" y="88" width="50" height="50" rx="4"/><rect x="1078" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1078" y="180" width="50" height="50" rx="4"/><rect x="1078" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1135" y="88" width="50" height="50" rx="4"/><rect x="1135" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1135" y="180" width="50" height="50" rx="4"/><rect x="1135" y="180" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1192" y="88" width="50" height="50" rx="4"/><rect x="1192" y="128" width="50" height="12" fill="url(#awning)"/>
+<rect class="roof" x="1192" y="180" width="50" height="50" rx="4"/><rect x="1192" y="180" width="50" height="12" fill="url(#awning)"/>
+</g>
+<g class="umbrella" transform="translate(880 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
+<g class="umbrella" transform="translate(964 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
+<g class="umbrella" transform="translate(1048 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
+<g class="umbrella" transform="translate(1132 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
+<g class="umbrella" transform="translate(1216 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
+<circle class="walker" r="3.2"><animateMotion dur="24s" begin="0s" repeatCount="indefinite" path="M850 152 H1250"/></circle>
+<circle class="walker" r="3.2"><animateMotion dur="19s" begin="-6s" repeatCount="indefinite" path="M1250 166 H850"/></circle>
+<circle class="walker" r="3.2"><animateMotion dur="28s" begin="-12s" repeatCount="indefinite" path="M850 160 H1250"/></circle>
+<circle class="lamp" cx="876" cy="112" r="5"/>
+<circle class="lamp" cx="876" cy="206" r="5"/>
+<circle class="lamp" cx="933" cy="112" r="5"/>
+<circle class="lamp" cx="933" cy="206" r="5"/>
+<circle class="lamp" cx="990" cy="112" r="5"/>
+<circle class="lamp" cx="990" cy="206" r="5"/>
+<circle class="lamp" cx="1047" cy="112" r="5"/>
+<circle class="lamp" cx="1047" cy="206" r="5"/>
+<circle class="lamp" cx="1104" cy="112" r="5"/>
+<circle class="lamp" cx="1104" cy="206" r="5"/>
+<circle class="lamp" cx="1161" cy="112" r="5"/>
+<circle class="lamp" cx="1161" cy="206" r="5"/>
+<circle class="lamp" cx="1218" cy="112" r="5"/>
+<circle class="lamp" cx="1218" cy="206" r="5"/>
+<g class="plot-label" transform="translate(1012.2 144)"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g>
+</g>
+<g class="plot" data-biz="health" tabindex="0" role="button" aria-label="Healthcare plot: care close to home">
+<rect class="zone z-health" x="830" y="294" width="196" height="150" rx="18"/>
+<g class="bld" filter="url(#sun)"><rect class="roof" x="852" y="314" width="122" height="88" rx="6"/></g>
+<path class="cross z-health" d="M904 334h18v16h16v18h-16v16h-18v-16h-16v-18h16z"/>
+<g class="tree" transform="translate(995 330)"><circle r="13" class="tree-canopy"/><circle r="5.9" cx="-3.2" cy="-3.2" class="tree-light"/></g>
+<g class="tree" transform="translate(1000 372)"><circle r="10" class="tree-canopy"/><circle r="4.5" cx="-2.5" cy="-2.5" class="tree-light"/></g>
+<g class="tree" transform="translate(990 410)"><circle r="12" class="tree-canopy"/><circle r="5.4" cx="-3" cy="-3" class="tree-light"/></g>
+<rect class="parking" x="852" y="410" width="122" height="22" rx="3"/>
+<circle class="lamp" cx="860" cy="330" r="5"/>
+<circle class="lamp" cx="966" cy="330" r="5"/>
+<g class="plot-label" transform="translate(875 255)"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g>
+</g>
+<g class="plot" data-biz="hosp" tabindex="0" role="button" aria-label="Hospitality plot: hotels and serviced apartments">
+<rect class="zone z-hosp" x="1040" y="294" width="230" height="150" rx="18"/>
+<g class="bld" filter="url(#sun)"><rect class="roof" x="1058" y="310" width="130" height="46" rx="5"/><rect class="roof" x="1058" y="356" width="48" height="74" rx="5"/><rect class="roof-accent z-hosp" x="1058" y="310" width="130" height="8" rx="3"/></g>
+<rect class="pool" x="1124" y="374" width="122" height="52" rx="10"/>
+<path class="pool-ripple" d="M1134 392 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0"/>
+<rect class="lounger" x="1132" y="432" width="16" height="7" rx="2"/>
+<rect class="lounger" x="1160" y="432" width="16" height="7" rx="2"/>
+<rect class="lounger" x="1188" y="432" width="16" height="7" rx="2"/>
+<rect class="lounger" x="1216" y="432" width="16" height="7" rx="2"/>
+<g class="palm" transform="translate(1218 330)"><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(0)"/><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(60)"/><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(120)"/><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(180)"/><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(240)"/><path d="M0 0 Q 8.4 -3.6 15.6 1.2" transform="rotate(300)"/><circle r="2.9"/></g>
+<g class="palm" transform="translate(1250 352)"><path d="M0 0 Q 7 -3 13 1" transform="rotate(0)"/><path d="M0 0 Q 7 -3 13 1" transform="rotate(60)"/><path d="M0 0 Q 7 -3 13 1" transform="rotate(120)"/><path d="M0 0 Q 7 -3 13 1" transform="rotate(180)"/><path d="M0 0 Q 7 -3 13 1" transform="rotate(240)"/><path d="M0 0 Q 7 -3 13 1" transform="rotate(300)"/><circle r="2.4"/></g>
+<g class="palm" transform="translate(1205 360)"><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(0)"/><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(60)"/><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(120)"/><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(180)"/><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(240)"/><path d="M0 0 Q 6.3 -2.7 11.7 0.9" transform="rotate(300)"/><circle r="2.2"/></g>
+<circle class="lamp" cx="1072" cy="334" r="5"/>
+<circle class="lamp" cx="1098" cy="334" r="5"/>
+<circle class="lamp" cx="1124" cy="334" r="5"/>
+<circle class="lamp" cx="1150" cy="334" r="5"/>
+<circle class="lamp" cx="1176" cy="334" r="5"/>
+<g class="plot-label" transform="translate(1098.2 255)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g>
+</g>
+<g class="plot" data-biz="re" tabindex="0" role="button" aria-label="Real estate plot: Bloom homes">
+<rect class="zone z-re" x="576" y="516" width="198" height="420" rx="18"/>
+<rect class="zone z-re" x="1330" y="70" width="252" height="374" rx="18"/>
+<g class="bld" filter="url(#sun)">
+<rect class="lot" x="590" y="534" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(598 542)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="600" y="580" width="18" height="14" rx="3"/>
+<rect class="lot" x="652" y="534" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(660 542)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="714" y="534" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(722 542)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="724" y="580" width="18" height="14" rx="3"/>
+<rect class="lot" x="590" y="614" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(598 622)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="652" y="614" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(660 622)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="662" y="660" width="18" height="14" rx="3"/>
+<rect class="lot" x="714" y="614" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(722 622)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="590" y="694" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(598 702)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="600" y="740" width="18" height="14" rx="3"/>
+<rect class="lot" x="652" y="694" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(660 702)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="714" y="694" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(722 702)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="724" y="740" width="18" height="14" rx="3"/>
+<rect class="lot" x="590" y="774" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(598 782)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="652" y="774" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(660 782)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="662" y="820" width="18" height="14" rx="3"/>
+<rect class="lot" x="714" y="774" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(722 782)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="590" y="854" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(598 862)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="600" y="900" width="18" height="14" rx="3"/>
+<rect class="lot" x="652" y="854" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(660 862)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="lot" x="714" y="854" width="54" height="70" rx="5"/>
+<g class="villa" transform="translate(722 862)"><rect width="38" height="30" rx="3" class="villa-roof"/><line x1="0" y1="15" x2="38" y2="15" class="villa-ridge"/></g>
+<rect class="pool" x="724" y="900" width="18" height="14" rx="3"/>
+<rect class="roof" x="1348" y="88" width="100" height="150" rx="6"/>
+<rect class="courtyard" x="1366" y="106" width="64" height="114" rx="4"/>
+<rect class="roof" x="1464" y="88" width="100" height="150" rx="6"/>
+<rect class="courtyard" x="1482" y="106" width="64" height="114" rx="4"/>
+<rect class="roof" x="1348" y="260" width="216" height="160" rx="6"/>
+<rect class="courtyard" x="1366" y="278" width="180" height="124" rx="4"/>
+</g>
+<g class="tree" transform="translate(1398 163)"><circle r="14" class="tree-canopy"/><circle r="6.3" cx="-3.5" cy="-3.5" class="tree-light"/></g>
+<g class="tree" transform="translate(1514 163)"><circle r="14" class="tree-canopy"/><circle r="6.3" cx="-3.5" cy="-3.5" class="tree-light"/></g>
+<g class="tree" transform="translate(1420 340)"><circle r="16" class="tree-canopy"/><circle r="7.2" cx="-4" cy="-4" class="tree-light"/></g>
+<g class="tree" transform="translate(1490 340)"><circle r="16" class="tree-canopy"/><circle r="7.2" cx="-4" cy="-4" class="tree-light"/></g>
+<circle class="lamp" cx="617" cy="562" r="5"/>
+<circle class="lamp" cx="679" cy="562" r="5"/>
+<circle class="lamp" cx="741" cy="562" r="5"/>
+<circle class="lamp" cx="617" cy="642" r="5"/>
+<circle class="lamp" cx="679" cy="642" r="5"/>
+<circle class="lamp" cx="741" cy="642" r="5"/>
+<circle class="lamp" cx="617" cy="722" r="5"/>
+<circle class="lamp" cx="679" cy="722" r="5"/>
+<circle class="lamp" cx="741" cy="722" r="5"/>
+<circle class="lamp" cx="617" cy="802" r="5"/>
+<circle class="lamp" cx="679" cy="802" r="5"/>
+<circle class="lamp" cx="741" cy="802" r="5"/>
+<circle class="lamp" cx="617" cy="882" r="5"/>
+<circle class="lamp" cx="679" cy="882" r="5"/>
+<circle class="lamp" cx="741" cy="882" r="5"/>
+<circle class="lamp" cx="1398" cy="110" r="5"/>
+<circle class="lamp" cx="1514" cy="110" r="5"/>
+<g class="plot-label" transform="translate(618.2 501)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g>
+</g>
+<g class="plot" data-biz="land" tabindex="0" role="button" aria-label="Landscaping plot: parks, streets and gardens">
+<rect class="zone z-land" x="830" y="516" width="440" height="420" rx="18"/>
+<path class="park-lawn" d="M846 540 H1254 V920 H846 Z"/>
+<path class="water" d="M900 620 C 930 560 1040 560 1100 590 C 1180 620 1240 600 1236 690 C 1232 780 1160 860 1060 852 C 960 846 880 820 870 740 C 862 690 880 660 900 620 Z"/>
+<path class="water-edge" d="M900 620 C 930 560 1040 560 1100 590 C 1180 620 1240 600 1236 690 C 1232 780 1160 860 1060 852 C 960 846 880 820 870 740 C 862 690 880 660 900 620 Z"/>
+<path class="ripple" d="M960 660 q8 -5 16 0 t16 0 t16 0"><animate attributeName="opacity" values="0;.9;0" dur="4s" begin="0s" repeatCount="indefinite"/></path>
+<path class="ripple" d="M1100 700 q8 -5 16 0 t16 0 t16 0"><animate attributeName="opacity" values="0;.9;0" dur="5s" begin="-1s" repeatCount="indefinite"/></path>
+<path class="ripple" d="M1010 780 q8 -5 16 0 t16 0 t16 0"><animate attributeName="opacity" values="0;.9;0" dur="6s" begin="-2s" repeatCount="indefinite"/></path>
+<path class="ripple" d="M1160 650 q8 -5 16 0 t16 0 t16 0"><animate attributeName="opacity" values="0;.9;0" dur="7s" begin="-3s" repeatCount="indefinite"/></path>
+<rect class="bridge" x="1046" y="640" width="16" height="140" rx="3" transform="rotate(-28 1054 710)"/>
+<path class="park-path" d="M852 560 C 900 540 980 540 1040 556 S 1200 548 1250 560"/>
+<path class="park-path" d="M852 900 C 940 920 1080 900 1250 912"/>
+<g class="tree" transform="translate(866 580)"><circle r="13" class="tree-canopy"/><circle r="5.9" cx="-3.2" cy="-3.2" class="tree-light"/></g>
+<g class="tree" transform="translate(890 878)"><circle r="15" class="tree-canopy"/><circle r="6.8" cx="-3.8" cy="-3.8" class="tree-light"/></g>
+<g class="tree" transform="translate(1240 880)"><circle r="14" class="tree-canopy"/><circle r="6.3" cx="-3.5" cy="-3.5" class="tree-light"/></g>
+<g class="tree" transform="translate(1250 760)"><circle r="12" class="tree-canopy"/><circle r="5.4" cx="-3" cy="-3" class="tree-light"/></g>
+<g class="tree" transform="translate(858 700)"><circle r="11" class="tree-canopy"/><circle r="5" cx="-2.8" cy="-2.8" class="tree-light"/></g>
+<g class="tree" transform="translate(1210 560)"><circle r="13" class="tree-canopy"/><circle r="5.9" cx="-3.2" cy="-3.2" class="tree-light"/></g>
+<g class="tree" transform="translate(950 900)"><circle r="10" class="tree-canopy"/><circle r="4.5" cx="-2.5" cy="-2.5" class="tree-light"/></g>
+<g class="tree" transform="translate(1150 904)"><circle r="12" class="tree-canopy"/><circle r="5.4" cx="-3" cy="-3" class="tree-light"/></g>
+<g class="tree" transform="translate(1028 556)"><circle r="9" class="tree-canopy"/><circle r="4" cx="-2.2" cy="-2.2" class="tree-light"/></g>
+<g class="tree" transform="translate(1120 556)"><circle r="11" class="tree-canopy"/><circle r="5" cx="-2.8" cy="-2.8" class="tree-light"/></g>
+<g class="playground"><circle cx="1196" cy="830" r="20"/><path d="M1182 830h28M1196 816v28"/></g>
+<g class="boat"><path d="M-12 -5 H8 L14 0 L8 5 H-12 Z"/><animateMotion dur="26s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
+<g class="boat boat-b"><path d="M-9 -4 H6 L11 0 L6 4 H-9 Z"/><animateMotion dur="34s" begin="-14s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
+<circle class="walker" r="3.2"><animateMotion dur="30s" begin="0s" repeatCount="indefinite" path="M852 560 C 900 540 980 540 1040 556 S 1200 548 1250 560"/></circle>
+<circle class="walker" r="3.2"><animateMotion dur="26s" begin="-8s" repeatCount="indefinite" path="M1250 912 C 1080 900 940 920 852 900"/></circle>
+<circle class="walker" r="3.2"><animateMotion dur="35s" begin="-20s" repeatCount="indefinite" path="M852 900 C 940 920 1080 900 1250 912"/></circle>
+<circle class="lamp" cx="900" cy="560" r="5"/>
+<circle class="lamp" cx="1000" cy="550" r="5"/>
+<circle class="lamp" cx="1100" cy="556" r="5"/>
+<circle class="lamp" cx="1200" cy="556" r="5"/>
+<circle class="lamp" cx="920" cy="905" r="5"/>
+<circle class="lamp" cx="1040" cy="910" r="5"/>
+<circle class="lamp" cx="1160" cy="908" r="5"/>
+<g class="plot-label" transform="translate(993.2 501)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g>
+</g>
+<g class="plot" data-biz="fm" tabindex="0" role="button" aria-label="Facilities management plot: the team behind the scenes">
+<rect class="zone z-fm" x="1330" y="516" width="252" height="420" rx="18"/>
+<g class="bld" filter="url(#sun)"><rect class="roof" x="1350" y="536" width="210" height="96" rx="5"/><rect x="1360" y="546" width="190" height="76" fill="url(#solar)"/><rect class="roof" x="1350" y="654" width="96" height="120" rx="5"/><rect class="roof-accent z-fm" x="1350" y="654" width="96" height="9" rx="3"/></g>
+<rect class="yard" x="1462" y="654" width="98" height="262" rx="6"/>
+<g class="van" transform="translate(1486 680)"><rect width="50" height="22" rx="4"/><rect class="car-glass" x="38" y="3" width="8" height="16" rx="2"/></g>
+<g class="van" transform="translate(1486 732)"><rect width="50" height="22" rx="4"/><rect class="car-glass" x="38" y="3" width="8" height="16" rx="2"/></g>
+<g class="van" transform="translate(1486 784)"><rect width="50" height="22" rx="4"/><rect class="car-glass" x="38" y="3" width="8" height="16" rx="2"/></g>
+<g class="van" transform="translate(1486 836)"><rect width="50" height="22" rx="4"/><rect class="car-glass" x="38" y="3" width="8" height="16" rx="2"/></g>
+<g class="tree" transform="translate(1380 820)"><circle r="14" class="tree-canopy"/><circle r="6.3" cx="-3.5" cy="-3.5" class="tree-light"/></g>
+<g class="tree" transform="translate(1420 880)"><circle r="12" class="tree-canopy"/><circle r="5.4" cx="-3" cy="-3" class="tree-light"/></g>
+<g class="tree" transform="translate(1370 900)"><circle r="10" class="tree-canopy"/><circle r="4.5" cx="-2.5" cy="-2.5" class="tree-light"/></g>
+<circle class="lamp" cx="1360" cy="790" r="5"/>
+<circle class="lamp" cx="1440" cy="790" r="5"/>
+<g class="plot-label" transform="translate(1403 501)"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g>
+</g>
+<g class="traffic">
+<g class="car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="22s" begin="0s" repeatCount="indefinite" rotate="auto" path="M-20 470 H1620"/></g>
+<g class="car car-b"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="22s" begin="-9s" repeatCount="indefinite" rotate="auto" path="M-20 470 H1620"/></g>
+<g class="car car-c"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="19s" begin="-4s" repeatCount="indefinite" rotate="auto" path="M1620 490 H-20"/></g>
+<g class="car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="19s" begin="-13s" repeatCount="indefinite" rotate="auto" path="M1620 490 H-20"/></g>
+<g class="car car-b"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="17s" begin="-2s" repeatCount="indefinite" rotate="auto" path="M792 -20 V1020"/></g>
+<g class="car car-c"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="15s" begin="-7s" repeatCount="indefinite" rotate="auto" path="M808 1020 V-20"/></g>
+<g class="car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="18s" begin="-11s" repeatCount="indefinite" rotate="auto" path="M1292 -20 V1020"/></g>
+<g class="car van-car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="16s" begin="-3s" repeatCount="indefinite" rotate="auto" path="M1308 1020 V-20"/></g>
+<g class="car van-car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="16s" begin="-11s" repeatCount="indefinite" rotate="auto" path="M1308 1020 V-20"/></g>
+</g>
+<circle class="lamp" cx="30" cy="452" r="5"/>
+<circle class="lamp" cx="30" cy="508" r="5"/>
+<circle class="lamp" cx="126" cy="452" r="5"/>
+<circle class="lamp" cx="126" cy="508" r="5"/>
+<circle class="lamp" cx="222" cy="452" r="5"/>
+<circle class="lamp" cx="222" cy="508" r="5"/>
+<circle class="lamp" cx="318" cy="452" r="5"/>
+<circle class="lamp" cx="318" cy="508" r="5"/>
+<circle class="lamp" cx="414" cy="452" r="5"/>
+<circle class="lamp" cx="414" cy="508" r="5"/>
+<circle class="lamp" cx="510" cy="452" r="5"/>
+<circle class="lamp" cx="510" cy="508" r="5"/>
+<circle class="lamp" cx="606" cy="452" r="5"/>
+<circle class="lamp" cx="606" cy="508" r="5"/>
+<circle class="lamp" cx="702" cy="452" r="5"/>
+<circle class="lamp" cx="702" cy="508" r="5"/>
+<circle class="lamp" cx="894" cy="452" r="5"/>
+<circle class="lamp" cx="894" cy="508" r="5"/>
+<circle class="lamp" cx="990" cy="452" r="5"/>
+<circle class="lamp" cx="990" cy="508" r="5"/>
+<circle class="lamp" cx="1086" cy="452" r="5"/>
+<circle class="lamp" cx="1086" cy="508" r="5"/>
+<circle class="lamp" cx="1182" cy="452" r="5"/>
+<circle class="lamp" cx="1182" cy="508" r="5"/>
+<circle class="lamp" cx="1374" cy="452" r="5"/>
+<circle class="lamp" cx="1374" cy="508" r="5"/>
+<circle class="lamp" cx="1470" cy="452" r="5"/>
+<circle class="lamp" cx="1470" cy="508" r="5"/>
+<circle class="lamp" cx="1566" cy="452" r="5"/>
+<circle class="lamp" cx="1566" cy="508" r="5"/>
+<g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
+<g class="conns" aria-hidden="true"></g>
+<rect class="tint" width="1600" height="1000"/>
+</svg>
+    <div class="plot-card" id="plot-card" role="region" aria-live="polite" aria-label="Selected business" hidden>
+      <button type="button" class="card-close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+      <p class="card-time"><span class="card-hour"></span> <span class="card-moment"></span></p>
+      <h2 class="card-name"></h2>
+      <p class="card-operator"></p>
+      <p class="card-text"></p>
+      <p class="card-stat"></p>
+      <div class="card-links">
+        <span class="card-links-label">Works with</span>
+        <div class="card-chips"></div>
+      </div>
+      <a class="card-visit" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+
+  <div class="title-block">
+    <div class="tb-sheet">
+      <h1 id="hero-title"><span data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
+      <p class="tb-lede" data-i18n="hero.lede">Seven businesses. One connected community. Tap any plot to see who it works with.</p>
+    </div>
+    <form class="legend-search" id="hero-search" aria-labelledby="hero-search-title">
+      <h2 class="legend-title" id="hero-search-title" data-i18n="hero.search">Find your plot</h2>
+      <div class="seg" role="radiogroup" aria-label="I want to">
+        <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
+        <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
+      </div>
+      <label class="field">
+        <span class="field-label">Community</span>
+        <select name="community">
+          <option value="">Any community</option>
+          <option value="zayed">Zayed City</option>
+          <option value="saadiyat">Saadiyat Island</option>
+          <option value="bateen">Al Bateen Marina</option>
+          <option value="jvc">Jumeirah Village Circle</option>
+          <option value="mangrove">Eastern Mangrove Corniche</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Home</span>
+        <select name="type">
+          <option value="">Any type</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Townhouse">Townhouse</option>
+          <option value="Villa">Villa</option>
+          <option value="Penthouse">Penthouse</option>
+        </select>
+      </label>
+      <button class="btn btn-red btn-block" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
+    </form>
+  </div>
+
+  <div class="day-clock" id="day-clock">
+    <button type="button" class="clock-play" aria-pressed="true" aria-label="Pause the day"><svg class="ic ic-pause"><use href="#i-pause"/></svg><svg class="ic ic-play"><use href="#i-play"/></svg></button>
+    <div class="clock-track" role="tablist" aria-label="A day in Bloom World">
+      <!-- filled by app.js from the business data -->
+    </div>
+  </div>
+  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span></p>
+</section>
+
+<!-- ================================================================ FIND A HOME -->
+<section class="find" id="find" aria-labelledby="find-title">
+  <div class="wrap">
+    <div class="find-head">
+      <h2 id="find-title" class="display" data-i18n="find.title">Find a place to call home.</h2>
+      <p class="find-intro" id="find-intro">Looking to own? Search apartments, townhouses and villas across Bloom's five communities.</p>
+    </div>
+
+    <form class="search" id="search" novalidate>
+      <fieldset class="mode">
+        <legend class="sr">I want to</legend>
+        <label class="mode-opt"><input type="radio" name="mode" value="buy" checked><span class="mode-face"><strong data-i18n="mode.buy">Buy</strong><small>Own an apartment, townhouse or villa</small></span></label>
+        <label class="mode-opt"><input type="radio" name="mode" value="rent"><span class="mode-face"><strong data-i18n="mode.rent">Rent</strong><small>Lease an apartment, townhouse or villa</small></span></label>
+      </fieldset>
+      <div class="search-fields">
+        <label class="field">
+          <span class="field-label">Community</span>
+          <select name="community" id="f-community">
+            <option value="">Any community</option>
+            <option value="zayed">Zayed City, Abu Dhabi</option>
+            <option value="saadiyat">Saadiyat Island, Abu Dhabi</option>
+            <option value="bateen">Al Bateen Marina, Abu Dhabi</option>
+            <option value="jvc">Jumeirah Village Circle, Dubai</option>
+            <option value="mangrove">Eastern Mangrove Corniche, Abu Dhabi</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Property type</span>
+          <select name="type" id="f-type">
+            <option value="">Any type</option>
+            <option>Apartment</option><option>Townhouse</option><option>Villa</option><option>Penthouse</option><option>Hotel apartment</option>
+          </select>
+        </label>
+        <fieldset class="field beds">
+          <legend class="field-label">Bedrooms</legend>
+          <div class="chips">
+            <label><input type="radio" name="beds" value="" checked><span>Any</span></label>
+            <label><input type="radio" name="beds" value="Studio"><span>Studio</span></label>
+            <label><input type="radio" name="beds" value="1"><span>1</span></label>
+            <label><input type="radio" name="beds" value="2"><span>2</span></label>
+            <label><input type="radio" name="beds" value="3"><span>3</span></label>
+            <label><input type="radio" name="beds" value="4+"><span>4+</span></label>
+          </div>
+        </fieldset>
+        <label class="field">
+          <span class="field-label" id="budget-label">Budget</span>
+          <select name="budget" id="f-budget">
+            <option value="">Any budget</option>
+            <option>Up to AED 1.5M</option><option>AED 1.5M to 3M</option><option>AED 3M to 5M</option><option>AED 5M and above</option>
+          </select>
+        </label>
+        <button class="btn btn-red search-go" type="submit"><svg class="ic"><use href="#i-search"/></svg><span id="search-go-label">Search homes to buy</span></button>
+      </div>
+      <div class="try">
+        <span class="try-label">Try</span>
+        <button type="button" class="try-chip" data-try='{"mode":"buy","type":"Villa","community":"zayed"}'>Villas to buy in Zayed City</button>
+        <button type="button" class="try-chip" data-try='{"mode":"rent","type":"Apartment","community":"jvc"}'>Apartments to rent in JVC</button>
+        <button type="button" class="try-chip" data-try='{"mode":"rent","type":"Townhouse","community":"mangrove"}'>Townhouses to rent by the mangroves</button>
+      </div>
+      <div class="result" id="search-result" role="status" aria-live="polite" hidden>
+        <svg class="ic"><use href="#i-check"/></svg>
+        <div>
+          <p class="result-q"></p>
+          <p class="result-note">Live listings are not connected to this prototype. On the finished site this opens the matching homes.</p>
+        </div>
+      </div>
+    </form>
+
+    <div class="parcels-head">
+      <h3 class="h3">Featured developments</h3>
+      <p class="muted-note">Placeholder selection</p>
+    </div>
+    <ol class="parcels">
+      <li class="parcel">
+        <a class="parcel-hit" href="#find" data-prefill='{"community":"zayed","mode":"buy"}'>
+          <span class="parcel-media"><img src="assets/img/community-zayed-city.webp" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" width="1400" height="933"></span>
+          <span class="parcel-tag">Plot A · Zayed City</span>
+          <strong class="parcel-name">Bloom Living</strong>
+          <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
+        </a>
+      </li>
+      <li class="parcel">
+        <a class="parcel-hit" href="#find" data-prefill='{"community":"mangrove","mode":"buy"}'>
+          <span class="parcel-media"><img src="assets/img/dev-bloom-gardens.webp" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" width="560" height="700"></span>
+          <span class="parcel-tag">Plot B · Eastern Mangrove Corniche</span>
+          <strong class="parcel-name">Bloom Gardens</strong>
+          <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
+        </a>
+      </li>
+      <li class="parcel">
+        <a class="parcel-hit" href="#find" data-prefill='{"community":"saadiyat","mode":"buy"}'>
+          <span class="parcel-media"><img src="assets/img/community-saadiyat.webp" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" width="1400" height="933"></span>
+          <span class="parcel-tag">Plot C · Saadiyat Island</span>
+          <strong class="parcel-name">Soho Square</strong>
+          <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
+        </a>
+      </li>
+      <li class="parcel parcel-reserved">
+        <button type="button" class="parcel-hit" data-enquire="Buying">
+          <span class="parcel-empty" aria-hidden="true"><span class="stamp-reserved">Reserved</span></span>
+          <span class="parcel-tag">Plot D · Next launch</span>
+          <strong class="parcel-name">Launch details to come from Bloom.</strong>
+          <span class="parcel-cta">Get launch updates <svg class="ic"><use href="#i-arrow"/></svg></span>
+        </button>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================================================================ COMMUNITIES -->
+<section class="communities" id="communities" aria-labelledby="communities-title">
+  <div class="wrap">
+    <div class="comm-head">
+      <h2 id="communities-title" class="display" data-i18n="comm.title">Five communities, one coastline.</h2>
+      <p>From the mangroves of Abu Dhabi to the heart of Dubai, each with its own character. Tap a pin, or swipe through.</p>
+    </div>
+    <div class="comm-grid">
+      <div class="coast-col">
+      <div class="coast" id="coast">
+        <svg class="coast-svg" viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs><pattern id="sea-lines" width="40" height="14" patternUnits="userSpaceOnUse"><path d="M0 7 q10 -6 20 0 t20 0" class="sea-wave"/></pattern></defs>
+<rect width="1000" height="640" class="sea"/>
+<rect width="1000" height="640" fill="url(#sea-lines)" class="sea-texture"/>
+<path class="land" d="M1000 0 L1000 640 L0 640 L0 560 C 60 540 120 520 170 530 C 210 520 230 500 260 505 C 330 470 380 440 420 430 C 500 400 560 360 620 330 C 690 290 760 240 820 190 C 860 160 900 110 940 70 C 960 45 980 20 1000 0 Z"/>
+<path class="island" d="M200 470 C 220 440 270 430 320 432 C 360 434 384 448 378 470 C 372 492 340 504 300 506 C 250 508 210 498 200 470 Z"/>
+<path class="island" d="M270 392 C 290 374 340 372 368 380 C 392 388 390 404 368 410 C 336 418 292 416 276 410 C 262 404 262 398 270 392 Z"/>
+<path class="island" d="M640 230 C 660 214 700 214 712 224 C 722 234 708 246 684 248 C 660 250 640 244 640 230 Z"/>
+<path class="mangrove" d="M362 452 C 380 446 396 456 392 470 C 388 482 372 486 362 478 Z"/>
+<path class="route" d="M330 470 C 420 470 470 452 540 400 C 620 340 700 300 780 240 C 820 210 846 196 870 186"/>
+<g class="route-car"><rect x="-10" y="-5" width="20" height="10" rx="3"/><animateMotion dur="14s" repeatCount="indefinite" rotate="auto" path="M330 470 C 420 470 470 452 540 400 C 620 340 700 300 780 240 C 820 210 846 196 870 186"/></g>
+<g class="dhow"><path d="M-16 0 H16 L10 7 H-10 Z"/><path d="M0 0 V-22 L14 -4 Z" class="sail"/><animateMotion dur="40s" repeatCount="indefinite" path="M120 300 C 260 260 420 240 560 160 C 640 120 700 80 760 40"/></g>
+<g class="dhow"><path d="M-12 0 H12 L8 5 H-8 Z"/><path d="M0 0 V-16 L10 -3 Z" class="sail"/><animateMotion dur="52s" begin="-20s" repeatCount="indefinite" path="M560 160 C 420 240 260 260 60 360"/></g>
+<text class="city" x="905" y="128">Dubai</text>
+<text class="city" x="150" y="560">Abu Dhabi</text>
+<text class="sea-name" x="230" y="200">Arabian Gulf</text>
+<g class="north" transform="translate(950 590)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
+<g class="scale" transform="translate(40 610)"><path d="M0 0 H120 M0 -6 V6 M60 -4 V4 M120 -6 V6"/><text x="130" y="5">Not to scale</text></g>
+</svg>
+        <div class="pins" role="tablist" aria-label="Communities">
+          <button type="button" role="tab" class="pin" data-c="0" style="--x:44%;--y:87%" aria-selected="true"><span class="pin-head">1</span><span class="pin-name">Zayed City</span></button>
+          <button type="button" role="tab" class="pin" data-c="1" style="--x:32%;--y:61%" aria-selected="false"><span class="pin-head">2</span><span class="pin-name">Saadiyat Island</span></button>
+          <button type="button" role="tab" class="pin pin-left" data-c="2" style="--x:22.5%;--y:75%" aria-selected="false"><span class="pin-head">3</span><span class="pin-name">Al Bateen Marina</span></button>
+          <button type="button" role="tab" class="pin pin-end" data-c="3" style="--x:85%;--y:32%" aria-selected="false"><span class="pin-head">4</span><span class="pin-name">Jumeirah Village Circle</span></button>
+          <button type="button" role="tab" class="pin" data-c="4" style="--x:38.5%;--y:73%" aria-selected="false"><span class="pin-head">5</span><span class="pin-name">Eastern Mangrove Corniche</span></button>
+        </div>
+      </div>
+      <ol class="comm-legend" aria-label="Community legend">
+        <li><button type="button"><b>1</b>Zayed City</button></li>
+        <li><button type="button"><b>2</b>Saadiyat Island</button></li>
+        <li><button type="button"><b>3</b>Al Bateen Marina</button></li>
+        <li><button type="button"><b>4</b>Jumeirah Village Circle</button></li>
+        <li><button type="button"><b>5</b>Eastern Mangrove Corniche</button></li>
+      </ol>
+      </div>
+      <article class="comm-panel" id="comm-panel" role="tabpanel" aria-live="polite">
+        <div class="comm-media"><img id="comm-img" src="assets/img/community-zayed-city.webp" alt="" width="1400" height="933"></div>
+        <div class="comm-body">
+          <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
+          <h3 class="comm-name" id="comm-name">Zayed City</h3>
+          <p class="comm-line" id="comm-line">A new community living experience, and home to Bloom Living.</p>
+          <p class="comm-devs"><span>Bloom developments</span> <strong id="comm-devs">Bloom Living</strong></p>
+          <div class="comm-actions">
+            <button type="button" class="btn btn-red" id="comm-find"><span>Find a home here</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+            <a class="btn btn-ghost" id="comm-explore" href="#communities">Explore community</a>
+          </div>
+          <div class="comm-step">
+            <button type="button" class="round-btn" id="comm-prev" aria-label="Previous community"><svg class="ic"><use href="#i-left"/></svg></button>
+            <span class="comm-count"><span id="comm-index">1</span> / 5</span>
+            <button type="button" class="round-btn" id="comm-next" aria-label="Next community"><svg class="ic"><use href="#i-right"/></svg></button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ LIFE AT BLOOM -->
+<section class="life" id="life" aria-labelledby="life-title">
+  <div class="wrap">
+    <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
+    <div class="strips" id="strips">
+      <article class="strip is-open">
+        <button type="button" class="strip-btn" aria-expanded="true">
+          <img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" loading="lazy" width="700" height="1060">
+          <span class="strip-title">Days spent outdoors</span>
+        </button>
+        <p class="strip-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</p>
+      </article>
+      <article class="strip">
+        <button type="button" class="strip-btn" aria-expanded="false">
+          <img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" loading="lazy" width="700" height="1061">
+          <span class="strip-title">Growing up together</span>
+        </button>
+        <p class="strip-text">Schools and shared spaces where neighbours turn into friends.</p>
+      </article>
+      <article class="strip">
+        <button type="button" class="strip-btn" aria-expanded="false">
+          <img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" loading="lazy" width="700" height="1060">
+          <span class="strip-title">Time well spent</span>
+        </button>
+        <p class="strip-text">Places to stay, dine and slow down, close to home.</p>
+      </article>
+      <article class="strip">
+        <button type="button" class="strip-btn" aria-expanded="false">
+          <img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" loading="lazy" width="700" height="1060">
+          <span class="strip-title">Looked after, every day</span>
+        </button>
+        <p class="strip-text">The teams who care for the buildings, streets and gardens behind the scenes.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ CUSTOMER SERVICES -->
+<section class="services" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    <div class="svc-head">
+      <h2 id="services-title" class="display" data-i18n="svc.title">Everything you need, closer to home.</h2>
+      <p>Already part of a Bloom community? Tell us who you are and we'll point you to your app.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="who" role="tablist" aria-label="I am">
+        <span class="who-label">I'm a</span>
+        <button type="button" role="tab" class="who-btn" aria-selected="true" aria-controls="svc-panel" data-app="0">Resident or homeowner</button>
+        <button type="button" role="tab" class="who-btn" aria-selected="false" aria-controls="svc-panel" data-app="1">Property owner</button>
+        <button type="button" role="tab" class="who-btn" aria-selected="false" aria-controls="svc-panel" data-app="2">Agency or broker</button>
+      </div>
+      <div class="app-panel" id="svc-panel" role="tabpanel" aria-live="polite">
+        <div class="app-media"><img id="app-img" src="assets/img/app-community.webp" alt="Two phones showing the Bloom Community App" width="1000" height="486"></div>
+        <div class="app-body">
+          <h3 class="app-name" id="app-name">Bloom Community App</h3>
+          <ul class="app-feats" id="app-feats"></ul>
+          <div class="stores">
+            <a class="store" href="#services" aria-label="Download on the App Store (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Download on the</small>App Store</span></a>
+            <a class="store" href="#services" aria-label="Get it on Google Play (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Get it on</small>Google Play</span></a>
+          </div>
+        </div>
+      </div>
+      <aside class="talk">
+        <h3 class="h3">Prefer to talk?</h3>
+        <a class="talk-num" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
+        <p class="talk-alt">+971 2 696 9500 outside the UAE</p>
+        <div class="talk-links">
+          <button type="button" class="btn btn-paper" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
+          <a class="link-u" href="#services" data-construction>Construction updates</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ AWARDS & NEWS -->
+<section class="awards" id="awards" aria-labelledby="awards-title">
+  <div class="wrap">
+    <div class="awards-head">
+      <h2 id="awards-title" class="display" data-i18n="awards.title">Recognised for the way we build communities.</h2>
+      <p>Stamped by the industry, year after year. <a class="link-u" href="https://bloomholding.com/media-centre" target="_blank" rel="noopener">All awards on bloomholding.com<svg class="ic ic-sm"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a></p>
+    </div>
+    <ul class="stamps" id="stamps">
+      <li class="stamp s-1"><span class="stamp-year">2026</span><strong>Four awards for Bloom Living</strong><span class="stamp-org">Arabian Property Awards</span></li>
+      <li class="stamp s-2"><span class="stamp-year">2026</span><strong>Two awards for Bloom Living, in London</strong><span class="stamp-org">International Property Awards</span></li>
+      <li class="stamp s-3"><span class="stamp-year">2026</span><strong>Bronze Sustainability Label</strong><span class="stamp-org">Abu Dhabi Chamber (ADCCI)</span></li>
+      <li class="stamp s-4"><span class="stamp-year">2025</span><strong>Residential Project of the Year, Bloom Living</strong><span class="stamp-org">Construction Week Awards Middle East</span></li>
+      <li class="stamp s-5"><span class="stamp-year">2025</span><strong>11th in the Top 100 Real Estate Developers in the GCC</strong><span class="stamp-org">Construction Week</span></li>
+    </ul>
+    <div class="news">
+      <div class="news-head">
+        <h3 class="h3">Latest announcements</h3>
+        <a class="link-u" href="https://bloomholding.com/media-centre" target="_blank" rel="noopener">Media Centre<svg class="ic ic-sm"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a>
+      </div>
+      <ol class="news-list">
+        <li><a href="https://bloomholding.com/press-releases/bloom-holding-wins-four-prestigious-awards-apa26" target="_blank" rel="noopener"><time datetime="2026-10-27">27 Oct 2026</time><span class="news-t">Bloom Holding Wins Four Prestigious Awards at the Arabian Property Awards 2026 for Bloom Living</span><svg class="ic"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a></li>
+        <li><a href="https://bloomholding.com/press-releases/minor-hotels-and-bloom-holding-announce-anantara-retreat-rabat" target="_blank" rel="noopener"><time datetime="2026-10-12">12 Oct 2026</time><span class="news-t">Minor Hotels and Bloom Holding Announce Anantara Retreat Rabat, Marking Morocco Debut</span><svg class="ic"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a></li>
+        <li><a href="https://bloomholding.com/press-releases/bloom-holding-launches-final-phase-of-bloom-living-alhambra" target="_blank" rel="noopener"><time datetime="2026-09-09">9 Sep 2026</time><span class="news-t">Bloom Holding Launches Alhambra, the Vibrant Heart and Final Release of Bloom Living</span><svg class="ic"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a></li>
+        <li class="news-next"><span class="news-t">The next announcement from Bloom will appear here.</span><button type="button" class="link-u" data-enquire="Something else">Get Bloom news</button></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ OUR STORY -->
+<section class="story" id="story" aria-labelledby="story-title">
+  <div class="wrap">
+    <h2 id="story-title" class="display" data-i18n="story.title">From one community to Bloom World.</h2>
+    <div class="story-grid">
+      <figure class="growth">
+        <svg class="growth-svg" viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<rect width="600" height="420" class="night-ground"/>
+<line x1="0" y1="0" x2="0" y2="420" class="night-grid"/>
+<line x1="30" y1="0" x2="30" y2="420" class="night-grid"/>
+<line x1="60" y1="0" x2="60" y2="420" class="night-grid"/>
+<line x1="90" y1="0" x2="90" y2="420" class="night-grid"/>
+<line x1="120" y1="0" x2="120" y2="420" class="night-grid"/>
+<line x1="150" y1="0" x2="150" y2="420" class="night-grid"/>
+<line x1="180" y1="0" x2="180" y2="420" class="night-grid"/>
+<line x1="210" y1="0" x2="210" y2="420" class="night-grid"/>
+<line x1="240" y1="0" x2="240" y2="420" class="night-grid"/>
+<line x1="270" y1="0" x2="270" y2="420" class="night-grid"/>
+<line x1="300" y1="0" x2="300" y2="420" class="night-grid"/>
+<line x1="330" y1="0" x2="330" y2="420" class="night-grid"/>
+<line x1="360" y1="0" x2="360" y2="420" class="night-grid"/>
+<line x1="390" y1="0" x2="390" y2="420" class="night-grid"/>
+<line x1="420" y1="0" x2="420" y2="420" class="night-grid"/>
+<line x1="450" y1="0" x2="450" y2="420" class="night-grid"/>
+<line x1="480" y1="0" x2="480" y2="420" class="night-grid"/>
+<line x1="510" y1="0" x2="510" y2="420" class="night-grid"/>
+<line x1="540" y1="0" x2="540" y2="420" class="night-grid"/>
+<line x1="570" y1="0" x2="570" y2="420" class="night-grid"/>
+<line x1="0" y1="0" x2="600" y2="0" class="night-grid"/>
+<line x1="0" y1="30" x2="600" y2="30" class="night-grid"/>
+<line x1="0" y1="60" x2="600" y2="60" class="night-grid"/>
+<line x1="0" y1="90" x2="600" y2="90" class="night-grid"/>
+<line x1="0" y1="120" x2="600" y2="120" class="night-grid"/>
+<line x1="0" y1="150" x2="600" y2="150" class="night-grid"/>
+<line x1="0" y1="180" x2="600" y2="180" class="night-grid"/>
+<line x1="0" y1="210" x2="600" y2="210" class="night-grid"/>
+<line x1="0" y1="240" x2="600" y2="240" class="night-grid"/>
+<line x1="0" y1="270" x2="600" y2="270" class="night-grid"/>
+<line x1="0" y1="300" x2="600" y2="300" class="night-grid"/>
+<line x1="0" y1="330" x2="600" y2="330" class="night-grid"/>
+<line x1="0" y1="360" x2="600" y2="360" class="night-grid"/>
+<line x1="0" y1="390" x2="600" y2="390" class="night-grid"/>
+<path class="night-road" d="M0 210 H600 M300 0 V420"/>
+<g class="grow" data-year="2008"><rect class="g-zone z-re" x="30" y="236" width="120" height="96" rx="10"/><rect class="g-villa" x="42" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="64" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="86" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="108" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="130" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="42" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="64" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="86" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="108" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="130" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="42" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="64" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="86" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="108" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="130" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="42" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="64" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="86" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="108" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="130" y="308" width="16" height="14" rx="2"/></g>
+<g class="grow" data-year="2011"><rect class="g-zone z-edu" x="30" y="30" width="110" height="150" rx="10"/><rect class="g-bld" x="44" y="44" width="82" height="34" rx="3"/><rect class="g-track" x="48" y="92" width="74" height="74" rx="37"/></g>
+<g class="grow" data-year="2012"><circle class="g-light" cx="50" cy="255" r="3"/><circle class="g-light" cx="72" cy="255" r="3"/><circle class="g-light" cx="94" cy="255" r="3"/><circle class="g-light" cx="116" cy="255" r="3"/><circle class="g-light" cx="138" cy="255" r="3"/><circle class="g-light" cx="50" cy="275" r="3"/><circle class="g-light" cx="72" cy="275" r="3"/><circle class="g-light" cx="94" cy="275" r="3"/><circle class="g-light" cx="116" cy="275" r="3"/><circle class="g-light" cx="138" cy="275" r="3"/><circle class="g-light" cx="50" cy="295" r="3"/><circle class="g-light" cx="72" cy="295" r="3"/><circle class="g-light" cx="94" cy="295" r="3"/><circle class="g-light" cx="116" cy="295" r="3"/><circle class="g-light" cx="138" cy="295" r="3"/><circle class="g-light" cx="50" cy="315" r="3"/><circle class="g-light" cx="72" cy="315" r="3"/><circle class="g-light" cx="94" cy="315" r="3"/><circle class="g-light" cx="116" cy="315" r="3"/><circle class="g-light" cx="138" cy="315" r="3"/></g>
+<g class="grow" data-year="2015"><path class="g-water" d="M330 20 H590 V170 H330 Z"/><rect class="g-island" x="380" y="50" width="160" height="90" rx="30"/><rect class="g-zone z-re" x="400" y="64" width="120" height="62" rx="8"/><rect class="g-bld" x="414" y="74" width="40" height="42" rx="3"/><rect class="g-bld" x="466" y="74" width="40" height="42" rx="3"/></g>
+<g class="grow" data-year="2017"><rect class="g-zone z-re" x="160" y="236" width="120" height="96" rx="10"/><rect class="g-villa" x="172" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="194" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="216" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="238" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="260" y="248" width="16" height="14" rx="2"/><rect class="g-villa" x="172" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="194" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="216" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="238" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="260" y="268" width="16" height="14" rx="2"/><rect class="g-villa" x="172" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="194" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="216" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="238" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="260" y="288" width="16" height="14" rx="2"/><rect class="g-villa" x="172" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="194" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="216" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="238" y="308" width="16" height="14" rx="2"/><rect class="g-villa" x="260" y="308" width="16" height="14" rx="2"/></g>
+<g class="grow" data-year="2018"><rect class="g-zone z-edu" x="160" y="30" width="120" height="150" rx="10"/><rect class="g-bld" x="174" y="44" width="92" height="34" rx="3"/><rect class="g-bld" x="174" y="96" width="92" height="34" rx="3"/></g>
+<g class="grow" data-year="2022"><rect class="g-zone z-land" x="320" y="236" width="260" height="164" rx="12"/><path class="g-water" d="M380 300 C 410 270 500 270 530 300 C 556 330 520 372 460 372 C 400 372 360 336 380 300 Z"/><rect class="g-villa" x="336" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="358" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="380" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="336" y="270" width="16" height="14" rx="2"/><rect class="g-villa" x="358" y="270" width="16" height="14" rx="2"/><rect class="g-villa" x="380" y="270" width="16" height="14" rx="2"/></g>
+<g class="grow" data-year="2024"><rect class="g-villa" x="494" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="516" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="538" y="250" width="16" height="14" rx="2"/><rect class="g-villa" x="494" y="270" width="16" height="14" rx="2"/><rect class="g-villa" x="516" y="270" width="16" height="14" rx="2"/><rect class="g-villa" x="538" y="270" width="16" height="14" rx="2"/><rect class="g-villa" x="336" y="344" width="16" height="14" rx="2"/><rect class="g-villa" x="358" y="344" width="16" height="14" rx="2"/><rect class="g-villa" x="336" y="364" width="16" height="14" rx="2"/><rect class="g-villa" x="358" y="364" width="16" height="14" rx="2"/><rect class="g-villa" x="520" y="344" width="16" height="14" rx="2"/><rect class="g-villa" x="542" y="344" width="16" height="14" rx="2"/><rect class="g-villa" x="520" y="364" width="16" height="14" rx="2"/><rect class="g-villa" x="542" y="364" width="16" height="14" rx="2"/></g>
+<g class="grow" data-year="2026"><rect class="g-zone z-hosp" x="30" y="350" width="250" height="56" rx="10"/><rect class="g-bld" x="44" y="362" width="120" height="32" rx="3"/><rect class="g-pool" x="176" y="364" width="90" height="28" rx="6"/></g>
+</svg>
+        <figcaption>Bloom World growing, year by year. Illustrative, not to scale.</figcaption>
+      </figure>
+      <div class="story-text" aria-live="polite">
+        <p class="story-year" id="story-year">2008</p>
+        <h3 class="story-t" id="story-t">Bloom Gardens begins</h3>
+        <p class="story-d" id="story-d">The first phase of Bloom Gardens launches: villas and townhouses inspired by the architecture of the Mediterranean.</p>
+        <div class="story-photo"><img id="story-img" src="assets/img/story-2008.webp" alt="" loading="lazy" width="700" height="933"></div>
+      </div>
+    </div>
+    <div class="scrub">
+      <button type="button" class="round-btn round-light" id="story-play" aria-label="Play the story"><svg class="ic ic-play"><use href="#i-play"/></svg><svg class="ic ic-pause"><use href="#i-pause"/></svg></button>
+      <div class="scrub-track">
+        <input type="range" id="story-range" min="0" max="8" step="1" value="0" aria-label="Year" aria-valuetext="2008, Bloom Gardens begins">
+        <ol class="scrub-years" aria-hidden="true">
+          <li>2008</li><li>2011</li><li>2012</li><li>2015</li><li>2017</li><li>2018</li><li>2022</li><li>2024</li><li>2026</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ ABOUT / NUMBERS -->
+<section class="about" id="about" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <div class="about-copy">
+      <h2 id="about-title" class="display" data-i18n="about.title">Thoughtfully building communities. Creating lasting value.</h2>
+      <p class="about-lede">Bloom is a master developer committed to curating premium communities with a high standard of living. Real estate, education, hospitality, retail, healthcare, facilities management and landscaping, working as one.</p>
+      <div class="about-actions">
+        <a class="btn btn-ink" href="https://bloomholding.com/who-we-are" target="_blank" rel="noopener">About Bloom<svg class="ic"><use href="#i-out"/></svg><span class="sr"> (opens in a new tab)</span></a>
+        <a class="link-u" href="#top">Back to the plan</a>
+      </div>
+    </div>
+    <div class="schedule">
+      <table>
+        <caption>Area schedule: Bloom in numbers</caption>
+        <thead><tr><th scope="col">Business</th><th scope="col">Figure</th><th scope="col">What it counts</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><i class="sw z-re"></i>Real Estate</th><td class="num" data-count="6500" data-suffix="+">6,500+</td><td>residential units delivered</td></tr>
+          <tr><th scope="row"><i class="sw z-re"></i>Real Estate</th><td class="num" data-count="25000" data-suffix="+">25,000+</td><td>units in the pipeline</td></tr>
+          <tr><th scope="row"><i class="sw z-re"></i>Leasing</th><td class="num" data-count="1000" data-suffix="+">1,000+</td><td>units in the leasing portfolio</td></tr>
+          <tr><th scope="row"><i class="sw z-edu"></i>Education</th><td class="num" data-count="15">15</td><td>schools, serving more than 20,000 students</td></tr>
+          <tr><th scope="row"><i class="sw z-hosp"></i>Hospitality</th><td class="num" data-count="851">851</td><td>hotel rooms and serviced apartments</td></tr>
+          <tr><th scope="row"><i class="sw z-fm"></i>Facilities</th><td class="num" data-count="8500" data-suffix="+">8,500+</td><td>units managed by Bloom Facilities Management</td></tr>
+        </tbody>
+      </table>
+      <p class="source">Figures as stated in Bloom's Website RFP.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================================================================ FOOTER: the drawing's title block -->
+<footer class="footer" aria-labelledby="footer-title">
+  <div class="wrap">
+    <div class="close-cta">
+      <h2 id="footer-title" class="display" data-i18n="footer.title">Let's find your place in Bloom World.</h2>
+      <div class="close-actions">
+        <button type="button" class="btn btn-red btn-lg" data-enquire data-i18n="cta.enquiry">Make an enquiry</button>
+        <a class="btn btn-line" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
+      </div>
+    </div>
+    <div class="tblock">
+      <div class="tb-cell tb-brand">
+        <img src="assets/img/bloom-wordmark-white.png" alt="Bloom" width="128" height="40">
+        <p>Curated Community Living</p>
+        <ul class="biz-list" aria-label="The businesses of Bloom World">
+          <li><i class="sw z-re"></i>Real Estate</li><li><i class="sw z-edu"></i>Education</li><li><i class="sw z-hosp"></i>Hospitality</li><li><i class="sw z-retail"></i>Retail</li><li><i class="sw z-health"></i>Healthcare</li><li><i class="sw z-fm"></i>Facilities Management</li><li><i class="sw z-land"></i>Landscaping</li>
+        </ul>
+      </div>
+      <nav class="tb-cell" aria-labelledby="fh-explore">
+        <h3 id="fh-explore" class="tb-h">Explore</h3>
+        <a href="#top">Bloom World</a><a href="#find">Find a Home</a><a href="#awards">Awards &amp; News</a><a href="#communities">Communities</a><a href="#story">Our Story</a><a href="#about">About Bloom</a>
+      </nav>
+      <nav class="tb-cell" aria-labelledby="fh-services">
+        <h3 id="fh-services" class="tb-h">Customer services</h3>
+        <a href="#services" data-app-link="0">Bloom Community App</a><a href="#services" data-app-link="1">Bloom Super App</a><a href="#services" data-app-link="2">Bloom Partners App</a><a href="#services" data-construction>Construction updates</a><button type="button" class="tb-link" data-enquire>Make an enquiry</button>
+      </nav>
+      <div class="tb-cell">
+        <h3 class="tb-h">Contact</h3>
+        <address>Bloom Headquarters<br>7th Floor, Bloom Central<br>Sheikh Rashid Bin Saeed St. Rd 18<br>Abu Dhabi, UAE</address>
+        <a href="tel:80025666">800 Bloom (25666)</a>
+        <a href="tel:+97126969500">+971 2 696 9500 outside UAE</a>
+        <a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a>
+      </div>
+      <div class="tb-cell tb-drawing">
+        <div class="tb-row"><span>Drawing</span><strong>BW-001 · Homepage</strong></div>
+        <div class="tb-row"><span>Status</span><strong>Design prototype for review</strong></div>
+        <div class="tb-row"><span>Note</span><strong>Not the live Bloom Holding website. Images are stand-ins until Bloom supplies photography.</strong></div>
+        <div class="tb-row tb-social">
+          <a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.youtube.com/c/BloomHoldings" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://twitter.com/BloomHolding" target="_blank" rel="noopener">X</a>
+        </div>
+        <svg class="tb-scale" viewBox="0 0 220 40" aria-hidden="true"><path d="M10 26H210M10 20v12M60 22v8M110 20v12M160 22v8M210 20v12"/><rect x="10" y="23" width="50" height="6"/><rect x="110" y="23" width="50" height="6"/><text x="10" y="14">0</text><text x="104" y="14">50</text><text x="198" y="14">100m</text></svg>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Bloom. All rights reserved.</span>
+      <a href="#top">Privacy Policy</a><a href="#top">Terms of use</a>
+      <a class="to-top" href="#top">Back to top<svg class="ic"><use href="#i-down"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ================================================================ ENQUIRY -->
+<dialog class="enquiry" id="enquiry" aria-labelledby="enquiry-title">
+  <form method="dialog" class="enq-close-form"><button class="card-close" aria-label="Close enquiry"><svg class="ic"><use href="#i-close"/></svg></button></form>
+  <form class="enq-form" id="enq-form" novalidate>
+    <h2 id="enquiry-title" class="enq-title">How can we help?</h2>
+    <fieldset class="enq-interest">
+      <legend class="field-label">I'm interested in</legend>
+      <div class="chips">
+        <label><input type="radio" name="interest" value="Buying" checked><span>Buying</span></label>
+        <label><input type="radio" name="interest" value="Renting"><span>Renting</span></label>
+        <label><input type="radio" name="interest" value="Resident support"><span>Resident support</span></label>
+        <label><input type="radio" name="interest" value="Partnering"><span>Partnering</span></label>
+        <label><input type="radio" name="interest" value="Something else"><span>Something else</span></label>
+      </div>
+    </fieldset>
+    <label class="field">
+      <span class="field-label">Full name</span>
+      <input name="name" autocomplete="name" required aria-describedby="err-name">
+      <span class="err" id="err-name">Please add your name.</span>
+    </label>
+    <label class="field">
+      <span class="field-label">Email address</span>
+      <input name="email" type="email" autocomplete="email" required aria-describedby="err-email">
+      <span class="err" id="err-email">Please add a valid email address, like name@example.com.</span>
+    </label>
+    <label class="field">
+      <span class="field-label">Phone number <em>(optional)</em></span>
+      <input name="phone" type="tel" autocomplete="tel">
+    </label>
+    <label class="field">
+      <span class="field-label">Message <em>(optional)</em></span>
+      <textarea name="message" rows="3"></textarea>
+    </label>
+    <button class="btn btn-red btn-block" type="submit"><span>Send enquiry</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+    <p class="enq-note">Prototype form: nothing is sent or stored.</p>
+  </form>
+  <div class="enq-done" id="enq-done" hidden tabindex="-1">
+    <svg class="enq-stamp" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="44"/><path d="M38 61l15 15 30-32"/></svg>
+    <h2 class="enq-title">Thank you<span id="enq-name"></span>.</h2>
+    <p>This is a prototype, so nothing was sent. On the finished site, Bloom's team would follow up on your enquiry.</p>
+    <button type="button" class="btn btn-ink" id="enq-back">Back to the homepage</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // ?still freezes the ambient scene (traffic, boats, autoplay) for screenshots and motion capture
+  const still = new URLSearchParams(location.search).has("still");
+  if (still) window.addEventListener("load", () => document.querySelectorAll("svg").forEach((v) => v.pauseAnimations && v.pauseAnimations()));
+  const SVGNS = "http://www.w3.org/2000/svg";
+
+  /* ------------------------------------------------------------ data */
+  const BIZ = {
+    re: { name: "Real Estate", op: "Bloom Properties", hour: "07:00", moment: "Morning, at home", zc: "var(--re)",
+      text: "The day starts in a Bloom home: an apartment, townhouse or villa in a community planned around everyday life.",
+      stat: "6,500+ residential units delivered", links: ["fm", "land", "edu"], url: "https://bloomholding.com/what-we-do/properties", visit: "Visit Bloom Properties",
+      at: [675, 725] },
+    edu: { name: "Education", op: "Bloom Education", hour: "07:45", moment: "The school run", zc: "var(--edu)",
+      text: "Schools anchor Bloom's communities, from Brighton College to Bloom World Academy, so learning stays close to home.",
+      stat: "15 schools serving more than 20,000 students", links: ["re", "land", "health"], url: "https://www.bloomeducation.com/", visit: "Visit Bloom Education",
+      at: [675, 260] },
+    fm: { name: "Facilities Management", op: "Bloom Facilities Management", hour: "10:00", moment: "Everything working", zc: "var(--fm)",
+      text: "Behind the scenes, community and facilities management keeps homes, buildings and shared spaces running day to day.",
+      stat: "8,500+ units managed", links: ["re", "hosp", "retail"], url: "https://bfm.ae/", visit: "Visit Bloom Facilities Management",
+      at: [1456, 725] },
+    retail: { name: "Retail", op: "Part of Bloom Holding", hour: "13:00", moment: "Lunch around the corner", zc: "var(--retail)",
+      text: "Shops, cafés and everyday conveniences bring a community's streets to life, a short walk from home.",
+      stat: "", links: ["re", "hosp", "fm"], url: "", visit: "Retail website to come",
+      at: [1050, 158] },
+    health: { name: "Healthcare", op: "Part of Bloom Holding", hour: "16:00", moment: "Care, close by", zc: "var(--health)",
+      text: "Care and wellbeing, close to where people live, as part of the same connected community.",
+      stat: "", links: ["re", "edu", "land"], url: "", visit: "Healthcare website to come",
+      at: [928, 368] },
+    land: { name: "Landscaping", op: "Bloom Landscape", hour: "18:30", moment: "An evening walk", zc: "var(--land)",
+      text: "The parks, streets and gardens between the buildings are designed, built and cared for by Bloom Landscape.",
+      stat: "", links: ["re", "edu", "hosp"], url: "https://bloomholding.com/what-we-do/bloomscape", visit: "Visit Bloom Landscape",
+      at: [1050, 725] },
+    hosp: { name: "Hospitality", op: "Bloom Hospitality", hour: "20:00", moment: "Guests in town", zc: "var(--hosp)",
+      text: "When family visits, there is a place for them too: Marriott Downtown, The Abu Dhabi EDITION and Bloom Arjaan by Rotana.",
+      stat: "851 hotel rooms and serviced apartments", links: ["retail", "land", "fm"], url: "https://bloomholding.com/what-we-do/hospitality", visit: "Visit Bloom Hospitality",
+      at: [1155, 368] },
+  };
+  const DAY = ["re", "edu", "fm", "retail", "health", "land", "hosp", "all"];
+  // sun angle per step: shadow offset and a multiply tint for the light of that hour
+  const LIGHT = {
+    re: { dx: -8, dy: 5, tint: "#fff3e4", night: 0 },
+    edu: { dx: -7, dy: 6, tint: "#fff8ee", night: 0 },
+    fm: { dx: -4, dy: 7, tint: "transparent", night: 0 },
+    retail: { dx: 0, dy: 6, tint: "transparent", night: 0 },
+    health: { dx: 5, dy: 6, tint: "#fff6ea", night: 0 },
+    land: { dx: 9, dy: 5, tint: "#ffd8bf", night: 0 },
+    hosp: { dx: 0, dy: 0, tint: "#7f8cc9", night: 1 },
+    all: { dx: 0, dy: 0, tint: "#6f7dbf", night: 1 },
+  };
+
+  const COMMUNITIES = [
+    { name: "Zayed City", where: "Khalifa City C, Abu Dhabi", line: "A new community living experience, and home to Bloom Living.", devs: "Bloom Living", img: "assets/img/community-zayed-city.webp", alt: "Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)", key: "zayed" },
+    { name: "Saadiyat Island", where: "Abu Dhabi", line: "Where nature meets culture, minutes from downtown.", devs: "Park View, Soho Square", img: "assets/img/community-saadiyat.webp", alt: "Apartment buildings behind a landscaped podium on Saadiyat Island", key: "saadiyat" },
+    { name: "Al Bateen Marina", where: "Abu Dhabi", line: "A waterfront escape from the city buzz.", devs: "Bloom Marina", img: "assets/img/community-al-bateen.webp", alt: "Aerial view of the marina and waterfront buildings at Al Bateen", key: "bateen" },
+    { name: "Jumeirah Village Circle", where: "Dubai", line: "A dynamic lifestyle in the heart of JVC.", devs: "Bloom Towers, Bloom Heights", img: "assets/img/community-jvc.webp", alt: "Two residential towers seen through palm fronds in Jumeirah Village Circle", key: "jvc" },
+    { name: "Eastern Mangrove Corniche", where: "Abu Dhabi", line: "A coveted address beside the mangroves.", devs: "Bloom Gardens, Faya, Aldhay", img: "assets/img/community-eastern-mangrove.webp", alt: "Mediterranean-style villa with arches and bougainvillea at Bloom Gardens", key: "mangrove" },
+  ];
+  const COMMUNITY_NAME = Object.fromEntries(COMMUNITIES.map((c) => [c.key, c.name]));
+
+  const APPS = [
+    { name: "Bloom Community App", img: "assets/img/app-community.webp", alt: "Two phones showing the Bloom Community App",
+      feats: ["Service requests", "Amenity bookings", "Moving in and out", "Tenancy renewals", "Service charges"] },
+    { name: "Bloom Super App", img: "assets/img/app-super.webp", alt: "Laptop and phone showing the Bloom Super App",
+      feats: ["Payments", "Property documents", "Construction updates for the homes you own"] },
+    { name: "Bloom Partners App", img: "assets/img/app-partners.webp", alt: "Laptop and phone showing the Bloom Partners App",
+      feats: ["Onboarding", "Live inventory", "Leads", "Commission tracking"] },
+  ];
+
+  const STORY = [
+    { y: 2008, t: "Bloom Gardens begins", d: "The first phase of Bloom Gardens launches: villas and townhouses inspired by the architecture of the Mediterranean.", img: "assets/img/story-2008.webp", alt: "Clipped hedges and flowering shrubs in front of villas" },
+    { y: 2011, t: "Brighton College Al Ain", d: "Bloom Education launches Brighton College Al Ain, the second sister school of Brighton College UK in the UAE.", img: "assets/img/story-2011.webp", alt: "School pupils walking along a palm-shaded lane" },
+    { y: 2012, t: "First homes handed over", d: "Phase One of Bloom Gardens is handed over to its owners.", img: "assets/img/story-2012.webp", alt: "Garden path between white villas and hedges" },
+    { y: 2015, t: "Soho Square on Saadiyat", d: "Soho Square launches on Saadiyat Island: 304 homes, from studios to three-bedroom apartments, green houses and a sky villa.", img: "assets/img/community-saadiyat.webp", alt: "Apartment buildings behind a landscaped podium on Saadiyat Island" },
+    { y: 2017, t: "Bloom Gardens grows", d: "Phase Three of Bloom Gardens is completed and handed over: 147 villas and townhouses.", img: "assets/img/dev-bloom-gardens.webp", alt: "Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" },
+    { y: 2018, t: "Schools open in Dubai", d: "Brighton College Dubai opens its doors, and Bloom Education opens Dwight School's first campus in the Middle East.", img: "assets/img/biz-education.webp", alt: "Two pupils in school gowns under a colonnade" },
+    { y: 2022, t: "Bloom Living launches", d: "Cordoba, the first phase of Bloom Living in Zayed City, launches in March and sells out within four hours.", img: "assets/img/community-zayed-city.webp", alt: "Waterfront plaza at Bloom Living, Zayed City (architectural render)" },
+    { y: 2024, t: "Three more phases", d: "Seville, Olvera and Almeria, the fifth to seventh phases of Bloom Living, launch with lakeside villas and townhouses.", img: "assets/img/story-2024.webp", alt: "Villas along a landscaped lake at Bloom Living (architectural render)" },
+    { y: 2026, t: "Bloom Arjaan by Rotana opens", d: "The 217-key residential-style hotel opens on Saadiyat Island, adding to Bloom's hospitality portfolio.", img: "assets/img/biz-hospitality.webp", alt: "Hotel bedroom with a view over a marina" },
+  ];
+
+  /* ------------------------------------------------------------ toast */
+  const toastEl = $("#toast");
+  let toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.hidden = false;
+    toastEl.classList.remove("is-in"); void toastEl.offsetWidth; toastEl.classList.add("is-in");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4200);
+  }
+
+  /* ------------------------------------------------------------ header + mobile menu */
+  const menuBtn = $(".menu-btn");
+  const menu = $("#mobile-menu");
+  menuBtn.addEventListener("click", () => {
+    const open = menuBtn.getAttribute("aria-expanded") !== "true";
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menuBtn.querySelector("use").setAttribute("href", open ? "#i-close" : "#i-menu");
+    menu.hidden = !open;
+  });
+  menu.addEventListener("click", (e) => { if (e.target.closest("a")) menuBtn.click(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { menuBtn.click(); menuBtn.focus(); } });
+
+  const navLinks = $$(".nav a");
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      navLinks.forEach((a) => a.setAttribute("aria-current", String(a.getAttribute("href") === "#" + en.target.id)));
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  ["find", "communities", "services", "story", "about"].forEach((id) => spy.observe(document.getElementById(id)));
+
+  /* ------------------------------------------------------------ the living masterplan */
+  const plan = $("#plan");
+  const svg = $(".plan-svg");
+  const conns = $(".conns", svg);
+  const tint = $(".tint", svg);
+  const sun = $("#sun-shadow");
+  const card = $("#plot-card");
+  const plots = Object.fromEntries($$(".plot", svg).map((g) => [g.dataset.biz, g]));
+  const track = $(".clock-track");
+  const playBtn = $(".clock-play");
+  let step = 0;
+  let playing = !reduced.matches && !still;
+  let inView = true;
+  let timer;
+
+  DAY.forEach((key, i) => {
+    const b = BIZ[key];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "hour";
+    btn.setAttribute("role", "tab");
+    btn.dataset.biz = key;
+    btn.dataset.i = i;
+    btn.setAttribute("aria-selected", "false");
+    btn.innerHTML = key === "all"
+      ? "<b>24/7</b><small>Together</small>"
+      : `<b>${b.hour}</b><small>${b.name === "Facilities Management" ? "Facilities" : b.name}</small>`;
+    btn.addEventListener("click", () => { stop(); go(i, true); });
+    track.appendChild(btn);
+  });
+  const hours = $$(".hour", track);
+  track.addEventListener("keydown", (e) => {
+    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
+    e.preventDefault();
+    const rtl = document.dir === "rtl";
+    let i = step;
+    if (e.key === "Home") i = 0; else if (e.key === "End") i = DAY.length - 1;
+    else i = (step + ((e.key === "ArrowRight") !== rtl ? 1 : -1) + DAY.length) % DAY.length;
+    stop(); go(i, true); hours[i].focus();
+  });
+
+  function setLight(key) {
+    const L = LIGHT[key];
+    if (sun) { sun.setAttribute("dx", L.dx); sun.setAttribute("dy", L.dy); sun.setAttribute("flood-opacity", L.night ? "0.12" : "0.32"); }
+    tint.style.fill = L.tint;
+    plan.dataset.night = L.night;
+  }
+
+  function curve(a, b) {
+    const [x1, y1] = a, [x2, y2] = b;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const dx = x2 - x1, dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 1;
+    const k = Math.min(140, len * 0.28);
+    return `M${x1} ${y1} Q ${mx - (dy / len) * k} ${my + (dx / len) * k} ${x2} ${y2}`;
+  }
+
+  function clearLinks() {
+    // old service lines fade out on their own layer while the new ones draw in
+    const old = [...conns.children];
+    if (!old.length) return;
+    if (reduced.matches) { old.forEach((n) => n.remove()); return; }
+    const g = document.createElementNS(SVGNS, "g");
+    g.setAttribute("class", "conns-old");
+    conns.parentNode.insertBefore(g, conns);
+    g.append(...old);
+    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" }).finished.then(() => g.remove(), () => g.remove());
+  }
+
+  function drawLinks(key) {
+    clearLinks();
+    if (!key) return;
+    const keys = key === "all" ? Object.keys(BIZ) : [key];
+    const pairs = new Set();
+    keys.forEach((k) => BIZ[k].links.forEach((l) => {
+      const id = [k, l].sort().join("-");
+      if (key === "all" && pairs.has(id)) return;
+      pairs.add(id);
+      const d = curve(BIZ[k].at, BIZ[l].at);
+      const p = document.createElementNS(SVGNS, "path");
+      p.setAttribute("d", d); p.setAttribute("class", "conn");
+      const f = document.createElementNS(SVGNS, "path");
+      f.setAttribute("d", d); f.setAttribute("class", "conn-flow");
+      conns.append(p, f);
+      if (!reduced.matches) {
+        const L = p.getTotalLength();
+        p.animate([{ strokeDasharray: `${L} ${L}`, strokeDashoffset: L }, { strokeDasharray: `${L} ${L}`, strokeDashoffset: 0 }],
+          { duration: 700, easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: pairs.size * 70 });
+        f.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 600 + pairs.size * 70, fill: "backwards" });
+      }
+      const [ex, ey] = BIZ[l].at;
+      const end = document.createElementNS(SVGNS, "circle");
+      end.setAttribute("cx", ex); end.setAttribute("cy", ey); end.setAttribute("r", 9); end.setAttribute("class", "conn-end");
+      const ring = document.createElementNS(SVGNS, "circle");
+      ring.setAttribute("cx", ex); ring.setAttribute("cy", ey); ring.setAttribute("r", 12); ring.setAttribute("class", "conn-ring");
+      conns.append(ring, end);
+      if (!reduced.matches) end.animate([{ transform: "scale(0)" }, { transform: "scale(1)" }], { duration: 420, delay: 520 + pairs.size * 70, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "backwards" });
+    }));
+    if (key !== "all") {
+      const [sx, sy] = BIZ[key].at;
+      const start = document.createElementNS(SVGNS, "circle");
+      start.setAttribute("cx", sx); start.setAttribute("cy", sy); start.setAttribute("r", 13); start.setAttribute("class", "conn-end");
+      conns.append(start);
+      if (!reduced.matches) start.animate([{ transform: "scale(0)" }, { transform: "scale(1)" }], { duration: 380, easing: "cubic-bezier(0.16, 1, 0.3, 1)" });
+    }
+  }
+
+  function fillCard(key) {
+    const isAll = key === "all";
+    const b = isAll ? null : BIZ[key];
+    $(".card-hour", card).textContent = isAll ? "24/7" : b.hour;
+    $(".card-moment", card).textContent = isAll ? "All seven, together" : b.moment;
+    $(".card-name", card).textContent = isAll ? "This is Bloom World" : b.name;
+    card.style.setProperty("--zc", isAll ? "var(--red)" : b.zc);
+    $(".card-operator", card).textContent = isAll ? "Seven businesses, one idea: Curated Community Living" : b.op;
+    $(".card-text", card).textContent = isAll
+      ? "Each business makes the others better: homes, schools, hotels, shops, care, facilities and landscapes, working as one."
+      : b.text;
+    $(".card-stat", card).textContent = isAll ? "" : b.stat;
+    const chips = $(".card-chips", card);
+    chips.replaceChildren();
+    (isAll ? DAY.slice(0, 7) : b.links).forEach((l) => {
+      const c = document.createElement("button");
+      c.type = "button"; c.className = "chip-biz";
+      c.style.setProperty("--zc", BIZ[l].zc);
+      c.innerHTML = `<i></i>${BIZ[l].name}`;
+      c.addEventListener("click", () => { stop(); go(DAY.indexOf(l), true); });
+      chips.appendChild(c);
+    });
+    $(".card-links-label", card).textContent = isAll ? "Tap any business" : "Works with";
+    const visit = $(".card-visit", card);
+    if (isAll) {
+      visit.textContent = "";
+      visit.removeAttribute("href");
+    } else if (b.url) {
+      visit.href = b.url; visit.classList.remove("is-soon");
+      visit.innerHTML = `${b.visit}<svg class="ic ic-sm"><use href="#i-out"/></svg><span class="sr"> (opens their website in a new tab)</span>`;
+    } else {
+      visit.removeAttribute("href"); visit.classList.add("is-soon"); visit.textContent = b.visit;
+    }
+  }
+
+  const mobile = window.matchMedia("(max-width: 1100px)");
+  function fitPlan() {
+    svg.setAttribute("viewBox", mobile.matches ? "540 30 1060 940" : "0 0 1600 1000");
+    svg.setAttribute("preserveAspectRatio", mobile.matches ? "xMidYMid meet" : "xMidYMid slice");
+  }
+  fitPlan();
+  mobile.addEventListener("change", fitPlan);
+  function placeCard(key) {
+    if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
+    const pr = plan.getBoundingClientRect();
+    const target = key === "all" ? null : plots[key].querySelector(".zone").getBoundingClientRect();
+    const cw = card.offsetWidth, ch = card.offsetHeight;
+    const tb = $(".title-block").getBoundingClientRect();
+    const minX = (document.dir === "rtl" ? 16 : tb.right - pr.left + 20);
+    const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
+    const top0 = 100, bottom0 = pr.height - 100 - ch;
+    let x, y;
+    if (!target) { x = maxX; y = top0 + 30; }
+    else {
+      const right = target.right - pr.left + 18;
+      const left = target.left - pr.left - cw - 18;
+      x = right <= maxX ? right : left >= minX ? left : maxX;
+      y = target.top - pr.top + target.height / 2 - ch / 2;
+    }
+    x = Math.max(minX, Math.min(maxX, x));
+    y = Math.max(top0, Math.min(bottom0, y));
+    card.style.left = x + "px"; card.style.top = y + "px";
+    if (target) {
+      card.style.setProperty("--ox", (target.left + target.width / 2 - pr.left - x) + "px");
+      card.style.setProperty("--oy", (target.top + target.height / 2 - pr.top - y) + "px");
+    }
+  }
+
+  function go(i, user) {
+    step = i;
+    const key = DAY[i];
+    plan.classList.add("has-active");
+    Object.entries(plots).forEach(([k, g]) => {
+      const on = key === "all" || k === key;
+      g.classList.toggle("is-on", on);
+      g.classList.toggle("is-linked", key !== "all" && BIZ[key].links.includes(k));
+      g.setAttribute("aria-pressed", String(k === key));
+    });
+    hours.forEach((h, j) => { h.setAttribute("aria-selected", String(j === i)); h.tabIndex = j === i ? 0 : -1; });
+    if (user || inView) hours[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduced.matches ? "auto" : "smooth" });
+    setLight(key);
+    drawLinks(key);
+    fillCard(key);
+    card.hidden = false;
+    placeCard(key);
+    card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in");
+    if (user) $(".plan-hint").textContent = "";
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (playing && inView && !document.hidden) timer = setTimeout(() => { go((step + 1) % DAY.length, false); schedule(); }, step === DAY.length - 1 ? 6500 : 4600);
+  }
+  function setPlaying(p) {
+    playing = p;
+    playBtn.setAttribute("aria-pressed", String(p));
+    playBtn.setAttribute("aria-label", p ? "Pause the day" : "Play the day");
+    schedule();
+  }
+  function stop() { setPlaying(false); }
+  playBtn.addEventListener("click", () => setPlaying(!playing));
+
+  Object.entries(plots).forEach(([k, g]) => {
+    const act = () => { stop(); if (plan.classList.contains("has-active") && step === DAY.indexOf(k) && !card.hidden) { closeCard(); return; } go(DAY.indexOf(k), true); };
+    g.addEventListener("click", act);
+    g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+  });
+  function closeCard() {
+    card.hidden = true;
+    plan.classList.remove("has-active");
+    Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
+    clearLinks();
+  }
+  $(".card-close", card).addEventListener("click", () => { stop(); closeCard(); });
+
+  new IntersectionObserver(([en]) => {
+    inView = en.isIntersecting;
+    if (inView && !still) { svg.unpauseAnimations(); } else { svg.pauseAnimations(); }
+    if (reduced.matches) svg.pauseAnimations();
+    schedule();
+  }, { threshold: 0.25 }).observe($(".hero"));
+  document.addEventListener("visibilitychange", schedule);
+  window.addEventListener("resize", () => { if (!card.hidden) placeCard(DAY[step]); });
+  if (reduced.matches) { svg.pauseAnimations(); playBtn.setAttribute("aria-pressed", "false"); playBtn.setAttribute("aria-label", "Play the day"); }
+
+  // the first state: the morning, so the plan explains itself before anyone touches it
+  go(0, false);
+  setPlaying(playing);
+
+  /* ------------------------------------------------------------ search */
+  const form = $("#search");
+  const intro = $("#find-intro");
+  const budget = $("#f-budget");
+  const goLabel = $("#search-go-label");
+  const result = $("#search-result");
+  const BUDGET = {
+    buy: { label: "Budget", opts: ["Up to AED 1.5M", "AED 1.5M to 3M", "AED 3M to 5M", "AED 5M and above"] },
+    rent: { label: "Yearly rent", opts: ["Up to AED 80K", "AED 80K to 150K", "AED 150K to 250K", "AED 250K and above"] },
+  };
+  function setMode(mode) {
+    form.elements.mode.value = mode;
+    const b = BUDGET[mode];
+    $("#budget-label").textContent = b.label;
+    budget.replaceChildren(new Option("Any budget", ""), ...b.opts.map((o) => new Option(o, o)));
+    goLabel.textContent = mode === "buy" ? "Search homes to buy" : "Search homes to rent";
+    intro.textContent = mode === "buy"
+      ? "Looking to own? Search apartments, townhouses and villas across Bloom's five communities."
+      : "Looking to lease? Search apartments, townhouses and villas across Bloom's five communities.";
+  }
+  $$('input[name="mode"]', form).forEach((r) => r.addEventListener("change", () => setMode(r.value)));
+  function describe() {
+    const f = form.elements;
+    const mode = f.mode.value;
+    const type = f.type.value ? (f.type.value === "Hotel apartment" ? "Hotel apartments" : f.type.value + "s") : "Homes";
+    const where = f.community.value ? ` in ${COMMUNITY_NAME[f.community.value]}` : " across all five communities";
+    const beds = f.beds.value ? (f.beds.value === "Studio" ? ", studio" : `, ${f.beds.value} bedroom${f.beds.value === "1" ? "" : "s"}`) : "";
+    const money = f.budget.value ? `, ${f.budget.value}${mode === "rent" ? " a year" : ""}` : "";
+    return `${type} to ${mode}${where}${beds}${money}`;
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    $(".result-q", result).textContent = describe();
+    result.hidden = false;
+    result.classList.remove("is-in"); void result.offsetWidth; result.classList.add("is-in");
+  });
+  function prefill(o, submit) {
+    if (o.mode) { setMode(o.mode); }
+    if ("community" in o) form.elements.community.value = o.community || "";
+    if ("type" in o) form.elements.type.value = o.type || "";
+    document.getElementById("find").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth" });
+    if (submit) form.requestSubmit();
+  }
+  $$(".try-chip").forEach((b) => b.addEventListener("click", () => {
+    const o = JSON.parse(b.dataset.try);
+    setMode(o.mode); form.elements.community.value = o.community; form.elements.type.value = o.type;
+    form.requestSubmit();
+  }));
+  $$("[data-prefill]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); prefill(JSON.parse(a.dataset.prefill), true); }));
+  $("#hero-search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.currentTarget.elements;
+    prefill({ mode: f.hmode.value, community: f.community.value, type: f.type.value }, true);
+  });
+
+  /* ------------------------------------------------------------ communities */
+  const pins = $$(".pin");
+  const panel = $("#comm-panel");
+  let cIndex = 0;
+  pins.forEach((p, i) => { p.querySelector(".pin-head").textContent = String(i + 1); });
+  function showCommunity(i, focus) {
+    cIndex = (i + COMMUNITIES.length) % COMMUNITIES.length;
+    const c = COMMUNITIES[cIndex];
+    pins.forEach((p, j) => { p.setAttribute("aria-selected", String(j === cIndex)); p.tabIndex = j === cIndex ? 0 : -1; });
+    $$(".comm-legend button").forEach((b, j) => b.setAttribute("aria-current", String(j === cIndex)));
+    $("#comm-img").src = c.img; $("#comm-img").alt = c.alt;
+    $("#comm-name").textContent = c.name;
+    $("#comm-where").textContent = c.where;
+    $("#comm-line").textContent = c.line;
+    $("#comm-devs").textContent = c.devs;
+    $("#comm-index").textContent = cIndex + 1;
+    panel.setAttribute("aria-label", c.name);
+    panel.classList.remove("is-swap"); void panel.offsetWidth; panel.classList.add("is-swap");
+    if (focus) pins[cIndex].focus();
+  }
+  pins.forEach((p, i) => p.addEventListener("click", () => showCommunity(i)));
+  $$(".comm-legend button").forEach((b, i) => b.addEventListener("click", () => showCommunity(i)));
+  $(".pins").addEventListener("keydown", (e) => {
+    const rtl = document.dir === "rtl";
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); showCommunity(cIndex + (rtl && e.key === "ArrowRight" ? -1 : 1), true); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); showCommunity(cIndex + (rtl && e.key === "ArrowLeft" ? 1 : -1), true); }
+  });
+  showCommunity(0);
+  panel.classList.remove("is-swap");
+  $("#comm-prev").addEventListener("click", () => showCommunity(cIndex - 1));
+  $("#comm-next").addEventListener("click", () => showCommunity(cIndex + 1));
+  $("#comm-find").addEventListener("click", () => prefill({ community: COMMUNITIES[cIndex].key }, true));
+  $("#comm-explore").addEventListener("click", (e) => { e.preventDefault(); toast(`The ${COMMUNITIES[cIndex].name} community page is not part of this prototype.`); });
+  let sx = null;
+  panel.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+  panel.addEventListener("pointerup", (e) => {
+    if (sx === null) return;
+    const d = e.clientX - sx; sx = null;
+    if (Math.abs(d) > 50) showCommunity(cIndex + (d < 0 ? 1 : -1) * (document.dir === "rtl" ? -1 : 1));
+  });
+  // pins drop onto the map the first time it is seen
+  new IntersectionObserver(([en], obs) => {
+    if (!en.isIntersecting) return;
+    obs.disconnect();
+    if (reduced.matches) return;
+    pins.forEach((p, i) => { p.style.setProperty("animation-delay", "0s"); p.querySelector(".pin-head").style.animationDelay = i * 110 + "ms"; p.classList.add("is-drop"); });
+  }, { threshold: 0.4 }).observe($("#coast"));
+  const coastSvg = $(".coast-svg");
+  new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
+
+  /* ------------------------------------------------------------ life strips */
+  const strips = $$(".strip");
+  strips.forEach((s) => {
+    const b = $(".strip-btn", s);
+    const open = () => strips.forEach((o) => { const on = o === s; o.classList.toggle("is-open", on); $(".strip-btn", o).setAttribute("aria-expanded", String(on)); });
+    b.addEventListener("click", open);
+    b.addEventListener("focus", open);
+    s.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !mobile.matches) open(); });
+  });
+
+  /* ------------------------------------------------------------ services */
+  const whoBtns = $$(".who-btn");
+  const appPanel = $("#svc-panel");
+  function showApp(i) {
+    const a = APPS[i];
+    whoBtns.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+    $("#app-img").src = a.img; $("#app-img").alt = a.alt;
+    $("#app-name").textContent = a.name;
+    $("#app-feats").replaceChildren(...a.feats.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
+    appPanel.setAttribute("aria-label", a.name);
+    appPanel.classList.remove("is-swap"); void appPanel.offsetWidth; appPanel.classList.add("is-swap");
+  }
+  whoBtns.forEach((b, i) => b.addEventListener("click", () => showApp(i)));
+  $(".who").addEventListener("keydown", (e) => {
+    const i = whoBtns.indexOf(document.activeElement);
+    if (i < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
+    const n = (i + ((e.key === "ArrowRight") !== (document.dir === "rtl") ? 1 : -1) + 3) % 3;
+    showApp(n); whoBtns[n].focus();
+  });
+  $$("[data-app-link]").forEach((a) => a.addEventListener("click", () => showApp(Number(a.dataset.appLink))));
+  $$(".store").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("Store links are not connected in this prototype."); }));
+  $$("[data-construction]").forEach((a) => a.addEventListener("click", () => { showApp(1); toast("Construction updates live in the Bloom Super App, for the homes you own."); }));
+  showApp(0);
+
+  /* ------------------------------------------------------------ awards: stamps press in */
+  const stampList = $("#stamps");
+  new IntersectionObserver(([en], obs) => {
+    if (!en.isIntersecting) return;
+    obs.disconnect();
+    if (reduced.matches) return;
+    $$(".stamp", stampList).forEach((s, i) => {
+      const rot = getComputedStyle(s).getPropertyValue("--rot").trim() || "0deg";
+      s.animate([
+        { transform: `rotate(${rot}) scale(1.6)`, opacity: 0 },
+        { transform: `rotate(${rot}) scale(0.96)`, opacity: 1, offset: 0.7 },
+        { transform: `rotate(${rot}) scale(1)`, opacity: 1 },
+      ], { duration: 520, delay: i * 140, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "backwards" });
+    });
+  }, { threshold: 0.35 }).observe(stampList);
+
+  /* ------------------------------------------------------------ story: the plan grows */
+  const range = $("#story-range");
+  const grows = $$(".grow");
+  const years = $$(".scrub-years li");
+  const storyText = $(".story-text");
+  const scrub = $(".scrub");
+  const storyPlay = $("#story-play");
+  let storyTimer;
+  function showYear(i) {
+    const s = STORY[i];
+    range.value = i;
+    range.style.setProperty("--p", (i / (STORY.length - 1)) * 100 + "%");
+    range.setAttribute("aria-valuetext", `${s.y}, ${s.t}`);
+    $("#story-year").textContent = s.y;
+    $("#story-t").textContent = s.t;
+    $("#story-d").textContent = s.d;
+    $("#story-img").src = s.img; $("#story-img").alt = s.alt;
+    grows.forEach((g) => { const y = Number(g.dataset.year); g.classList.toggle("is-built", y <= s.y); g.classList.toggle("is-new", y === s.y); });
+    years.forEach((li, j) => li.classList.toggle("is-on", j === i));
+    storyText.classList.remove("is-swap"); void storyText.offsetWidth; storyText.classList.add("is-swap");
+  }
+  range.addEventListener("input", () => { stopStory(); showYear(Number(range.value)); });
+  function stopStory() { clearInterval(storyTimer); storyTimer = null; scrub.classList.remove("is-playing"); storyPlay.setAttribute("aria-label", "Play the story"); }
+  storyPlay.addEventListener("click", () => {
+    if (storyTimer) { stopStory(); return; }
+    let i = Number(range.value);
+    if (i >= STORY.length - 1) { i = 0; showYear(0); }
+    scrub.classList.add("is-playing");
+    storyPlay.setAttribute("aria-label", "Pause the story");
+    storyTimer = setInterval(() => { i += 1; showYear(i); if (i >= STORY.length - 1) stopStory(); }, 2200);
+  });
+  showYear(0);
+
+  /* ------------------------------------------------------------ about: area schedule counts up */
+  const nums = $$(".num[data-count]");
+  const fmt = new Intl.NumberFormat("en");
+  new IntersectionObserver(([en], obs) => {
+    if (!en.isIntersecting) return;
+    obs.disconnect();
+    if (reduced.matches) return;
+    nums.forEach((n, i) => {
+      const end = Number(n.dataset.count), suf = n.dataset.suffix || "";
+      const t0 = performance.now() + i * 90, dur = 1300;
+      const tick = (t) => {
+        const p = Math.min(1, Math.max(0, (t - t0) / dur));
+        n.textContent = fmt.format(Math.round(end * (1 - Math.pow(1 - p, 4)))) + suf;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.4 }).observe($(".schedule"));
+
+  /* ------------------------------------------------------------ enquiry dialog */
+  const dlg = $("#enquiry");
+  const enq = $("#enq-form");
+  const done = $("#enq-done");
+  let opener = null;
+  $$("[data-enquire]").forEach((b) => b.addEventListener("click", () => {
+    opener = b;
+    enq.hidden = false; done.hidden = true; enq.reset();
+    $$(".field", enq).forEach((f) => f.classList.remove("is-bad"));
+    const want = b.dataset.enquire;
+    if (want) { const r = enq.querySelector(`input[name="interest"][value="${want}"]`); if (r) r.checked = true; }
+    dlg.showModal();
+  }));
+  dlg.addEventListener("close", () => { if (opener) opener.focus(); });
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+  function check(input) {
+    const ok = input.name === "email" ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim()) : input.value.trim().length > 1;
+    input.closest(".field").classList.toggle("is-bad", !ok);
+    input.setAttribute("aria-invalid", String(!ok));
+    return ok;
+  }
+  $$("input[required]", enq).forEach((i) => i.addEventListener("blur", () => { if (i.value) check(i); }));
+  $$("input[required]", enq).forEach((i) => i.addEventListener("input", () => { if (i.closest(".field").classList.contains("is-bad")) check(i); }));
+  enq.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const bad = $$("input[required]", enq).filter((i) => !check(i));
+    if (bad.length) { bad[0].focus(); return; }
+    const first = enq.elements.name.value.trim().split(/\s+/)[0];
+    $("#enq-name").textContent = first ? `, ${first}` : "";
+    enq.hidden = true; done.hidden = false;
+    done.classList.remove("is-in"); void done.offsetWidth; done.classList.add("is-in");
+    done.focus();
+  });
+  $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
+
+  /* ------------------------------------------------------------ language: EN / AR preview */
+  const AR = {
+    "nav.find": "ابحث عن منزل", "nav.communities": "المجتمعات", "nav.services": "خدمة العملاء", "nav.story": "قصتنا", "nav.about": "عن بلوم",
+    "cta.enquire": "استفسر", "cta.enquiry": "أرسل استفساراً", "cta.search": "ابحث عن المنازل",
+    "hero.title1": "مرحباً بكم في", "hero.title2": "عالم بلوم", "hero.lede": "سبعة أعمال. مجتمع واحد متصل. اضغط على أي قطعة لترى كيف تتصل.",
+    "hero.search": "ابحث عن قطعتك", "mode.buy": "شراء", "mode.rent": "إيجار",
+    "find.title": "ابحث عن مكان تسميه منزلك.", "comm.title": "خمسة مجتمعات، ساحل واحد.", "life.title": "أكثر من مكان. أسلوب حياة.",
+    "svc.title": "كل ما تحتاجه، أقرب إلى منزلك.", "awards.title": "تقدير لطريقتنا في بناء المجتمعات.", "story.title": "من مجتمع واحد إلى عالم بلوم.",
+    "about.title": "نبني المجتمعات بعناية. ونصنع قيمة دائمة.", "footer.title": "لنجد مكانك في عالم بلوم.",
+  };
+  const EN = {};
+  $$("[data-i18n]").forEach((el) => { EN[el.dataset.i18n] ??= el.textContent; });
+  function setLang(lang) {
+    const ar = lang === "ar";
+    document.documentElement.lang = ar ? "ar" : "en";
+    document.documentElement.dir = ar ? "rtl" : "ltr";
+    $$("[data-i18n]").forEach((el) => { const k = el.dataset.i18n; el.textContent = ar ? (AR[k] || EN[k]) : EN[k]; });
+    $$(".lang-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    if (!card.hidden) placeCard(DAY[step]);
+    if (ar) toast("معاينة عربية: العناوين والتنقل فقط. Arabic preview covers headings and navigation only.");
+  }
+  $$(".lang-btn").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+})();
+
+</script>
+</body>
+</html>
