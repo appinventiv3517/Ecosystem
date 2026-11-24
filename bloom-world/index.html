@@ -535,41 +535,96 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 }
 @media (prefers-reduced-motion: reduce) { ::view-transition-group(*) { animation-duration: 0.01ms; } }
 
-/* ---------------------------------------------------------------- services (facilities slate zone) */
-.services { background: var(--fm); color: #fff; padding-block: var(--section-y); }
-.svc-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
+/* ---------------------------------------------------------------- services (facilities slate zone): your app, on a phone */
+.services { background: var(--fm); color: #fff; padding-block: var(--section-y); overflow: hidden; }
+.svc-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(32px, 5vw, 56px); }
 .svc-head p { font-size: 1.1rem; color: #e6eaf3; max-width: 40ch; }
-.svc-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
-.who { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.who-label { font: 800 1.5rem var(--display); letter-spacing: -0.02em; margin-inline-end: 6px; }
-.who-btn { border: 2px solid rgb(255 255 255 / 0.55); background: transparent; color: #fff; border-radius: 999px; min-height: 48px; padding: 0 20px; font-weight: 600; font-size: 1rem; transition: background-color 0.25s, color 0.25s, border-color 0.25s; }
-.who-btn:hover { border-color: #fff; }
-.who-btn[aria-selected="true"] { background: #fff; color: var(--ink); border-color: #fff; }
-.app-panel { background: var(--paper); color: var(--ink); border-radius: 26px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden; min-height: 340px; }
-.app-media { background: #f4f1e9; display: grid; place-items: center; padding: 0; overflow: hidden; }
-.app-media img { width: 100%; height: 100%; object-fit: contain; }
-.app-panel.is-swap .app-media img { animation: app-in 0.55s var(--ease); }
-@keyframes app-in { from { opacity: 0; transform: translateY(26px) rotate(-2deg); } }
-.app-body { padding: 26px; display: grid; gap: 14px; align-content: start; }
-.app-name { font: 800 clamp(1.6rem, 2.3vw, 2.1rem)/1 var(--display); letter-spacing: -0.03em; }
-.app-feats { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.app-feats li { display: flex; gap: 10px; align-items: center; font-weight: 500; }
-.app-feats li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); flex: none; }
-.app-panel.is-swap .app-feats li { animation: swap-txt 0.45s var(--ease) backwards; }
-.app-panel.is-swap .app-feats li:nth-child(2) { animation-delay: 0.05s; }
-.app-panel.is-swap .app-feats li:nth-child(3) { animation-delay: 0.1s; }
-.app-panel.is-swap .app-feats li:nth-child(4) { animation-delay: 0.15s; }
-.app-panel.is-swap .app-feats li:nth-child(5) { animation-delay: 0.2s; }
-.stores { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
-.store { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--paper); border-radius: 14px; padding: 8px 16px 8px 12px; text-decoration: none; font-weight: 700; line-height: 1.1; transition: background-color 0.2s; }
-.store:hover { background: #000; }
+.svc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.svc-side { display: grid; gap: 18px; }
+.roles { display: grid; gap: 10px; }
+.role {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; grid-template-areas: "ic who arrow" "ic app arrow"; column-gap: 14px; row-gap: 2px; align-items: center;
+  text-align: start; padding: 14px 18px 14px 14px; border-radius: 20px; border: 2px solid rgb(255 255 255 / 0.32); background: rgb(255 255 255 / 0.04); color: #fff;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.4s var(--ease);
+}
+.role::after { content: "\2192"; grid-area: arrow; font-size: 1.2rem; opacity: 0; transform: translateX(-6px); transition: opacity 0.3s, transform 0.4s var(--ease); }
+.role:hover { border-color: #fff; background: rgb(255 255 255 / 0.1); }
+.role:hover::after { opacity: 0.8; transform: none; }
+.role-ic { grid-area: ic; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--rc); color: #fff; transform: rotate(-6deg); transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); box-shadow: 0 8px 16px -8px rgb(0 0 0 / 0.5); }
+.role-ic .ic { width: 26px; height: 26px; stroke-width: 2; }
+.role:hover .role-ic { transform: rotate(6deg) scale(1.06); }
+.role-who { grid-area: who; font: 800 1.15rem/1.2 var(--display); letter-spacing: -0.01em; }
+.role-app { grid-area: app; font-size: 0.88rem; opacity: 0.85; }
+.role[aria-selected="true"] { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.role[aria-selected="true"] .role-app { opacity: 1; color: var(--ink-soft); }
+.role[aria-selected="true"]::after { opacity: 1; transform: none; color: var(--red); }
+.role[aria-selected="true"] .role-ic { transform: rotate(0deg); }
+.stores { display: flex; flex-wrap: wrap; gap: 10px; }
+.store { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--paper); border-radius: 14px; padding: 8px 16px 8px 12px; text-decoration: none; font-weight: 700; line-height: 1.1; transition: background-color 0.2s, transform 0.3s var(--ease); }
+.store:hover { background: #000; transform: translateY(-2px); }
 .store small { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.85; }
 .store .ic { width: 26px; height: 26px; }
-.talk { background: color-mix(in srgb, var(--fm) 55%, var(--ink)); border-radius: 26px; padding: 26px; display: grid; gap: 10px; align-content: start; border: 2px solid rgb(255 255 255 / 0.25); }
-.talk-num { display: inline-flex; align-items: center; gap: 10px; font: 800 clamp(1.5rem, 2.2vw, 2rem)/1.1 var(--display); letter-spacing: -0.02em; text-decoration: none; }
+.talk { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; padding: 18px 20px; border-radius: 20px; background: color-mix(in srgb, var(--fm) 55%, var(--ink)); }
+.talk-h { font: 700 0.95rem var(--text); color: #dfe3ee; }
+.talk-num { display: inline-flex; align-items: center; gap: 10px; font: 800 clamp(1.3rem, 2vw, 1.7rem)/1.15 var(--display); letter-spacing: -0.02em; text-decoration: none; color: #fff; }
 .talk-num:hover { text-decoration: underline; }
-.talk-alt { color: #dfe3ee; font-size: 0.92rem; }
-.talk-links { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-top: 12px; }
+.talk-alt { color: #dfe3ee; font-size: 0.85rem; }
+.talk-links { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; }
+.talk .link-u { color: #fff; }
+
+/* the stage: a phone drawn in code, with the app's features floating around it as stickers */
+.svc-stage { position: relative; display: grid; place-items: center; min-height: 560px; }
+.stage-blob { position: absolute; width: min(460px, 90%); aspect-ratio: 1; border-radius: 46% 54% 52% 48% / 48% 44% 56% 52%; background: var(--ac, var(--red)); opacity: 0.9; transition: background-color 0.6s var(--ease); animation: blob 14s ease-in-out infinite alternate; }
+@keyframes blob { 0% { border-radius: 46% 54% 52% 48% / 48% 44% 56% 52%; rotate: 0deg; } 100% { border-radius: 56% 44% 44% 56% / 42% 58% 42% 58%; rotate: 25deg; } }
+.phone { position: relative; z-index: 2; width: 270px; height: 548px; border-radius: 46px; background: #121019; padding: 11px; box-shadow: 0 50px 80px -40px rgb(0 0 0 / 0.75), inset 0 0 0 2px #3a3545; transform: rotate(-4deg); animation: bob 6s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+.phone::before { content: ""; position: absolute; top: 20px; left: 50%; width: 84px; height: 24px; margin-left: -42px; border-radius: 14px; background: #121019; z-index: 3; }
+.phone-screen { position: relative; height: 100%; border-radius: 36px; overflow: hidden; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; }
+.ps-status { display: flex; justify-content: space-between; padding: 14px 22px 0; font-size: 0.68rem; font-weight: 700; }
+.ps-head { padding: 30px 18px 12px; display: flex; align-items: center; justify-content: space-between; }
+.ps-head img { width: 62px; }
+.ps-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--ac, var(--red)); display: grid; place-items: center; color: #fff; }
+.ps-avatar .ic { width: 16px; height: 16px; }
+.ps-hello { padding: 0 18px; font: 800 1.25rem/1.1 var(--display); letter-spacing: -0.02em; }
+.ps-sub { padding: 2px 18px 12px; font-size: 0.7rem; color: var(--ink-soft); }
+.ps-card { margin: 0 14px; padding: 14px; border-radius: 18px; background: var(--ac, var(--red)); color: #fff; display: grid; gap: 4px; }
+.ps-card small { font-size: 0.66rem; opacity: 0.9; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.ps-card strong { font: 800 1.15rem/1.15 var(--display); }
+.ps-card span { font-size: 0.7rem; opacity: 0.92; }
+.ps-progress { height: 6px; border-radius: 6px; background: rgb(255 255 255 / 0.3); overflow: hidden; margin-top: 6px; }
+.ps-progress i { display: block; height: 100%; width: var(--p, 0%); background: #fff; border-radius: 6px; transition: width 1.2s var(--ease) 0.3s; }
+.ps-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 14px; }
+.ps-tile { display: grid; gap: 6px; padding: 10px; border-radius: 14px; background: color-mix(in srgb, var(--ac, var(--red)) 10%, #fff); border: 1px solid color-mix(in srgb, var(--ac, var(--red)) 18%, transparent); font-size: 0.68rem; font-weight: 700; line-height: 1.2; }
+.ps-tile .ic { width: 18px; height: 18px; color: var(--ac, var(--red)); stroke-width: 2.1; }
+.ps-tabs { margin-top: auto; display: flex; justify-content: space-around; padding: 10px 10px 16px; border-top: 1px solid rgb(29 24 48 / 0.08); }
+.ps-tabs i { width: 22px; height: 4px; border-radius: 4px; background: rgb(29 24 48 / 0.18); }
+.ps-tabs i:first-child { background: var(--ac, var(--red)); }
+.phone-screen.is-swap > * { animation: screen-in 0.55s var(--ease) backwards; }
+.phone-screen.is-swap > :nth-child(3) { animation-delay: 0.04s; }
+.phone-screen.is-swap > :nth-child(4) { animation-delay: 0.08s; }
+.phone-screen.is-swap > :nth-child(5) { animation-delay: 0.12s; }
+.phone-screen.is-swap > :nth-child(6) { animation-delay: 0.16s; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(14px); } }
+.feat-stickers { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.feat-stickers li {
+  position: absolute; left: var(--fx); top: var(--fy); display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; border-radius: 999px;
+  background: var(--paper); color: var(--ink); font-weight: 700; font-size: 0.86rem; white-space: nowrap; box-shadow: 0 14px 24px -12px rgb(0 0 0 / 0.55);
+  transform: translate(-50%, -50%) rotate(var(--fr, 0deg)); animation: sticker-in 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) backwards; animation-delay: calc(var(--k) * 90ms + 150ms);
+}
+.feat-stickers li .ic { width: 16px; height: 16px; color: var(--ac, var(--red)); stroke-width: 2.2; }
+@keyframes sticker-in { from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--fr, 0deg)) scale(0.4); } }
+.stage-note { position: absolute; bottom: 0; font-size: 0.78rem; color: #f1f3f8; }
+@media (max-width: 1100px) {
+  .feat-stickers li { font-size: 0.78rem; }
+}
+@media (max-width: 860px) {
+  .svc-head, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .svc-stage { order: -1; min-height: 500px; }
+  .phone { width: 230px; height: 468px; border-radius: 40px; }
+  .stage-blob { width: min(360px, 88%); }
+  .feat-stickers { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .phone, .stage-blob { animation: none; } .feat-stickers li { animation: none; } }
 
 /* ---------------------------------------------------------------- awards (blueprint) */
 .awards { background: var(--blueprint); color: #fff; padding-block: var(--section-y); position: relative; overflow: hidden; }
@@ -765,11 +820,10 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
 }
 @media (max-width: 860px) {
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
-  .find-head, .comm-head, .svc-head, .awards-head, .close-cta { grid-template-columns: 1fr; }
+  .find-head, .comm-head, .awards-head, .close-cta { grid-template-columns: 1fr; }
   .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot-brand { grid-column: 1 / -1; }
-  .svc-grid, .story-grid, .about-grid { grid-template-columns: minmax(0, 1fr); }
-  .app-panel { grid-template-columns: 1fr; }
+  .story-grid, .about-grid { grid-template-columns: minmax(0, 1fr); }
   .stamps { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .news-list a, .news-next { grid-template-columns: 1fr auto; }
   .news-list time { grid-column: 1 / -1; }
@@ -993,6 +1047,19 @@ html.smooth { scroll-behavior: auto; }
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></symbol>
   <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.6v4.1c0 1.6 2.5 3.1 5.5 3.1s5.5-1.5 5.5-3.1v-4.1"/><path d="M21.5 9.5v5"/></symbol>
   <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.2 4.3a4.6 4.6 0 0 0 4.5 5.9l-9.4 9.4a2.2 2.2 0 0 1-3.1-3.1l9.4-9.4a4.6 4.6 0 0 1-1.4-2.8z"/><path d="M14.5 9.5l-1.4-1.4"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2.5 2.5M14 9l2 2"/></symbol>
+  <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M3 12l4-4 4 3 3-3 3 3 4-1"/><path d="M7 8 3 12l5 5 2-1 2 2 2-1 2 1 4-5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.5 5a4 4 0 0 0 4.7 4.7l-8.6 8.6a2 2 0 0 1-2.9-2.9l8.6-8.6A4 4 0 0 1 14.5 5z"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.6L4 8M4 13a8 8 0 0 0 14.3 4.6L20 16"/><path d="M4 4v4h4M20 20v-4h-4"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12.5" rx="2.5"/><path d="M3 10.5h18M7 15h4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-crane" viewBox="0 0 24 24"><path d="M6 21V4h2v17M8 6h12l-3 3M8 6 4 9"/><path d="M17 9v4"/><rect x="15" y="13" width="4" height="3"/><path d="M4 21h6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M15.5 5.5a3.2 3.2 0 0 1 0 6.2M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 16v-5M12 16V7M17 16v-8"/></symbol>
+  <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7"/><path d="M10 15.5c.6 1.2 2.6 2 5 2 2.8 0 5-1.1 5-2.5v-4c0-1.2-1.6-2.2-3.8-2.4"/></symbol>
   <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.5 5 20 4.5 19.5 14 14 19.5 5.5 19.5z"/><path d="M5 19l8.5-8.5"/></symbol>
 </svg>
 
@@ -1654,32 +1721,48 @@ html.smooth { scroll-behavior: auto; }
       <p>Already part of a Bloom community? Tell us who you are and we'll point you to your app.</p>
     </div>
     <div class="svc-grid">
-      <div class="who" role="tablist" aria-label="I am">
-        <span class="who-label">I'm a</span>
-        <button type="button" role="tab" class="who-btn" aria-selected="true" aria-controls="svc-panel" data-app="0">Resident or homeowner</button>
-        <button type="button" role="tab" class="who-btn" aria-selected="false" aria-controls="svc-panel" data-app="1">Property owner</button>
-        <button type="button" role="tab" class="who-btn" aria-selected="false" aria-controls="svc-panel" data-app="2">Agency or broker</button>
-      </div>
-      <div class="app-panel" id="svc-panel" role="tabpanel" aria-live="polite">
-        <div class="app-media"><img id="app-img" src="assets/img/app-community.webp" alt="Two phones showing the Bloom Community App" width="1000" height="486"></div>
-        <div class="app-body">
-          <h3 class="app-name" id="app-name">Bloom Community App</h3>
-          <ul class="app-feats" id="app-feats"></ul>
-          <div class="stores">
-            <a class="store" href="#services" aria-label="Download on the App Store (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Download on the</small>App Store</span></a>
-            <a class="store" href="#services" aria-label="Get it on Google Play (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Get it on</small>Google Play</span></a>
+      <div class="svc-side">
+        <div class="roles" role="tablist" aria-label="I am">
+          <button type="button" role="tab" class="role" aria-selected="true" aria-controls="svc-stage" data-app="0" style="--rc: var(--red)">
+            <span class="role-ic" aria-hidden="true"><svg class="ic"><use href="#i-home"/></svg></span>
+            <span class="role-who">I'm a resident or homeowner</span>
+            <span class="role-app">Bloom Community App</span>
+          </button>
+          <button type="button" role="tab" class="role" aria-selected="false" aria-controls="svc-stage" data-app="1" tabindex="-1" style="--rc: var(--re)">
+            <span class="role-ic" aria-hidden="true"><svg class="ic"><use href="#i-key"/></svg></span>
+            <span class="role-who">I'm a property owner</span>
+            <span class="role-app">Bloom Super App</span>
+          </button>
+          <button type="button" role="tab" class="role" aria-selected="false" aria-controls="svc-stage" data-app="2" tabindex="-1" style="--rc: var(--water)">
+            <span class="role-ic" aria-hidden="true"><svg class="ic"><use href="#i-handshake"/></svg></span>
+            <span class="role-who">I'm an agency or broker</span>
+            <span class="role-app">Bloom Partners App</span>
+          </button>
+        </div>
+        <div class="stores">
+          <a class="store" href="#services" aria-label="Download on the App Store (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Download on the</small>App Store</span></a>
+          <a class="store" href="#services" aria-label="Get it on Google Play (prototype link)"><svg class="ic"><use href="#i-phone-dev"/></svg><span><small>Get it on</small>Google Play</span></a>
+        </div>
+        <aside class="talk">
+          <div class="talk-copy">
+            <h3 class="talk-h">Prefer to talk?</h3>
+            <a class="talk-num" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
+            <p class="talk-alt">+971 2 696 9500 outside the UAE</p>
           </div>
-        </div>
+          <div class="talk-links">
+            <button type="button" class="btn btn-red" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
+            <a class="link-u" href="#services" data-construction>Construction updates</a>
+          </div>
+        </aside>
       </div>
-      <aside class="talk">
-        <h3 class="h3">Prefer to talk?</h3>
-        <a class="talk-num" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
-        <p class="talk-alt">+971 2 696 9500 outside the UAE</p>
-        <div class="talk-links">
-          <button type="button" class="btn btn-red" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
-          <a class="link-u" href="#services" data-construction>Construction updates</a>
+      <div class="svc-stage" id="svc-stage" role="tabpanel" aria-live="polite" aria-label="Bloom Community App">
+        <div class="stage-blob" aria-hidden="true"></div>
+        <ul class="feat-stickers" id="feat-stickers" aria-label="What you can do in this app"></ul>
+        <div class="phone" aria-hidden="true">
+          <div class="phone-screen" id="phone-screen"></div>
         </div>
-      </aside>
+        <p class="stage-note">Illustrative screen with sample data.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -2028,13 +2111,20 @@ html.smooth { scroll-behavior: auto; }
   ];
   const COMMUNITY_NAME = Object.fromEntries(COMMUNITIES.map((c) => [c.key, c.name]));
 
+  // sample screens for each app: demonstration data, labelled as such on the page
   const APPS = [
-    { name: "Bloom Community App", img: "assets/img/app-community.webp", alt: "Two phones showing the Bloom Community App",
-      feats: ["Service requests", "Amenity bookings", "Moving in and out", "Tenancy renewals", "Service charges"] },
-    { name: "Bloom Super App", img: "assets/img/app-super.webp", alt: "Laptop and phone showing the Bloom Super App",
-      feats: ["Payments", "Property documents", "Construction updates for the homes you own"] },
-    { name: "Bloom Partners App", img: "assets/img/app-partners.webp", alt: "Laptop and phone showing the Bloom Partners App",
-      feats: ["Onboarding", "Live inventory", "Leads", "Commission tracking"] },
+    { name: "Bloom Community App", ac: "var(--red)", icon: "i-home", hello: "Good morning", sub: "Your home in a Bloom community",
+      card: { k: "Service request", v: "AC check booked", s: "Technician visit tomorrow, 10:00", p: 0 },
+      tiles: [["i-tool", "Service requests"], ["i-calendar", "Amenity bookings"], ["i-box", "Moving in and out"], ["i-refresh", "Tenancy renewals"]],
+      feats: [["i-tool", "Service requests"], ["i-calendar", "Amenity bookings"], ["i-box", "Moving in and out"], ["i-refresh", "Tenancy renewals"], ["i-card", "Service charges"]] },
+    { name: "Bloom Super App", ac: "#b86f12", icon: "i-key", hello: "Your property", sub: "Everything about the homes you own",
+      card: { k: "Construction update", v: "Phase 2 progress", s: "Next site update this month", p: 68 },
+      tiles: [["i-card", "Payments"], ["i-doc", "Property documents"], ["i-crane", "Construction updates"], ["i-calendar", "Handover dates"]],
+      feats: [["i-card", "Payments"], ["i-doc", "Property documents"], ["i-crane", "Construction updates"]] },
+    { name: "Bloom Partners App", ac: "#0e7c8c", icon: "i-handshake", hello: "Hello, partner", sub: "Your agency's Bloom workspace",
+      card: { k: "Live inventory", v: "Units ready to sell", s: "Updated in real time", p: 0 },
+      tiles: [["i-users", "Onboarding"], ["i-box", "Live inventory"], ["i-chart", "Leads"], ["i-coins", "Commission tracking"]],
+      feats: [["i-users", "Onboarding"], ["i-box", "Live inventory"], ["i-chart", "Leads"], ["i-coins", "Commission tracking"]] },
   ];
 
   const STORY = [
@@ -2580,24 +2670,39 @@ html.smooth { scroll-behavior: auto; }
     });
   }
 
-  /* ------------------------------------------------------------ services */
-  const whoBtns = $$(".who-btn");
-  const appPanel = $("#svc-panel");
+  /* ------------------------------------------------------------ services: your app, on a phone */
+  const roleBtns = $$(".role");
+  const svcStage = $("#svc-stage");
+  const screen = $("#phone-screen");
+  const stickers = $("#feat-stickers");
+  // sticker spots around the phone (percent of the stage), alternating sides
+  const SPOTS = [["14%", "22%", "-6deg"], ["86%", "30%", "5deg"], ["12%", "62%", "4deg"], ["88%", "68%", "-5deg"], ["16%", "88%", "-3deg"]];
+  const ic = (id) => `<svg class="ic"><use href="#${id}"/></svg>`;
   function showApp(i) {
     const a = APPS[i];
-    whoBtns.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
-    $("#app-img").src = a.img; $("#app-img").alt = a.alt;
-    $("#app-name").textContent = a.name;
-    $("#app-feats").replaceChildren(...a.feats.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
-    appPanel.setAttribute("aria-label", a.name);
-    appPanel.classList.remove("is-swap"); void appPanel.offsetWidth; appPanel.classList.add("is-swap");
+    roleBtns.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+    svcStage.style.setProperty("--ac", a.ac);
+    svcStage.setAttribute("aria-label", a.name);
+    const wordmark = document.querySelector(".brand img").getAttribute("src");
+    screen.innerHTML = `
+      <div class="ps-status"><span>9:41</span><span>5G</span></div>
+      <div class="ps-head"><img src="${wordmark}" alt=""><span class="ps-avatar">${ic(a.icon)}</span></div>
+      <p class="ps-hello">${a.hello}</p>
+      <p class="ps-sub">${a.name}</p>
+      <div class="ps-card"><small>${a.card.k}</small><strong>${a.card.v}</strong><span>${a.card.s}</span>${a.card.p ? `<div class="ps-progress" style="--p:0%"><i></i></div>` : ""}</div>
+      <div class="ps-tiles">${a.tiles.map(([id, t]) => `<span class="ps-tile">${ic(id)}${t}</span>`).join("")}</div>
+      <div class="ps-tabs"><i></i><i></i><i></i><i></i></div>`;
+    if (a.card.p) requestAnimationFrame(() => requestAnimationFrame(() => { const p = $(".ps-progress", screen); if (p) p.style.setProperty("--p", a.card.p + "%"); }));
+    stickers.innerHTML = a.feats.map(([id, t], k) => `<li style="--fx:${SPOTS[k][0]};--fy:${SPOTS[k][1]};--fr:${SPOTS[k][2]};--k:${k}">${ic(id)}${t}</li>`).join("");
+    if (motion) { screen.classList.remove("is-swap"); void screen.offsetWidth; screen.classList.add("is-swap"); }
   }
-  whoBtns.forEach((b, i) => b.addEventListener("click", () => showApp(i)));
-  $(".who").addEventListener("keydown", (e) => {
-    const i = whoBtns.indexOf(document.activeElement);
-    if (i < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
-    const n = (i + ((e.key === "ArrowRight") !== (document.dir === "rtl") ? 1 : -1) + 3) % 3;
-    showApp(n); whoBtns[n].focus();
+  roleBtns.forEach((b, i) => b.addEventListener("click", () => showApp(i)));
+  $(".roles").addEventListener("keydown", (e) => {
+    const i = roleBtns.indexOf(document.activeElement);
+    if (i < 0 || !["ArrowDown", "ArrowUp"].includes(e.key)) return;
+    e.preventDefault();
+    const n = (i + (e.key === "ArrowDown" ? 1 : -1) + 3) % 3;
+    showApp(n); roleBtns[n].focus();
   });
   $$("[data-app-link]").forEach((a) => a.addEventListener("click", () => showApp(Number(a.dataset.appLink))));
   $$(".store").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("Store links are not connected in this prototype."); }));
@@ -2752,11 +2857,11 @@ html.smooth { scroll-behavior: auto; }
       watch(h, "rv-words");
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
-      ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".parcels-head", ".comm-index", ".comm-stage", ".roles", ".svc-stage", ".stores", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".bento"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
     [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */

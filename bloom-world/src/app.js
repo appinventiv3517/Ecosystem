@@ -103,13 +103,20 @@
   ];
   const COMMUNITY_NAME = Object.fromEntries(COMMUNITIES.map((c) => [c.key, c.name]));
 
+  // sample screens for each app: demonstration data, labelled as such on the page
   const APPS = [
-    { name: "Bloom Community App", img: "assets/img/app-community.webp", alt: "Two phones showing the Bloom Community App",
-      feats: ["Service requests", "Amenity bookings", "Moving in and out", "Tenancy renewals", "Service charges"] },
-    { name: "Bloom Super App", img: "assets/img/app-super.webp", alt: "Laptop and phone showing the Bloom Super App",
-      feats: ["Payments", "Property documents", "Construction updates for the homes you own"] },
-    { name: "Bloom Partners App", img: "assets/img/app-partners.webp", alt: "Laptop and phone showing the Bloom Partners App",
-      feats: ["Onboarding", "Live inventory", "Leads", "Commission tracking"] },
+    { name: "Bloom Community App", ac: "var(--red)", icon: "i-home", hello: "Good morning", sub: "Your home in a Bloom community",
+      card: { k: "Service request", v: "AC check booked", s: "Technician visit tomorrow, 10:00", p: 0 },
+      tiles: [["i-tool", "Service requests"], ["i-calendar", "Amenity bookings"], ["i-box", "Moving in and out"], ["i-refresh", "Tenancy renewals"]],
+      feats: [["i-tool", "Service requests"], ["i-calendar", "Amenity bookings"], ["i-box", "Moving in and out"], ["i-refresh", "Tenancy renewals"], ["i-card", "Service charges"]] },
+    { name: "Bloom Super App", ac: "#b86f12", icon: "i-key", hello: "Your property", sub: "Everything about the homes you own",
+      card: { k: "Construction update", v: "Phase 2 progress", s: "Next site update this month", p: 68 },
+      tiles: [["i-card", "Payments"], ["i-doc", "Property documents"], ["i-crane", "Construction updates"], ["i-calendar", "Handover dates"]],
+      feats: [["i-card", "Payments"], ["i-doc", "Property documents"], ["i-crane", "Construction updates"]] },
+    { name: "Bloom Partners App", ac: "#0e7c8c", icon: "i-handshake", hello: "Hello, partner", sub: "Your agency's Bloom workspace",
+      card: { k: "Live inventory", v: "Units ready to sell", s: "Updated in real time", p: 0 },
+      tiles: [["i-users", "Onboarding"], ["i-box", "Live inventory"], ["i-chart", "Leads"], ["i-coins", "Commission tracking"]],
+      feats: [["i-users", "Onboarding"], ["i-box", "Live inventory"], ["i-chart", "Leads"], ["i-coins", "Commission tracking"]] },
   ];
 
   const STORY = [
@@ -655,24 +662,39 @@
     });
   }
 
-  /* ------------------------------------------------------------ services */
-  const whoBtns = $$(".who-btn");
-  const appPanel = $("#svc-panel");
+  /* ------------------------------------------------------------ services: your app, on a phone */
+  const roleBtns = $$(".role");
+  const svcStage = $("#svc-stage");
+  const screen = $("#phone-screen");
+  const stickers = $("#feat-stickers");
+  // sticker spots around the phone (percent of the stage), alternating sides
+  const SPOTS = [["14%", "22%", "-6deg"], ["86%", "30%", "5deg"], ["12%", "62%", "4deg"], ["88%", "68%", "-5deg"], ["16%", "88%", "-3deg"]];
+  const ic = (id) => `<svg class="ic"><use href="#${id}"/></svg>`;
   function showApp(i) {
     const a = APPS[i];
-    whoBtns.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
-    $("#app-img").src = a.img; $("#app-img").alt = a.alt;
-    $("#app-name").textContent = a.name;
-    $("#app-feats").replaceChildren(...a.feats.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
-    appPanel.setAttribute("aria-label", a.name);
-    appPanel.classList.remove("is-swap"); void appPanel.offsetWidth; appPanel.classList.add("is-swap");
+    roleBtns.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+    svcStage.style.setProperty("--ac", a.ac);
+    svcStage.setAttribute("aria-label", a.name);
+    const wordmark = document.querySelector(".brand img").getAttribute("src");
+    screen.innerHTML = `
+      <div class="ps-status"><span>9:41</span><span>5G</span></div>
+      <div class="ps-head"><img src="${wordmark}" alt=""><span class="ps-avatar">${ic(a.icon)}</span></div>
+      <p class="ps-hello">${a.hello}</p>
+      <p class="ps-sub">${a.name}</p>
+      <div class="ps-card"><small>${a.card.k}</small><strong>${a.card.v}</strong><span>${a.card.s}</span>${a.card.p ? `<div class="ps-progress" style="--p:0%"><i></i></div>` : ""}</div>
+      <div class="ps-tiles">${a.tiles.map(([id, t]) => `<span class="ps-tile">${ic(id)}${t}</span>`).join("")}</div>
+      <div class="ps-tabs"><i></i><i></i><i></i><i></i></div>`;
+    if (a.card.p) requestAnimationFrame(() => requestAnimationFrame(() => { const p = $(".ps-progress", screen); if (p) p.style.setProperty("--p", a.card.p + "%"); }));
+    stickers.innerHTML = a.feats.map(([id, t], k) => `<li style="--fx:${SPOTS[k][0]};--fy:${SPOTS[k][1]};--fr:${SPOTS[k][2]};--k:${k}">${ic(id)}${t}</li>`).join("");
+    if (motion) { screen.classList.remove("is-swap"); void screen.offsetWidth; screen.classList.add("is-swap"); }
   }
-  whoBtns.forEach((b, i) => b.addEventListener("click", () => showApp(i)));
-  $(".who").addEventListener("keydown", (e) => {
-    const i = whoBtns.indexOf(document.activeElement);
-    if (i < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
-    const n = (i + ((e.key === "ArrowRight") !== (document.dir === "rtl") ? 1 : -1) + 3) % 3;
-    showApp(n); whoBtns[n].focus();
+  roleBtns.forEach((b, i) => b.addEventListener("click", () => showApp(i)));
+  $(".roles").addEventListener("keydown", (e) => {
+    const i = roleBtns.indexOf(document.activeElement);
+    if (i < 0 || !["ArrowDown", "ArrowUp"].includes(e.key)) return;
+    e.preventDefault();
+    const n = (i + (e.key === "ArrowDown" ? 1 : -1) + 3) % 3;
+    showApp(n); roleBtns[n].focus();
   });
   $$("[data-app-link]").forEach((a) => a.addEventListener("click", () => showApp(Number(a.dataset.appLink))));
   $$(".store").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("Store links are not connected in this prototype."); }));
@@ -827,11 +849,11 @@
       watch(h, "rv-words");
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
-      ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".parcels-head", ".comm-index", ".comm-stage", ".roles", ".svc-stage", ".stores", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".bento"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
     [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */
