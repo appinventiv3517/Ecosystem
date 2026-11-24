@@ -898,18 +898,18 @@
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
 
 
-  /* ------------------------------------------------------------ custom cursor: a trailing ring that knows what it is over */
+  /* ------------------------------------------------------------ custom cursor: a bloom that rolls, opens and drops leaves */
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (motion && finePointer.matches) {
     const cur = document.createElement("div");
     cur.className = "cur is-out";
     cur.setAttribute("aria-hidden", "true");
-    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><svg class="cur-dot" viewBox="0 0 22 26"><path d="M3 2.5v18.2l4.9-4.6 3.4 7.4 3.4-1.6-3.4-7.2h6.6z"/></svg>';
+    cur.innerHTML = '<svg class="cur-fl" viewBox="0 0 64 64"><g class="fl-petals"><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(0 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(72 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(144 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(216 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(288 32 32)"/></g><circle class="fl-heart" cx="32" cy="32" r="5.5"/></svg><span class="cur-tag"></span>';
     document.body.appendChild(cur);
     document.documentElement.classList.add("has-cursor");
-    const ring = $(".cur-ring", cur), dot = $(".cur-dot", cur), label = $(".cur-label", cur);
-    let mx = -100, my = -100, rx = -100, ry = -100;
-    // what the cursor says over each kind of thing (first match wins)
+    const fl = $(".cur-fl", cur), tag = $(".cur-tag", cur);
+    let mx = -100, my = -100, tx = -100, ty = -100, spin = 0, lastX = -100, lastY = -100, travel = 0;
+    // what the bloom says over each kind of thing (first match wins)
     const LABELS = [
       [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})` })],
       [".parcel-hit", () => ({ t: "Enquire", c: "var(--red)" })],
@@ -922,24 +922,24 @@
     const TEXT = "input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea";
     let lastKey = "";
     function setState(target) {
+      if (!target.closest) return;
       let key = "", info = null;
-      if (target.closest && target.closest(TEXT)) key = "text";
+      if (target.closest(TEXT)) key = "text";
       else {
-        for (const [sel, fn] of LABELS) { const el = target.closest && target.closest(sel); if (el) { info = fn(el); key = "label:" + info.t + info.c; break; } }
-        if (!info && target.closest && target.closest(HOVER)) key = "hover";
+        for (const [sel, fn] of LABELS) { const el = target.closest(sel); if (el) { info = fn(el); key = "label:" + info.t + info.c; break; } }
+        if (!info && target.closest(HOVER)) key = "hover";
       }
       if (key === lastKey) return;
       lastKey = key;
       cur.classList.toggle("is-text", key === "text");
       cur.classList.toggle("is-hover", key === "hover");
       cur.classList.toggle("is-label", !!info);
-      if (!info) cur.style.removeProperty("--cc");
       if (info) {
         cur.style.setProperty("--cc", info.c);
         // dark text on the light zone colours, white on the deep ones
         cur.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
-        label.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
-      }
+        tag.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+      } else cur.style.removeProperty("--cc");
     }
     // primary buttons lean towards the cursor
     const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
@@ -953,10 +953,31 @@
       const dx = (mx - (r.left + r.width / 2)) / r.width, dy = (my - (r.top + r.height / 2)) / r.height;
       m.style.translate = `${(dx * 10).toFixed(1)}px ${(dy * 8).toFixed(1)}px`;
     }
+    // a leaf falls from the bloom every so often as it travels
+    function dropLeaf(x, y, dir) {
+      const leaf = document.createElement("span");
+      leaf.className = "cur-leaf";
+      document.body.appendChild(leaf);
+      const rot = dir + 90 + (Math.random() * 60 - 30);
+      leaf.animate([
+        { transform: `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.3)`, opacity: 0.95 },
+        { transform: `translate(${x + (Math.random() * 16 - 8)}px, ${y + 8}px) rotate(${rot + 40}deg) scale(1)`, opacity: 0.9, offset: 0.25 },
+        { transform: `translate(${x + (Math.random() * 30 - 15)}px, ${y + 34}px) rotate(${rot + 140}deg) scale(0.5)`, opacity: 0 },
+      ], { duration: 1100, easing: "cubic-bezier(0.3, 0.6, 0.4, 1)" }).onfinish = () => leaf.remove();
+    }
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      if (cur.classList.contains("is-out")) { rx = mx; ry = my; cur.classList.remove("is-out"); }
+      if (cur.classList.contains("is-out")) { tx = mx; ty = my; lastX = mx; lastY = my; cur.classList.remove("is-out"); }
+      const d = Math.hypot(mx - lastX, my - lastY);
+      // the bloom rolls: it turns with the distance it covers, clockwise going right
+      spin += (mx - lastX >= 0 ? 1 : -1) * d * 1.4;
+      travel += d;
+      if (travel > 90 && !cur.classList.contains("is-label") && !cur.classList.contains("is-text")) {
+        travel = 0;
+        dropLeaf(mx, my, Math.atan2(my - lastY, mx - lastX) * 180 / Math.PI);
+      }
+      lastX = mx; lastY = my;
       setState(e.target);
       pullMagnet(e.target);
     }, { passive: true });
@@ -967,35 +988,31 @@
     window.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse") return;
       cur.classList.add("is-down");
-      // a small burst of zone colours
-      const cols = ["--re", "--edu", "--hosp", "--land", "--water", "--red"];
-      for (let i = 0; i < 6; i++) {
-        const sp = document.createElement("span");
-        sp.className = "cur-spark";
-        sp.style.background = `var(${cols[i]})`;
-        document.body.appendChild(sp);
-        const a = (i / 6) * Math.PI * 2 + Math.random() * 0.5, d = 26 + Math.random() * 18;
-        sp.animate([
-          { transform: `translate(${mx}px, ${my}px) scale(1)`, opacity: 1 },
-          { transform: `translate(${mx + Math.cos(a) * d}px, ${my + Math.sin(a) * d}px) scale(0)`, opacity: 0.9 },
-        ], { duration: 520, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }).onfinish = () => sp.remove();
+      // petals scatter and drift down, in the colours of Bloom's businesses
+      const cols = ["--red", "--re", "--hosp", "--retail", "--edu", "--land", "--health"];
+      for (let k = 0; k < 7; k++) {
+        const p = document.createElement("span");
+        p.className = "cur-petal";
+        p.style.background = `var(${cols[k]})`;
+        document.body.appendChild(p);
+        const a = (k / 7) * Math.PI * 2 + Math.random() * 0.4, d = 30 + Math.random() * 22, r0 = (a * 180) / Math.PI + 90;
+        p.animate([
+          { transform: `translate(${mx}px, ${my}px) rotate(${r0}deg) scale(0.4)`, opacity: 1 },
+          { transform: `translate(${mx + Math.cos(a) * d}px, ${my + Math.sin(a) * d}px) rotate(${r0 + 90}deg) scale(1)`, opacity: 1, offset: 0.35 },
+          { transform: `translate(${mx + Math.cos(a) * d * 1.3}px, ${my + Math.sin(a) * d + 40}px) rotate(${r0 + 240}deg) scale(0.6)`, opacity: 0 },
+        ], { duration: 1000, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)" }).onfinish = () => p.remove();
       }
     });
     window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
-    let ang = 0, stretch = 1;
+    let shownSpin = 0;
     (function loop() {
-      // the tile sits just behind the arrow's tail, unless it is showing a label
-      const labelled = cur.classList.contains("is-label") || cur.classList.contains("is-hover");
-      const ox = labelled ? 0 : 16, oy = labelled ? 0 : 22;
-      const vx = mx + ox - rx, vy = my + oy - ry;
-      rx += (mx + ox - rx) * 0.18; ry += (my + oy - ry) * 0.18;
-      const speed = Math.hypot(vx, vy);
-      const tAng = labelled || speed < 2 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
-      let dA = ((tAng - ang + 540) % 360) - 180;
-      ang += dA * 0.2;
-      stretch += ((labelled ? 1 : 1 + Math.min(speed / 60, 0.55)) - stretch) * 0.25;
-      dot.style.transform = `translate3d(${mx - 3}px, ${my - 2}px, 0)`;
-      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0) rotate(${ang.toFixed(1)}deg) scale(${stretch.toFixed(3)}, ${(1 / Math.sqrt(stretch)).toFixed(3)})`;
+      // idle blooms turn slowly on their own; moving ones roll
+      spin += 0.35;
+      shownSpin += (spin - shownSpin) * 0.2;
+      fl.style.transform = `translate3d(${mx}px, ${my}px, 0) rotate(${shownSpin.toFixed(1)}deg)`;
+      // the label tag trails just behind and to the right
+      tx += (mx + 30 - tx) * 0.2; ty += (my + 8 - ty) * 0.2;
+      tag.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) translateY(-50%)`;
       requestAnimationFrame(loop);
     })();
   }
