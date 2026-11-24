@@ -42,11 +42,30 @@ def walker(path, dur, begin, cls="walker"):
 
 
 LABELS = []
+_ADV = None
+
+
+def text_width(text, size=14, weight=600):
+    """Width of a label in Readex Pro, read from the shipped font so pills fit their text exactly."""
+    global _ADV
+    if _ADV is None:
+        try:
+            from pathlib import Path
+            from fontTools.ttLib import TTFont
+            from fontTools.varLib import instancer
+            font = TTFont(Path(__file__).resolve().parent.parent / "assets/fonts/readex-pro-latin.woff2")
+            inst = instancer.instantiateVariableFont(font, {"wght": weight})
+            cmap, hmtx, upm = inst.getBestCmap(), inst["hmtx"], inst["head"].unitsPerEm
+            _ADV = {ch: hmtx[g][0] / upm for ch, g in ((chr(c), g) for c, g in cmap.items())}
+        except Exception:  # fontTools missing: fall back to an average advance
+            _ADV = {}
+    return sum(_ADV.get(ch, 0.56) for ch in text) * size
 
 
 def label(x, y, text, zone, anchor="start"):
-    """Plot labels are collected and drawn last, above the service lines, so nothing covers them."""
-    w = 30 + len(text) * 7.6
+    """Plot labels are collected and drawn last, above the service lines, so nothing covers them.
+    The pill is 12px before the dot, the text starts at 26px, and 13px of space follows the text."""
+    w = round(26 + text_width(text) + 13, 1)
     x0 = x if anchor == "start" else x - w / 2
     LABELS.append(f'<g class="plot-label" data-biz="{zone}" transform="translate({f(x0)} {f(y)})"><g class="label-in">'
                   f'<rect width="{f(w)}" height="30" rx="15"/>'

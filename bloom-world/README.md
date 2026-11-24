@@ -7,7 +7,7 @@ A homepage design prototype for review, not the live Bloom Holding website.
 
 ## Edit and rebuild
 
-Edit the sources in `src/`, then run:
+Edit the sources in `src/`, then run (the build reads the label font with `fonttools`; install it once with `pip install fonttools brotli`):
 
 ```sh
 python3 build.py

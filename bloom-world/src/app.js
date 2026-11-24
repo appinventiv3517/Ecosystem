@@ -163,20 +163,7 @@
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
   const keyBtns = $$(".key button");
-  // size each pill to its real text so every label has the same padding on both sides
-  function sizeLabels() {
-    Object.values(labels).forEach((l) => {
-      const t = l.querySelector("text"), r = l.querySelector("rect");
-      const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(l.getAttribute("transform"));
-      if (!m) return;
-      if (!l.dataset.cx) l.dataset.cx = Number(m[1]) + Number(r.getAttribute("width")) / 2;
-      const w = Math.ceil(26 + t.getComputedTextLength() + 13);
-      r.setAttribute("width", w);
-      l.setAttribute("transform", `translate(${(Number(l.dataset.cx) - w / 2).toFixed(1)} ${m[2]})`);
-    });
-  }
-  sizeLabels();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeLabels);
+  // pill widths are measured from the font at build time (drawings.py), so nothing resizes in the browser
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");

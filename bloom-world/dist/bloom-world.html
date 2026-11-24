@@ -1286,7 +1286,7 @@ html.smooth { scroll-behavior: auto; }
 <g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
 <rect class="tint" width="1600" height="1000"/>
 <g class="conns" aria-hidden="true"></g>
-<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 199)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 628)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
+<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(620.8 199)"><g class="label-in"><rect width="108.5" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1010.7 144)"><g class="label-in"><rect width="78.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(871.1 255)"><g class="label-in"><rect width="113.8" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1097.8 255)"><g class="label-in"><rect width="114.5" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(617 501)"><g class="label-in"><rect width="115.9" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(986.7 501)"><g class="label-in"><rect width="126.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1405.8 628)"><g class="label-in"><rect width="100.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
 </svg>
     </div>
     <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
@@ -2030,20 +2030,7 @@ html.smooth { scroll-behavior: auto; }
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
   const keyBtns = $$(".key button");
-  // size each pill to its real text so every label has the same padding on both sides
-  function sizeLabels() {
-    Object.values(labels).forEach((l) => {
-      const t = l.querySelector("text"), r = l.querySelector("rect");
-      const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(l.getAttribute("transform"));
-      if (!m) return;
-      if (!l.dataset.cx) l.dataset.cx = Number(m[1]) + Number(r.getAttribute("width")) / 2;
-      const w = Math.ceil(26 + t.getComputedTextLength() + 13);
-      r.setAttribute("width", w);
-      l.setAttribute("transform", `translate(${(Number(l.dataset.cx) - w / 2).toFixed(1)} ${m[2]})`);
-    });
-  }
-  sizeLabels();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeLabels);
+  // pill widths are measured from the font at build time (drawings.py), so nothing resizes in the browser
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");
