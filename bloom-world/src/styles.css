@@ -286,9 +286,9 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .clock-play[aria-pressed="false"] .ic-pause { display: none; }
 .clock-track { display: flex; flex: 1; overflow-x: auto; scrollbar-width: none; gap: 2px; }
 .clock-track::-webkit-scrollbar { display: none; }
-.hour { flex: 1; min-width: 74px; border: 0; background: none; border-radius: 999px; padding: 6px 8px; display: grid; line-height: 1.1; text-align: center; transition: background-color 0.25s, color 0.25s; }
+.hour { flex: 1; min-width: 74px; border: 0; background: none; border-radius: 999px; padding: 6px 8px; display: grid; line-height: 1.1; text-align: center; transition: background-color 0.24s linear, color 0s linear 0.12s; }
 .hour b { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; }
-.hour small { font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; transition: color 0.25s; }
+.hour small { font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; transition: color 0s linear 0.12s; }
 .hour:hover { background: color-mix(in srgb, var(--site) 50%, var(--paper)); }
 .hour[aria-selected="true"] { background: var(--z, var(--ink)); color: #fff; }
 .hour[aria-selected="true"] small { color: rgb(255 255 255 / 0.9); }

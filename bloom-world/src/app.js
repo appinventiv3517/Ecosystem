@@ -328,6 +328,7 @@
     setLight(key);
     drawLinks(key);
     fillCard(key);
+    if (cardExit) { cardExit.cancel(); cardExit = null; card.style.overflow = ""; }
     card.hidden = false;
     placeCard(key);
     if (!reduced.matches) { card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in"); }
@@ -371,8 +372,23 @@
     legendToggle.setAttribute("aria-expanded", String(open));
     legendToggle.textContent = open ? "Fewer filters" : "More filters";
   });
+  let cardExit = null;
+  function hideCard() {
+    // the card leaves quickly; in the stacked layout its row collapses so the content below glides up
+    if (cardExit) cardExit.cancel();
+    if (reduced.matches || card.hidden) { card.hidden = true; return; }
+    const stacked = mobile.matches;
+    const h = card.offsetHeight;
+    const frames = stacked
+      ? [{ opacity: 1, height: h + "px", marginBottom: "0px" }, { opacity: 0, height: "0px", marginBottom: "0px", paddingTop: "0px", paddingBottom: "0px", borderWidth: "0px" }]
+      : [{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(0.96)" }];
+    card.style.overflow = "hidden";
+    cardExit = card.animate(frames, { duration: stacked ? 260 : 160, easing: "cubic-bezier(0.4, 0, 1, 1)" });
+    const done = () => { card.hidden = true; card.style.overflow = ""; cardExit = null; };
+    cardExit.finished.then(done, () => { card.style.overflow = ""; });
+  }
   function closeCard() {
-    card.hidden = true;
+    hideCard();
     hours.forEach((h) => h.setAttribute("aria-selected", "false"));
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
