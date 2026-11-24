@@ -609,6 +609,26 @@
   const stageImgs = $$(".stage-img");
   const moment = $("#day-moment");
   const timeline = $(".tl-track");
+  if (!$(".tl-line", timeline)) timeline.insertAdjacentHTML("afterbegin", '<span class="tl-line"></span>');
+  const marks = $$(".tl-mark", timeline);
+  // markers sit exactly above the centre of each moment button; the sun travels between them
+  function centers() {
+    const tr = timeline.getBoundingClientRect();
+    return ways.map((b) => { const r = b.getBoundingClientRect(); return r.left + r.width / 2 - tr.left; });
+  }
+  function placeSun() {
+    if (!timeline.offsetWidth) return;
+    const cs = centers(), tw = timeline.offsetWidth;
+    const lo = Math.min(...cs), hi = Math.max(...cs);
+    timeline.style.setProperty("--l0", lo + "px");
+    timeline.style.setProperty("--r0", (tw - hi) + "px");
+    marks.forEach((m, j) => m.style.setProperty("--x", cs[j] + "px"));
+    timeline.style.setProperty("--sun", cs[wi] + "px");
+    const rtl = document.dir === "rtl";
+    timeline.style.setProperty("--fill", (rtl ? hi - cs[wi] : cs[wi] - lo) + "px");
+  }
+  window.addEventListener("resize", placeSun);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeSun);
   const tlPlay = $("#tl-play");
   function setDayPlaying(p) {
     wAuto = p;
@@ -637,7 +657,7 @@
     $("#dm-text").textContent = b.dataset.text;
     $("#dm-zone").textContent = b.dataset.zone;
     $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    timeline.style.setProperty("--sun", $$(".tl-mark")[i].style.getPropertyValue("--at"));
+    placeSun();
     lifeSec.classList.remove("is-auto"); void lifeSec.offsetWidth; lifeSec.classList.toggle("is-auto", wAuto);
     if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
     scheduleWay();
