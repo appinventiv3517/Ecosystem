@@ -101,8 +101,9 @@ def masterplan():
 </defs>''')
 
     # ground
-    a('<rect class="g-site" width="1600" height="1000"/>')
-    a('<rect fill="url(#dots)" width="1600" height="1000"/>')
+    # the ground runs well past the plan so the desktop fit can add margin on any side
+    a('<rect class="g-site" x="-1200" y="-600" width="4000" height="2200"/>')
+    a('<rect fill="url(#dots)" x="-1200" y="-600" width="4000" height="2200"/>')
 
     # beyond the plan (under the title block): faded future phases
     a('<g class="beyond">')

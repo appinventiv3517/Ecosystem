@@ -244,49 +244,11 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 @keyframes flow { to { stroke-dashoffset: -28; } }
 @keyframes ring { 0% { transform: scale(0.6); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
 
-.title-block {
-  position: absolute; z-index: 3; inset-inline-start: var(--gutter); top: 104px; bottom: 96px;
-  width: min(430px, 36vw); display: flex; flex-direction: column; gap: 14px; justify-content: space-between;
-}
-.tb-sheet { background: var(--paper); border-radius: 6px; padding: 24px 0 0; box-shadow: var(--shadow); border: 2px solid var(--ink); overflow: hidden; }
-.tb-sheet h1, .tb-sheet .tb-lede { margin-inline: 24px; }
-.tb-cells { margin: 16px 0 0; display: grid; grid-template-columns: 1fr 0.8fr 1fr; border-top: 2px solid var(--ink); }
-.tb-c { padding: 8px 14px 9px; border-top: 1.5px solid rgb(29 24 48 / 0.25); display: grid; gap: 1px; min-width: 0; }
-.tb-c:nth-child(-n+3) { border-top: 0; }
-.tb-c:nth-child(-n+2) { border-inline-end: 1.5px solid rgb(29 24 48 / 0.25); }
-.tb-c.tb-status { grid-column: 1 / -1; border-inline-end: 0; background: color-mix(in srgb, var(--site) 28%, var(--paper)); }
-.tb-c dt { font-size: 0.74rem; font-weight: 600; color: var(--ink-soft); letter-spacing: 0.04em; text-transform: uppercase; }
-.tb-c dd { margin: 0; text-align: start; unicode-bidi: isolate; font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
-.tb-client img { width: 62px; margin-top: 2px; }
-.title-block h1 { font-size: clamp(2.3rem, 3.4vw, 3.3rem); }
 .h1-world { color: var(--red); display: inline-block; }
-.tb-lede { margin-top: 12px; font-size: 1rem; color: var(--ink-soft); max-width: 34ch; }
-.tb-concept { margin-top: 14px; padding-top: 12px; border-top: 1.5px dashed rgb(29 24 48 / 0.3); font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); }
-.legend-search { background: var(--paper); color: var(--ink); border-radius: 6px; border: 2px solid var(--ink); display: grid; box-shadow: var(--shadow); overflow: hidden; }
-.legend-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 16px; border-bottom: 2px solid var(--ink); }
-.legend-title { font: 800 1.15rem/1.1 var(--display); letter-spacing: -0.02em; }
-.legend-toggle { display: none; border: 1.5px solid var(--ink); background: none; border-radius: 999px; min-height: 36px; padding: 0 12px; font-size: 0.82rem; font-weight: 600; }
-.key { list-style: none; margin: 0; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1.5px solid rgb(29 24 48 / 0.25); }
-.key button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; border-radius: 999px; min-height: 30px; padding: 0 9px 0 6px; font-size: 0.8rem; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
-.key .sw { width: 12px; height: 12px; margin: 0; border-radius: 3px; }
-.key button:hover { background: color-mix(in srgb, var(--site) 45%, var(--paper)); }
-.key button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.legend-find { padding: 12px 16px 14px; display: grid; gap: 10px; }
-.legend-sub { font: 700 1rem/1.2 var(--display); display: none; }
-.legend-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.legend-fields .field-label { font-size: 0.75rem; color: var(--ink-soft); }
-.legend-fields select { min-height: 42px; font-size: 0.9rem; }
-.legend-go { width: 100%; }
-.seg { display: grid; grid-template-columns: 1fr 1fr; background: color-mix(in srgb, var(--site) 40%, var(--paper)); border-radius: 999px; padding: 4px; }
-.seg label { position: relative; }
-.seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.seg span { display: grid; place-items: center; height: 36px; border-radius: 999px; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
-.seg input:checked + span { background: var(--ink); color: var(--paper); }
-.seg input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 1px; }
 
 
 .day-clock {
-  position: absolute; z-index: 3; bottom: 26px; inset-inline-start: calc(var(--gutter) + min(430px, 36vw) + 28px); inset-inline-end: var(--gutter);
+  position: absolute; z-index: 3; bottom: 26px; inset-inline-start: calc(var(--gutter) + min(470px, 37vw) + 24px); inset-inline-end: var(--gutter);
   display: flex; align-items: center; gap: 10px; background: var(--paper); border-radius: 999px; padding: 6px; box-shadow: var(--shadow); border: 2px solid var(--ink);
 }
 .clock-play { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--ink); color: var(--paper); display: grid; place-items: center; flex: none; }
@@ -752,23 +714,8 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
   .plan-pan { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
   .plan-svg { width: max(100%, 560px); height: auto; aspect-ratio: 1060 / 940; }
-  .title-block { position: static; width: auto; display: contents; }
-  .title-block h1 { font-size: clamp(2rem, 6vw, 3rem); }
-  .tb-sheet { order: 1; margin: 0 16px 12px; padding-top: 16px; }
-  .tb-sheet h1, .tb-sheet .tb-lede { margin-inline: 16px; }
-  .tb-sheet .tb-lede { display: none; }
-  .tb-cells { margin-top: 12px; }
-  .tb-cells .tb-c:not(.tb-status) { display: none; }
-  .tb-c.tb-status { border-top: 0; }
-  .legend-search { order: 2; margin: 0 16px 12px; }
-  .legend-toggle { display: inline-flex; align-items: center; justify-content: center; }
-  .legend-search:not(.is-open) .legend-head, .legend-search:not(.is-open) .key, .legend-search:not(.is-open) .legend-fields { display: none; }
-  .legend-search:not(.is-open) .legend-find { grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 8px; }
-  .legend-search:not(.is-open) .legend-go { width: auto; padding: 0 14px; }
-  .legend-search:not(.is-open) .legend-toggle { min-height: 44px; }
   .day-clock { position: relative; order: 4; inset: auto; margin: 0 16px 12px; }
   .plan-note { position: static; order: 6; align-self: flex-start; margin: 10px 16px 22px; background: var(--paper); }
-  .tb-sheet, .legend-search, .day-clock, .plot-card, .plan-note { margin-inline: var(--gutter); }
 }
 @media (max-width: 860px) {
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
@@ -795,7 +742,6 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .stamp strong { font-size: 0.8rem; }
   .stamp-org { display: none; }
   .scrub-years li:nth-child(even) { visibility: hidden; }
-  .legend-search .field { grid-template-columns: 1fr; gap: 6px; }
   .comm-actions .btn { flex: 1; }
 }
 
@@ -821,12 +767,8 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .plan.is-panned .pan-chip { opacity: 0; }
 }
 @media (max-height: 880px) and (min-width: 1201px) {
-  .tb-lede { display: none; }
 }
 @media (max-width: 420px) {
-  .legend-search:not(.is-open) .legend-go span { display: none; }
-  .legend-search:not(.is-open) .legend-go { min-width: 48px; }
-  .legend-search:not(.is-open) .legend-go::after { content: "Search"; }
 }
 
 /* area schedule: stack each row on phones so no cell is cut */
@@ -864,7 +806,7 @@ html.smooth { scroll-behavior: auto; }
 @media (prefers-reduced-motion: reduce) {
   .site-header.is-hidden { transform: none; }
 }
-.intro .site-header .bar, .intro .tb-sheet, .intro .legend-search, .intro .day-clock, .intro .plot-card, .intro .plan-svg { opacity: 0; }
+.intro .site-header .bar, .intro .hero-intro, .intro .day-clock, .intro .plot-card, .intro .plan-svg { opacity: 0; }
 .zone, .label-in, .tree-canopy, .tree-light, .palm path, .umbrella circle { transform-box: fill-box; transform-origin: center; }
 .life-stage { translate: 0 var(--py, 0px); }
 .foot-contact a { white-space: nowrap; }
@@ -888,6 +830,63 @@ html.smooth { scroll-behavior: auto; }
   .chip-biz { font-size: 0.74rem; padding: 3px 9px 3px 7px; }
   .card-visit { font-size: 0.84rem; }
   .card-close { width: 32px; height: 32px; }
+}
+
+/* ---------------------------------------------------------------- hero intro: set on the plan, no box */
+.hero::before {
+  content: ""; position: absolute; z-index: 2; inset: 0 auto 0 0; width: calc(var(--gutter) + min(470px, 37vw) + 20px); pointer-events: none;
+  background: linear-gradient(90deg, var(--site) 0%, color-mix(in srgb, var(--site) 88%, transparent) 72%, transparent 100%);
+}
+[dir="rtl"] .hero::before { inset: 0 0 0 auto; background: linear-gradient(270deg, var(--site) 0%, color-mix(in srgb, var(--site) 88%, transparent) 72%, transparent 100%); }
+.hero-intro {
+  position: absolute; z-index: 3; inset-inline-start: var(--gutter); top: 50%; transform: translateY(-46%);
+  width: min(470px, 37vw); display: grid; gap: 22px;
+}
+.hero-intro h1 { font-size: clamp(2.8rem, 4.7vw, 5.2rem); line-height: 0.92; letter-spacing: -0.045em; }
+.h1-a { display: block; }
+.hero-lede { font-size: clamp(1.02rem, 1.25vw, 1.2rem); max-width: 30ch; color: var(--ink-soft); }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-cta .btn-ghost { background: color-mix(in srgb, var(--paper) 70%, transparent); }
+.hero-cta .btn-ghost:hover { background: var(--ink); }
+@media (max-height: 760px) and (min-width: 1201px) {
+  .hero-lede { display: none; }
+  .hero-intro { gap: 16px; }
+}
+@media (max-width: 1200px) {
+  .hero::before { display: none; }
+  .hero-intro { position: static; order: 1; transform: none; width: auto; margin: 0 var(--gutter) 18px; gap: 16px; }
+  .hero-intro h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); }
+  .h1-a { display: inline; }
+    .hero-cta .btn-lg { min-height: 50px; padding: 0 1.3em; font-size: 1rem; }
+}
+@media (max-width: 420px) {
+  .hero-cta .btn { flex: 1 1 auto; }
+}
+@media (min-width: 1201px) and (max-width: 1366px) {
+  .hero-cta .btn-lg { min-height: 50px; padding: 0 1.25em; font-size: 0.98rem; }
+}
+
+/* the business card as part of the intro column (desktop) */
+.plot-card.in-intro {
+  position: relative; width: auto; max-width: 420px; background: none; box-shadow: none; border: 0; border-radius: 0;
+  border-top: 2px solid var(--ink); border-bottom: 1.5px solid rgb(29 24 48 / 0.3); padding: 14px 0 14px; gap: 6px;
+}
+.plot-card.in-intro .card-close { top: 10px; inset-inline-end: 0; background: color-mix(in srgb, var(--paper) 60%, transparent); }
+.plot-card.in-intro .card-name { font-size: 1.6rem; }
+.plot-card.in-intro .card-text { font-size: 0.92rem; max-width: 38ch; color: var(--ink-soft); }
+.plot-card.in-intro .chip-biz { background: color-mix(in srgb, var(--paper) 55%, transparent); }
+.plot-card.in-intro .chip-biz:hover { background: var(--ink); }
+.plot-card.in-intro.is-in { animation: none; }
+.plot-card.in-intro.is-in > * { animation: swap-txt 0.45s var(--ease) backwards; }
+.plot-card.in-intro.is-in > :nth-child(3) { animation-delay: 0.04s; }
+.plot-card.in-intro.is-in > :nth-child(5) { animation-delay: 0.08s; }
+.plot-card.in-intro.is-in > :nth-child(7) { animation-delay: 0.12s; }
+.plot-card.is-rest .card-close, .plot-card.is-rest .card-links { display: none; }
+.card-home:empty { display: none; }
+@media (max-height: 860px) and (min-width: 1201px) {
+  .hero-lede { display: none; }
+  .hero-intro { gap: 14px; }
+  .plot-card.in-intro .card-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 }
 
 </style>
@@ -965,8 +964,8 @@ html.smooth { scroll-behavior: auto; }
   <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" class="hatch-line"/></pattern>
   <pattern id="solar" width="12" height="8" patternUnits="userSpaceOnUse"><rect width="11" height="7" class="solar-cell"/></pattern>
 </defs>
-<rect class="g-site" width="1600" height="1000"/>
-<rect fill="url(#dots)" width="1600" height="1000"/>
+<rect class="g-site" x="-1200" y="-600" width="4000" height="2200"/>
+<rect fill="url(#dots)" x="-1200" y="-600" width="4000" height="2200"/>
 <g class="beyond">
 <rect x="40" y="40" width="62" height="78" rx="4" class="beyond-lot"/>
 <rect x="40" y="144" width="62" height="78" rx="4" class="beyond-lot"/>
@@ -1292,63 +1291,14 @@ html.smooth { scroll-behavior: auto; }
     <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
   </div>
 
-  <div class="title-block">
-    <div class="tb-sheet">
-      <h1 id="hero-title"><span data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
-      <p class="tb-lede" data-i18n="hero.lede">Seven businesses. One connected community. Tap any plot to see who it works with.</p>
-      <dl class="tb-cells">
-        <div class="tb-c tb-client"><dt>Client</dt><dd><img src="assets/img/bloom-wordmark-red.png" alt="Bloom" width="70" height="22"></dd></div>
-        <div class="tb-c"><dt>Sheet</dt><dd dir="ltr">01 of 08</dd></div>
-        <div class="tb-c"><dt>Scale</dt><dd dir="ltr">Not to scale</dd></div>
-        <div class="tb-c tb-status"><dt>Status</dt><dd dir="ltr">Design concept for review. Not the live Bloom Holding website.</dd></div>
-      </dl>
+  <div class="hero-intro">
+    <h1 id="hero-title"><span class="h1-a" data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
+    <p class="hero-lede" data-i18n="hero.lede">Seven businesses running one connected community. Tap any plot to see who it works with.</p>
+    <div class="card-home" id="card-home"></div>
+    <div class="hero-cta">
+      <a class="btn btn-red btn-lg" href="#find" id="hero-find"><span data-i18n="cta.search">Find a home</span><svg class="ic"><use href="#i-arrow"/></svg></a>
+      <button type="button" class="btn btn-ghost btn-lg" data-enquire data-i18n="cta.enquiry">Make an enquiry</button>
     </div>
-    <form class="legend-search" id="hero-search" aria-labelledby="hero-search-title">
-      <div class="legend-head">
-        <h2 class="legend-title" id="hero-search-title">Legend</h2>
-      </div>
-      <ul class="key" aria-label="Plan key: select a business to find its plot">
-        <li><button type="button" data-key="re"><i class="sw z-re"></i>Real Estate</button></li>
-        <li><button type="button" data-key="edu"><i class="sw z-edu"></i>Education</button></li>
-        <li><button type="button" data-key="hosp"><i class="sw z-hosp"></i>Hospitality</button></li>
-        <li><button type="button" data-key="retail"><i class="sw z-retail"></i>Retail</button></li>
-        <li><button type="button" data-key="health"><i class="sw z-health"></i>Healthcare</button></li>
-        <li><button type="button" data-key="fm"><i class="sw z-fm"></i>Facilities</button></li>
-        <li><button type="button" data-key="land"><i class="sw z-land"></i>Landscaping</button></li>
-      </ul>
-      <div class="legend-find">
-        <p class="legend-sub" data-i18n="hero.search">Find your plot</p>
-        <div class="seg" role="radiogroup" aria-label="I want to">
-          <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
-          <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
-        </div>
-        <div class="legend-fields" id="legend-more">
-          <label class="field">
-            <span class="field-label">Community</span>
-            <select dir="ltr" name="community" id="h-community">
-              <option value="">Any community</option>
-              <option value="zayed">Zayed City</option>
-              <option value="saadiyat">Saadiyat Island</option>
-              <option value="bateen">Al Bateen Marina</option>
-              <option value="jvc">Jumeirah Village Circle</option>
-              <option value="mangrove">Eastern Mangrove Corniche</option>
-            </select>
-          </label>
-          <label class="field">
-            <span class="field-label">Home</span>
-            <select dir="ltr" name="type" id="h-type">
-              <option value="">Any type</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Townhouse">Townhouse</option>
-              <option value="Villa">Villa</option>
-              <option value="Penthouse">Penthouse</option>
-            </select>
-          </label>
-        </div>
-        <button class="btn btn-red legend-go" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
-        <button type="button" class="legend-toggle" aria-expanded="false" aria-controls="legend-more">More filters</button>
-      </div>
-    </form>
   </div>
 
   <div class="day-clock" id="day-clock">
@@ -2029,7 +1979,6 @@ html.smooth { scroll-behavior: auto; }
   const svg = $(".plan-svg");
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
-  const keyBtns = $$(".key button");
   // pill widths are measured from the font at build time (drawings.py), so nothing resizes in the browser
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
@@ -2173,21 +2122,47 @@ html.smooth { scroll-behavior: auto; }
   }
 
   const mobile = window.matchMedia("(max-width: 1200px)");
-  function fitPlan() {
-    svg.setAttribute("viewBox", mobile.matches ? "540 30 1060 940" : "0 0 1600 1000");
-    svg.setAttribute("preserveAspectRatio", mobile.matches ? "xMidYMid meet" : "xMidYMid slice");
+  // on desktop the business card sits in the intro column; on smaller screens it follows the plan
+  const cardHome = $("#card-home");
+  const cardAway = card.parentNode;
+  const cardAfter = card.nextSibling;
+  function homeCard() {
+    if (!mobile.matches) { if (card.parentNode !== cardHome) cardHome.appendChild(card); }
+    else if (card.parentNode !== cardAway) cardAway.insertBefore(card, cardAfter);
+    card.classList.toggle("in-intro", !mobile.matches);
   }
+  // desktop: fit the plotted area (x 576..1590) into the space beside the intro, so text never sits on a plot
+  const PLOT_L = 560, PLOT_R = 1596, PLOT_T = 20, PLOT_B = 950;
+  function fitPlan() {
+    if (mobile.matches) {
+      svg.setAttribute("viewBox", "540 30 1060 940");
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      return;
+    }
+    const W = plan.clientWidth, H = plan.clientHeight;
+    const ir = $(".hero-intro").getBoundingClientRect(), pr = plan.getBoundingClientRect();
+    const rtl = document.dir === "rtl";
+    const free = rtl ? ir.left - pr.left - 40 : pr.right - ir.right - 40;
+    const s = Math.min(H / (PLOT_B - PLOT_T + 40), free / (PLOT_R - PLOT_L));
+    const vbW = W / s, vbH = H / s;
+    const vx = rtl ? PLOT_R - (ir.left - pr.left - 24) / s : PLOT_L - (ir.right - pr.left + 24) / s;
+    const vy = (PLOT_T + PLOT_B) / 2 - vbH / 2 + 18 / s;
+    svg.setAttribute("viewBox", `${vx.toFixed(1)} ${vy.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`);
+    svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
+  }
+  homeCard();
   fitPlan();
-  mobile.addEventListener("change", fitPlan);
+  mobile.addEventListener("change", () => { homeCard(); fitPlan(); });
+  window.addEventListener("resize", fitPlan);
   let autoPan = false;
   pan.addEventListener("scroll", () => { if (!autoPan) plan.classList.add("is-panned"); }, { passive: true });
   let docked = true;
   function placeCard(key) {
-    if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
+    if (mobile.matches || card.classList.contains("in-intro")) { card.style.left = ""; card.style.top = ""; return; }
     const pr = plan.getBoundingClientRect();
     const target = key === "all" ? null : plots[key].querySelector(".zone").getBoundingClientRect();
     const cw = card.offsetWidth, ch = card.offsetHeight;
-    const tb = $(".title-block").getBoundingClientRect();
+    const tb = $(".hero-intro").getBoundingClientRect();
     const minX = (document.dir === "rtl" ? 16 : tb.right - pr.left + 20);
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
@@ -2237,7 +2212,6 @@ html.smooth { scroll-behavior: auto; }
       l.classList.toggle("is-on", key === "all" || k === key);
       l.classList.toggle("is-dim", key !== "all" && k !== key && !BIZ[key].links.includes(k));
     });
-    keyBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.key === key)));
     hours.forEach((h, j) => { h.setAttribute("aria-selected", String(j === i)); h.tabIndex = j === i ? 0 : -1; });
     const h = hours[i];
     const smooth = reduced.matches ? "auto" : "smooth";
@@ -2252,11 +2226,13 @@ html.smooth { scroll-behavior: auto; }
     docked = !user;
     setLight(key);
     drawLinks(key);
+    card.classList.remove("is-rest");
     fillCard(key);
     if (cardExit) { cardExit.cancel(); cardExit = null; card.style.overflow = ""; }
     card.hidden = false;
     placeCard(key);
     if (!reduced.matches) { card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in"); }
+    fitPlan();
     if (user) $(".plan-hint").textContent = "";
   }
 
@@ -2288,15 +2264,6 @@ html.smooth { scroll-behavior: auto; }
     l.addEventListener("pointerenter", () => l.classList.add("is-hover"));
     l.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
   });
-  keyBtns.forEach((b) => b.addEventListener("click", () => { stop(); go(DAY.indexOf(b.dataset.key), true); }));
-  const legend = $("#hero-search");
-  const legendToggle = $(".legend-toggle");
-  legendToggle.addEventListener("click", () => {
-    const open = !legend.classList.contains("is-open");
-    legend.classList.toggle("is-open", open);
-    legendToggle.setAttribute("aria-expanded", String(open));
-    legendToggle.textContent = open ? "Fewer filters" : "More filters";
-  });
   let cardExit = null;
   function hideCard() {
     // the card leaves quickly; in the stacked layout its row collapses so the content below glides up
@@ -2312,13 +2279,25 @@ html.smooth { scroll-behavior: auto; }
     const done = () => { card.hidden = true; card.style.overflow = ""; cardExit = null; };
     cardExit.finished.then(done, () => { card.style.overflow = ""; });
   }
+  function restCard() {
+    $(".card-hour", card).textContent = "";
+    $(".card-moment", card).textContent = "Tap any plot, or press play, to see how it works with the others.";
+    $(".card-name", card).textContent = "Pick a plot";
+    card.style.setProperty("--zc", "var(--red)");
+    $(".card-operator", card).textContent = "";
+    $(".card-text", card).textContent = "";
+    $(".card-stat", card).textContent = "";
+    $(".card-chips", card).replaceChildren();
+    $(".card-links-label", card).textContent = "";
+    const v = $(".card-visit", card); v.textContent = ""; v.removeAttribute("href");
+    card.classList.add("is-rest");
+  }
   function closeCard() {
-    hideCard();
+    if (card.classList.contains("in-intro")) restCard(); else hideCard();
     hours.forEach((h) => h.setAttribute("aria-selected", "false"));
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
     Object.values(labels).forEach((l) => l.classList.remove("is-on", "is-dim"));
-    keyBtns.forEach((b) => b.setAttribute("aria-pressed", "false"));
     clearLinks();
   }
   $(".card-close", card).addEventListener("click", () => { stop(); closeCard(); });
@@ -2388,11 +2367,6 @@ html.smooth { scroll-behavior: auto; }
     form.requestSubmit();
   }));
   $$("[data-prefill]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); prefill(JSON.parse(a.dataset.prefill), true); }));
-  $("#hero-search").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const f = e.currentTarget.elements;
-    prefill({ mode: f.hmode.value, community: f.community.value, type: f.type.value }, true);
-  });
 
   /* ------------------------------------------------------------ communities */
   const pins = $$(".pin");
@@ -2620,9 +2594,10 @@ html.smooth { scroll-behavior: auto; }
     $$(".water, .pool, .track, .pitch, .park-lawn", svg).forEach((w, i) => enter(w, [{ opacity: 0 }, { opacity: 1 }], 380 + i * 30, 700));
     $$(".label-in", svg).forEach((l, i) => enter(l, [{ opacity: 0, transform: "scale(0.6)" }, { opacity: 1, transform: "none" }], 1050 + i * 60, 700));
     enter($(".traffic", svg), [{ opacity: 0 }, { opacity: 1 }], 1200, 800);
-    $$(".tb-sheet h1 > span").forEach((sp, i) => enter(sp, up(34), 260 + i * 110, 1000));
-    enter($(".tb-sheet"), [{ opacity: 0, transform: "translateX(-28px)" }, { opacity: 1, transform: "none" }], 180, 950);
-    enter($(".legend-search"), up(28), 420, 950);
+    $$(".hero-intro h1 > span").forEach((sp, i) => enter(sp, up(48), 220 + i * 120, 1100));
+    enter($(".hero-intro"), [{ opacity: 0 }, { opacity: 1 }], 120, 600);
+    enter($(".hero-lede"), up(24), 520, 900);
+    enter($(".hero-cta"), up(24), 760, 900);
     enter($(".day-clock"), up(28), 560, 950);
     enter($(".plan-note"), [{ opacity: 0 }, { opacity: 1 }], 1300, 700);
     if (!card.hidden) enter(card, [{ opacity: 0, transform: "scale(0.92) translateY(10px)" }, { opacity: 1, transform: "none" }], 1250, 800);
@@ -2698,9 +2673,9 @@ html.smooth { scroll-behavior: auto; }
   /* ------------------------------------------------------------ language: EN / AR preview */
   const AR = {
     "nav.find": "ابحث عن منزل", "nav.communities": "المجتمعات", "nav.services": "خدمة العملاء", "nav.story": "قصتنا", "nav.about": "عن بلوم",
-    "cta.enquire": "استفسر", "cta.enquiry": "أرسل استفساراً", "cta.search": "ابحث عن المنازل",
+    "cta.enquire": "استفسر", "cta.enquiry": "أرسل استفساراً", "cta.search": "ابحث عن منزل",
     "hero.title1": "مرحباً بكم في", "hero.title2": "عالم بلوم", "hero.lede": "سبعة أعمال. مجتمع واحد متصل. اضغط على أي قطعة لترى كيف تتصل.",
-    "hero.search": "ابحث عن قطعتك", "mode.buy": "شراء", "mode.rent": "إيجار",
+    "mode.buy": "شراء", "mode.rent": "إيجار",
     "find.title": "ابحث عن مكان تسميه منزلك.", "comm.title": "خمسة مجتمعات، ساحل واحد.", "life.title": "أكثر من مكان. أسلوب حياة.",
     "svc.title": "كل ما تحتاجه، أقرب إلى منزلك.", "awards.title": "تقدير لطريقتنا في بناء المجتمعات.", "story.title": "من مجتمع واحد إلى عالم بلوم.",
     "about.title": "نبني المجتمعات بعناية. ونصنع قيمة دائمة.", "footer.title": "لنجد مكانك في عالم بلوم.",
@@ -2713,6 +2688,7 @@ html.smooth { scroll-behavior: auto; }
     document.documentElement.dir = ar ? "rtl" : "ltr";
     $$("[data-i18n]").forEach((el) => { const k = el.dataset.i18n; el.textContent = ar ? (AR[k] || EN[k]) : EN[k]; });
     $$(".lang-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    fitPlan();
     if (!card.hidden) placeCard(DAY[step]);
     if (ar) toast("معاينة عربية: العناوين والتنقل فقط. Arabic preview covers headings and navigation only.");
   }

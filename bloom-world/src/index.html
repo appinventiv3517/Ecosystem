@@ -75,63 +75,14 @@
     <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
   </div>
 
-  <div class="title-block">
-    <div class="tb-sheet">
-      <h1 id="hero-title"><span data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
-      <p class="tb-lede" data-i18n="hero.lede">Seven businesses. One connected community. Tap any plot to see who it works with.</p>
-      <dl class="tb-cells">
-        <div class="tb-c tb-client"><dt>Client</dt><dd><img src="assets/img/bloom-wordmark-red.png" alt="Bloom" width="70" height="22"></dd></div>
-        <div class="tb-c"><dt>Sheet</dt><dd dir="ltr">01 of 08</dd></div>
-        <div class="tb-c"><dt>Scale</dt><dd dir="ltr">Not to scale</dd></div>
-        <div class="tb-c tb-status"><dt>Status</dt><dd dir="ltr">Design concept for review. Not the live Bloom Holding website.</dd></div>
-      </dl>
+  <div class="hero-intro">
+    <h1 id="hero-title"><span class="h1-a" data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
+    <p class="hero-lede" data-i18n="hero.lede">Seven businesses running one connected community. Tap any plot to see who it works with.</p>
+    <div class="card-home" id="card-home"></div>
+    <div class="hero-cta">
+      <a class="btn btn-red btn-lg" href="#find" id="hero-find"><span data-i18n="cta.search">Find a home</span><svg class="ic"><use href="#i-arrow"/></svg></a>
+      <button type="button" class="btn btn-ghost btn-lg" data-enquire data-i18n="cta.enquiry">Make an enquiry</button>
     </div>
-    <form class="legend-search" id="hero-search" aria-labelledby="hero-search-title">
-      <div class="legend-head">
-        <h2 class="legend-title" id="hero-search-title">Legend</h2>
-      </div>
-      <ul class="key" aria-label="Plan key: select a business to find its plot">
-        <li><button type="button" data-key="re"><i class="sw z-re"></i>Real Estate</button></li>
-        <li><button type="button" data-key="edu"><i class="sw z-edu"></i>Education</button></li>
-        <li><button type="button" data-key="hosp"><i class="sw z-hosp"></i>Hospitality</button></li>
-        <li><button type="button" data-key="retail"><i class="sw z-retail"></i>Retail</button></li>
-        <li><button type="button" data-key="health"><i class="sw z-health"></i>Healthcare</button></li>
-        <li><button type="button" data-key="fm"><i class="sw z-fm"></i>Facilities</button></li>
-        <li><button type="button" data-key="land"><i class="sw z-land"></i>Landscaping</button></li>
-      </ul>
-      <div class="legend-find">
-        <p class="legend-sub" data-i18n="hero.search">Find your plot</p>
-        <div class="seg" role="radiogroup" aria-label="I want to">
-          <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
-          <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
-        </div>
-        <div class="legend-fields" id="legend-more">
-          <label class="field">
-            <span class="field-label">Community</span>
-            <select dir="ltr" name="community" id="h-community">
-              <option value="">Any community</option>
-              <option value="zayed">Zayed City</option>
-              <option value="saadiyat">Saadiyat Island</option>
-              <option value="bateen">Al Bateen Marina</option>
-              <option value="jvc">Jumeirah Village Circle</option>
-              <option value="mangrove">Eastern Mangrove Corniche</option>
-            </select>
-          </label>
-          <label class="field">
-            <span class="field-label">Home</span>
-            <select dir="ltr" name="type" id="h-type">
-              <option value="">Any type</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Townhouse">Townhouse</option>
-              <option value="Villa">Villa</option>
-              <option value="Penthouse">Penthouse</option>
-            </select>
-          </label>
-        </div>
-        <button class="btn btn-red legend-go" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
-        <button type="button" class="legend-toggle" aria-expanded="false" aria-controls="legend-more">More filters</button>
-      </div>
-    </form>
   </div>
 
   <div class="day-clock" id="day-clock">

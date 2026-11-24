@@ -20,7 +20,7 @@ python3 build.py
 
 ## What's on the page
 
-- **Living masterplan (hero):** an illustrative site plan with one plot per Bloom business. Tap a plot to draw its service lines to the businesses it works with. The day clock runs the plan from 07:00 to night, and the title block holds a working home search.
+- **Living masterplan (hero):** an illustrative site plan with one plot per Bloom business. Tap a plot to draw its service lines to the businesses it works with; the selected business shows in the intro beside the plan (below the plan on small screens). A day clock runs the plan from 07:00 to night. "Find a home" leads to the search section.
 - **Find a home:** buy/rent search with a prototype result, plus featured developments as land parcels.
 - **Communities:** five pins on a not-to-scale coast map, with a detail panel.
 - **Life at Bloom:** expanding photo strips.

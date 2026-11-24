@@ -162,7 +162,6 @@
   const svg = $(".plan-svg");
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
-  const keyBtns = $$(".key button");
   // pill widths are measured from the font at build time (drawings.py), so nothing resizes in the browser
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
@@ -306,21 +305,47 @@
   }
 
   const mobile = window.matchMedia("(max-width: 1200px)");
-  function fitPlan() {
-    svg.setAttribute("viewBox", mobile.matches ? "540 30 1060 940" : "0 0 1600 1000");
-    svg.setAttribute("preserveAspectRatio", mobile.matches ? "xMidYMid meet" : "xMidYMid slice");
+  // on desktop the business card sits in the intro column; on smaller screens it follows the plan
+  const cardHome = $("#card-home");
+  const cardAway = card.parentNode;
+  const cardAfter = card.nextSibling;
+  function homeCard() {
+    if (!mobile.matches) { if (card.parentNode !== cardHome) cardHome.appendChild(card); }
+    else if (card.parentNode !== cardAway) cardAway.insertBefore(card, cardAfter);
+    card.classList.toggle("in-intro", !mobile.matches);
   }
+  // desktop: fit the plotted area (x 576..1590) into the space beside the intro, so text never sits on a plot
+  const PLOT_L = 560, PLOT_R = 1596, PLOT_T = 20, PLOT_B = 950;
+  function fitPlan() {
+    if (mobile.matches) {
+      svg.setAttribute("viewBox", "540 30 1060 940");
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      return;
+    }
+    const W = plan.clientWidth, H = plan.clientHeight;
+    const ir = $(".hero-intro").getBoundingClientRect(), pr = plan.getBoundingClientRect();
+    const rtl = document.dir === "rtl";
+    const free = rtl ? ir.left - pr.left - 40 : pr.right - ir.right - 40;
+    const s = Math.min(H / (PLOT_B - PLOT_T + 40), free / (PLOT_R - PLOT_L));
+    const vbW = W / s, vbH = H / s;
+    const vx = rtl ? PLOT_R - (ir.left - pr.left - 24) / s : PLOT_L - (ir.right - pr.left + 24) / s;
+    const vy = (PLOT_T + PLOT_B) / 2 - vbH / 2 + 18 / s;
+    svg.setAttribute("viewBox", `${vx.toFixed(1)} ${vy.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`);
+    svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
+  }
+  homeCard();
   fitPlan();
-  mobile.addEventListener("change", fitPlan);
+  mobile.addEventListener("change", () => { homeCard(); fitPlan(); });
+  window.addEventListener("resize", fitPlan);
   let autoPan = false;
   pan.addEventListener("scroll", () => { if (!autoPan) plan.classList.add("is-panned"); }, { passive: true });
   let docked = true;
   function placeCard(key) {
-    if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
+    if (mobile.matches || card.classList.contains("in-intro")) { card.style.left = ""; card.style.top = ""; return; }
     const pr = plan.getBoundingClientRect();
     const target = key === "all" ? null : plots[key].querySelector(".zone").getBoundingClientRect();
     const cw = card.offsetWidth, ch = card.offsetHeight;
-    const tb = $(".title-block").getBoundingClientRect();
+    const tb = $(".hero-intro").getBoundingClientRect();
     const minX = (document.dir === "rtl" ? 16 : tb.right - pr.left + 20);
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
@@ -370,7 +395,6 @@
       l.classList.toggle("is-on", key === "all" || k === key);
       l.classList.toggle("is-dim", key !== "all" && k !== key && !BIZ[key].links.includes(k));
     });
-    keyBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.key === key)));
     hours.forEach((h, j) => { h.setAttribute("aria-selected", String(j === i)); h.tabIndex = j === i ? 0 : -1; });
     const h = hours[i];
     const smooth = reduced.matches ? "auto" : "smooth";
@@ -385,11 +409,13 @@
     docked = !user;
     setLight(key);
     drawLinks(key);
+    card.classList.remove("is-rest");
     fillCard(key);
     if (cardExit) { cardExit.cancel(); cardExit = null; card.style.overflow = ""; }
     card.hidden = false;
     placeCard(key);
     if (!reduced.matches) { card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in"); }
+    fitPlan();
     if (user) $(".plan-hint").textContent = "";
   }
 
@@ -421,15 +447,6 @@
     l.addEventListener("pointerenter", () => l.classList.add("is-hover"));
     l.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
   });
-  keyBtns.forEach((b) => b.addEventListener("click", () => { stop(); go(DAY.indexOf(b.dataset.key), true); }));
-  const legend = $("#hero-search");
-  const legendToggle = $(".legend-toggle");
-  legendToggle.addEventListener("click", () => {
-    const open = !legend.classList.contains("is-open");
-    legend.classList.toggle("is-open", open);
-    legendToggle.setAttribute("aria-expanded", String(open));
-    legendToggle.textContent = open ? "Fewer filters" : "More filters";
-  });
   let cardExit = null;
   function hideCard() {
     // the card leaves quickly; in the stacked layout its row collapses so the content below glides up
@@ -445,13 +462,25 @@
     const done = () => { card.hidden = true; card.style.overflow = ""; cardExit = null; };
     cardExit.finished.then(done, () => { card.style.overflow = ""; });
   }
+  function restCard() {
+    $(".card-hour", card).textContent = "";
+    $(".card-moment", card).textContent = "Tap any plot, or press play, to see how it works with the others.";
+    $(".card-name", card).textContent = "Pick a plot";
+    card.style.setProperty("--zc", "var(--red)");
+    $(".card-operator", card).textContent = "";
+    $(".card-text", card).textContent = "";
+    $(".card-stat", card).textContent = "";
+    $(".card-chips", card).replaceChildren();
+    $(".card-links-label", card).textContent = "";
+    const v = $(".card-visit", card); v.textContent = ""; v.removeAttribute("href");
+    card.classList.add("is-rest");
+  }
   function closeCard() {
-    hideCard();
+    if (card.classList.contains("in-intro")) restCard(); else hideCard();
     hours.forEach((h) => h.setAttribute("aria-selected", "false"));
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
     Object.values(labels).forEach((l) => l.classList.remove("is-on", "is-dim"));
-    keyBtns.forEach((b) => b.setAttribute("aria-pressed", "false"));
     clearLinks();
   }
   $(".card-close", card).addEventListener("click", () => { stop(); closeCard(); });
@@ -521,11 +550,6 @@
     form.requestSubmit();
   }));
   $$("[data-prefill]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); prefill(JSON.parse(a.dataset.prefill), true); }));
-  $("#hero-search").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const f = e.currentTarget.elements;
-    prefill({ mode: f.hmode.value, community: f.community.value, type: f.type.value }, true);
-  });
 
   /* ------------------------------------------------------------ communities */
   const pins = $$(".pin");
@@ -753,9 +777,10 @@
     $$(".water, .pool, .track, .pitch, .park-lawn", svg).forEach((w, i) => enter(w, [{ opacity: 0 }, { opacity: 1 }], 380 + i * 30, 700));
     $$(".label-in", svg).forEach((l, i) => enter(l, [{ opacity: 0, transform: "scale(0.6)" }, { opacity: 1, transform: "none" }], 1050 + i * 60, 700));
     enter($(".traffic", svg), [{ opacity: 0 }, { opacity: 1 }], 1200, 800);
-    $$(".tb-sheet h1 > span").forEach((sp, i) => enter(sp, up(34), 260 + i * 110, 1000));
-    enter($(".tb-sheet"), [{ opacity: 0, transform: "translateX(-28px)" }, { opacity: 1, transform: "none" }], 180, 950);
-    enter($(".legend-search"), up(28), 420, 950);
+    $$(".hero-intro h1 > span").forEach((sp, i) => enter(sp, up(48), 220 + i * 120, 1100));
+    enter($(".hero-intro"), [{ opacity: 0 }, { opacity: 1 }], 120, 600);
+    enter($(".hero-lede"), up(24), 520, 900);
+    enter($(".hero-cta"), up(24), 760, 900);
     enter($(".day-clock"), up(28), 560, 950);
     enter($(".plan-note"), [{ opacity: 0 }, { opacity: 1 }], 1300, 700);
     if (!card.hidden) enter(card, [{ opacity: 0, transform: "scale(0.92) translateY(10px)" }, { opacity: 1, transform: "none" }], 1250, 800);
@@ -831,9 +856,9 @@
   /* ------------------------------------------------------------ language: EN / AR preview */
   const AR = {
     "nav.find": "ابحث عن منزل", "nav.communities": "المجتمعات", "nav.services": "خدمة العملاء", "nav.story": "قصتنا", "nav.about": "عن بلوم",
-    "cta.enquire": "استفسر", "cta.enquiry": "أرسل استفساراً", "cta.search": "ابحث عن المنازل",
+    "cta.enquire": "استفسر", "cta.enquiry": "أرسل استفساراً", "cta.search": "ابحث عن منزل",
     "hero.title1": "مرحباً بكم في", "hero.title2": "عالم بلوم", "hero.lede": "سبعة أعمال. مجتمع واحد متصل. اضغط على أي قطعة لترى كيف تتصل.",
-    "hero.search": "ابحث عن قطعتك", "mode.buy": "شراء", "mode.rent": "إيجار",
+    "mode.buy": "شراء", "mode.rent": "إيجار",
     "find.title": "ابحث عن مكان تسميه منزلك.", "comm.title": "خمسة مجتمعات، ساحل واحد.", "life.title": "أكثر من مكان. أسلوب حياة.",
     "svc.title": "كل ما تحتاجه، أقرب إلى منزلك.", "awards.title": "تقدير لطريقتنا في بناء المجتمعات.", "story.title": "من مجتمع واحد إلى عالم بلوم.",
     "about.title": "نبني المجتمعات بعناية. ونصنع قيمة دائمة.", "footer.title": "لنجد مكانك في عالم بلوم.",
@@ -846,6 +871,7 @@
     document.documentElement.dir = ar ? "rtl" : "ltr";
     $$("[data-i18n]").forEach((el) => { const k = el.dataset.i18n; el.textContent = ar ? (AR[k] || EN[k]) : EN[k]; });
     $$(".lang-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    fitPlan();
     if (!card.hidden) placeCard(DAY[step]);
     if (ar) toast("معاينة عربية: العناوين والتنقل فقط. Arabic preview covers headings and navigation only.");
   }
