@@ -965,7 +965,8 @@
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      if (blob.classList.contains("is-out")) {
+      // never fly in from somewhere else: re-entering, or a big jump, puts the blob straight under the pointer
+      if (blob.classList.contains("is-out") || Math.hypot(mx - hx, my - hy) > 160) {
         hx = gx = mx; hy = gy = my; tp.forEach((p) => { p.x = mx; p.y = my; });
         blob.classList.remove("is-out");
       }
@@ -973,7 +974,9 @@
       pullMagnet(e.target);
     }, { passive: true });
     window.addEventListener("scroll", () => { const el = document.elementFromPoint(mx, my); if (el) setState(el); }, { passive: true });
-    document.addEventListener("pointerleave", () => { blob.classList.add("is-out"); btag.classList.remove("is-on"); lastKey = ""; });
+    const hideBlob = () => { blob.classList.add("is-out"); btag.classList.remove("is-on"); lastKey = ""; };
+    document.addEventListener("pointerleave", hideBlob);
+    document.addEventListener("mouseout", (e) => { if (!e.relatedTarget) hideBlob(); });
     window.addEventListener("blur", () => blob.classList.add("is-out"));
     // a click splashes: droplets fly out of the blob and are pulled back in
     let squish = 0;
@@ -1012,7 +1015,7 @@
       const sx = (1 + sp) * (1 - squish * 0.35), sy = (1 - sp * 0.4) * (1 - squish * 0.35);
       head.style.transform = `rotate(${ang.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
       blob.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
-      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0) rotate(${(vx * 0.4).toFixed(1)}deg)`;
+      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0) rotate(${Math.max(-8, Math.min(8, vx * 0.3)).toFixed(1)}deg)`;
       requestAnimationFrame(loop);
     })();
   }
