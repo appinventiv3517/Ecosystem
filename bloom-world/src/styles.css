@@ -1146,48 +1146,37 @@ body.dock-on .toast { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
 .dock :focus-visible { outline-color: var(--site); }
 @media (prefers-reduced-motion: reduce) { .dock { transition: opacity 0.2s; } }
 
-/* ---------------------------------------------------------------- custom cursor: a surveyor's reticle (fine pointers with motion only) */
-.cur { position: fixed; inset: 0 auto auto 0; z-index: 90; pointer-events: none; display: none; }
-html.has-cursor .cur { display: block; }
+/* ---------------------------------------------------------------- custom cursor: a liquid blob (fine pointers with motion only) */
 html.has-cursor, html.has-cursor * { cursor: none !important; }
 html.has-cursor :is(input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]) { cursor: text !important; }
-html.has-cursor:has(dialog[open]) .cur { display: none; }
+html.has-cursor:has(dialog[open]) :is(.blob, .blob-tag) { display: none; }
 html.has-cursor:has(dialog[open]) * { cursor: auto !important; }
 html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { cursor: pointer !important; }
 
-/* the crosshair: ink ticks with a white halo so it reads on any background */
-.cur-ret { position: fixed; left: 0; top: 0; width: 30px; height: 30px; margin: -15px 0 0 -15px; overflow: visible; will-change: transform; transition: opacity 0.2s; }
-.cur-ret g { transform-box: view-box; transform-origin: center; transition: transform 0.35s var(--ease); }
-.cur-ret .halo { stroke: #fff; stroke-width: 4.5; stroke-linecap: round; fill: #fff; }
-.cur-ret .ink { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; fill: var(--ink); }
-.cur.is-hover .cur-ret g, .cur.is-label .cur-ret g { transform: scale(0.75); }
-.cur.is-down .cur-ret g { transform: rotate(45deg) scale(0.8); }
+/* the blob sits straight on the page so it can invert whatever is under it */
+.blob { position: fixed; left: 0; top: 0; width: 260px; height: 260px; margin: -130px 0 0 -130px; z-index: 90; pointer-events: none; mix-blend-mode: difference; filter: url(#goo); will-change: transform; transition: opacity 0.25s; }
+.bd { position: absolute; left: 130px; top: 130px; border-radius: 50%; background: #fff; will-change: transform; transition: width 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), height 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), margin 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.bd-head { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
+.bd-t1 { width: 16px; height: 16px; margin: -8px 0 0 -8px; }
+.bd-t2 { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.bd-t3 { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+.bd-drop { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.blob.is-hover .bd-head { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
+.blob.is-hover :is(.bd-t1, .bd-t2, .bd-t3) { width: 0; height: 0; margin: 0; }
+.blob.is-label, .blob.is-text, .blob.is-out { opacity: 0; }
+.blob.is-sheen { mix-blend-mode: normal; }
+.blob.is-sheen:not(.is-label):not(.is-text):not(.is-out) { opacity: 0.28; }
+.blob { transition: opacity 0.25s; }
+.bd { transition-property: width, height, margin, background-color; }
 
-/* selection brackets that trail the crosshair and snap around what you point at */
-.cur-box { position: fixed; left: 0; top: 0; will-change: transform, width, height; filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); transition: opacity 0.25s; }
-.cb { position: absolute; width: 10px; height: 10px; border: 0 solid var(--cc, var(--k)); transition: border-color 0.3s, width 0.3s var(--ease), height 0.3s var(--ease); }
-.cb-tl { --k: var(--re); left: 0; top: 0; border-width: 3px 0 0 3px; border-top-left-radius: 3px; }
-.cb-tr { --k: var(--edu); right: 0; top: 0; border-width: 3px 3px 0 0; border-top-right-radius: 3px; }
-.cb-bl { --k: var(--land); left: 0; bottom: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 3px; }
-.cb-br { --k: var(--hosp); right: 0; bottom: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 3px; }
-.cur.is-snap .cb { width: 16px; height: 16px; }
-.cur.is-snap .cur-box { animation: lock-on 0.45s cubic-bezier(0.3, 1.6, 0.5, 1); }
-@keyframes lock-on { 40% { filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgb(255 255 255 / 0.9)); } }
-.cur.is-label .cur-tag { animation: tag-pop 0.45s cubic-bezier(0.3, 1.8, 0.5, 1); }
-@keyframes tag-pop { from { scale: 0.3; rotate: -12deg; } }
-.cur-tag { transform-origin: 0 100%; }
-.cur.is-down .cur-box { scale: 0.96; }
-.cur-box { transition: opacity 0.25s, scale 0.15s var(--ease); }
-.cur-tag {
-  position: absolute; left: -2px; bottom: calc(100% + 6px); padding: 5px 9px 5px 8px; border-radius: 6px; white-space: nowrap;
-  font: 700 0.78rem/1 var(--display); letter-spacing: 0.01em; color: var(--cf, #fff); background: var(--cc, var(--ink));
-  display: inline-flex; align-items: center; gap: 6px; opacity: 0; translate: 0 6px; transition: opacity 0.2s, translate 0.3s var(--ease), background-color 0.3s;
+/* over plots and cards: a coloured bubble with the action */
+.blob-tag {
+  position: fixed; left: 0; top: 0; z-index: 91; pointer-events: none; width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--cc, var(--ink)); color: var(--cf, #fff); box-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.55);
+  font: 700 0.86rem/1 var(--display); letter-spacing: 0.01em; will-change: transform;
+  scale: 0; transition: scale 0.45s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.3s;
 }
-.cur-tag::before { content: ""; width: 6px; height: 6px; background: currentColor; transform: rotate(45deg); opacity: 0.85; }
-.cur-tag .ic { width: 13px; height: 13px; }
-.cur.is-label .cur-tag { opacity: 1; translate: 0 0; }
-.cur.is-flip .cur-tag { bottom: auto; top: calc(100% + 6px); }
-.cur.is-text .cur-ret, .cur.is-out .cur-ret, .cur.is-out .cur-box { opacity: 0; }
-.cur-bit { position: fixed; left: 0; top: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 2px; border: 1.5px solid #fff; pointer-events: none; z-index: 89; }
-.cur-ping { position: fixed; left: 0; top: 0; width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 2px solid var(--ink); pointer-events: none; z-index: 89; box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff; }
+.blob-tag span { display: inline-flex; align-items: center; gap: 5px; }
+.blob-tag .ic { width: 14px; height: 14px; }
+.blob-tag.is-on { scale: 1; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }

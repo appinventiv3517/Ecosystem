@@ -1155,50 +1155,39 @@ body.dock-on .toast { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
 .dock :focus-visible { outline-color: var(--site); }
 @media (prefers-reduced-motion: reduce) { .dock { transition: opacity 0.2s; } }
 
-/* ---------------------------------------------------------------- custom cursor: a surveyor's reticle (fine pointers with motion only) */
-.cur { position: fixed; inset: 0 auto auto 0; z-index: 90; pointer-events: none; display: none; }
-html.has-cursor .cur { display: block; }
+/* ---------------------------------------------------------------- custom cursor: a liquid blob (fine pointers with motion only) */
 html.has-cursor, html.has-cursor * { cursor: none !important; }
 html.has-cursor :is(input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]) { cursor: text !important; }
-html.has-cursor:has(dialog[open]) .cur { display: none; }
+html.has-cursor:has(dialog[open]) :is(.blob, .blob-tag) { display: none; }
 html.has-cursor:has(dialog[open]) * { cursor: auto !important; }
 html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { cursor: pointer !important; }
 
-/* the crosshair: ink ticks with a white halo so it reads on any background */
-.cur-ret { position: fixed; left: 0; top: 0; width: 30px; height: 30px; margin: -15px 0 0 -15px; overflow: visible; will-change: transform; transition: opacity 0.2s; }
-.cur-ret g { transform-box: view-box; transform-origin: center; transition: transform 0.35s var(--ease); }
-.cur-ret .halo { stroke: #fff; stroke-width: 4.5; stroke-linecap: round; fill: #fff; }
-.cur-ret .ink { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; fill: var(--ink); }
-.cur.is-hover .cur-ret g, .cur.is-label .cur-ret g { transform: scale(0.75); }
-.cur.is-down .cur-ret g { transform: rotate(45deg) scale(0.8); }
+/* the blob sits straight on the page so it can invert whatever is under it */
+.blob { position: fixed; left: 0; top: 0; width: 260px; height: 260px; margin: -130px 0 0 -130px; z-index: 90; pointer-events: none; mix-blend-mode: difference; filter: url(#goo); will-change: transform; transition: opacity 0.25s; }
+.bd { position: absolute; left: 130px; top: 130px; border-radius: 50%; background: #fff; will-change: transform; transition: width 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), height 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), margin 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.bd-head { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
+.bd-t1 { width: 16px; height: 16px; margin: -8px 0 0 -8px; }
+.bd-t2 { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.bd-t3 { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+.bd-drop { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.blob.is-hover .bd-head { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
+.blob.is-hover :is(.bd-t1, .bd-t2, .bd-t3) { width: 0; height: 0; margin: 0; }
+.blob.is-label, .blob.is-text, .blob.is-out { opacity: 0; }
+.blob.is-sheen { mix-blend-mode: normal; }
+.blob.is-sheen:not(.is-label):not(.is-text):not(.is-out) { opacity: 0.28; }
+.blob { transition: opacity 0.25s; }
+.bd { transition-property: width, height, margin, background-color; }
 
-/* selection brackets that trail the crosshair and snap around what you point at */
-.cur-box { position: fixed; left: 0; top: 0; will-change: transform, width, height; filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); transition: opacity 0.25s; }
-.cb { position: absolute; width: 10px; height: 10px; border: 0 solid var(--cc, var(--k)); transition: border-color 0.3s, width 0.3s var(--ease), height 0.3s var(--ease); }
-.cb-tl { --k: var(--re); left: 0; top: 0; border-width: 3px 0 0 3px; border-top-left-radius: 3px; }
-.cb-tr { --k: var(--edu); right: 0; top: 0; border-width: 3px 3px 0 0; border-top-right-radius: 3px; }
-.cb-bl { --k: var(--land); left: 0; bottom: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 3px; }
-.cb-br { --k: var(--hosp); right: 0; bottom: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 3px; }
-.cur.is-snap .cb { width: 16px; height: 16px; }
-.cur.is-snap .cur-box { animation: lock-on 0.45s cubic-bezier(0.3, 1.6, 0.5, 1); }
-@keyframes lock-on { 40% { filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgb(255 255 255 / 0.9)); } }
-.cur.is-label .cur-tag { animation: tag-pop 0.45s cubic-bezier(0.3, 1.8, 0.5, 1); }
-@keyframes tag-pop { from { scale: 0.3; rotate: -12deg; } }
-.cur-tag { transform-origin: 0 100%; }
-.cur.is-down .cur-box { scale: 0.96; }
-.cur-box { transition: opacity 0.25s, scale 0.15s var(--ease); }
-.cur-tag {
-  position: absolute; left: -2px; bottom: calc(100% + 6px); padding: 5px 9px 5px 8px; border-radius: 6px; white-space: nowrap;
-  font: 700 0.78rem/1 var(--display); letter-spacing: 0.01em; color: var(--cf, #fff); background: var(--cc, var(--ink));
-  display: inline-flex; align-items: center; gap: 6px; opacity: 0; translate: 0 6px; transition: opacity 0.2s, translate 0.3s var(--ease), background-color 0.3s;
+/* over plots and cards: a coloured bubble with the action */
+.blob-tag {
+  position: fixed; left: 0; top: 0; z-index: 91; pointer-events: none; width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--cc, var(--ink)); color: var(--cf, #fff); box-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.55);
+  font: 700 0.86rem/1 var(--display); letter-spacing: 0.01em; will-change: transform;
+  scale: 0; transition: scale 0.45s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.3s;
 }
-.cur-tag::before { content: ""; width: 6px; height: 6px; background: currentColor; transform: rotate(45deg); opacity: 0.85; }
-.cur-tag .ic { width: 13px; height: 13px; }
-.cur.is-label .cur-tag { opacity: 1; translate: 0 0; }
-.cur.is-flip .cur-tag { bottom: auto; top: calc(100% + 6px); }
-.cur.is-text .cur-ret, .cur.is-out .cur-ret, .cur.is-out .cur-box { opacity: 0; }
-.cur-bit { position: fixed; left: 0; top: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 2px; border: 1.5px solid #fff; pointer-events: none; z-index: 89; }
-.cur-ping { position: fixed; left: 0; top: 0; width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 2px solid var(--ink); pointer-events: none; z-index: 89; box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff; }
+.blob-tag span { display: inline-flex; align-items: center; gap: 5px; }
+.blob-tag .ic { width: 14px; height: 14px; }
+.blob-tag.is-on { scale: 1; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }
 
 </style>
@@ -3160,76 +3149,59 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
 
 
-  /* ------------------------------------------------------------ custom cursor: a surveyor's reticle that frames what you point at */
+  /* ------------------------------------------------------------ custom cursor: a liquid blob */
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (motion && finePointer.matches) {
-    const cur = document.createElement("div");
-    cur.className = "cur is-out";
-    cur.setAttribute("aria-hidden", "true");
-    const ticks = "M15 2v6M15 22v6M2 15h6M22 15h6";
-    cur.innerHTML = `<svg class="cur-ret" viewBox="0 0 30 30"><g><path class="halo" d="${ticks}"/><circle class="halo" cx="15" cy="15" r="2.6"/><path class="ink" d="${ticks}"/><circle class="ink" cx="15" cy="15" r="1.6"/></g></svg>`
-      + '<div class="cur-box"><i class="cb cb-tl"></i><i class="cb cb-tr"></i><i class="cb cb-bl"></i><i class="cb cb-br"></i><span class="cur-tag"></span></div>';
-    document.body.appendChild(cur);
+    // the goo: blur the dots together, then sharpen the edge back up so they merge like liquid
+    document.body.insertAdjacentHTML("beforeend", `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="5"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter></svg>
+      <div class="blob is-out" aria-hidden="true"><i class="bd bd-t3"></i><i class="bd bd-t2"></i><i class="bd bd-t1"></i><i class="bd bd-head"></i></div>
+      <div class="blob-tag" aria-hidden="true"><span></span></div>`);
     document.documentElement.classList.add("has-cursor");
-    const ret = $(".cur-ret", cur), box = $(".cur-box", cur), tag = $(".cur-tag", cur);
-    let mx = -100, my = -100;
-    const b = { x: -100, y: -100, w: 28, h: 28 };
-    const v = { x: 0, y: 0, w: 0, h: 0 };
-    let rot = 0, lastMove = 0, pmx = -100, pmy = -100, lastBit = 0, bits = 0;
-    const ZONES = ["--re", "--edu", "--land", "--hosp", "--retail", "--health", "--water"];
-    // little plot tiles that tumble off the frame when you move fast
-    function bit(x, y, spread, life) {
-      if (bits > 28) return;
-      bits++;
-      const el = document.createElement("span");
-      el.className = "cur-bit";
-      el.style.background = `var(${ZONES[Math.floor(Math.random() * ZONES.length)]})`;
-      document.body.appendChild(el);
-      const a = Math.random() * Math.PI * 2, d = spread * (0.5 + Math.random() * 0.6), r0 = Math.random() * 90;
-      el.animate([
-        { transform: `translate(${x}px, ${y}px) rotate(${r0}deg) scale(0.3)`, opacity: 1 },
-        { transform: `translate(${x + Math.cos(a) * d}px, ${y + Math.sin(a) * d}px) rotate(${r0 + 120}deg) scale(1)`, opacity: 1, offset: 0.3 },
-        { transform: `translate(${x + Math.cos(a) * d * 1.2}px, ${y + Math.sin(a) * d + 46}px) rotate(${r0 + 320}deg) scale(0.4)`, opacity: 0 },
-      ], { duration: life, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)" }).onfinish = () => { el.remove(); bits--; };
-    }
-    let snapEl = null;
-    // what the frame says over each kind of thing (first match wins)
+    const blob = $(".blob"), head = $(".bd-head", blob), tails = [$(".bd-t1", blob), $(".bd-t2", blob), $(".bd-t3", blob)];
+    const btag = $(".blob-tag"), btagText = $("span", btag);
+    let mx = -300, my = -300, hx = -300, hy = -300, gx = -300, gy = -300;
+    const tp = tails.map(() => ({ x: -300, y: -300 }));
     const LABELS = [
-      [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})`, el: el.closest(".plot") || el })],
-      [".parcel-hit", (el) => ({ t: "Enquire", c: "var(--red)", el })],
-      [".ci", (el) => ({ t: "View", c: "var(--water-deep)", el })],
-      [".tile:not([data-slot='a'])", (el) => ({ t: "Open", c: "var(--land)", el })],
-      [".role", (el) => ({ t: "Try it", c: "var(--fm)", el })],
-      [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--ink)", ic: "i-down", el: null })],
+      [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})` })],
+      [".parcel-hit", () => ({ t: "Enquire", c: "var(--red)" })],
+      [".ci", () => ({ t: "View", c: "var(--water-deep)" })],
+      [".tile:not([data-slot='a'])", () => ({ t: "Open", c: "var(--land)" })],
+      [".role", () => ({ t: "Try it", c: "var(--fm)" })],
+      [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--site)", ic: "i-down" })],
     ];
     const HOVER = "a, button, [role='button'], label, select, summary, input[type='range']";
     const TEXT = "input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea";
     let lastKey = "";
+    // on dark or coloured buttons an inverted blob turns garish, so there it becomes a soft sheen instead
+    function isDeep(el) {
+      for (let n = el; n && n !== document.body; n = n.parentElement) {
+        const m = getComputedStyle(n).backgroundColor.match(/[\d.]+/g);
+        if (m && (m.length < 4 || Number(m[3]) > 0.5)) { const [r, g, b] = m.map(Number); return (0.299 * r + 0.587 * g + 0.114 * b) < 150; }
+      }
+      return false;
+    }
     function setState(target) {
       if (!target.closest) return;
-      let key = "", info = null, el = null;
-      const field = target.closest(TEXT);
-      if (field) { key = "text"; el = field; }
+      let key = "", info = null;
+      if (target.closest(TEXT)) key = "text";
       else {
-        for (const [sel, fn] of LABELS) { const m = target.closest(sel); if (m) { info = fn(m); el = info.el; key = "label:" + info.t + info.c; break; } }
-        if (!info) { el = target.closest(HOVER); if (el) key = "hover"; }
+        for (const [sel, fn] of LABELS) { const m = target.closest(sel); if (m) { info = fn(m); key = "label:" + info.t + info.c; break; } }
+        if (!info && target.closest(HOVER)) key = "hover";
       }
-      // only frame things of a sensible size; big areas keep the small frame
-      if (el) { const r = el.getBoundingClientRect(); if (r.width > 720 || r.height > 520) el = null; }
-      snapEl = el;
-      cur.classList.toggle("is-snap", !!el);
+      if (key === "hover") key += isDeep(target.closest(HOVER)) ? ":deep" : "";
       if (key === lastKey) return;
       lastKey = key;
-      cur.classList.toggle("is-text", key === "text");
-      cur.classList.toggle("is-hover", key === "hover");
-      cur.classList.toggle("is-label", !!info);
+      blob.classList.toggle("is-text", key === "text");
+      blob.classList.toggle("is-hover", key.startsWith("hover"));
+      blob.classList.toggle("is-sheen", key === "hover:deep");
+      blob.classList.toggle("is-label", !!info);
+      btag.classList.toggle("is-on", !!info);
       if (info) {
-        cur.style.setProperty("--cc", info.c);
-        cur.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
-        tag.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
-      } else cur.style.removeProperty("--cc");
+        btag.style.setProperty("--cc", info.c);
+        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
+        btagText.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+      }
     }
-    // primary buttons lean towards the cursor
     const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
     let magnet = null;
     function pullMagnet(target) {
@@ -3244,66 +3216,56 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      if (cur.classList.contains("is-out")) { b.x = mx - 14; b.y = my - 14; pmx = mx; pmy = my; cur.classList.remove("is-out"); }
-      const sp = Math.hypot(mx - pmx, my - pmy), now = performance.now();
-      if (sp > 22 && now - lastBit > 45 && !snapEl) { lastBit = now; bit(mx, my, 14, 800); }
-      if (now - lastMove > 1400) cur.classList.remove("is-idle");
-      lastMove = now; pmx = mx; pmy = my;
+      if (blob.classList.contains("is-out")) {
+        hx = gx = mx; hy = gy = my; tp.forEach((p) => { p.x = mx; p.y = my; });
+        blob.classList.remove("is-out");
+      }
       setState(e.target);
       pullMagnet(e.target);
     }, { passive: true });
     window.addEventListener("scroll", () => { const el = document.elementFromPoint(mx, my); if (el) setState(el); }, { passive: true });
-    document.addEventListener("pointerleave", () => cur.classList.add("is-out"));
-    window.addEventListener("blur", () => cur.classList.add("is-out"));
+    document.addEventListener("pointerleave", () => { blob.classList.add("is-out"); btag.classList.remove("is-on"); lastKey = ""; });
+    window.addEventListener("blur", () => blob.classList.add("is-out"));
+    // a click splashes: droplets fly out of the blob and are pulled back in
+    let squish = 0;
     window.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse") return;
-      cur.classList.add("is-down");
-      // the frame squishes and springs back, and a handful of tiles pop out
-      v.w -= 14; v.h -= 14; v.x += 7; v.y += 7;
-      for (let n = 0; n < 9; n++) bit(mx, my, 44, 900);
-      // a square ping, like marking a point on the plan
-      const ping = document.createElement("span");
-      ping.className = "cur-ping";
-      document.body.appendChild(ping);
-      ping.animate([
-        { transform: `translate(${mx}px, ${my}px) rotate(45deg) scale(0.4)`, opacity: 1 },
-        { transform: `translate(${mx}px, ${my}px) rotate(45deg) scale(3.2)`, opacity: 0 },
-      ], { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }).onfinish = () => ping.remove();
-    });
-    window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
-    let prevX = 0, prevY = 0;
-    (function loop(t) {
-      let tx, ty, tw, th;
-      const snapped = snapEl && snapEl.isConnected;
-      const dvx = mx - prevX, dvy = my - prevY; prevX = mx; prevY = my;
-      const idle = !snapped && performance.now() - lastMove > 1400;
-      cur.classList.toggle("is-idle", idle);
-      if (snapped) {
-        const r = snapEl.getBoundingClientRect(), pad = 6;
-        tx = r.left - pad; ty = r.top - pad; tw = r.width + pad * 2; th = r.height + pad * 2;
-      } else {
-        // the frame stretches along fast movement, and breathes while you rest
-        const base = cur.classList.contains("is-label") ? 42 : idle ? 30 + Math.sin((t || 0) / 380) * 4 : 30;
-        tw = base + Math.min(Math.abs(dvx) * 1.4, 40); th = base + Math.min(Math.abs(dvy) * 1.4, 40);
-        tx = mx - tw / 2; ty = my - th / 2;
+      squish = 1;
+      for (let n = 0; n < 5; n++) {
+        const d = document.createElement("i");
+        d.className = "bd bd-drop";
+        blob.appendChild(d);
+        const a = (n / 5) * Math.PI * 2 + Math.random() * 0.6, r = 34 + Math.random() * 18;
+        d.animate([
+          { transform: "translate(0, 0) scale(1)" },
+          { transform: `translate(${Math.cos(a) * r}px, ${Math.sin(a) * r}px) scale(0.9)`, offset: 0.45 },
+          { transform: "translate(0, 0) scale(0.4)" },
+        ], { duration: 700, easing: "cubic-bezier(0.3, 0.9, 0.4, 1)" }).onfinish = () => d.remove();
       }
-      // springs, so it overshoots a little and settles: a jelly snap around whatever you point at
-      // position follows firmly; size is the wobbly part
-      const k = 0.2, damp = 0.62, kp = 0.3, dp = 0.42;
-      v.x = v.x * dp + (tx - b.x) * kp; b.x += v.x;
-      v.y = v.y * dp + (ty - b.y) * kp; b.y += v.y;
-      v.w = v.w * damp + (tw - b.w) * k; b.w += v.w;
-      v.h = v.h * damp + (th - b.h) * k; b.h += v.h;
-      // tilt into the movement; spin slowly when idle; square up when framing something
-      if (!idle) rot = ((rot + 180) % 360 + 360) % 360 - 180;
-      const tRot = snapped ? Math.round(rot / 90) * 90 : idle ? rot + 1.6 : Math.max(-22, Math.min(22, dvx * 1.2));
-      rot += (tRot - rot) * (idle ? 1 : 0.18);
-      box.style.transform = `translate3d(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px, 0) rotate(${rot.toFixed(1)}deg)`;
-      box.style.width = `${Math.max(18, b.w).toFixed(1)}px`; box.style.height = `${Math.max(18, b.h).toFixed(1)}px`;
-      cur.classList.toggle("is-flip", b.y < 40);
-      ret.style.transform = `translate3d(${mx}px, ${my}px, 0) rotate(${(dvx * 2).toFixed(1)}deg)`;
+    });
+    (function loop() {
+      // the head chases the pointer, each tail drop chases the one ahead: a liquid trail
+      hx += (mx - hx) * 0.45; hy += (my - hy) * 0.45;
+      gx = hx; gy = hy;
+      let px = hx, py = hy;
+      tp.forEach((p, n) => {
+        const k = [0.34, 0.28, 0.22][n];
+        p.x += (px - p.x) * k; p.y += (py - p.y) * k;
+        // keep the tail inside the blob's canvas
+        const dx = Math.max(-110, Math.min(110, p.x - hx)), dy = Math.max(-110, Math.min(110, p.y - hy));
+        tails[n].style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+        px = p.x; py = p.y;
+      });
+      // the head stretches along its speed and squishes on click
+      const vx = mx - hx, vy = my - hy, sp = Math.min(Math.hypot(vx, vy) / 30, 0.6);
+      squish *= 0.86;
+      const ang = Math.atan2(vy, vx) * 180 / Math.PI;
+      const sx = (1 + sp) * (1 - squish * 0.35), sy = (1 - sp * 0.4) * (1 - squish * 0.35);
+      head.style.transform = `rotate(${ang.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+      blob.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
+      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0) rotate(${(vx * 0.4).toFixed(1)}deg)`;
       requestAnimationFrame(loop);
-    })(0);
+    })();
   }
 
   /* ------------------------------------------------------------ entrance: the plan draws itself */
