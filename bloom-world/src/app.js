@@ -730,38 +730,88 @@
   $$("[data-construction]").forEach((a) => a.addEventListener("click", () => { showApp(1); toast("Construction updates live in the Bloom Super App, for the homes you own."); }));
   showApp(0);
 
-  /* ------------------------------------------------------------ story: the plan grows */
-  const range = $("#story-range");
-  const grows = $$(".grow");
-  const years = $$(".scrub-years li");
-  const storyText = $(".story-text");
-  const scrub = $(".scrub");
-  const storyPlay = $("#story-play");
-  let storyTimer;
-  function showYear(i) {
-    const s = STORY[i];
-    range.value = i;
-    range.style.setProperty("--p", (i / (STORY.length - 1)) * 100 + "%");
-    range.setAttribute("aria-valuetext", `${s.y}, ${s.t}`);
-    $("#story-year").textContent = s.y;
-    $("#story-t").textContent = s.t;
-    $("#story-d").textContent = s.d;
-    $("#story-img").src = s.img; $("#story-img").alt = s.alt;
-    grows.forEach((g) => { const y = Number(g.dataset.year); g.classList.toggle("is-built", y <= s.y); g.classList.toggle("is-new", y === s.y); });
-    years.forEach((li, j) => li.classList.toggle("is-on", j === i));
-    storyText.classList.remove("is-swap"); void storyText.offsetWidth; storyText.classList.add("is-swap");
+  /* ------------------------------------------------------------ story: a road that builds Bloom World as you scroll */
+  const storySec = $("#story");
+  const STORY_ZONE = ["re", "edu", "re", "re", "re", "edu", "land", "re", "hosp"];
+  const STORY_ICON = ["i-home", "i-cap", "i-key", "i-home", "i-home", "i-cap", "i-leaf", "i-home", "i-moon"];
+  const roadPath = $("#road-path"), roadBuilt = $("#road-built"), roadHead = $("#road-head");
+  const roadLen = roadPath.getTotalLength();
+  roadBuilt.style.strokeDasharray = `${roadLen} ${roadLen}`;
+  roadBuilt.style.strokeDashoffset = roadLen;
+  // stars, scattered with a fixed seed so they never jump between loads
+  let seed = 7;
+  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  $("#road-stars").innerHTML = Array.from({ length: 36 }, () => `<circle class="road-star" cx="${(rnd() * 1000).toFixed(0)}" cy="${(rnd() * 260).toFixed(0)}" r="${(rnd() * 1.6 + 0.6).toFixed(1)}" style="--tw:${(2 + rnd() * 3).toFixed(1)}s;--td:${(-rnd() * 4).toFixed(1)}s"/>`).join("");
+  // milestones evenly along the road, each with a plot tile that pops up when the road reaches it
+  const stopAt = STORY.map((_, k) => 0.04 + (k / (STORY.length - 1)) * 0.92);
+  $("#road-marks").innerHTML = STORY.map((st, k) => {
+    const pt = roadPath.getPointAtLength(roadLen * stopAt[k]);
+    const up = k % 2 === 0 ? -1 : 1;
+    const py = pt.y + up * 70, ty = pt.y - up * 30 + (up < 0 ? 12 : 0);
+    return `<g class="rm" data-k="${k}" tabindex="0" role="button" aria-label="${st.y}: ${st.t}" style="--zc: var(--${STORY_ZONE[k]})">
+      <rect class="rm-hit" x="${pt.x - 38}" y="${Math.min(pt.y, py) - 30}" width="76" height="${Math.abs(py - pt.y) + 60}" fill="transparent"/>
+      <line x1="${pt.x}" y1="${pt.y}" x2="${pt.x}" y2="${py}" stroke="rgb(255 255 255 / 0.25)" stroke-width="2" stroke-dasharray="3 4"/>
+      <g class="rm-plot"><rect x="${pt.x - 34}" y="${py - 25}" width="68" height="50" rx="12"/><use href="#${STORY_ICON[k]}" x="${pt.x - 14}" y="${py - 14}" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/></g>
+      <circle class="rm-ring" cx="${pt.x}" cy="${pt.y}" r="16"/>
+      <circle class="rm-dot" cx="${pt.x}" cy="${pt.y}" r="10"/>
+      <text class="rm-year" x="${pt.x}" y="${ty}">${st.y}</text>
+    </g>`;
+  }).join("");
+  const marks = $$(".rm", storySec);
+  const storyNow = $(".story-now", storySec);
+  const strips = $$(".odo-strip", storySec);
+  let storyIdx = -1;
+  function showYear(k) {
+    if (k === storyIdx) return;
+    storyIdx = k;
+    const st = STORY[k];
+    String(st.y).split("").forEach((d, n) => strips[n] && strips[n].style.setProperty("--d", d));
+    $("#story-year-sr").textContent = st.y;
+    $(".odo", storySec).setAttribute("aria-label", st.y);
+    $("#story-t").textContent = st.t;
+    $("#story-d").textContent = st.d;
+    $("#story-img").src = st.img; $("#story-img").alt = st.alt;
+    marks.forEach((m, n) => m.classList.toggle("is-on", n === k));
+    if (motion) { storyNow.classList.remove("is-swap"); void storyNow.offsetWidth; storyNow.classList.add("is-swap"); }
   }
-  range.addEventListener("input", () => { stopStory(); showYear(Number(range.value)); });
-  function stopStory() { clearInterval(storyTimer); storyTimer = null; scrub.classList.remove("is-playing"); storyPlay.setAttribute("aria-label", "Play the story"); }
-  storyPlay.addEventListener("click", () => {
-    if (storyTimer) { stopStory(); return; }
-    let i = Number(range.value);
-    if (i >= STORY.length - 1) { i = 0; showYear(0); }
-    scrub.classList.add("is-playing");
-    storyPlay.setAttribute("aria-label", "Pause the story");
-    storyTimer = setInterval(() => { i += 1; showYear(i); if (i >= STORY.length - 1) stopStory(); }, 2200);
+  const pinnable = window.matchMedia("(min-width: 861px)");
+  function storyPinned() { return motion && pinnable.matches; }
+  function storyProgress() {
+    if (!storyPinned()) return 1;
+    const r = storySec.getBoundingClientRect();
+    const span = storySec.offsetHeight - window.innerHeight;
+    return Math.max(0, Math.min(1, -r.top / span));
+  }
+  function drawRoad() {
+    storySec.classList.toggle("is-pinned", storyPinned());
+    const p = storyProgress();
+    // the road leads slightly ahead of the active milestone
+    const reach = 0.045 + p * 0.95;
+    roadBuilt.style.strokeDashoffset = (roadLen * (1 - reach)).toFixed(1);
+    const head = roadPath.getPointAtLength(roadLen * reach);
+    roadHead.setAttribute("cx", head.x.toFixed(1)); roadHead.setAttribute("cy", head.y.toFixed(1));
+    let k = 0;
+    stopAt.forEach((t, n) => { if (reach >= t - 0.005) k = n; });
+    marks.forEach((m, n) => m.classList.toggle("is-built", reach >= stopAt[n] - 0.005));
+    storySec.style.setProperty("--sp", p.toFixed(3));
+    showYear(k);
+  }
+  // jump to a milestone by scrolling to its place in the pinned section
+  function goToYear(k) {
+    if (!storyPinned()) { showYear(k); return; }
+    const span = storySec.offsetHeight - window.innerHeight;
+    const target = storySec.offsetTop + span * Math.max(0, (stopAt[k] - 0.045) / 0.95) + 2;
+    if (smooth) smooth.to(target); else window.scrollTo({ top: target, behavior: "smooth" });
+  }
+  marks.forEach((m, k) => {
+    m.addEventListener("click", () => goToYear(k));
+    m.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); goToYear(k); } });
   });
-  showYear(0);
+  let roadTick = false;
+  window.addEventListener("scroll", () => { if (!roadTick) { roadTick = true; requestAnimationFrame(() => { roadTick = false; drawRoad(); }); } }, { passive: true });
+  window.addEventListener("resize", drawRoad);
+  pinnable.addEventListener("change", drawRoad);
+  drawRoad();
 
   /* ------------------------------------------------------------ about: area schedule counts up */
   const nums = $$(".num[data-count]");
@@ -878,11 +928,11 @@
       watch(h, "rv-words");
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
-      ".parcels-head", ".comm-index", ".comm-stage", ".roles", ".svc-stage", ".stores", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".parcels-head", ".comm-index", ".comm-stage", ".roles", ".svc-stage", ".stores", ".talk", ".news-head", ".story-list > li",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".bento"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
     [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */

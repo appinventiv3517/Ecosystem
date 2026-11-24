@@ -450,30 +450,98 @@
 </section>
 
 <!-- ================================================================ OUR STORY -->
-<section class="story" id="story" aria-labelledby="story-title">
-  <div class="wrap">
-    <h2 id="story-title" class="display" data-i18n="story.title">From one community to Bloom World.</h2>
-    <div class="story-grid">
-      <figure class="growth">
-        {{GROWTH_SVG}}
-        <figcaption>Bloom World growing, year by year. Illustrative, not to scale.</figcaption>
+<section class="story" id="story" aria-labelledby="story-title" style="--steps: 9">
+  <div class="story-pin">
+    <div class="wrap story-layout">
+      <div class="story-copy">
+        <h2 id="story-title" class="display" data-i18n="story.title">From one community to Bloom World.</h2>
+        <p class="story-hint">Scroll to build it, 2008 to 2026. Or pick a year on the road.</p>
+        <div class="story-now" aria-live="polite">
+          <p class="odo" aria-label="2008"><span class="sr" id="story-year-sr">2008</span><span aria-hidden="true" class="odo-digits"><span class="odo-col"><span class="odo-strip" data-d="2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="odo-col"><span class="odo-strip" data-d="0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="odo-col"><span class="odo-strip" data-d="0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="odo-col"><span class="odo-strip" data-d="8"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></span></p>
+          <h3 class="story-t" id="story-t">Bloom Gardens begins</h3>
+          <p class="story-d" id="story-d">The first phase of Bloom Gardens launches: villas and townhouses inspired by the architecture of the Mediterranean.</p>
+          <div class="story-photo"><img id="story-img" src="assets/img/story-2008.webp" alt="Clipped hedges and flowering shrubs in front of villas" width="700" height="933"></div>
+        </div>
+      </div>
+      <figure class="story-road" aria-label="Bloom's milestones on a road from 2008 to 2026">
+        <svg class="road-svg" id="road-svg" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet">
+          <g class="road-stars" id="road-stars"></g>
+          <path class="road-base" id="road-path" d="M40 560 C 180 560 180 430 300 440 S 450 560 560 470 S 600 300 720 300 S 900 390 930 250 S 860 110 960 70"/>
+          <path class="road-built" id="road-built" d="M40 560 C 180 560 180 430 300 440 S 450 560 560 470 S 600 300 720 300 S 900 390 930 250 S 860 110 960 70"/>
+          <g id="road-marks"></g>
+          <circle class="road-head" id="road-head" r="9"/>
+        </svg>
+        <figcaption>Illustrative, not to scale.</figcaption>
       </figure>
-      <div class="story-text" aria-live="polite">
-        <p class="story-year" id="story-year">2008</p>
-        <h3 class="story-t" id="story-t">Bloom Gardens begins</h3>
-        <p class="story-d" id="story-d">The first phase of Bloom Gardens launches: villas and townhouses inspired by the architecture of the Mediterranean.</p>
-        <div class="story-photo"><img id="story-img" src="assets/img/story-2008.webp" alt="" loading="lazy" width="700" height="933"></div>
-      </div>
     </div>
-    <div class="scrub">
-      <button type="button" class="round-btn round-light" id="story-play" aria-label="Play the story"><svg class="ic ic-play"><use href="#i-play"/></svg><svg class="ic ic-pause"><use href="#i-pause"/></svg></button>
-      <div class="scrub-track">
-        <input type="range" id="story-range" min="0" max="8" step="1" value="0" aria-label="Year" aria-valuetext="2008, Bloom Gardens begins">
-        <ol class="scrub-years" aria-hidden="true">
-          <li>2008</li><li>2011</li><li>2012</li><li>2015</li><li>2017</li><li>2018</li><li>2022</li><li>2024</li><li>2026</li>
-        </ol>
-      </div>
-    </div>
+    <div class="wrap story-ticks" aria-hidden="true"><span class="story-bar"><i></i></span></div>
+  </div>
+  <div class="wrap story-list-wrap">
+    <ol class="story-list" aria-label="Bloom's story, 2008 to 2026">
+        <li class="sl-item" style="--zc: var(--re)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-home"/></svg></span>
+          <p class="sl-year">2008</p>
+          <h3 class="sl-title">Bloom Gardens begins</h3>
+          <p class="sl-text">The first phase of Bloom Gardens launches: villas and townhouses inspired by the architecture of the Mediterranean.</p>
+          <img src="assets/img/story-2008.webp" alt="Clipped hedges and flowering shrubs in front of villas" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--edu)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-cap"/></svg></span>
+          <p class="sl-year">2011</p>
+          <h3 class="sl-title">Brighton College Al Ain</h3>
+          <p class="sl-text">Bloom Education launches Brighton College Al Ain, the second sister school of Brighton College UK in the UAE.</p>
+          <img src="assets/img/story-2011.webp" alt="School pupils walking along a palm-shaded lane" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--re)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-key"/></svg></span>
+          <p class="sl-year">2012</p>
+          <h3 class="sl-title">First homes handed over</h3>
+          <p class="sl-text">Phase One of Bloom Gardens is handed over to its owners.</p>
+          <img src="assets/img/story-2012.webp" alt="Garden path between white villas and hedges" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--re)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-home"/></svg></span>
+          <p class="sl-year">2015</p>
+          <h3 class="sl-title">Soho Square on Saadiyat</h3>
+          <p class="sl-text">Soho Square launches on Saadiyat Island: 304 homes, from studios to three-bedroom apartments, green houses and a sky villa.</p>
+          <img src="assets/img/community-saadiyat.webp" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--re)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-home"/></svg></span>
+          <p class="sl-year">2017</p>
+          <h3 class="sl-title">Bloom Gardens grows</h3>
+          <p class="sl-text">Phase Three of Bloom Gardens is completed and handed over: 147 villas and townhouses.</p>
+          <img src="assets/img/dev-bloom-gardens.webp" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--edu)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-cap"/></svg></span>
+          <p class="sl-year">2018</p>
+          <h3 class="sl-title">Schools open in Dubai</h3>
+          <p class="sl-text">Brighton College Dubai opens its doors, and Bloom Education opens Dwight School's first campus in the Middle East.</p>
+          <img src="assets/img/biz-education.webp" alt="Two pupils in school gowns under a colonnade" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--land)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-leaf"/></svg></span>
+          <p class="sl-year">2022</p>
+          <h3 class="sl-title">Bloom Living launches</h3>
+          <p class="sl-text">Cordoba, the first phase of Bloom Living in Zayed City, launches in March and sells out within four hours.</p>
+          <img src="assets/img/community-zayed-city.webp" alt="Waterfront plaza at Bloom Living, Zayed City (architectural render)" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--re)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-home"/></svg></span>
+          <p class="sl-year">2024</p>
+          <h3 class="sl-title">Three more phases</h3>
+          <p class="sl-text">Seville, Olvera and Almeria, the fifth to seventh phases of Bloom Living, launch with lakeside villas and townhouses.</p>
+          <img src="assets/img/story-2024.webp" alt="Villas along a landscaped lake at Bloom Living (architectural render)" loading="lazy" width="700" height="933">
+        </li>
+        <li class="sl-item" style="--zc: var(--hosp)">
+          <span class="sl-dot" aria-hidden="true"><svg class="ic"><use href="#i-moon"/></svg></span>
+          <p class="sl-year">2026</p>
+          <h3 class="sl-title">Bloom Arjaan by Rotana opens</h3>
+          <p class="sl-text">The 217-key residential-style hotel opens on Saadiyat Island, adding to Bloom's hospitality portfolio.</p>
+          <img src="assets/img/biz-hospitality.webp" alt="Hotel bedroom with a view over a marina" loading="lazy" width="700" height="933">
+        </li>
+    </ol>
   </div>
 </section>
 
