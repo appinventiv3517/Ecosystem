@@ -603,47 +603,43 @@
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life: one day, hour by hour */
+  /* ------------------------------------------------------------ life: the sun travels a day timeline */
   const lifeSec = $("#life");
-  const ways = $$(".way");
+  const ways = $$(".tl-stop");
   const stageImgs = $$(".stage-img");
+  const moment = $("#day-moment");
+  const timeline = $(".timeline");
   const WAY_MS = 5600;
   let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
-  function restartBar() {
-    const bar = $(".way-bar i", ways[wi]);
-    bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
-  }
   function scheduleWay() {
     clearTimeout(wTimer);
-    lifeSec.classList.toggle("is-auto", wAuto);
     if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
   }
   function showWay(i) {
     const prev = wi;
     wi = i;
-    ways.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
-    if (prev !== i) {
-      // crossfade: the new photo fades in over the old one, so there is never an empty frame
-      stageImgs.forEach((im, j) => im.classList.toggle("is-on", j === i));
-    }
     const b = ways[i];
-    $("#stage-time").textContent = $(".way-time", b).textContent;
-    $("#stage-title").textContent = $(".way-title", b).textContent;
-    $("#stage-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    restartBar();
+    ways.forEach((x, j) => { x.setAttribute("aria-selected", String(j === i)); x.tabIndex = j === i ? 0 : -1; });
+    // shuffle the prints: the current moment on top, the next ones of the day behind it
+    stageImgs.forEach((im, j) => { im.dataset.pos = String((j - i + stageImgs.length) % stageImgs.length); im.classList.toggle("is-on", j === i); });
+    $("#dm-time").textContent = b.dataset.time;
+    $("#dm-title").textContent = b.dataset.title;
+    $("#dm-text").textContent = b.dataset.text;
+    $("#dm-zone").textContent = b.dataset.zone;
+    $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
+    timeline.style.setProperty("--sun", b.parentElement.style.getPropertyValue("--at"));
+    if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
     scheduleWay();
   }
-  ways.forEach((b, i) => {
-    b.addEventListener("click", () => { wAuto = false; showWay(i); });
-    b.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && wi !== i) { wAuto = false; showWay(i); } });
-  });
-  $(".ways").addEventListener("keydown", (e) => {
-    if (!["ArrowDown", "ArrowUp"].includes(e.key)) return;
+  ways.forEach((b, i) => b.addEventListener("click", () => { wAuto = false; showWay(i); }));
+  $(".tl-stops").addEventListener("keydown", (e) => {
+    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
     e.preventDefault(); wAuto = false;
-    const n = (wi + (e.key === "ArrowDown" ? 1 : -1) + ways.length) % ways.length;
+    const fwd = (e.key === "ArrowRight") !== (document.dir === "rtl");
+    const n = e.key === "Home" ? 0 : e.key === "End" ? ways.length - 1 : (wi + (fwd ? 1 : -1) + ways.length) % ways.length;
     showWay(n); ways[n].focus();
   });
-  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; if (lifeVisible) restartBar(); scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
+  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
   document.addEventListener("visibilitychange", scheduleWay);
   showWay(0);
 
@@ -821,9 +817,9 @@
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
-    [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+    [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media, .life-stage").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .day").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */

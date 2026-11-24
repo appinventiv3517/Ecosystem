@@ -470,50 +470,69 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 }
 @media (prefers-reduced-motion: reduce) { .loc-pin.is-on { animation: none; } }
 
-/* ---------------------------------------------------------------- life (landscape zone, forest): one day, hour by hour */
-.life { --forest: #173f2b; --forest-2: #1f5038; background: var(--forest); color: var(--paper); padding-block: var(--section-y); overflow: hidden; }
+/* ---------------------------------------------------------------- life (landscape zone, forest): a day timeline */
+.life { --forest: #173f2b; background: var(--forest); color: var(--paper); padding-block: var(--section-y); overflow: hidden; }
 .life :focus-visible { outline-color: var(--paper); }
-.life-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 56px); }
+.life-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(32px, 4.5vw, 52px); }
 .life-head .display { max-width: 16ch; }
 .life-lede { font-size: 1.1rem; max-width: 40ch; color: color-mix(in srgb, var(--paper) 84%, var(--forest)); }
-.life-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: stretch; }
-.life-copy { display: flex; flex-direction: column; justify-content: center; }
-.ways { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
-.way {
-  position: relative; width: 100%; display: grid; grid-template-columns: 76px minmax(0, 1fr); column-gap: 18px; align-items: baseline;
-  text-align: start; border: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); background: none; color: var(--paper);
-  padding: 22px 0; border-radius: 0; transition: background-color 0.3s;
+.day {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr); grid-template-rows: 1fr auto;
+  gap: 8px clamp(24px, 4vw, 64px); padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) 26px; border-radius: 30px; background: #1f5038; isolation: isolate;
 }
-.way-time { grid-column: 1; grid-row: 1; font: 700 1.05rem/1 var(--display); font-variant-numeric: tabular-nums; color: var(--site); }
-.way-title { grid-column: 2; grid-row: 1; font: 800 clamp(1.4rem, 2.3vw, 2rem)/1.1 var(--display); letter-spacing: -0.025em; color: color-mix(in srgb, var(--paper) 78%, var(--forest)); transition: color 0.3s, transform 0.5s var(--ease); }
-.way:hover .way-title, .way[aria-selected="true"] .way-title { color: var(--paper); }
-.way:hover .way-title { transform: translateX(6px); }
-.way[aria-selected="true"]:hover .way-title { transform: none; }
-[dir="rtl"] .way:hover .way-title { transform: translateX(-6px); }
-.way-more { grid-column: 2; grid-row: 2; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease); }
-.way-more-in { min-height: 0; overflow: hidden; }
-.way[aria-selected="true"] .way-more { grid-template-rows: 1fr; }
-.way-text { display: block; padding-top: 12px; font-size: 1.02rem; line-height: 1.55; max-width: 44ch; color: color-mix(in srgb, var(--paper) 88%, var(--forest)); }
-.way-zone { display: inline-flex; align-items: center; gap: 8px; margin: 12px 0 4px; font-size: 0.85rem; font-weight: 600; padding: 4px 12px 4px 9px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 12%, transparent); }
-.way-zone i { width: 10px; height: 10px; border-radius: 50%; background: var(--zc); box-shadow: 0 0 0 1.5px var(--paper); }
-.way-bar { position: absolute; left: 0; right: 0; bottom: -1.5px; height: 3px; overflow: hidden; }
-.way-bar i { display: block; height: 100%; background: var(--site); transform: scaleX(0); transform-origin: left; }
-[dir="rtl"] .way-bar i { transform-origin: right; }
-.way[aria-selected="true"] .way-bar i { transform: scaleX(1); }
-.life.is-auto .way[aria-selected="true"] .way-bar i { animation: way-fill var(--way-ms, 5600ms) linear; }
-@keyframes way-fill { from { transform: scaleX(0); } }
-.way:focus-visible { outline-offset: -3px; }
-.life-stage { position: relative; margin: 0; min-height: 480px; width: 100%; height: 100%; border-radius: 28px; overflow: hidden; background: var(--forest-2); box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.6); }
-.stage-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.06; translate: 0 var(--py, 0px); transition: opacity 0.8s var(--ease), scale 1.6s var(--ease); }
-.stage-img.is-on { opacity: 1; scale: 1; z-index: 1; }
-.stage-tag { position: absolute; z-index: 2; left: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 10px; background: var(--paper); color: var(--ink); border-radius: 999px; padding: 9px 16px 9px 12px; font-weight: 600; font-size: 0.92rem; box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.5); }
-.stage-tag i { width: 10px; height: 10px; border-radius: 50%; background: var(--edu); transition: background-color 0.3s; }
-.stage-tag span:first-of-type { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; }
+.day-moment { grid-column: 1; grid-row: 1; align-self: center; display: grid; gap: 12px; max-width: 560px; }
+.dm-time { font: 800 clamp(3.2rem, 7vw, 6rem)/0.85 var(--display); letter-spacing: -0.04em; color: var(--site); font-variant-numeric: tabular-nums; }
+.dm-title { font: 800 clamp(1.7rem, 3vw, 2.6rem)/1.05 var(--display); letter-spacing: -0.03em; }
+.dm-text { font-size: 1.08rem; line-height: 1.55; max-width: 44ch; color: color-mix(in srgb, var(--paper) 90%, #1f5038); }
+.dm-zone { display: inline-flex; align-items: center; gap: 8px; justify-self: start; font-size: 0.85rem; font-weight: 600; padding: 5px 13px 5px 10px; border-radius: 999px; background: rgb(255 255 255 / 0.12); }
+.dm-zone i { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--paper); }
+.day-moment.is-swap > * { animation: swap-txt 0.55s var(--ease) backwards; }
+.day-moment.is-swap > :nth-child(2) { animation-delay: 0.06s; }
+.day-moment.is-swap > :nth-child(3) { animation-delay: 0.12s; }
+.day-moment.is-swap > :nth-child(4) { animation-delay: 0.18s; }
+
+/* a stack of photo prints: the current moment on top, the rest of the day tilted behind */
+.day-photos { grid-column: 2; grid-row: 1; position: relative; width: min(100%, 400px); aspect-ratio: 4 / 5; justify-self: center; align-self: center; margin: 12px 0 24px; }
+.stage-img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 18px; border: 7px solid var(--paper);
+  box-shadow: 0 30px 50px -28px rgb(0 0 0 / 0.75); transform: rotate(var(--r, 0deg)) translate(var(--tx, 0px), var(--ty, 0px)) scale(var(--s, 1));
+  transition: transform 0.9s var(--ease), opacity 0.6s var(--ease); z-index: var(--z, 1); opacity: var(--o, 1);
+}
+.stage-img[data-pos="0"] { --r: -1.5deg; --z: 4; }
+.stage-img[data-pos="1"] { --r: 6deg; --tx: 34px; --ty: 10px; --s: 0.94; --z: 3; }
+.stage-img[data-pos="2"] { --r: -8deg; --tx: -36px; --ty: 16px; --s: 0.9; --z: 2; --o: 0.85; }
+.stage-img[data-pos="3"] { --r: 3deg; --tx: 8px; --ty: 22px; --s: 0.86; --z: 1; --o: 0.6; }
+[dir="rtl"] .stage-img[data-pos="1"] { --tx: -34px; }
+[dir="rtl"] .stage-img[data-pos="2"] { --tx: 36px; }
+
+.timeline { grid-column: 1 / -1; grid-row: 2; position: relative; height: 88px; margin-top: 6px; }
+.tl-track { position: absolute; left: 0; right: 0; top: 30px; height: 3px; background: rgb(255 255 255 / 0.25); border-radius: 3px; }
+.tl-fill { position: absolute; left: 0; top: 0; bottom: 0; width: var(--sun, 0%); background: var(--site); border-radius: 3px; transition: width 0.9s var(--ease); }
+.tl-sun { position: absolute; top: 50%; left: var(--sun, 0%); width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; display: grid; place-items: center; background: var(--site); color: var(--ink); box-shadow: 0 0 0 6px rgb(231 196 138 / 0.22); transition: left 0.9s var(--ease); z-index: 2; }
+.tl-sun .ic { width: 18px; height: 18px; }
+.tl-hour { position: absolute; top: -26px; font-size: 0.75rem; font-weight: 600; color: rgb(255 255 255 / 0.72); font-variant-numeric: tabular-nums; }
+.tl-start { left: 0; } .tl-end { right: 0; }
+[dir="rtl"] .tl-track { transform: scaleX(-1); }
+[dir="rtl"] .tl-track .tl-hour, [dir="rtl"] .tl-sun .ic { transform: scaleX(-1); }
+.tl-stops { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+.tl-stops li { position: absolute; top: 0; left: var(--at); transform: translateX(-50%); }
+[dir="rtl"] .tl-stops li { left: auto; right: var(--at); transform: translateX(50%); }
+.tl-stop { position: relative; display: grid; justify-items: center; gap: 6px; border: 0; background: none; color: var(--paper); padding: 22px 8px 4px; min-width: 44px; cursor: pointer; }
+.tl-dot { width: 18px; height: 18px; border-radius: 50%; background: #1f5038; border: 3px solid var(--paper); transition: transform 0.3s var(--ease), background-color 0.3s; }
+.tl-time { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; color: rgb(255 255 255 / 0.85); }
+.tl-name { position: absolute; top: 100%; left: 50%; translate: -50% 0; font-size: 0.82rem; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.tl-stop:hover .tl-dot { transform: scale(1.2); background: var(--zc); }
+.tl-stop[aria-selected="true"] .tl-dot { background: var(--zc); transform: scale(1.3); }
+.tl-stop[aria-selected="true"] .tl-time { color: var(--site); }
+.tl-stop:focus-visible { outline-offset: 2px; border-radius: 10px; }
 @media (max-width: 860px) {
   .life-head { grid-template-columns: minmax(0, 1fr); }
-  .life-grid { grid-template-columns: minmax(0, 1fr); }
-  .life-stage { order: -1; aspect-ratio: 4 / 3; height: auto; min-height: 0; }
-  .way { grid-template-columns: 58px minmax(0, 1fr); column-gap: 12px; padding: 18px 0; }
+  .day { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; padding: 26px 20px 18px; border-radius: 24px; }
+  .day-photos { grid-column: 1; grid-row: 1; width: min(76%, 320px); margin: 8px 0 30px; }
+  .day-moment { grid-column: 1; grid-row: 2; }
+  .dm-time { font-size: 2.8rem; }
+  .timeline { grid-row: 3; height: 70px; }
+  .tl-stop:not([aria-selected="true"]) .tl-time { opacity: 0; }
 }
 
 /* ---------------------------------------------------------------- services (facilities slate zone) */
@@ -1532,40 +1551,34 @@ html.smooth { scroll-behavior: auto; }
   <div class="wrap">
   <div class="life-head">
     <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-    <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment to see it.</p>
+    <p class="life-lede">One day in a Bloom community, from the school run to dinner. Follow the sun, or tap a time.</p>
   </div>
-  <div class="life-grid">
-    <div class="life-copy">
-      <ol class="ways" role="tablist" aria-label="Life at Bloom">
-        <li><button type="button" class="way" role="tab" aria-selected="true" aria-controls="life-stage" data-i="0" style="--zc: var(--edu)">
-          <span class="way-time">07:45</span><span class="way-title">Growing up together</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="1" style="--zc: var(--fm)">
-          <span class="way-time">10:00</span><span class="way-title">Looked after, every day</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="2" style="--zc: var(--land)">
-          <span class="way-time">18:30</span><span class="way-title">Days spent outdoors</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="3" style="--zc: var(--hosp)">
-          <span class="way-time">20:00</span><span class="way-title">Time well spent</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-      </ol>
-    </div>
-    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite">
+  <div class="day" id="day">
+    <div class="day-photos" aria-hidden="true">
       <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
       <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
-      <figcaption class="stage-tag"><i id="stage-dot"></i><span id="stage-time">07:45</span><span id="stage-title">Growing up together</span></figcaption>
-    </figure>
+    </div>
+    <div class="day-moment" id="day-moment" role="tabpanel" aria-live="polite">
+      <p class="dm-time" id="dm-time">07:45</p>
+      <h3 class="dm-title" id="dm-title">Growing up together</h3>
+      <p class="dm-text" id="dm-text">Schools and shared spaces where neighbours turn into friends.</p>
+      <p class="dm-zone"><i id="dm-dot" style="background: var(--edu)"></i><span id="dm-zone">Education</span></p>
+    </div>
+    <div class="timeline">
+      <div class="tl-track" aria-hidden="true">
+        <span class="tl-fill" id="tl-fill"></span>
+        <span class="tl-sun" id="tl-sun"><svg class="ic"><use href="#i-sun"/></svg></span>
+        <span class="tl-hour tl-start">06:00</span><span class="tl-hour tl-end">22:00</span>
+      </div>
+      <ol class="tl-stops" role="tablist" aria-label="A day in a Bloom community">
+        <li style="--at:10.94%"><button type="button" class="tl-stop" role="tab" data-i="0" aria-selected="true" tabindex="0" aria-controls="day-moment" style="--zc: var(--edu)" data-time="07:45" data-title="Growing up together" data-text="Schools and shared spaces where neighbours turn into friends." data-zone="Education"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">07:45</span><span class="tl-name">Growing up together</span></button></li>
+        <li style="--at:25.00%"><button type="button" class="tl-stop" role="tab" data-i="1" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--fm)" data-time="10:00" data-title="Looked after, every day" data-text="The teams who care for the buildings, streets and gardens behind the scenes." data-zone="Facilities Management"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">10:00</span><span class="tl-name">Looked after, every day</span></button></li>
+        <li style="--at:78.12%"><button type="button" class="tl-stop" role="tab" data-i="2" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--land)" data-time="18:30" data-title="Days spent outdoors" data-text="Shaded paths, open water and green streets, so stepping outside is part of the everyday." data-zone="Landscaping"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">18:30</span><span class="tl-name">Days spent outdoors</span></button></li>
+        <li style="--at:87.50%"><button type="button" class="tl-stop" role="tab" data-i="3" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--hosp)" data-time="20:00" data-title="Time well spent" data-text="Places to stay, dine and slow down, close to home." data-zone="Hospitality"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">20:00</span><span class="tl-name">Time well spent</span></button></li>
+      </ol>
+    </div>
   </div>
   </div>
 </section>
@@ -2452,47 +2465,43 @@ html.smooth { scroll-behavior: auto; }
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life: one day, hour by hour */
+  /* ------------------------------------------------------------ life: the sun travels a day timeline */
   const lifeSec = $("#life");
-  const ways = $$(".way");
+  const ways = $$(".tl-stop");
   const stageImgs = $$(".stage-img");
+  const moment = $("#day-moment");
+  const timeline = $(".timeline");
   const WAY_MS = 5600;
   let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
-  function restartBar() {
-    const bar = $(".way-bar i", ways[wi]);
-    bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
-  }
   function scheduleWay() {
     clearTimeout(wTimer);
-    lifeSec.classList.toggle("is-auto", wAuto);
     if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
   }
   function showWay(i) {
     const prev = wi;
     wi = i;
-    ways.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
-    if (prev !== i) {
-      // crossfade: the new photo fades in over the old one, so there is never an empty frame
-      stageImgs.forEach((im, j) => im.classList.toggle("is-on", j === i));
-    }
     const b = ways[i];
-    $("#stage-time").textContent = $(".way-time", b).textContent;
-    $("#stage-title").textContent = $(".way-title", b).textContent;
-    $("#stage-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    restartBar();
+    ways.forEach((x, j) => { x.setAttribute("aria-selected", String(j === i)); x.tabIndex = j === i ? 0 : -1; });
+    // shuffle the prints: the current moment on top, the next ones of the day behind it
+    stageImgs.forEach((im, j) => { im.dataset.pos = String((j - i + stageImgs.length) % stageImgs.length); im.classList.toggle("is-on", j === i); });
+    $("#dm-time").textContent = b.dataset.time;
+    $("#dm-title").textContent = b.dataset.title;
+    $("#dm-text").textContent = b.dataset.text;
+    $("#dm-zone").textContent = b.dataset.zone;
+    $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
+    timeline.style.setProperty("--sun", b.parentElement.style.getPropertyValue("--at"));
+    if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
     scheduleWay();
   }
-  ways.forEach((b, i) => {
-    b.addEventListener("click", () => { wAuto = false; showWay(i); });
-    b.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && wi !== i) { wAuto = false; showWay(i); } });
-  });
-  $(".ways").addEventListener("keydown", (e) => {
-    if (!["ArrowDown", "ArrowUp"].includes(e.key)) return;
+  ways.forEach((b, i) => b.addEventListener("click", () => { wAuto = false; showWay(i); }));
+  $(".tl-stops").addEventListener("keydown", (e) => {
+    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
     e.preventDefault(); wAuto = false;
-    const n = (wi + (e.key === "ArrowDown" ? 1 : -1) + ways.length) % ways.length;
+    const fwd = (e.key === "ArrowRight") !== (document.dir === "rtl");
+    const n = e.key === "Home" ? 0 : e.key === "End" ? ways.length - 1 : (wi + (fwd ? 1 : -1) + ways.length) % ways.length;
     showWay(n); ways[n].focus();
   });
-  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; if (lifeVisible) restartBar(); scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
+  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
   document.addEventListener("visibilitychange", scheduleWay);
   showWay(0);
 
@@ -2670,9 +2679,9 @@ html.smooth { scroll-behavior: auto; }
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
-    [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+    [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media, .life-stage").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .day").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */

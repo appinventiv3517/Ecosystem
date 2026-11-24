@@ -279,40 +279,34 @@
   <div class="wrap">
   <div class="life-head">
     <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-    <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment to see it.</p>
+    <p class="life-lede">One day in a Bloom community, from the school run to dinner. Follow the sun, or tap a time.</p>
   </div>
-  <div class="life-grid">
-    <div class="life-copy">
-      <ol class="ways" role="tablist" aria-label="Life at Bloom">
-        <li><button type="button" class="way" role="tab" aria-selected="true" aria-controls="life-stage" data-i="0" style="--zc: var(--edu)">
-          <span class="way-time">07:45</span><span class="way-title">Growing up together</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="1" style="--zc: var(--fm)">
-          <span class="way-time">10:00</span><span class="way-title">Looked after, every day</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="2" style="--zc: var(--land)">
-          <span class="way-time">18:30</span><span class="way-title">Days spent outdoors</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="3" style="--zc: var(--hosp)">
-          <span class="way-time">20:00</span><span class="way-title">Time well spent</span>
-          <span class="way-more"><span class="way-more-in"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span></span>
-          <span class="way-bar" aria-hidden="true"><i></i></span>
-        </button></li>
-      </ol>
-    </div>
-    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite">
+  <div class="day" id="day">
+    <div class="day-photos" aria-hidden="true">
       <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
       <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
-      <figcaption class="stage-tag"><i id="stage-dot"></i><span id="stage-time">07:45</span><span id="stage-title">Growing up together</span></figcaption>
-    </figure>
+    </div>
+    <div class="day-moment" id="day-moment" role="tabpanel" aria-live="polite">
+      <p class="dm-time" id="dm-time">07:45</p>
+      <h3 class="dm-title" id="dm-title">Growing up together</h3>
+      <p class="dm-text" id="dm-text">Schools and shared spaces where neighbours turn into friends.</p>
+      <p class="dm-zone"><i id="dm-dot" style="background: var(--edu)"></i><span id="dm-zone">Education</span></p>
+    </div>
+    <div class="timeline">
+      <div class="tl-track" aria-hidden="true">
+        <span class="tl-fill" id="tl-fill"></span>
+        <span class="tl-sun" id="tl-sun"><svg class="ic"><use href="#i-sun"/></svg></span>
+        <span class="tl-hour tl-start">06:00</span><span class="tl-hour tl-end">22:00</span>
+      </div>
+      <ol class="tl-stops" role="tablist" aria-label="A day in a Bloom community">
+        <li style="--at:10.94%"><button type="button" class="tl-stop" role="tab" data-i="0" aria-selected="true" tabindex="0" aria-controls="day-moment" style="--zc: var(--edu)" data-time="07:45" data-title="Growing up together" data-text="Schools and shared spaces where neighbours turn into friends." data-zone="Education"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">07:45</span><span class="tl-name">Growing up together</span></button></li>
+        <li style="--at:25.00%"><button type="button" class="tl-stop" role="tab" data-i="1" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--fm)" data-time="10:00" data-title="Looked after, every day" data-text="The teams who care for the buildings, streets and gardens behind the scenes." data-zone="Facilities Management"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">10:00</span><span class="tl-name">Looked after, every day</span></button></li>
+        <li style="--at:78.12%"><button type="button" class="tl-stop" role="tab" data-i="2" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--land)" data-time="18:30" data-title="Days spent outdoors" data-text="Shaded paths, open water and green streets, so stepping outside is part of the everyday." data-zone="Landscaping"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">18:30</span><span class="tl-name">Days spent outdoors</span></button></li>
+        <li style="--at:87.50%"><button type="button" class="tl-stop" role="tab" data-i="3" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--hosp)" data-time="20:00" data-title="Time well spent" data-text="Places to stay, dine and slow down, close to home." data-zone="Hospitality"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">20:00</span><span class="tl-name">Time well spent</span></button></li>
+      </ol>
+    </div>
   </div>
   </div>
 </section>
