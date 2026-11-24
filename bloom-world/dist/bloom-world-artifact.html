@@ -1015,6 +1015,42 @@ html.smooth { scroll-behavior: auto; }
 .tile[data-slot="a"]::before { content: ""; position: absolute; inset: 0 0 auto; height: 42%; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, rgb(7 20 13 / 0.62), rgb(7 20 13 / 0)); }
 .tile[data-slot="a"] .tile-time { text-shadow: 0 2px 4px rgb(0 0 0 / 0.35), 0 6px 28px rgb(0 0 0 / 0.45); }
 
+/* ---------------------------------------------------------------- floating section dock (shows while the header is tucked away) */
+.dock {
+  position: fixed; z-index: 55; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); width: max-content; max-width: calc(100% - 32px);
+  transform: translate(-50%, calc(100% + 40px)); opacity: 0; pointer-events: none; transition: transform 0.55s var(--ease), opacity 0.3s;
+}
+.dock.is-shown { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.dock-bar { position: relative; display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: var(--ink); color: var(--paper); box-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.6), 0 0 0 1.5px rgb(255 255 255 / 0.08); overflow: hidden; }
+.dock-current { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px 0 16px; border: 0; border-radius: 999px; background: none; color: var(--paper); font-weight: 600; font-size: 0.95rem; white-space: nowrap; transition: background-color 0.2s; }
+.dock-current:hover, .dock-current[aria-expanded="true"] { background: rgb(255 255 255 / 0.1); }
+.dock-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dc, var(--site)); box-shadow: 0 0 0 2px rgb(255 255 255 / 0.85); transition: background-color 0.3s; }
+.dock-label { min-width: 9.5ch; text-align: start; }
+.dock-label.is-swap { animation: swap-txt 0.4s var(--ease); }
+.dock-chev { width: 16px; height: 16px; transform: rotate(180deg); transition: transform 0.3s var(--ease); opacity: 0.8; }
+.dock-current[aria-expanded="true"] .dock-chev { transform: rotate(0deg); }
+.dock-cta { min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--red); color: #fff; font-weight: 600; font-size: 0.92rem; transition: background-color 0.2s; }
+.dock-cta:hover { background: var(--red-deep); }
+.dock-progress { position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2px; border-radius: 2px; background: rgb(255 255 255 / 0.12); overflow: hidden; }
+.dock-progress i { display: block; height: 100%; width: 100%; background: var(--site); transform-origin: left; transform: scaleX(var(--pg, 0)); }
+[dir="rtl"] .dock-progress i { transform-origin: right; }
+.dock-menu {
+  list-style: none; margin: 0 0 10px; padding: 8px; position: absolute; left: 0; right: 0; bottom: 100%; min-width: 240px;
+  background: var(--paper); color: var(--ink); border-radius: 20px; box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.55); border: 2px solid var(--ink);
+  display: grid; gap: 2px; transform-origin: bottom center;
+}
+.dock-menu[hidden] { display: none; }
+.dock-menu:not([hidden]) { animation: dock-menu-in 0.35s var(--ease); }
+@keyframes dock-menu-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
+.dock-menu a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+.dock-menu a i { width: 10px; height: 10px; border-radius: 50%; background: var(--dc); box-shadow: 0 0 0 1.5px rgb(29 24 48 / 0.25); }
+.dock-menu a:hover { background: color-mix(in srgb, var(--site) 40%, var(--paper)); }
+.dock-menu a[aria-current="true"] { background: var(--ink); color: var(--paper); }
+.dock-menu a[aria-current="true"] i { box-shadow: 0 0 0 1.5px var(--paper); }
+body.dock-on .toast { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+.dock :focus-visible { outline-color: var(--site); }
+@media (prefers-reduced-motion: reduce) { .dock { transition: opacity 0.2s; } }
+
 </style>
 <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!/[?&]still\b/.test(location.search)){document.documentElement.classList.add("anim","intro");setTimeout(function(){document.documentElement.classList.remove("intro")},3000)}}catch(e){}</script>
 <a class="skip" href="#main">Skip to content</a>
@@ -1084,6 +1120,26 @@ html.smooth { scroll-behavior: auto; }
     <a href="tel:80025666" class="mobile-call"><svg class="ic"><use href="#i-phone"/></svg> 800 Bloom (25666)</a>
   </nav>
 </header>
+
+<nav class="dock" id="dock" aria-label="Sections">
+  <div class="dock-bar">
+    <button type="button" class="dock-current" aria-expanded="false" aria-controls="dock-menu" aria-label="Sections: Bloom World. Open the section list">
+      <i class="dock-dot" aria-hidden="true"></i><span class="dock-label">Bloom World</span><svg class="ic dock-chev" aria-hidden="true"><use href="#i-down"/></svg>
+    </button>
+    <button type="button" class="dock-cta" data-enquire>Enquire</button>
+    <span class="dock-progress" aria-hidden="true"><i></i></span>
+  </div>
+  <ol class="dock-menu" id="dock-menu" hidden>
+      <li><a href="#top" data-sec="top" style="--dc: var(--site-deep)"><i></i>Bloom World</a></li>
+      <li><a href="#find" data-sec="find" style="--dc: var(--re)"><i></i>Find a Home</a></li>
+      <li><a href="#communities" data-sec="communities" style="--dc: var(--water)"><i></i>Communities</a></li>
+      <li><a href="#life" data-sec="life" style="--dc: var(--land)"><i></i>Life at Bloom</a></li>
+      <li><a href="#services" data-sec="services" style="--dc: var(--fm)"><i></i>Customer Services</a></li>
+      <li><a href="#awards" data-sec="awards" style="--dc: var(--blueprint)"><i></i>Awards &amp; News</a></li>
+      <li><a href="#story" data-sec="story" style="--dc: var(--night)"><i></i>Our Story</a></li>
+      <li><a href="#about" data-sec="about" style="--dc: var(--site)"><i></i>About Bloom</a></li>
+  </ol>
+</nav>
 
 <main id="main">
 
@@ -2163,6 +2219,35 @@ html.smooth { scroll-behavior: auto; }
   }, { rootMargin: "-45% 0px -50% 0px" });
   ["find", "communities", "services", "story", "about"].forEach((id) => spy.observe(document.getElementById(id)));
 
+  /* ------------------------------------------------------------ floating section dock */
+  const dock = $("#dock");
+  const dockBtn = $(".dock-current", dock);
+  const dockMenu = $("#dock-menu");
+  const dockLinks = $$("a", dockMenu);
+  let dockSec = "top";
+  function setDockSection(id) {
+    if (id === dockSec) return;
+    dockSec = id;
+    const link = dockLinks.find((a) => a.dataset.sec === id);
+    if (!link) return;
+    const label = $(".dock-label", dock);
+    label.textContent = link.textContent.trim();
+    label.classList.remove("is-swap"); void label.offsetWidth; label.classList.add("is-swap");
+    $(".dock-dot", dock).style.setProperty("--dc", link.style.getPropertyValue("--dc"));
+    dockBtn.setAttribute("aria-label", `Sections: ${link.textContent.trim()}. Open the section list`);
+    dockLinks.forEach((a) => a.setAttribute("aria-current", String(a === link)));
+  }
+  const dockSpy = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) setDockSection(en.target.id); }), { rootMargin: "-45% 0px -50% 0px" });
+  dockLinks.forEach((a) => { const el = document.getElementById(a.dataset.sec); if (el) dockSpy.observe(el); });
+  function setDockMenu(open) {
+    dockMenu.hidden = !open;
+    dockBtn.setAttribute("aria-expanded", String(open));
+  }
+  dockBtn.addEventListener("click", () => setDockMenu(dockMenu.hidden));
+  dockLinks.forEach((a) => a.addEventListener("click", () => setDockMenu(false)));
+  document.addEventListener("click", (e) => { if (!dockMenu.hidden && !dock.contains(e.target)) setDockMenu(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !dockMenu.hidden) { setDockMenu(false); dockBtn.focus(); } });
+
   /* ------------------------------------------------------------ the living masterplan */
   const plan = $("#plan");
   const svg = $(".plan-svg");
@@ -2874,6 +2959,13 @@ html.smooth { scroll-behavior: auto; }
     const menuOpen = menuBtn.getAttribute("aria-expanded") === "true";
     if (!menuOpen && y > 420 && y > lastY + 2) header.classList.add("is-hidden");
     else if (menuOpen || y < lastY - 2 || y <= 420) header.classList.remove("is-hidden");
+    // the dock stands in for the header while it is tucked away (and stays while its menu is open)
+    const showDock = (header.classList.contains("is-hidden") && !reduced.matches) || !dockMenu.hidden;
+    dock.classList.toggle("is-shown", showDock);
+    document.body.classList.toggle("dock-on", showDock);
+    if (!showDock && !dockMenu.hidden) setDockMenu(false);
+    const max = document.documentElement.scrollHeight - vh;
+    dock.style.setProperty("--pg", max > 0 ? (y / max).toFixed(3) : "0");
     lastY = y; ticking = false;
   }
   measure();

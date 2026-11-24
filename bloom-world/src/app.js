@@ -164,6 +164,35 @@
   }, { rootMargin: "-45% 0px -50% 0px" });
   ["find", "communities", "services", "story", "about"].forEach((id) => spy.observe(document.getElementById(id)));
 
+  /* ------------------------------------------------------------ floating section dock */
+  const dock = $("#dock");
+  const dockBtn = $(".dock-current", dock);
+  const dockMenu = $("#dock-menu");
+  const dockLinks = $$("a", dockMenu);
+  let dockSec = "top";
+  function setDockSection(id) {
+    if (id === dockSec) return;
+    dockSec = id;
+    const link = dockLinks.find((a) => a.dataset.sec === id);
+    if (!link) return;
+    const label = $(".dock-label", dock);
+    label.textContent = link.textContent.trim();
+    label.classList.remove("is-swap"); void label.offsetWidth; label.classList.add("is-swap");
+    $(".dock-dot", dock).style.setProperty("--dc", link.style.getPropertyValue("--dc"));
+    dockBtn.setAttribute("aria-label", `Sections: ${link.textContent.trim()}. Open the section list`);
+    dockLinks.forEach((a) => a.setAttribute("aria-current", String(a === link)));
+  }
+  const dockSpy = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) setDockSection(en.target.id); }), { rootMargin: "-45% 0px -50% 0px" });
+  dockLinks.forEach((a) => { const el = document.getElementById(a.dataset.sec); if (el) dockSpy.observe(el); });
+  function setDockMenu(open) {
+    dockMenu.hidden = !open;
+    dockBtn.setAttribute("aria-expanded", String(open));
+  }
+  dockBtn.addEventListener("click", () => setDockMenu(dockMenu.hidden));
+  dockLinks.forEach((a) => a.addEventListener("click", () => setDockMenu(false)));
+  document.addEventListener("click", (e) => { if (!dockMenu.hidden && !dock.contains(e.target)) setDockMenu(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !dockMenu.hidden) { setDockMenu(false); dockBtn.focus(); } });
+
   /* ------------------------------------------------------------ the living masterplan */
   const plan = $("#plan");
   const svg = $(".plan-svg");
@@ -875,6 +904,13 @@
     const menuOpen = menuBtn.getAttribute("aria-expanded") === "true";
     if (!menuOpen && y > 420 && y > lastY + 2) header.classList.add("is-hidden");
     else if (menuOpen || y < lastY - 2 || y <= 420) header.classList.remove("is-hidden");
+    // the dock stands in for the header while it is tucked away (and stays while its menu is open)
+    const showDock = (header.classList.contains("is-hidden") && !reduced.matches) || !dockMenu.hidden;
+    dock.classList.toggle("is-shown", showDock);
+    document.body.classList.toggle("dock-on", showDock);
+    if (!showDock && !dockMenu.hidden) setDockMenu(false);
+    const max = document.documentElement.scrollHeight - vh;
+    dock.style.setProperty("--pg", max > 0 ? (y / max).toFixed(3) : "0");
     lastY = y; ticking = false;
   }
   measure();
