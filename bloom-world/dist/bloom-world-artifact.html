@@ -1156,22 +1156,24 @@ html.has-cursor :is(input:not([type="radio"]):not([type="checkbox"]), textarea, 
 html.has-cursor:has(dialog[open]) .cur { display: none; }
 html.has-cursor:has(dialog[open]) * { cursor: auto !important; }
 html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { cursor: pointer !important; }
-.cur-dot, .cur-ring { position: fixed; left: 0; top: 0; border-radius: 999px; will-change: transform; }
-.cur-dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff; mix-blend-mode: difference; transition: opacity 0.2s, scale 0.25s var(--ease); }
+.cur-dot, .cur-ring { position: fixed; left: 0; top: 0; will-change: transform; }
+/* the pointer: an ink arrow with a cream outline, so it reads on every background */
+.cur-dot { width: 22px; height: 26px; z-index: 2; filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.3)); transition: opacity 0.2s; }
+.cur-dot path { fill: var(--ink); stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; }
+/* the follower: a little plot tile that trails, leans into the motion and stretches with speed */
 .cur-ring {
-  width: 38px; height: 38px; display: grid; place-items: center;
-  border: 1.5px solid #fff; mix-blend-mode: difference; translate: -50% -50%;
-  transition: width 0.35s var(--ease), height 0.35s var(--ease), background-color 0.3s, border-color 0.3s, scale 0.2s var(--ease), opacity 0.25s;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 6px; display: grid; place-items: center;
+  background: var(--cc, var(--red)); border: 2px solid #fff; box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.45);
+  transition: width 0.35s var(--ease), height 0.35s var(--ease), margin 0.35s var(--ease), border-radius 0.35s var(--ease), background-color 0.3s, opacity 0.25s;
 }
 .cur-label { font: 700 0.86rem/1 var(--display); letter-spacing: 0.01em; color: var(--cf, #fff); white-space: nowrap; opacity: 0; transform: scale(0.6); transition: opacity 0.2s, transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1); display: inline-flex; align-items: center; gap: 6px; }
 .cur-label .ic { width: 14px; height: 14px; }
-.cur.is-hover .cur-ring { width: 64px; height: 64px; border-width: 2px; }
-.cur.is-hover .cur-dot { scale: 0.5; }
-.cur.is-label .cur-ring { width: 92px; height: 92px; mix-blend-mode: normal; border-color: transparent; background: var(--cc, var(--ink)); box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5); }
+.cur.is-hover .cur-ring { width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 14px; background: transparent; border-color: var(--ink); box-shadow: 0 0 0 2px #fff, 0 6px 16px -6px rgb(0 0 0 / 0.45); }
+.cur.is-label .cur-ring { width: 96px; height: 42px; margin: -21px 0 0 -48px; border-radius: 14px; }
 .cur.is-label .cur-label { opacity: 1; transform: none; }
-.cur.is-label .cur-dot { opacity: 0; }
 .cur.is-text .cur-ring, .cur.is-text .cur-dot, .cur.is-out .cur-ring, .cur.is-out .cur-dot { opacity: 0; }
-.cur.is-down .cur-ring { scale: 0.78; }
+.cur-dot { transform-origin: 3px 2px; transition: opacity 0.2s, scale 0.15s var(--ease); }
+.cur.is-down .cur-dot { scale: 0.82; }
 .cur-spark { position: fixed; left: 0; top: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; pointer-events: none; z-index: 89; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }
 
@@ -3138,7 +3140,7 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
     const cur = document.createElement("div");
     cur.className = "cur is-out";
     cur.setAttribute("aria-hidden", "true");
-    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><div class="cur-dot"></div>';
+    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><svg class="cur-dot" viewBox="0 0 22 26"><path d="M3 2.5v18.2l4.9-4.6 3.4 7.4 3.4-1.6-3.4-7.2h6.6z"/></svg>';
     document.body.appendChild(cur);
     document.documentElement.classList.add("has-cursor");
     const ring = $(".cur-ring", cur), dot = $(".cur-dot", cur), label = $(".cur-label", cur);
@@ -3167,6 +3169,7 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
       cur.classList.toggle("is-text", key === "text");
       cur.classList.toggle("is-hover", key === "hover");
       cur.classList.toggle("is-label", !!info);
+      if (!info) cur.style.removeProperty("--cc");
       if (info) {
         cur.style.setProperty("--cc", info.c);
         // dark text on the light zone colours, white on the deep ones
@@ -3215,10 +3218,20 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
       }
     });
     window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
+    let ang = 0, stretch = 1;
     (function loop() {
-      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
-      dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
-      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0)`;
+      // the tile sits just behind the arrow's tail, unless it is showing a label
+      const labelled = cur.classList.contains("is-label") || cur.classList.contains("is-hover");
+      const ox = labelled ? 0 : 16, oy = labelled ? 0 : 22;
+      const vx = mx + ox - rx, vy = my + oy - ry;
+      rx += (mx + ox - rx) * 0.18; ry += (my + oy - ry) * 0.18;
+      const speed = Math.hypot(vx, vy);
+      const tAng = labelled || speed < 2 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
+      let dA = ((tAng - ang + 540) % 360) - 180;
+      ang += dA * 0.2;
+      stretch += ((labelled ? 1 : 1 + Math.min(speed / 60, 0.55)) - stretch) * 0.25;
+      dot.style.transform = `translate3d(${mx - 3}px, ${my - 2}px, 0)`;
+      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0) rotate(${ang.toFixed(1)}deg) scale(${stretch.toFixed(3)}, ${(1 / Math.sqrt(stretch)).toFixed(3)})`;
       requestAnimationFrame(loop);
     })();
   }

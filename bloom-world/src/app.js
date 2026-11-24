@@ -904,7 +904,7 @@
     const cur = document.createElement("div");
     cur.className = "cur is-out";
     cur.setAttribute("aria-hidden", "true");
-    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><div class="cur-dot"></div>';
+    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><svg class="cur-dot" viewBox="0 0 22 26"><path d="M3 2.5v18.2l4.9-4.6 3.4 7.4 3.4-1.6-3.4-7.2h6.6z"/></svg>';
     document.body.appendChild(cur);
     document.documentElement.classList.add("has-cursor");
     const ring = $(".cur-ring", cur), dot = $(".cur-dot", cur), label = $(".cur-label", cur);
@@ -933,6 +933,7 @@
       cur.classList.toggle("is-text", key === "text");
       cur.classList.toggle("is-hover", key === "hover");
       cur.classList.toggle("is-label", !!info);
+      if (!info) cur.style.removeProperty("--cc");
       if (info) {
         cur.style.setProperty("--cc", info.c);
         // dark text on the light zone colours, white on the deep ones
@@ -981,10 +982,20 @@
       }
     });
     window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
+    let ang = 0, stretch = 1;
     (function loop() {
-      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
-      dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
-      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0)`;
+      // the tile sits just behind the arrow's tail, unless it is showing a label
+      const labelled = cur.classList.contains("is-label") || cur.classList.contains("is-hover");
+      const ox = labelled ? 0 : 16, oy = labelled ? 0 : 22;
+      const vx = mx + ox - rx, vy = my + oy - ry;
+      rx += (mx + ox - rx) * 0.18; ry += (my + oy - ry) * 0.18;
+      const speed = Math.hypot(vx, vy);
+      const tAng = labelled || speed < 2 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
+      let dA = ((tAng - ang + 540) % 360) - 180;
+      ang += dA * 0.2;
+      stretch += ((labelled ? 1 : 1 + Math.min(speed / 60, 0.55)) - stretch) * 0.25;
+      dot.style.transform = `translate3d(${mx - 3}px, ${my - 2}px, 0)`;
+      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0) rotate(${ang.toFixed(1)}deg) scale(${stretch.toFixed(3)}, ${(1 / Math.sqrt(stretch)).toFixed(3)})`;
       requestAnimationFrame(loop);
     })();
   }
