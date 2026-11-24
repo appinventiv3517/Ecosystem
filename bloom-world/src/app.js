@@ -266,7 +266,8 @@
   }
   fitPlan();
   mobile.addEventListener("change", fitPlan);
-  requestAnimationFrame(() => { if (pan.scrollWidth > pan.clientWidth) pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2; });
+  let autoPan = false;
+  pan.addEventListener("scroll", () => { if (!autoPan) plan.classList.add("is-panned"); }, { passive: true });
   let docked = true;
   function placeCard(key) {
     if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
@@ -316,7 +317,9 @@
     if (mobile.matches && pan.scrollWidth > pan.clientWidth && key !== "all") {
       const zr = plots[key].querySelector(".zone").getBoundingClientRect();
       const pr = pan.getBoundingClientRect();
-      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: smooth });
+      autoPan = true;
+      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: user ? smooth : "auto" });
+      setTimeout(() => { autoPan = false; }, user ? 700 : 50);
     }
     docked = !user;
     setLight(key);

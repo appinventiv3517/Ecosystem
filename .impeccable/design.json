@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T06:50:24+00:00",
+  "title": "Design System: Bloom World",
+  "extensions": {
+    "colorMeta": {
+      "bloom-red": {
+        "role": "primary",
+        "displayName": "Bloom Red",
+        "canonical": "#922a22",
+        "cssVar": "--red",
+        "tonalRamp": [
+          "#1d0201",
+          "#44110d",
+          "#6f2720",
+          "#9d3f35",
+          "#c36155",
+          "#de8c80",
+          "#f8b6ac",
+          "#ffe2da"
+        ]
+      },
+      "bloom-red-deep": {
+        "role": "primary",
+        "displayName": "Bloom Red Deep",
+        "canonical": "#73201a",
+        "cssVar": "--red-deep",
+        "tonalRamp": [
+          "#1a0302",
+          "#3f1612",
+          "#682d27",
+          "#94463e",
+          "#ba685d",
+          "#d69087",
+          "#f1bab1",
+          "#ffe4de"
+        ]
+      },
+      "bloom-red-tint": {
+        "role": "primary",
+        "displayName": "Bloom Red Tint",
+        "canonical": "#f6d9d3",
+        "cssVar": "--red-tint",
+        "tonalRamp": [
+          "#100908",
+          "#2e221f",
+          "#4e3d3a",
+          "#725b57",
+          "#947c77",
+          "#b4a09c",
+          "#d5c5c2",
+          "#f7ece9"
+        ]
+      },
+      "zone-residential": {
+        "role": "secondary",
+        "displayName": "Residential Ochre",
+        "canonical": "#f0a431",
+        "cssVar": "--re",
+        "tonalRamp": [
+          "#190500",
+          "#3d1b00",
+          "#653500",
+          "#8f5000",
+          "#b47200",
+          "#d09951",
+          "#ecc18c",
+          "#ffe9c5"
+        ]
+      },
+      "zone-education": {
+        "role": "secondary",
+        "displayName": "Education Blue",
+        "canonical": "#3b74cc",
+        "cssVar": "--edu",
+        "tonalRamp": [
+          "#000922",
+          "#08234c",
+          "#19407b",
+          "#2c5fad",
+          "#4d82d3",
+          "#7ba6e9",
+          "#a9cbff",
+          "#d8f0ff"
+        ]
+      },
+      "zone-hospitality": {
+        "role": "secondary",
+        "displayName": "Hospitality Coral",
+        "canonical": "#ec6a51",
+        "cssVar": "--hosp",
+        "tonalRamp": [
+          "#1f0000",
+          "#480b02",
+          "#752010",
+          "#a63521",
+          "#cd5943",
+          "#e78773",
+          "#ffb3a3",
+          "#ffe0d4"
+        ]
+      },
+      "zone-retail": {
+        "role": "secondary",
+        "displayName": "Retail Rose",
+        "canonical": "#d94c84",
+        "cssVar": "--retail",
+        "tonalRamp": [
+          "#1f000a",
+          "#480324",
+          "#751540",
+          "#a6295e",
+          "#cd4f7f",
+          "#e87fa2",
+          "#ffadc7",
+          "#ffdced"
+        ]
+      },
+      "zone-healthcare": {
+        "role": "secondary",
+        "displayName": "Healthcare Mint",
+        "canonical": "#2aa889",
+        "cssVar": "--health",
+        "tonalRamp": [
+          "#001109",
+          "#002f21",
+          "#00503d",
+          "#00745a",
+          "#28977b",
+          "#69b79f",
+          "#9ed7c4",
+          "#d2f9eb"
+        ]
+      },
+      "zone-facilities": {
+        "role": "secondary",
+        "displayName": "Facilities Slate",
+        "canonical": "#586683",
+        "cssVar": "--fm",
+        "tonalRamp": [
+          "#070b13",
+          "#1e2533",
+          "#384256",
+          "#55617b",
+          "#75829e",
+          "#9aa5bd",
+          "#c0c9dc",
+          "#e8effc"
+        ]
+      },
+      "zone-landscape": {
+        "role": "secondary",
+        "displayName": "Landscape Green",
+        "canonical": "#5da246",
+        "cssVar": "--land",
+        "tonalRamp": [
+          "#011000",
+          "#0c2e01",
+          "#204e0d",
+          "#35721e",
+          "#579543",
+          "#83b573",
+          "#afd6a3",
+          "#ddf8d4"
+        ]
+      },
+      "zone-lagoon": {
+        "role": "secondary",
+        "displayName": "Lagoon Turquoise",
+        "canonical": "#2bb1c3",
+        "cssVar": "--water",
+        "tonalRamp": [
+          "#000f15",
+          "#002d35",
+          "#004d59",
+          "#007080",
+          "#1293a3",
+          "#62b4c0",
+          "#99d5df",
+          "#cff7fe"
+        ]
+      },
+      "lagoon-deep": {
+        "role": "secondary",
+        "displayName": "Lagoon Deep",
+        "canonical": "#0e6676",
+        "cssVar": "--water-deep",
+        "tonalRamp": [
+          "#000e13",
+          "#032a32",
+          "#134a55",
+          "#256c7a",
+          "#4a8e9d",
+          "#7aafbb",
+          "#a9d1db",
+          "#d9f4fb"
+        ]
+      },
+      "night-plan": {
+        "role": "tertiary",
+        "displayName": "Night Plan Navy",
+        "canonical": "#161d3d",
+        "cssVar": "--night",
+        "tonalRamp": [
+          "#080a15",
+          "#1f2436",
+          "#39415a",
+          "#566082",
+          "#7681a5",
+          "#9ba4c2",
+          "#c1c8e0",
+          "#e9eeff"
+        ]
+      },
+      "blueprint": {
+        "role": "tertiary",
+        "displayName": "Blueprint Blue",
+        "canonical": "#1d4c9c",
+        "cssVar": "--blueprint",
+        "tonalRamp": [
+          "#010921",
+          "#0c234a",
+          "#1f4078",
+          "#345fa9",
+          "#5481ce",
+          "#7fa6e6",
+          "#accafd",
+          "#daf0ff"
+        ]
+      },
+      "site-sand": {
+        "role": "neutral",
+        "displayName": "Site Sand",
+        "canonical": "#e7c48a",
+        "cssVar": "--site",
+        "tonalRamp": [
+          "#120900",
+          "#312206",
+          "#533e17",
+          "#785c29",
+          "#9b7d4b",
+          "#baa179",
+          "#dac6a7",
+          "#faedd7"
+        ]
+      },
+      "site-sand-deep": {
+        "role": "neutral",
+        "displayName": "Site Sand Deep",
+        "canonical": "#d6a964",
+        "cssVar": "--site-deep",
+        "tonalRamp": [
+          "#140800",
+          "#342100",
+          "#583c07",
+          "#7f5917",
+          "#a27b3d",
+          "#c09f6f",
+          "#dec5a0",
+          "#feecd2"
+        ]
+      },
+      "site-line": {
+        "role": "neutral",
+        "displayName": "Site Line",
+        "canonical": "#b98a45",
+        "cssVar": "--site-line",
+        "tonalRamp": [
+          "#150800",
+          "#352000",
+          "#593b06",
+          "#805816",
+          "#a47a3c",
+          "#c19f6f",
+          "#e0c4a0",
+          "#ffebd2"
+        ]
+      },
+      "drawing-paper": {
+        "role": "neutral",
+        "displayName": "Drawing Paper",
+        "canonical": "#fff8ec",
+        "cssVar": "--paper",
+        "tonalRamp": [
+          "#0d0b08",
+          "#272520",
+          "#45413a",
+          "#666057",
+          "#878278",
+          "#a9a49c",
+          "#ccc9c2",
+          "#f1eeea"
+        ]
+      },
+      "drafting-ink": {
+        "role": "neutral",
+        "displayName": "Drafting Ink",
+        "canonical": "#1d1830",
+        "cssVar": "--ink",
+        "tonalRamp": [
+          "#0b0a12",
+          "#252331",
+          "#423f53",
+          "#615d77",
+          "#827e9a",
+          "#a5a2b9",
+          "#c9c6d9",
+          "#eeedfa"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#463d55",
+        "cssVar": "--ink-soft",
+        "tonalRamp": [
+          "#0c0a11",
+          "#27222f",
+          "#453e50",
+          "#655c74",
+          "#867d96",
+          "#a8a1b6",
+          "#ccc6d6",
+          "#f0ecf8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "One section headline per section; hero H1 uses it at clamp(2.3rem, 3.4vw, 3.3rem)."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "The single big number in a section (story year); schedule figures at clamp(1.6rem, 2.6vw, 2.3rem)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Names inside panels and cards: community, app, enquiry title, plot card, parcel."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sub-headings, legend title, schedule caption, news titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text in Latin and Arabic."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Section intros, 40 to 46ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Chips, controls, field labels, legend entries."
+      },
+      "cell-label": {
+        "displayName": "Cell Label",
+        "purpose": "Uppercase field names inside title-block cells only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "paper-lift",
+        "value": "0 18px 40px -18px rgb(45 25 5 / 0.45), 0 3px 8px -2px rgb(45 25 5 / 0.18)",
+        "purpose": "Every paper sheet resting on the plan or a section (styles.css --shadow)."
+      },
+      {
+        "name": "header-lift",
+        "value": "0 10px 30px -14px rgb(45 25 5 / 0.5), 0 0 0 1.5px rgb(29 24 48 / 0.08)",
+        "purpose": "The floating header bar."
+      },
+      {
+        "name": "pin-drop",
+        "value": "0 6px 12px -4px rgb(0 0 0 / 0.4)",
+        "purpose": "Coast-map pins stuck into the map."
+      },
+      {
+        "name": "dialog",
+        "value": "0 40px 80px -30px rgb(0 0 0 / 0.6)",
+        "purpose": "Enquiry dialog over a blurred navy backdrop."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The single easing for every transition and keyframe (styles.css --ease)."
+      },
+      {
+        "name": "state",
+        "value": "0.2s",
+        "purpose": "Colour and border changes on controls."
+      },
+      {
+        "name": "card-in",
+        "value": "0.42s scale(0.92) translateY(6px) to rest",
+        "purpose": "Plot card, result panel, dialog and toast entrances."
+      },
+      {
+        "name": "service-line",
+        "value": "flow 1.1s linear x4 (dashoffset -28); ring 1.8s x3",
+        "purpose": "Red service lines drawn between linked plots, paper dash flowing, ring pulse at ends."
+      },
+      {
+        "name": "day-tint",
+        "value": "fill 1.2s multiply tint; lamps 0.8s",
+        "purpose": "Day clock moves the sun shadow and tints the plan to night."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animations 0.01ms, transitions limited to colour/opacity; service-line flow removed",
+        "purpose": "prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stack-sm",
+        "value": "560px"
+      },
+      {
+        "name": "single-column",
+        "value": "860px"
+      },
+      {
+        "name": "hero-unstack",
+        "value": "1100px"
+      },
+      {
+        "name": "tight-nav",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Bloom red pill for the one main action in a view.",
+      "html": "<button class=\"ds-btn-primary\">Make an enquiry <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.55em;min-height:48px;padding:0 1.35em;border-radius:999px;border:2px solid transparent;font-weight:600;cursor:pointer;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s,border-color .2s;font-family:\"Readex Pro\",system-ui,sans-serif;background:var(--red,#922a22);color:#fff} .ds-btn-primary:hover{background:var(--red-deep,#73201a)} .ds-btn-primary svg{transition:transform .3s cubic-bezier(.16,1,.3,1)} .ds-btn-primary:hover svg{transform:translateX(3px)} .ds-btn-primary:active{transform:translateY(1px)} .ds-btn-primary:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px}"
+    },
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "Secondary action on light grounds.",
+      "html": "<button class=\"ds-btn-ink\">Explore community</button>",
+      "css": ".ds-btn-ink{display:inline-flex;align-items:center;gap:.55em;min-height:48px;padding:0 1.35em;border-radius:999px;border:2px solid transparent;font-weight:600;cursor:pointer;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s,border-color .2s;font-family:\"Readex Pro\",system-ui,sans-serif;background:var(--ink,#1d1830);color:var(--paper,#fff8ec)} .ds-btn-ink:hover{background:#000} .ds-btn-ink:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined tertiary action; fills ink on hover.",
+      "html": "<button class=\"ds-btn-ghost\">About Bloom</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;gap:.55em;min-height:48px;padding:0 1.35em;border-radius:999px;border:2px solid transparent;font-weight:600;cursor:pointer;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s,border-color .2s;font-family:\"Readex Pro\",system-ui,sans-serif;background:transparent;color:var(--ink,#1d1830);border-color:currentColor} .ds-btn-ghost:hover{background:var(--ink,#1d1830);color:var(--paper,#fff8ec);border-color:var(--ink,#1d1830)} .ds-btn-ghost:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px}"
+    },
+    {
+      "name": "Legend Chips",
+      "kind": "chip",
+      "refersTo": "legend-chip",
+      "description": "Zone legend entries that double as filters; pressed fills ink.",
+      "html": "<div class=\"ds-key\"><button class=\"ds-key-btn\" aria-pressed=\"true\"><i style=\"background:#f0a431\"></i>Real Estate</button><button class=\"ds-key-btn\" aria-pressed=\"false\"><i style=\"background:#3b74cc\"></i>Education</button><button class=\"ds-key-btn\" aria-pressed=\"false\"><i style=\"background:#5da246\"></i>Landscaping</button></div>",
+      "css": ".ds-key{display:flex;flex-wrap:wrap;gap:4px;padding:10px 12px;background:var(--paper,#fff8ec)} .ds-key-btn{display:inline-flex;align-items:center;gap:6px;border:0;background:none;border-radius:999px;min-height:30px;padding:0 9px 0 6px;font-size:.8rem;font-weight:600;color:var(--ink,#1d1830);cursor:pointer;transition:background-color .2s,color .2s;font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-key-btn i{width:12px;height:12px;border-radius:3px} .ds-key-btn:hover{background:color-mix(in srgb,var(--site,#e7c48a) 45%,var(--paper,#fff8ec))} .ds-key-btn[aria-pressed=\"true\"]{background:var(--ink,#1d1830);color:var(--paper,#fff8ec)} .ds-key-btn:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px}"
+    },
+    {
+      "name": "Select Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Paper field with ink border; focus adds a red halo.",
+      "html": "<label class=\"ds-field\"><span>Community</span><select class=\"ds-input\"><option>Any community</option><option>Zayed City</option></select></label>",
+      "css": ".ds-field{display:grid;gap:6px;font-size:.85rem;font-weight:600;color:var(--ink,#1d1830);font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-input{appearance:none;width:100%;min-height:46px;border-radius:12px;border:2px solid rgb(29 24 48 / .2);background:var(--paper,#fff8ec);padding:0 40px 0 14px;font:inherit;font-weight:400;color:inherit;transition:border-color .2s,box-shadow .2s} .ds-input:hover{border-color:rgb(29 24 48 / .45)} .ds-input:focus-visible{outline:none;border-color:var(--ink,#1d1830);box-shadow:0 0 0 3px color-mix(in srgb,var(--red,#922a22) 40%,transparent)}"
+    },
+    {
+      "name": "Header Bar",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Floating paper pill with links, language switch and the red enquire action.",
+      "html": "<nav class=\"ds-bar\"><strong class=\"ds-mark\">Bloom</strong><a href=\"#\" aria-current=\"true\">Find a home</a><a href=\"#\">Communities</a><a href=\"#\">Customer Services</a><span class=\"ds-lang\"><button aria-pressed=\"true\">EN</button><button aria-pressed=\"false\">ع</button></span></nav>",
+      "css": ".ds-bar{display:flex;align-items:center;gap:6px;background:var(--paper,#fff8ec);border-radius:999px;padding:8px 8px 8px 22px;box-shadow:0 10px 30px -14px rgb(45 25 5 / .5),0 0 0 1.5px rgb(29 24 48 / .08);color:var(--ink,#1d1830);font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-mark{font:800 1.3rem/1 \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;color:var(--red,#922a22);margin-inline-end:auto} .ds-bar a{text-decoration:none;color:inherit;font-weight:500;font-size:.95rem;padding:10px 14px;border-radius:999px;transition:background-color .2s} .ds-bar a:hover,.ds-bar a[aria-current=\"true\"]{background:color-mix(in srgb,var(--site,#e7c48a) 55%,var(--paper,#fff8ec))} .ds-bar a:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px} .ds-lang{display:flex;border:1.5px solid rgb(29 24 48 / .18);border-radius:999px;padding:3px} .ds-lang button{border:0;background:none;min-width:38px;height:32px;border-radius:999px;font:600 .85rem \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;color:inherit;cursor:pointer} .ds-lang button[aria-pressed=\"true\"]{background:var(--ink,#1d1830);color:var(--paper,#fff8ec)}"
+    },
+    {
+      "name": "Title Block Sheet",
+      "kind": "card",
+      "refersTo": "title-block-sheet",
+      "description": "Drawing title block: paper sheet, ink border, ruled cells.",
+      "html": "<div class=\"ds-tb\"><h3>Welcome to <span>Bloom World</span></h3><dl class=\"ds-tb-cells\"><div><dt>Client</dt><dd>Bloom Holding</dd></div><div><dt>Scale</dt><dd>1 : 2,500</dd></div><div><dt>Sheet</dt><dd>01 / 01</dd></div><div class=\"ds-tb-status\"><dt>Status</dt><dd>Design prototype for review</dd></div></dl></div>",
+      "css": ".ds-tb{background:var(--paper,#fff8ec);border:2px solid var(--ink,#1d1830);border-radius:6px;box-shadow:0 18px 40px -18px rgb(45 25 5 / .45),0 3px 8px -2px rgb(45 25 5 / .18);overflow:hidden;color:var(--ink,#1d1830);font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-tb h3{margin:20px 22px 0;font:800 2.2rem/.98 \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;letter-spacing:-.035em} .ds-tb h3 span{color:var(--red,#922a22)} .ds-tb-cells{margin:16px 0 0;display:grid;grid-template-columns:1fr .8fr 1fr;border-top:2px solid var(--ink,#1d1830)} .ds-tb-cells div{padding:8px 14px 9px;border-inline-end:1.5px solid rgb(29 24 48 / .25)} .ds-tb-cells div:nth-child(3){border-inline-end:0} .ds-tb-status{grid-column:1/-1;border-top:1.5px solid rgb(29 24 48 / .25);background:color-mix(in srgb,var(--site,#e7c48a) 28%,var(--paper,#fff8ec))} .ds-tb dt{font-size:.74rem;font-weight:600;color:var(--ink-soft,#463d55);letter-spacing:.04em;text-transform:uppercase} .ds-tb dd{margin:0;font-size:.85rem;font-weight:600}"
+    },
+    {
+      "name": "Plot Card",
+      "kind": "custom",
+      "refersTo": "plot-card",
+      "description": "Card that opens from a tapped plot, listing linked businesses.",
+      "html": "<div class=\"ds-plot\"><p class=\"ds-plot-time\"><b>07:00</b> Morning drop-off</p><h3 style=\"--zc:#3b74cc\">Brighton College</h3><p class=\"ds-plot-op\">Bloom Education</p><div class=\"ds-chips\"><button><i style=\"background:#586683\"></i>Facilities</button><button><i style=\"background:#5da246\"></i>Landscaping</button></div></div>",
+      "css": ".ds-plot{width:300px;background:var(--paper,#fff8ec);border:2px solid var(--ink,#1d1830);border-radius:18px;padding:20px 20px 18px;display:grid;gap:8px;box-shadow:0 18px 40px -18px rgb(45 25 5 / .45),0 3px 8px -2px rgb(45 25 5 / .18);color:var(--ink,#1d1830);font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-plot p{margin:0} .ds-plot-time{font-size:.85rem;color:var(--ink-soft,#463d55)} .ds-plot-time b{font:700 .95rem \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;color:var(--ink,#1d1830);font-variant-numeric:tabular-nums} .ds-plot h3{margin:0;font:800 1.7rem/1 \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;letter-spacing:-.03em} .ds-plot h3::before{content:\"\";display:inline-block;width:.55em;height:.55em;border-radius:50%;background:var(--zc);margin-inline-end:.3em;vertical-align:.08em} .ds-plot-op{font-size:.85rem;font-weight:600;color:var(--ink-soft,#463d55)} .ds-chips{display:flex;flex-wrap:wrap;gap:6px} .ds-chips button{border:1.5px solid var(--ink,#1d1830);background:none;border-radius:999px;padding:5px 11px 5px 9px;font:600 .82rem \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;color:inherit;display:inline-flex;align-items:center;gap:6px;cursor:pointer} .ds-chips i{width:9px;height:9px;border-radius:50%} .ds-chips button:hover{background:var(--ink,#1d1830);color:var(--paper,#fff8ec)} .ds-chips button:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px}"
+    },
+    {
+      "name": "Parcel Tile",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Development tile: dashed ink outline at rest, solid on hover.",
+      "html": "<a class=\"ds-parcel\" href=\"#\"><span class=\"ds-parcel-media\"></span><span class=\"ds-parcel-tag\">Plot 01 · Zayed City</span><strong>Bloom Living</strong><span class=\"ds-parcel-cta\">Homes to buy here</span></a>",
+      "css": ".ds-parcel{display:grid;gap:6px;width:240px;text-decoration:none;color:var(--ink,#1d1830);background:var(--paper,#fff8ec);border:2.5px dashed var(--ink,#1d1830);border-radius:20px;padding:10px 10px 18px;font-family:\"Readex Pro\",system-ui,sans-serif;} .ds-parcel:hover{border-style:solid} .ds-parcel:focus-visible{outline:3px solid var(--red,#922a22);outline-offset:3px} .ds-parcel-media{aspect-ratio:4/3;border-radius:13px;background:var(--site,#e7c48a);margin-bottom:8px} .ds-parcel span,.ds-parcel strong{padding-inline:8px} .ds-parcel-tag{font-size:.8rem;font-weight:600;color:var(--ink-soft,#463d55)} .ds-parcel strong{font:800 1.45rem/1.05 \"Bricolage Grotesque\",\"Readex Pro\",system-ui,sans-serif;letter-spacing:-.025em} .ds-parcel-cta{font-weight:600;color:var(--red,#922a22);margin-top:8px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Masterplan",
+    "overview": "Bloom World is drawn, not photographed. The whole system is planning-drawing material at page scale: a saturated desert-sand site ground, zoning fields in full colour, white roads with dashed centre lines, plot outlines, north arrows, scale bars, legends and a drawing title block. Every Bloom business is a zone with its own colour, and those colours are big enough to own whole sections of the page, so scrolling reads like walking across the site from the residential quarter to the lagoon, the park, the facilities yard, the blueprint archive and the night plan.\n\nTools sit on top of the drawing as sheets of paper outlined in drafting ink: the title block, the legend, the day clock, the plot card, the search sheet, the area schedule. Controls borrow the plan's own furniture: filters are legend entries with zone swatches, confirmations are stamps, the footer is a title block. Bloom red is the one voice that is not a zone: it marks the main action and Bloom's own connections between plots.\n\nMotion is the plan working. Service lines draw between plots when one is tapped, cars and boats move on the roads and water, and a day clock runs the plan from morning light to a multiply-tinted night with lamps on. Everything else moves little and briefly.",
+    "keyCharacteristics": [
+      "Saturated sand site ground with zoning colours at full strength as section grounds.",
+      "Paper sheets with 2px drafting-ink borders and ruled cells carry every tool.",
+      "Dashed lines mean available or at rest; solid lines mean selected, built or engaged.",
+      "Bricolage Grotesque at weight 800 with tight tracking for drawing titles; Readex Pro for all running text and Arabic.",
+      "Bloom red for main actions, focus, selection and service lines only.",
+      "Bilingual by construction: logical properties throughout, mirrored arrows and clip reveals in RTL."
+    ],
+    "rules": [
+      {
+        "name": "The Zone Owns the Section Rule",
+        "body": "A content section takes one zone or drawing ground at full strength as its whole background, and its accent details stay in that zone's family. Sections are flat colour fields, never gradients or photo backgrounds.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Red Rule",
+        "body": "Bloom red is not a zone and never fills a section or a plot. It marks what Bloom asks you to do (the main action) and what Bloom connects (service lines, routes, the selected pin, focus). If two red buttons compete in one view, one of them is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Drawing Title Rule",
+        "body": "Display type is always Bricolage at 800 with negative tracking; nothing between 400 and 700 is set in the display face at large sizes. Running text, controls and Arabic stay in Readex Pro.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Clock Rule",
+        "body": "Hours, years, counts and schedule figures use tabular numerals so the day clock and timelines never jitter.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Lift Rule",
+        "body": "Shadows belong to paper sheets resting on the drawing, never to drawn things (plots, zones, roads) and never as a hard offset block.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Dashed Means Proposed Rule",
+        "body": "A dashed edge means available, at rest or not yet built; a solid edge means chosen, engaged or built. Never draw a selected state dashed.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** give each new content section one zone or drawing ground at full strength, chosen by the business the section is about.",
+      "**Do** put tools on paper sheets with a 2px drafting-ink border and the warm paper lift shadow.",
+      "**Do** build filters and selectors as legend entries with zone swatches; pressed state fills ink.",
+      "**Do** use dashed edges for at-rest or unbuilt states and solid edges for selected or built ones.",
+      "**Do** keep Bloom red for the main action, focus and Bloom's connections, one primary red button per view.",
+      "**Do** use logical properties and mirror directional arrows and reveals for Arabic.",
+      "**Do** label anything not live (search, listings, form, illustrative plan) in plain text on the surface itself."
+    ],
+    "donts": [
+      "**Don't** fill a section, plot or zone with Bloom red, or use red as a decorative accent.",
+      "**Don't** use gradients for section grounds; the only gradients are the blueprint grid rules, photo scrims and slider fills.",
+      "**Don't** set display headlines in a light weight or in the text face, or set running text in Bricolage.",
+      "**Don't** put shadows on drawn plan elements or use hard offset shadows; depth on the plan comes from the sun angle and the night tint.",
+      "**Don't** return to the incumbent prototype's cream ground, serif display or scattered red accents."
+    ]
+  }
+}

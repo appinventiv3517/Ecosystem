@@ -140,7 +140,8 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 /* ---------------------------------------------------------------- hero: the living masterplan */
 .hero { position: relative; height: max(100svh, 720px); min-height: 640px; overflow: hidden; background: var(--site); isolation: isolate; }
 .plan { position: absolute; inset: 0; }
-.plan-svg { width: 100%; height: 100%; display: block; }
+.plan-svg { width: 100%; height: 100%; display: block; direction: ltr; }
+.coast-svg, .growth-svg { direction: ltr; }
 .plan-svg text { font-family: var(--text); }
 
 .g-site { fill: var(--site); }
@@ -492,7 +493,7 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 .strip-text { position: absolute; z-index: 1; inset-inline: 22px; bottom: 22px; color: #fff; max-width: 40ch; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.5s var(--ease); }
 .strip.is-open .strip-text { opacity: 1; transform: none; transition-delay: 0.25s; }
 
-/* ---------------------------------------------------------------- services (Bloom red) */
+/* ---------------------------------------------------------------- services (facilities slate zone) */
 .services { background: var(--fm); color: #fff; padding-block: var(--section-y); }
 .svc-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
 .svc-head p { font-size: 1.1rem; color: #e6eaf3; max-width: 40ch; }
@@ -780,10 +781,12 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   .pin-name { font-size: 0.7rem; }
 }
 
-.pan-hint { display: none; }
+.pan-chip { display: none; }
 @media (max-width: 700px) {
   .label-in { transform: scale(1.65); }
-  .pan-hint { display: inline; }
+  .pan-chip { display: inline-flex; align-items: center; gap: 6px; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); margin: 0; padding: 6px 12px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 0.78rem; font-weight: 600; white-space: nowrap; pointer-events: none; transition: opacity 0.3s; }
+  .pan-chip .ic { width: 14px; height: 14px; }
+  .plan.is-panned .pan-chip { opacity: 0; }
 }
 @media (max-height: 880px) and (min-width: 1101px) {
   .tb-lede { display: none; }
@@ -792,6 +795,15 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   .legend-search:not(.is-open) .legend-go span { display: none; }
   .legend-search:not(.is-open) .legend-go { min-width: 48px; }
   .legend-search:not(.is-open) .legend-go::after { content: "Search"; }
+}
+
+/* area schedule: stack each row on phones so no cell is cut */
+@media (max-width: 560px) {
+  .schedule { padding: 6px 16px 14px; min-width: 0; }
+  .schedule thead { display: none; }
+  .schedule tbody tr { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 12px; padding: 10px 0; border-top: 1.5px solid rgb(29 24 48 / 0.14); }
+  .schedule th, .schedule td { border-top: 0; padding: 0; }
+  .schedule tbody td:last-child { grid-column: 1 / -1; padding-top: 4px; }
 }
 
 </style>
@@ -1190,6 +1202,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 191)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 501)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
 </svg>
     </div>
+    <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
   </div>
 
   <div class="title-block">
@@ -1270,7 +1283,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     </div>
     <a class="card-visit" target="_blank" rel="noopener"></a>
   </div>
-  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span><span class="pan-hint"> Swipe sideways to see the whole plan.</span></p>
+  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span></p>
 </section>
 
 <!-- ================================================================ FIND A HOME -->
@@ -2027,7 +2040,8 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   }
   fitPlan();
   mobile.addEventListener("change", fitPlan);
-  requestAnimationFrame(() => { if (pan.scrollWidth > pan.clientWidth) pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2; });
+  let autoPan = false;
+  pan.addEventListener("scroll", () => { if (!autoPan) plan.classList.add("is-panned"); }, { passive: true });
   let docked = true;
   function placeCard(key) {
     if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
@@ -2077,7 +2091,9 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     if (mobile.matches && pan.scrollWidth > pan.clientWidth && key !== "all") {
       const zr = plots[key].querySelector(".zone").getBoundingClientRect();
       const pr = pan.getBoundingClientRect();
-      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: smooth });
+      autoPan = true;
+      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: user ? smooth : "auto" });
+      setTimeout(() => { autoPan = false; }, user ? 700 : 50);
     }
     docked = !user;
     setLight(key);
