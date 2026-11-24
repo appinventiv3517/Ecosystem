@@ -928,6 +928,46 @@ html.smooth { scroll-behavior: auto; }
 }
 
 
+/* ---------------------------------------------------------------- life: colour, stickers and play */
+.tile { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); box-shadow: 0 24px 40px -28px rgb(0 0 0 / 0.7); }
+.tile:not([data-slot="a"]):hover { box-shadow: 0 30px 50px -24px color-mix(in srgb, var(--zc) 60%, rgb(0 0 0 / 0.7)); }
+.tile img { translate: var(--px, 0px) var(--py, 0px); transition: scale 0.9s var(--ease), translate 0.6s var(--ease); }
+/* the fade takes the business's own zone colour, so the collage reads as the zoning of a day */
+.tile::after { background: linear-gradient(to top, color-mix(in srgb, var(--zc) 58%, #07140d) 0%, color-mix(in srgb, var(--zc) 30%, rgb(7 20 13 / 0.55)) 34%, rgb(7 20 13 / 0) 64%); }
+.tile[data-slot="a"]::after { background: linear-gradient(to top, color-mix(in srgb, var(--zc) 45%, #07140d) 0%, color-mix(in srgb, var(--zc) 22%, rgb(7 20 13 / 0.7)) 38%, rgb(7 20 13 / 0) 70%); }
+.tile[data-slot="a"] img { animation: drift 9s ease-in-out infinite alternate; }
+@keyframes drift { from { scale: 1; } to { scale: 1.09; } }
+.tile-sticker {
+  position: absolute; right: 14px; top: 12px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--zc); color: #fff; border: 3px solid var(--paper); box-shadow: 0 8px 18px -8px rgb(0 0 0 / 0.6); transform: rotate(-12deg); transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+[dir="rtl"] .tile-sticker { right: auto; left: 14px; }
+.tile-sticker .ic { width: 22px; height: 22px; stroke-width: 2; }
+.tile:hover .tile-sticker { transform: rotate(10deg) scale(1.12); }
+.tile[data-slot="a"] .tile-sticker { width: 64px; height: 64px; right: 22px; top: 22px; transform: rotate(-8deg); }
+.tile[data-slot="a"] .tile-sticker .ic { width: 30px; height: 30px; }
+/* the featured time becomes the headline of the tile */
+.tile[data-slot="a"] .tile-time {
+  background: none; color: var(--site); padding: 0; left: clamp(20px, 2.6vw, 36px); top: clamp(16px, 2.4vh, 28px);
+  font: 800 clamp(3.2rem, 7vw, 6rem)/0.85 var(--display); letter-spacing: -0.045em; text-shadow: 0 4px 24px rgb(0 0 0 / 0.35);
+}
+.tile[data-slot="a"] .tile-zone { background: var(--zc); color: #fff; }
+.tile[data-slot="a"] .tile-zone i { background: #fff; box-shadow: none; }
+.tile[data-slot="a"] .tile-text { color: #fff; }
+@media (max-width: 860px) {
+  .tile:not([data-slot="a"]) .tile-sticker { width: 30px; height: 30px; right: 6px; top: 6px; border-width: 2px; }
+  .tile:not([data-slot="a"]) .tile-sticker .ic { width: 15px; height: 15px; }
+  .tile[data-slot="a"] .tile-sticker { width: 50px; height: 50px; right: 14px; top: 14px; }
+  .tile[data-slot="a"] .tile-time { font-size: 3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile[data-slot="a"] img { animation: none; }
+  .tile { transform: none; }
+}
+/* a soft top fade so the big featured time reads on bright photos */
+.tile[data-slot="a"]::before { content: ""; position: absolute; inset: 0 0 auto; height: 42%; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, rgb(7 20 13 / 0.62), rgb(7 20 13 / 0)); }
+.tile[data-slot="a"] .tile-time { text-shadow: 0 2px 4px rgb(0 0 0 / 0.35), 0 6px 28px rgb(0 0 0 / 0.45); }
+
 </style>
 <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!/[?&]still\b/.test(location.search)){document.documentElement.classList.add("anim","intro");setTimeout(function(){document.documentElement.classList.remove("intro")},3000)}}catch(e){}</script>
 </head>
@@ -951,6 +991,9 @@ html.smooth { scroll-behavior: auto; }
   <symbol id="i-phone-dev" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.6v4.1c0 1.6 2.5 3.1 5.5 3.1s5.5-1.5 5.5-3.1v-4.1"/><path d="M21.5 9.5v5"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.2 4.3a4.6 4.6 0 0 0 4.5 5.9l-9.4 9.4a2.2 2.2 0 0 1-3.1-3.1l9.4-9.4a4.6 4.6 0 0 1-1.4-2.8z"/><path d="M14.5 9.5l-1.4-1.4"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.5 5 20 4.5 19.5 14 14 19.5 5.5 19.5z"/><path d="M5 19l8.5-8.5"/></symbol>
 </svg>
 
 <header class="site-header" id="site-header">
@@ -1552,11 +1595,12 @@ html.smooth { scroll-behavior: auto; }
   <div class="wrap">
     <div class="life-head">
       <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-      <p class="life-lede">One day in a Bloom community, from the school run to dinner. Choose a moment to bring it forward.</p>
+      <p class="life-lede">One day in a Bloom community, from the school run to dinner. Pick a moment and it moves to the front.</p>
     </div>
     <div class="bento" id="bento" role="group" aria-label="A day in a Bloom community">
       <button type="button" class="tile" data-i="0" data-slot="a" aria-pressed="true" style="--zc: var(--edu); view-transition-name: life-tile-0">
         <img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1060" loading="lazy">
+        <span class="tile-sticker" aria-hidden="true"><svg class="ic"><use href="#i-cap"/></svg></span>
         <span class="tile-time">07:45</span>
         <span class="tile-body">
           <span class="tile-zone"><i></i>Education</span>
@@ -1567,6 +1611,7 @@ html.smooth { scroll-behavior: auto; }
       </button>
       <button type="button" class="tile" data-i="1" data-slot="b" aria-pressed="false" style="--zc: var(--fm); view-transition-name: life-tile-1">
         <img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
+        <span class="tile-sticker" aria-hidden="true"><svg class="ic"><use href="#i-wrench"/></svg></span>
         <span class="tile-time">10:00</span>
         <span class="tile-body">
           <span class="tile-zone"><i></i>Facilities Management</span>
@@ -1577,6 +1622,7 @@ html.smooth { scroll-behavior: auto; }
       </button>
       <button type="button" class="tile" data-i="2" data-slot="c" aria-pressed="false" style="--zc: var(--land); view-transition-name: life-tile-2">
         <img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
+        <span class="tile-sticker" aria-hidden="true"><svg class="ic"><use href="#i-leaf"/></svg></span>
         <span class="tile-time">18:30</span>
         <span class="tile-body">
           <span class="tile-zone"><i></i>Landscaping</span>
@@ -1587,6 +1633,7 @@ html.smooth { scroll-behavior: auto; }
       </button>
       <button type="button" class="tile" data-i="3" data-slot="d" aria-pressed="false" style="--zc: var(--hosp); view-transition-name: life-tile-3">
         <img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
+        <span class="tile-sticker" aria-hidden="true"><svg class="ic"><use href="#i-moon"/></svg></span>
         <span class="tile-time">20:00</span>
         <span class="tile-body">
           <span class="tile-zone"><i></i>Hospitality</span>
@@ -2517,6 +2564,21 @@ html.smooth { scroll-behavior: auto; }
   document.addEventListener("visibilitychange", scheduleWay);
   applyWay(0);
   scheduleWay();
+  // tiles lean toward the pointer, and the photo shifts the other way (fine pointers, motion on)
+  if (motion && window.matchMedia("(pointer: fine)").matches) {
+    tiles.forEach((t) => {
+      t.addEventListener("pointermove", (e) => {
+        const r = t.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        const k = t.dataset.slot === "a" ? 3 : 6;
+        t.style.setProperty("--ry", (x * k).toFixed(2) + "deg");
+        t.style.setProperty("--rx", (-y * k).toFixed(2) + "deg");
+        t.style.setProperty("--px", (-x * 14).toFixed(1) + "px");
+        t.style.setProperty("--py", (-y * 14).toFixed(1) + "px");
+      });
+      t.addEventListener("pointerleave", () => { ["--rx", "--ry", "--px", "--py"].forEach((v) => t.style.removeProperty(v)); });
+    });
+  }
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");

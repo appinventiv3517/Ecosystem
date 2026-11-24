@@ -918,3 +918,43 @@ html.smooth { scroll-behavior: auto; }
   .plot-card.in-intro .card-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 }
 
+
+/* ---------------------------------------------------------------- life: colour, stickers and play */
+.tile { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); box-shadow: 0 24px 40px -28px rgb(0 0 0 / 0.7); }
+.tile:not([data-slot="a"]):hover { box-shadow: 0 30px 50px -24px color-mix(in srgb, var(--zc) 60%, rgb(0 0 0 / 0.7)); }
+.tile img { translate: var(--px, 0px) var(--py, 0px); transition: scale 0.9s var(--ease), translate 0.6s var(--ease); }
+/* the fade takes the business's own zone colour, so the collage reads as the zoning of a day */
+.tile::after { background: linear-gradient(to top, color-mix(in srgb, var(--zc) 58%, #07140d) 0%, color-mix(in srgb, var(--zc) 30%, rgb(7 20 13 / 0.55)) 34%, rgb(7 20 13 / 0) 64%); }
+.tile[data-slot="a"]::after { background: linear-gradient(to top, color-mix(in srgb, var(--zc) 45%, #07140d) 0%, color-mix(in srgb, var(--zc) 22%, rgb(7 20 13 / 0.7)) 38%, rgb(7 20 13 / 0) 70%); }
+.tile[data-slot="a"] img { animation: drift 9s ease-in-out infinite alternate; }
+@keyframes drift { from { scale: 1; } to { scale: 1.09; } }
+.tile-sticker {
+  position: absolute; right: 14px; top: 12px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--zc); color: #fff; border: 3px solid var(--paper); box-shadow: 0 8px 18px -8px rgb(0 0 0 / 0.6); transform: rotate(-12deg); transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+[dir="rtl"] .tile-sticker { right: auto; left: 14px; }
+.tile-sticker .ic { width: 22px; height: 22px; stroke-width: 2; }
+.tile:hover .tile-sticker { transform: rotate(10deg) scale(1.12); }
+.tile[data-slot="a"] .tile-sticker { width: 64px; height: 64px; right: 22px; top: 22px; transform: rotate(-8deg); }
+.tile[data-slot="a"] .tile-sticker .ic { width: 30px; height: 30px; }
+/* the featured time becomes the headline of the tile */
+.tile[data-slot="a"] .tile-time {
+  background: none; color: var(--site); padding: 0; left: clamp(20px, 2.6vw, 36px); top: clamp(16px, 2.4vh, 28px);
+  font: 800 clamp(3.2rem, 7vw, 6rem)/0.85 var(--display); letter-spacing: -0.045em; text-shadow: 0 4px 24px rgb(0 0 0 / 0.35);
+}
+.tile[data-slot="a"] .tile-zone { background: var(--zc); color: #fff; }
+.tile[data-slot="a"] .tile-zone i { background: #fff; box-shadow: none; }
+.tile[data-slot="a"] .tile-text { color: #fff; }
+@media (max-width: 860px) {
+  .tile:not([data-slot="a"]) .tile-sticker { width: 30px; height: 30px; right: 6px; top: 6px; border-width: 2px; }
+  .tile:not([data-slot="a"]) .tile-sticker .ic { width: 15px; height: 15px; }
+  .tile[data-slot="a"] .tile-sticker { width: 50px; height: 50px; right: 14px; top: 14px; }
+  .tile[data-slot="a"] .tile-time { font-size: 3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile[data-slot="a"] img { animation: none; }
+  .tile { transform: none; }
+}
+/* a soft top fade so the big featured time reads on bright photos */
+.tile[data-slot="a"]::before { content: ""; position: absolute; inset: 0 0 auto; height: 42%; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, rgb(7 20 13 / 0.62), rgb(7 20 13 / 0)); }
+.tile[data-slot="a"] .tile-time { text-shadow: 0 2px 4px rgb(0 0 0 / 0.35), 0 6px 28px rgb(0 0 0 / 0.45); }

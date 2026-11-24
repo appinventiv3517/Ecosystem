@@ -639,6 +639,21 @@
   document.addEventListener("visibilitychange", scheduleWay);
   applyWay(0);
   scheduleWay();
+  // tiles lean toward the pointer, and the photo shifts the other way (fine pointers, motion on)
+  if (motion && window.matchMedia("(pointer: fine)").matches) {
+    tiles.forEach((t) => {
+      t.addEventListener("pointermove", (e) => {
+        const r = t.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        const k = t.dataset.slot === "a" ? 3 : 6;
+        t.style.setProperty("--ry", (x * k).toFixed(2) + "deg");
+        t.style.setProperty("--rx", (-y * k).toFixed(2) + "deg");
+        t.style.setProperty("--px", (-x * 14).toFixed(1) + "px");
+        t.style.setProperty("--py", (-y * 14).toFixed(1) + "px");
+      });
+      t.addEventListener("pointerleave", () => { ["--rx", "--ry", "--px", "--py"].forEach((v) => t.style.removeProperty(v)); });
+    });
+  }
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
