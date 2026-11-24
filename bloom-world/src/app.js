@@ -898,6 +898,97 @@
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
 
 
+  /* ------------------------------------------------------------ custom cursor: a trailing ring that knows what it is over */
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (motion && finePointer.matches) {
+    const cur = document.createElement("div");
+    cur.className = "cur is-out";
+    cur.setAttribute("aria-hidden", "true");
+    cur.innerHTML = '<div class="cur-ring"><span class="cur-label"></span></div><div class="cur-dot"></div>';
+    document.body.appendChild(cur);
+    document.documentElement.classList.add("has-cursor");
+    const ring = $(".cur-ring", cur), dot = $(".cur-dot", cur), label = $(".cur-label", cur);
+    let mx = -100, my = -100, rx = -100, ry = -100;
+    // what the cursor says over each kind of thing (first match wins)
+    const LABELS = [
+      [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})` })],
+      [".parcel-hit", () => ({ t: "Enquire", c: "var(--red)" })],
+      [".ci", () => ({ t: "View", c: "var(--water-deep)" })],
+      [".tile:not([data-slot='a'])", () => ({ t: "Open", c: "var(--land)" })],
+      [".role", () => ({ t: "Try it", c: "var(--fm)" })],
+      [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--site)", ic: "i-down" })],
+    ];
+    const HOVER = "a, button, [role='button'], label, select, summary, input[type='radio'], input[type='range']";
+    const TEXT = "input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea";
+    let lastKey = "";
+    function setState(target) {
+      let key = "", info = null;
+      if (target.closest && target.closest(TEXT)) key = "text";
+      else {
+        for (const [sel, fn] of LABELS) { const el = target.closest && target.closest(sel); if (el) { info = fn(el); key = "label:" + info.t + info.c; break; } }
+        if (!info && target.closest && target.closest(HOVER)) key = "hover";
+      }
+      if (key === lastKey) return;
+      lastKey = key;
+      cur.classList.toggle("is-text", key === "text");
+      cur.classList.toggle("is-hover", key === "hover");
+      cur.classList.toggle("is-label", !!info);
+      if (info) {
+        cur.style.setProperty("--cc", info.c);
+        // dark text on the light zone colours, white on the deep ones
+        cur.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
+        label.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+      }
+    }
+    // primary buttons lean towards the cursor
+    const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
+    let magnet = null;
+    function pullMagnet(target) {
+      const m = target.closest && target.closest(MAGNETS);
+      if (magnet && magnet !== m) { magnet.style.translate = ""; magnet = null; }
+      if (!m) return;
+      magnet = m; m.classList.add("is-magnetic");
+      const r = m.getBoundingClientRect();
+      const dx = (mx - (r.left + r.width / 2)) / r.width, dy = (my - (r.top + r.height / 2)) / r.height;
+      m.style.translate = `${(dx * 10).toFixed(1)}px ${(dy * 8).toFixed(1)}px`;
+    }
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      mx = e.clientX; my = e.clientY;
+      if (cur.classList.contains("is-out")) { rx = mx; ry = my; cur.classList.remove("is-out"); }
+      setState(e.target);
+      pullMagnet(e.target);
+    }, { passive: true });
+    // the label can change under a still cursor when the page scrolls
+    window.addEventListener("scroll", () => { const el = document.elementFromPoint(mx, my); if (el) setState(el); }, { passive: true });
+    document.addEventListener("pointerleave", () => cur.classList.add("is-out"));
+    window.addEventListener("blur", () => cur.classList.add("is-out"));
+    window.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse") return;
+      cur.classList.add("is-down");
+      // a small burst of zone colours
+      const cols = ["--re", "--edu", "--hosp", "--land", "--water", "--red"];
+      for (let i = 0; i < 6; i++) {
+        const sp = document.createElement("span");
+        sp.className = "cur-spark";
+        sp.style.background = `var(${cols[i]})`;
+        document.body.appendChild(sp);
+        const a = (i / 6) * Math.PI * 2 + Math.random() * 0.5, d = 26 + Math.random() * 18;
+        sp.animate([
+          { transform: `translate(${mx}px, ${my}px) scale(1)`, opacity: 1 },
+          { transform: `translate(${mx + Math.cos(a) * d}px, ${my + Math.sin(a) * d}px) scale(0)`, opacity: 0.9 },
+        ], { duration: 520, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }).onfinish = () => sp.remove();
+      }
+    });
+    window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
+    (function loop() {
+      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
+      dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0)`;
+      requestAnimationFrame(loop);
+    })();
+  }
+
   /* ------------------------------------------------------------ entrance: the plan draws itself */
   const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
   function enter(el, frames, delay, duration = 900) {
