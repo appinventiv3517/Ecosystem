@@ -670,7 +670,7 @@ input[type="range"]:focus-visible { outline: 3px solid #fff; outline-offset: 4px
 .footer { position: relative; background: var(--ink); color: var(--paper); padding-top: var(--section-y); overflow: hidden; }
 .close-cta { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 28px; align-items: end; padding-bottom: clamp(56px, 8vw, 96px); border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 22%, transparent); }
 .close-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.foot-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 40px; padding-block: 56px 48px; }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 40px; padding-block: 56px 48px; }
 .foot-brand img { width: 132px; }
 .foot-tag { margin-top: 10px; color: var(--site); font-weight: 600; }
 .foot-line { margin-top: 14px; max-width: 34ch; color: color-mix(in srgb, var(--paper) 78%, var(--ink)); }
@@ -866,9 +866,14 @@ html.smooth { scroll-behavior: auto; }
 .intro .site-header .bar, .intro .tb-sheet, .intro .legend-search, .intro .day-clock, .intro .plot-card, .intro .plan-svg { opacity: 0; }
 .zone, .label-in, .tree-canopy, .tree-light, .palm path, .umbrella circle { transform-box: fill-box; transform-origin: center; }
 .life-stage { translate: 0 var(--py, 0px); }
-.foot-contact a { overflow-wrap: anywhere; }
+.foot-contact a { white-space: nowrap; }
 @media (max-width: 560px) {
   .foot-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+/* the footer drops to two columns before any column gets too narrow for the email address */
+@media (min-width: 561px) and (max-width: 1180px) {
+  .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foot-brand, .foot-grid > .foot-col:last-child { grid-column: 1 / -1; }
 }
 
 </style>
@@ -1778,7 +1783,7 @@ html.smooth { scroll-behavior: auto; }
         <ul class="foot-contact">
           <li><a href="tel:80025666">800 Bloom (25666)</a></li>
           <li><a href="tel:+97126969500">+971 2 696 9500 outside UAE</a></li>
-          <li><a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a></li>
+          <li><a class="foot-email" href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a></li>
         </ul>
         <ul class="foot-social" aria-label="Bloom on social media">
           <li><a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a></li>
