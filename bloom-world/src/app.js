@@ -898,37 +898,46 @@
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
 
 
-  /* ------------------------------------------------------------ custom cursor: a bloom that rolls, opens and drops leaves */
+  /* ------------------------------------------------------------ custom cursor: a surveyor's reticle that frames what you point at */
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (motion && finePointer.matches) {
     const cur = document.createElement("div");
     cur.className = "cur is-out";
     cur.setAttribute("aria-hidden", "true");
-    cur.innerHTML = '<svg class="cur-fl" viewBox="0 0 64 64"><g class="fl-petals"><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(0 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(72 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(144 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(216 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(288 32 32)"/></g><circle class="fl-heart" cx="32" cy="32" r="5.5"/></svg><span class="cur-tag"></span>';
+    const ticks = "M15 2v6M15 22v6M2 15h6M22 15h6";
+    cur.innerHTML = `<svg class="cur-ret" viewBox="0 0 30 30"><g><path class="halo" d="${ticks}"/><circle class="halo" cx="15" cy="15" r="2.6"/><path class="ink" d="${ticks}"/><circle class="ink" cx="15" cy="15" r="1.6"/></g></svg>`
+      + '<div class="cur-box"><i class="cb cb-tl"></i><i class="cb cb-tr"></i><i class="cb cb-bl"></i><i class="cb cb-br"></i><span class="cur-tag"></span></div>';
     document.body.appendChild(cur);
     document.documentElement.classList.add("has-cursor");
-    const fl = $(".cur-fl", cur), tag = $(".cur-tag", cur);
-    let mx = -100, my = -100, tx = -100, ty = -100, spin = 0, lastX = -100, lastY = -100, travel = 0;
-    // what the bloom says over each kind of thing (first match wins)
+    const ret = $(".cur-ret", cur), box = $(".cur-box", cur), tag = $(".cur-tag", cur);
+    let mx = -100, my = -100;
+    const b = { x: -100, y: -100, w: 28, h: 28 };
+    let snapEl = null;
+    // what the frame says over each kind of thing (first match wins)
     const LABELS = [
-      [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})` })],
-      [".parcel-hit", () => ({ t: "Enquire", c: "var(--red)" })],
-      [".ci", () => ({ t: "View", c: "var(--water-deep)" })],
-      [".tile:not([data-slot='a'])", () => ({ t: "Open", c: "var(--land)" })],
-      [".role", () => ({ t: "Try it", c: "var(--fm)" })],
-      [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--site)", ic: "i-down" })],
+      [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})`, el: el.closest(".plot") || el })],
+      [".parcel-hit", (el) => ({ t: "Enquire", c: "var(--red)", el })],
+      [".ci", (el) => ({ t: "View", c: "var(--water-deep)", el })],
+      [".tile:not([data-slot='a'])", (el) => ({ t: "Open", c: "var(--land)", el })],
+      [".role", (el) => ({ t: "Try it", c: "var(--fm)", el })],
+      [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--ink)", ic: "i-down", el: null })],
     ];
-    const HOVER = "a, button, [role='button'], label, select, summary, input[type='radio'], input[type='range']";
+    const HOVER = "a, button, [role='button'], label, select, summary, input[type='range']";
     const TEXT = "input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea";
     let lastKey = "";
     function setState(target) {
       if (!target.closest) return;
-      let key = "", info = null;
-      if (target.closest(TEXT)) key = "text";
+      let key = "", info = null, el = null;
+      const field = target.closest(TEXT);
+      if (field) { key = "text"; el = field; }
       else {
-        for (const [sel, fn] of LABELS) { const el = target.closest(sel); if (el) { info = fn(el); key = "label:" + info.t + info.c; break; } }
-        if (!info && target.closest(HOVER)) key = "hover";
+        for (const [sel, fn] of LABELS) { const m = target.closest(sel); if (m) { info = fn(m); el = info.el; key = "label:" + info.t + info.c; break; } }
+        if (!info) { el = target.closest(HOVER); if (el) key = "hover"; }
       }
+      // only frame things of a sensible size; big areas keep the small frame
+      if (el) { const r = el.getBoundingClientRect(); if (r.width > 720 || r.height > 520) el = null; }
+      snapEl = el;
+      cur.classList.toggle("is-snap", !!el);
       if (key === lastKey) return;
       lastKey = key;
       cur.classList.toggle("is-text", key === "text");
@@ -936,7 +945,6 @@
       cur.classList.toggle("is-label", !!info);
       if (info) {
         cur.style.setProperty("--cc", info.c);
-        // dark text on the light zone colours, white on the deep ones
         cur.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
         tag.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
       } else cur.style.removeProperty("--cc");
@@ -953,66 +961,44 @@
       const dx = (mx - (r.left + r.width / 2)) / r.width, dy = (my - (r.top + r.height / 2)) / r.height;
       m.style.translate = `${(dx * 10).toFixed(1)}px ${(dy * 8).toFixed(1)}px`;
     }
-    // a leaf falls from the bloom every so often as it travels
-    function dropLeaf(x, y, dir) {
-      const leaf = document.createElement("span");
-      leaf.className = "cur-leaf";
-      document.body.appendChild(leaf);
-      const rot = dir + 90 + (Math.random() * 60 - 30);
-      leaf.animate([
-        { transform: `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.3)`, opacity: 0.95 },
-        { transform: `translate(${x + (Math.random() * 16 - 8)}px, ${y + 8}px) rotate(${rot + 40}deg) scale(1)`, opacity: 0.9, offset: 0.25 },
-        { transform: `translate(${x + (Math.random() * 30 - 15)}px, ${y + 34}px) rotate(${rot + 140}deg) scale(0.5)`, opacity: 0 },
-      ], { duration: 1100, easing: "cubic-bezier(0.3, 0.6, 0.4, 1)" }).onfinish = () => leaf.remove();
-    }
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      if (cur.classList.contains("is-out")) { tx = mx; ty = my; lastX = mx; lastY = my; cur.classList.remove("is-out"); }
-      const d = Math.hypot(mx - lastX, my - lastY);
-      // the bloom rolls: it turns with the distance it covers, clockwise going right
-      spin += (mx - lastX >= 0 ? 1 : -1) * d * 1.4;
-      travel += d;
-      if (travel > 90 && !cur.classList.contains("is-label") && !cur.classList.contains("is-text")) {
-        travel = 0;
-        dropLeaf(mx, my, Math.atan2(my - lastY, mx - lastX) * 180 / Math.PI);
-      }
-      lastX = mx; lastY = my;
+      if (cur.classList.contains("is-out")) { b.x = mx - 14; b.y = my - 14; cur.classList.remove("is-out"); }
       setState(e.target);
       pullMagnet(e.target);
     }, { passive: true });
-    // the label can change under a still cursor when the page scrolls
     window.addEventListener("scroll", () => { const el = document.elementFromPoint(mx, my); if (el) setState(el); }, { passive: true });
     document.addEventListener("pointerleave", () => cur.classList.add("is-out"));
     window.addEventListener("blur", () => cur.classList.add("is-out"));
     window.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse") return;
       cur.classList.add("is-down");
-      // petals scatter and drift down, in the colours of Bloom's businesses
-      const cols = ["--red", "--re", "--hosp", "--retail", "--edu", "--land", "--health"];
-      for (let k = 0; k < 7; k++) {
-        const p = document.createElement("span");
-        p.className = "cur-petal";
-        p.style.background = `var(${cols[k]})`;
-        document.body.appendChild(p);
-        const a = (k / 7) * Math.PI * 2 + Math.random() * 0.4, d = 30 + Math.random() * 22, r0 = (a * 180) / Math.PI + 90;
-        p.animate([
-          { transform: `translate(${mx}px, ${my}px) rotate(${r0}deg) scale(0.4)`, opacity: 1 },
-          { transform: `translate(${mx + Math.cos(a) * d}px, ${my + Math.sin(a) * d}px) rotate(${r0 + 90}deg) scale(1)`, opacity: 1, offset: 0.35 },
-          { transform: `translate(${mx + Math.cos(a) * d * 1.3}px, ${my + Math.sin(a) * d + 40}px) rotate(${r0 + 240}deg) scale(0.6)`, opacity: 0 },
-        ], { duration: 1000, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)" }).onfinish = () => p.remove();
-      }
+      // a square ping, like marking a point on the plan
+      const ping = document.createElement("span");
+      ping.className = "cur-ping";
+      document.body.appendChild(ping);
+      ping.animate([
+        { transform: `translate(${mx}px, ${my}px) rotate(45deg) scale(0.4)`, opacity: 1 },
+        { transform: `translate(${mx}px, ${my}px) rotate(45deg) scale(3.2)`, opacity: 0 },
+      ], { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }).onfinish = () => ping.remove();
     });
     window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
-    let shownSpin = 0;
     (function loop() {
-      // idle blooms turn slowly on their own; moving ones roll
-      spin += 0.35;
-      shownSpin += (spin - shownSpin) * 0.2;
-      fl.style.transform = `translate3d(${mx}px, ${my}px, 0) rotate(${shownSpin.toFixed(1)}deg)`;
-      // the label tag trails just behind and to the right
-      tx += (mx + 30 - tx) * 0.2; ty += (my + 8 - ty) * 0.2;
-      tag.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) translateY(-50%)`;
+      let tx, ty, tw, th;
+      if (snapEl && snapEl.isConnected) {
+        const r = snapEl.getBoundingClientRect(), pad = 6;
+        tx = r.left - pad; ty = r.top - pad; tw = r.width + pad * 2; th = r.height + pad * 2;
+      } else {
+        const size = cur.classList.contains("is-label") ? 40 : 28;
+        tx = mx - size / 2; ty = my - size / 2; tw = size; th = size;
+      }
+      const k = 0.22;
+      b.x += (tx - b.x) * k; b.y += (ty - b.y) * k; b.w += (tw - b.w) * k; b.h += (th - b.h) * k;
+      box.style.transform = `translate3d(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px, 0)`;
+      box.style.width = `${b.w.toFixed(1)}px`; box.style.height = `${b.h.toFixed(1)}px`;
+      cur.classList.toggle("is-flip", b.y < 40);
+      ret.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
       requestAnimationFrame(loop);
     })();
   }
