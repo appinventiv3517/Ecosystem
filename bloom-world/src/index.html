@@ -221,30 +221,39 @@
   <div class="wrap">
     <div class="comm-head">
       <h2 id="communities-title" class="display" data-i18n="comm.title">Five communities, one coastline.</h2>
-      <p>From the mangroves of Abu Dhabi to the heart of Dubai, each with its own character. Tap a pin, or swipe through.</p>
+      <p>From the mangroves of Abu Dhabi to the heart of Dubai, each with its own character. Pick a community, or swipe through.</p>
     </div>
     <div class="comm-grid">
-      <div class="coast-col">
-      <div class="coast" id="coast">
-        {{COAST_SVG}}
-        <div class="pins" role="tablist" aria-label="Communities">
-          <button type="button" role="tab" class="pin" data-c="0" style="--x:44%;--y:87%" aria-selected="true"><span class="pin-head">1</span><span class="pin-name">Zayed City</span></button>
-          <button type="button" role="tab" class="pin" data-c="1" style="--x:32%;--y:61%" aria-selected="false"><span class="pin-head">2</span><span class="pin-name">Saadiyat Island</span></button>
-          <button type="button" role="tab" class="pin pin-left" data-c="2" style="--x:22.5%;--y:75%" aria-selected="false"><span class="pin-head">3</span><span class="pin-name">Al Bateen Marina</span></button>
-          <button type="button" role="tab" class="pin pin-end" data-c="3" style="--x:85%;--y:32%" aria-selected="false"><span class="pin-head">4</span><span class="pin-name">Jumeirah Village Circle</span></button>
-          <button type="button" role="tab" class="pin" data-c="4" style="--x:38.5%;--y:73%" aria-selected="false"><span class="pin-head">5</span><span class="pin-name">Eastern Mangrove Corniche</span></button>
-        </div>
-      </div>
-      <ol class="comm-legend" aria-label="Community legend">
-        <li><button type="button"><b>1</b>Zayed City</button></li>
-        <li><button type="button"><b>2</b>Saadiyat Island</button></li>
-        <li><button type="button"><b>3</b>Al Bateen Marina</button></li>
-        <li><button type="button"><b>4</b>Jumeirah Village Circle</button></li>
-        <li><button type="button"><b>5</b>Eastern Mangrove Corniche</button></li>
+      <ol class="comm-index" role="tablist" aria-label="Communities">
+        <li><button type="button" class="ci" role="tab" data-c="0" aria-selected="true" aria-controls="comm-panel" tabindex="0">
+          <span class="ci-n">01</span><span class="ci-name">Zayed City</span><span class="ci-where">Khalifa City C, Abu Dhabi</span><svg class="ic ci-arrow"><use href="#i-arrow"/></svg>
+        </button></li>
+        <li><button type="button" class="ci" role="tab" data-c="1" aria-selected="false" aria-controls="comm-panel" tabindex="-1">
+          <span class="ci-n">02</span><span class="ci-name">Saadiyat Island</span><span class="ci-where">Abu Dhabi</span><svg class="ic ci-arrow"><use href="#i-arrow"/></svg>
+        </button></li>
+        <li><button type="button" class="ci" role="tab" data-c="2" aria-selected="false" aria-controls="comm-panel" tabindex="-1">
+          <span class="ci-n">03</span><span class="ci-name">Al Bateen Marina</span><span class="ci-where">Abu Dhabi</span><svg class="ic ci-arrow"><use href="#i-arrow"/></svg>
+        </button></li>
+        <li><button type="button" class="ci" role="tab" data-c="3" aria-selected="false" aria-controls="comm-panel" tabindex="-1">
+          <span class="ci-n">04</span><span class="ci-name">Jumeirah Village Circle</span><span class="ci-where">Dubai</span><svg class="ic ci-arrow"><use href="#i-arrow"/></svg>
+        </button></li>
+        <li><button type="button" class="ci" role="tab" data-c="4" aria-selected="false" aria-controls="comm-panel" tabindex="-1">
+          <span class="ci-n">05</span><span class="ci-name">Eastern Mangrove Corniche</span><span class="ci-where">Abu Dhabi</span><svg class="ic ci-arrow"><use href="#i-arrow"/></svg>
+        </button></li>
       </ol>
-      </div>
-      <article class="comm-panel" id="comm-panel" role="tabpanel" aria-live="polite">
-        <div class="comm-media"><img id="comm-img" src="assets/img/community-zayed-city.webp" alt="" width="1400" height="933"></div>
+      <article class="comm-stage" id="comm-panel" role="tabpanel" aria-live="polite" aria-label="Zayed City">
+        <div class="comm-media"><img id="comm-img" src="assets/img/community-zayed-city.webp" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" width="1400" height="933"></div>
+        <figure class="comm-locator" id="coast" aria-hidden="true">
+          {{COAST_SVG}}
+          <div class="pins">
+          <span class="loc-pin is-on" style="--x:44%;--y:87%">1</span>
+          <span class="loc-pin" style="--x:32%;--y:61%">2</span>
+          <span class="loc-pin" style="--x:22.5%;--y:75%">3</span>
+          <span class="loc-pin" style="--x:85%;--y:32%">4</span>
+          <span class="loc-pin" style="--x:38.5%;--y:73%">5</span>
+          </div>
+          <figcaption>Abu Dhabi to Dubai · not to scale</figcaption>
+        </figure>
         <div class="comm-body">
           <h3 class="comm-name" id="comm-name">Zayed City</h3>
           <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
@@ -253,11 +262,11 @@
           <div class="comm-actions">
             <button type="button" class="btn btn-red" id="comm-find"><span>Find a home here</span><svg class="ic"><use href="#i-arrow"/></svg></button>
             <a class="btn btn-ghost" id="comm-explore" href="#communities">Explore community</a>
-          </div>
-          <div class="comm-step">
-            <button type="button" class="round-btn" id="comm-prev" aria-label="Previous community"><svg class="ic"><use href="#i-left"/></svg></button>
-            <span class="comm-count"><span id="comm-index">1</span> / 5</span>
-            <button type="button" class="round-btn" id="comm-next" aria-label="Next community"><svg class="ic"><use href="#i-right"/></svg></button>
+            <span class="comm-step">
+              <button type="button" class="round-btn" id="comm-prev" aria-label="Previous community"><svg class="ic"><use href="#i-left"/></svg></button>
+              <span class="comm-count"><span id="comm-index">1</span> / 5</span>
+              <button type="button" class="round-btn" id="comm-next" aria-label="Next community"><svg class="ic"><use href="#i-right"/></svg></button>
+            </span>
           </div>
         </div>
       </article>

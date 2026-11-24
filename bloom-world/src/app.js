@@ -552,15 +552,17 @@
   $$("[data-prefill]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); prefill(JSON.parse(a.dataset.prefill), true); }));
 
   /* ------------------------------------------------------------ communities */
-  const pins = $$(".pin");
+  const cis = $$(".ci");
+  const locPins = $$(".loc-pin");
   const panel = $("#comm-panel");
   let cIndex = 0;
-  pins.forEach((p, i) => { p.querySelector(".pin-head").textContent = String(i + 1); });
   function showCommunity(i, focus) {
-    cIndex = (i + COMMUNITIES.length) % COMMUNITIES.length;
+    const next = (i + COMMUNITIES.length) % COMMUNITIES.length;
+    const changed = next !== cIndex;
+    cIndex = next;
     const c = COMMUNITIES[cIndex];
-    pins.forEach((p, j) => { p.setAttribute("aria-selected", String(j === cIndex)); p.tabIndex = j === cIndex ? 0 : -1; });
-    $$(".comm-legend button").forEach((b, j) => b.setAttribute("aria-current", String(j === cIndex)));
+    cis.forEach((b, j) => { b.setAttribute("aria-selected", String(j === cIndex)); b.tabIndex = j === cIndex ? 0 : -1; });
+    locPins.forEach((p, j) => p.classList.toggle("is-on", j === cIndex));
     $("#comm-img").src = c.img; $("#comm-img").alt = c.alt;
     $("#comm-name").textContent = c.name;
     $("#comm-where").textContent = c.where;
@@ -568,37 +570,36 @@
     $("#comm-devs").textContent = c.devs;
     $("#comm-index").textContent = cIndex + 1;
     panel.setAttribute("aria-label", c.name);
-    panel.classList.remove("is-swap"); void panel.offsetWidth; panel.classList.add("is-swap");
-    if (focus) pins[cIndex].focus();
+    if (changed && motion) { panel.classList.remove("is-swap"); void panel.offsetWidth; panel.classList.add("is-swap"); }
+    if (focus) cis[cIndex].focus();
   }
-  pins.forEach((p, i) => p.addEventListener("click", () => showCommunity(i)));
-  $$(".comm-legend button").forEach((b, i) => b.addEventListener("click", () => showCommunity(i)));
-  $(".pins").addEventListener("keydown", (e) => {
-    const rtl = document.dir === "rtl";
-    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); showCommunity(cIndex + (rtl && e.key === "ArrowRight" ? -1 : 1), true); }
-    if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); showCommunity(cIndex + (rtl && e.key === "ArrowLeft" ? 1 : -1), true); }
+  cis.forEach((b, i) => {
+    b.addEventListener("click", () => showCommunity(i));
   });
-  showCommunity(0);
-  panel.classList.remove("is-swap");
+  $(".comm-index").addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); showCommunity(cIndex + 1, true); }
+    if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); showCommunity(cIndex - 1, true); }
+  });
   $("#comm-prev").addEventListener("click", () => showCommunity(cIndex - 1));
   $("#comm-next").addEventListener("click", () => showCommunity(cIndex + 1));
   $("#comm-find").addEventListener("click", () => prefill({ community: COMMUNITIES[cIndex].key }, true));
   $("#comm-explore").addEventListener("click", (e) => { e.preventDefault(); toast(`The ${COMMUNITIES[cIndex].name} community page is not part of this prototype.`); });
   let sx = null;
-  panel.addEventListener("pointerdown", (e) => { sx = e.clientX; });
-  panel.addEventListener("pointerup", (e) => {
+  const media = $(".comm-media");
+  media.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+  media.addEventListener("pointerup", (e) => {
     if (sx === null) return;
     const d = e.clientX - sx; sx = null;
     if (Math.abs(d) > 50) showCommunity(cIndex + (d < 0 ? 1 : -1) * (document.dir === "rtl" ? -1 : 1));
   });
-  // pins drop onto the map the first time it is seen
+  // the locator pins drop in the first time the section is seen
   new IntersectionObserver(([en], obs) => {
     if (!en.isIntersecting) return;
     obs.disconnect();
     $(".pins").classList.add("dropped");
     if (!motion) return;
-    pins.forEach((p, i) => { p.querySelector(".pin-head").style.animationDelay = 200 + i * 120 + "ms"; p.classList.add("is-drop"); });
-  }, { threshold: 0.35 }).observe($("#coast"));
+    locPins.forEach((p, i) => { p.style.animationDelay = 300 + i * 110 + "ms"; p.classList.add("is-drop"); });
+  }, { threshold: 0.35 }).observe(panel);
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
@@ -818,8 +819,8 @@
       watch(h, "rv-words");
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-lede", ".about-lede", ".about-actions", ".search",
-      ".parcels-head", ".coast-col", ".comm-panel", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
-      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-panel" ? 140 : 0)));
+      ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
     [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
     $$(".parcel-media, .comm-media, .story-photo, .app-media, .life-stage").forEach((el) => watch(el, "rv-img", 120));
