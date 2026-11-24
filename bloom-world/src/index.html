@@ -279,40 +279,50 @@
   <div class="wrap">
     <div class="life-head">
       <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-      <p class="life-lede">One day in a Bloom community, from the school run to dinner. Scroll and follow the sun.</p>
+      <p class="life-lede">One day in a Bloom community, from the school run to dinner. Choose a moment to bring it forward.</p>
     </div>
-    <div class="sky" aria-hidden="true">
-      <svg class="sky-svg" viewBox="0 0 1000 120" preserveAspectRatio="none"><path class="sky-arc" id="sky-arc" d="M80 112 Q500 -96 920 112"/></svg>
-      <span class="sky-sun" id="sky-sun"><svg class="ic"><use href="#i-sun"/></svg></span>
-      <span class="sky-clock" id="sky-clock">06:00</span>
-      <span class="sky-end sky-start">Sunrise</span><span class="sky-end sky-stop">Night</span>
+    <div class="bento" id="bento" role="group" aria-label="A day in a Bloom community">
+      <button type="button" class="tile" data-i="0" data-slot="a" aria-pressed="true" style="--zc: var(--edu); view-transition-name: life-tile-0">
+        <img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1060" loading="lazy">
+        <span class="tile-time">07:45</span>
+        <span class="tile-body">
+          <span class="tile-zone"><i></i>Education</span>
+          <span class="tile-title">Growing up together</span>
+          <span class="tile-text">Schools and shared spaces where neighbours turn into friends.</span>
+        </span>
+        <span class="tile-bar" aria-hidden="true"><i></i></span>
+      </button>
+      <button type="button" class="tile" data-i="1" data-slot="b" aria-pressed="false" style="--zc: var(--fm); view-transition-name: life-tile-1">
+        <img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
+        <span class="tile-time">10:00</span>
+        <span class="tile-body">
+          <span class="tile-zone"><i></i>Facilities Management</span>
+          <span class="tile-title">Looked after, every day</span>
+          <span class="tile-text">The teams who care for the buildings, streets and gardens behind the scenes.</span>
+        </span>
+        <span class="tile-bar" aria-hidden="true"><i></i></span>
+      </button>
+      <button type="button" class="tile" data-i="2" data-slot="c" aria-pressed="false" style="--zc: var(--land); view-transition-name: life-tile-2">
+        <img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
+        <span class="tile-time">18:30</span>
+        <span class="tile-body">
+          <span class="tile-zone"><i></i>Landscaping</span>
+          <span class="tile-title">Days spent outdoors</span>
+          <span class="tile-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span>
+        </span>
+        <span class="tile-bar" aria-hidden="true"><i></i></span>
+      </button>
+      <button type="button" class="tile" data-i="3" data-slot="d" aria-pressed="false" style="--zc: var(--hosp); view-transition-name: life-tile-3">
+        <img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
+        <span class="tile-time">20:00</span>
+        <span class="tile-body">
+          <span class="tile-zone"><i></i>Hospitality</span>
+          <span class="tile-title">Time well spent</span>
+          <span class="tile-text">Places to stay, dine and slow down, close to home.</span>
+        </span>
+        <span class="tile-bar" aria-hidden="true"><i></i></span>
+      </button>
     </div>
-    <ol class="moments" aria-label="A day in a Bloom community">
-      <li class="moment" style="--zc: var(--edu)" data-time="07:45">
-        <figure class="mo-photo"><img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1060" loading="lazy"><figcaption class="mo-time">07:45</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
-        <p class="mo-zone"><i></i>Education</p>
-        <h3 class="mo-title">Growing up together</h3>
-        <p class="mo-text">Schools and shared spaces where neighbours turn into friends.</p>
-      </li>
-      <li class="moment" style="--zc: var(--fm)" data-time="10:00">
-        <figure class="mo-photo"><img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy"><figcaption class="mo-time">10:00</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
-        <p class="mo-zone"><i></i>Facilities Management</p>
-        <h3 class="mo-title">Looked after, every day</h3>
-        <p class="mo-text">The teams who care for the buildings, streets and gardens behind the scenes.</p>
-      </li>
-      <li class="moment" style="--zc: var(--land)" data-time="18:30">
-        <figure class="mo-photo"><img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy"><figcaption class="mo-time">18:30</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
-        <p class="mo-zone"><i></i>Landscaping</p>
-        <h3 class="mo-title">Days spent outdoors</h3>
-        <p class="mo-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</p>
-      </li>
-      <li class="moment" style="--zc: var(--hosp)" data-time="20:00">
-        <figure class="mo-photo"><img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy"><figcaption class="mo-time">20:00</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
-        <p class="mo-zone"><i></i>Hospitality</p>
-        <h3 class="mo-title">Time well spent</h3>
-        <p class="mo-text">Places to stay, dine and slow down, close to home.</p>
-      </li>
-    </ol>
   </div>
 </section>
 

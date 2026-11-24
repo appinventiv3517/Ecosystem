@@ -603,47 +603,42 @@
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life: the sun crosses the sky as you scroll */
+  /* ------------------------------------------------------------ life: a bento collage of the day */
   const lifeSec = $("#life");
-  const sky = $(".sky");
-  const arc = $("#sky-arc");
-  const skySun = $("#sky-sun");
-  const clock = $("#sky-clock");
-  const moments = $$(".moment");
-  const momentMin = moments.map((m) => { const [hh, mm] = m.dataset.time.split(":").map(Number); return hh * 60 + mm; });
-  const DAY_START = 6 * 60, DAY_END = 22 * 60;
-  const arcLen = arc.getTotalLength();
-  let lastT = -1;
-  function skyAt(t) {
-    // t is 0..1 across the day; place the sun on the arc (viewBox 1000 x 120, stretched to the sky box)
-    const pt = arc.getPointAtLength(arcLen * t);
-    const w = sky.clientWidth, h = sky.clientHeight;
-    const rtl = document.dir === "rtl";
-    const x = (rtl ? 1000 - pt.x : pt.x) / 1000 * w, y = pt.y / 120 * h;
-    sky.style.setProperty("--sx", x.toFixed(1) + "px");
-    sky.style.setProperty("--sy", y.toFixed(1) + "px");
-    sky.classList.toggle("clock-left", rtl ? t < 0.2 : t > 0.8);
-    const mins = Math.round(DAY_START + t * (DAY_END - DAY_START));
-    clock.textContent = String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
-    let now = -1;
-    momentMin.forEach((m, k) => { if (mins >= m) now = k; });
-    moments.forEach((m, k) => m.classList.toggle("is-now", k === now));
+  const bento = $("#bento");
+  const tiles = $$(".tile", bento);
+  const WAY_MS = 6000;
+  let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion, held = false;
+  function applyWay(i) {
+    wi = i;
+    // the chosen moment takes the big slot; the rest follow it in day order
+    tiles.forEach((t, j) => {
+      const k = (j - i + tiles.length) % tiles.length;
+      t.dataset.slot = "abcd"[k];
+      t.setAttribute("aria-pressed", String(k === 0));
+      t.setAttribute("aria-label", (k === 0 ? "Showing: " : "Show ") + $(".tile-time", t).textContent + ", " + $(".tile-title", t).textContent);
+    });
+    const bar = $(".tile-bar i", tiles[i]);
+    if (bar) { bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = ""; }
   }
-  function skyScroll() {
-    const r = lifeSec.getBoundingClientRect(), vh = window.innerHeight;
-    // the day runs while the section passes through the viewport
-    // sunrise as the section arrives, midday as it settles, night as it leaves
-    let t = (vh * 0.75 - r.top) / (vh * 0.75 + r.height * 0.45);
-    t = Math.max(0, Math.min(1, t));
-    if (reduced.matches || still) t = (13 * 60 - DAY_START) / (DAY_END - DAY_START);
-    if (Math.abs(t - lastT) < 0.001) return;
-    lastT = t;
-    skyAt(t);
+  function showWay(i) {
+    if (i === wi && tiles[i].dataset.slot === "a") { scheduleWay(); return; }
+    if (motion && document.startViewTransition) document.startViewTransition(() => applyWay(i));
+    else applyWay(i);
+    scheduleWay();
   }
-  let skyTick = false;
-  window.addEventListener("scroll", () => { if (!skyTick) { skyTick = true; requestAnimationFrame(() => { skyTick = false; skyScroll(); }); } }, { passive: true });
-  window.addEventListener("resize", () => { lastT = -1; skyScroll(); });
-  skyScroll();
+  function scheduleWay() {
+    clearTimeout(wTimer);
+    lifeSec.classList.toggle("is-auto", wAuto);
+    if (wAuto && lifeVisible && !held && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % tiles.length), WAY_MS);
+  }
+  tiles.forEach((t, i) => t.addEventListener("click", () => { if (t.dataset.slot === "a") return; wAuto = false; showWay(i); }));
+  bento.addEventListener("pointerenter", () => { held = true; bento.classList.add("is-held"); clearTimeout(wTimer); });
+  bento.addEventListener("pointerleave", () => { held = false; bento.classList.remove("is-held"); const bar = $(".tile-bar i", tiles[wi]); if (bar) { bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = ""; } scheduleWay(); });
+  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
+  document.addEventListener("visibilitychange", scheduleWay);
+  applyWay(0);
+  scheduleWay();
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
@@ -818,10 +813,10 @@
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
-      ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".sky"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
-    [".parcels > li", ".moments > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".bento"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
+    [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media, .mo-photo").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */
