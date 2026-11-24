@@ -223,10 +223,11 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .plot-label .dot.z-re { fill: var(--re); } .plot-label .dot.z-edu { fill: var(--edu); } .plot-label .dot.z-hosp { fill: var(--hosp); }
 .plot-label .dot.z-retail { fill: var(--retail); } .plot-label .dot.z-health { fill: var(--health); } .plot-label .dot.z-fm { fill: var(--fm); } .plot-label .dot.z-land { fill: var(--land); }
 .plot:hover .zone, .plot:focus-visible .zone, .plot.is-on .zone { stroke-width: 5; stroke-dasharray: none; }
-.plot-label.is-hover rect, .plot-label.is-on rect { fill: var(--ink); }
-.plot-label.is-hover text, .plot-label.is-on text { fill: var(--paper); }
-.plot-label.is-focus rect { stroke: var(--red); stroke-width: 3; }
 .plot-label.is-dim rect { fill: color-mix(in srgb, var(--paper) 88%, var(--site)); }
+/* hover and selection always win over the dimmed state, so text and pill never share a tone */
+.plot-label.is-hover rect, .plot-label.is-on rect, .plot-label.is-dim.is-hover rect { fill: var(--ink); }
+.plot-label.is-hover text, .plot-label.is-on text, .plot-label.is-dim.is-hover text { fill: var(--paper); }
+.plot-label.is-focus rect { stroke: var(--red); stroke-width: 3; }
 .plan.has-active .plot:not(.is-on):not(.is-linked) { opacity: 0.42; filter: saturate(0.5); }
 .conns { pointer-events: none; }
 .conn { fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round; }
@@ -733,12 +734,12 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .parcels { grid-template-columns: repeat(2, 1fr); }
   .stamps { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .nav { display: none; }
   .menu-btn { display: grid; }
   .bar-end { margin-inline-start: auto; }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .hero { height: auto; min-height: 0; padding-top: 86px; display: flex; flex-direction: column; }
   .plan { position: relative; inset: auto; order: 3; }
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
@@ -812,7 +813,7 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .pan-chip .ic { width: 14px; height: 14px; }
   .plan.is-panned .pan-chip { opacity: 0; }
 }
-@media (max-height: 880px) and (min-width: 1101px) {
+@media (max-height: 880px) and (min-width: 1201px) {
   .tb-lede { display: none; }
 }
 @media (max-width: 420px) {
@@ -867,6 +868,19 @@ html.smooth { scroll-behavior: auto; }
 @media (min-width: 561px) and (max-width: 1180px) {
   .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot-brand, .foot-grid > .foot-col:last-child { grid-column: 1 / -1; }
+}
+/* compact plot card on desktop so it fits the free lanes of the plan without covering labels */
+@media (min-width: 1201px) {
+  .plot-card { width: clamp(270px, 22vw, 330px); padding: 15px 16px 14px; gap: 5px; }
+  .card-name { font-size: 1.45rem; }
+  .card-time, .card-operator { font-size: 0.8rem; }
+  .card-text { font-size: 0.86rem; line-height: 1.45; }
+  .card-stat { font-size: 0.95rem; }
+  .card-links { gap: 4px; }
+  .card-chips { gap: 4px; }
+  .chip-biz { font-size: 0.74rem; padding: 3px 9px 3px 7px; }
+  .card-visit { font-size: 0.84rem; }
+  .card-close { width: 32px; height: 32px; }
 }
 
 </style>
@@ -1263,7 +1277,7 @@ html.smooth { scroll-behavior: auto; }
 <g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
 <rect class="tint" width="1600" height="1000"/>
 <g class="conns" aria-hidden="true"></g>
-<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 199)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 501)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
+<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 199)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 628)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
 </svg>
     </div>
     <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
@@ -2007,6 +2021,20 @@ html.smooth { scroll-behavior: auto; }
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
   const keyBtns = $$(".key button");
+  // size each pill to its real text so every label has the same padding on both sides
+  function sizeLabels() {
+    Object.values(labels).forEach((l) => {
+      const t = l.querySelector("text"), r = l.querySelector("rect");
+      const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(l.getAttribute("transform"));
+      if (!m) return;
+      if (!l.dataset.cx) l.dataset.cx = Number(m[1]) + Number(r.getAttribute("width")) / 2;
+      const w = Math.ceil(26 + t.getComputedTextLength() + 13);
+      r.setAttribute("width", w);
+      l.setAttribute("transform", `translate(${(Number(l.dataset.cx) - w / 2).toFixed(1)} ${m[2]})`);
+    });
+  }
+  sizeLabels();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeLabels);
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");
@@ -2148,7 +2176,7 @@ html.smooth { scroll-behavior: auto; }
     }
   }
 
-  const mobile = window.matchMedia("(max-width: 1100px)");
+  const mobile = window.matchMedia("(max-width: 1200px)");
   function fitPlan() {
     svg.setAttribute("viewBox", mobile.matches ? "540 30 1060 940" : "0 0 1600 1000");
     svg.setAttribute("preserveAspectRatio", mobile.matches ? "xMidYMid meet" : "xMidYMid slice");
@@ -2167,16 +2195,31 @@ html.smooth { scroll-behavior: auto; }
     const minX = (document.dir === "rtl" ? 16 : tb.right - pr.left + 20);
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
-    let x, y;
-    if (!target || docked) { x = maxX; y = top0 + 24; }
-    else {
-      const right = target.right - pr.left + 18;
-      const left = target.left - pr.left - cw - 18;
-      x = right <= maxX ? right : left >= minX ? left : maxX;
-      y = target.top - pr.top + target.height / 2 - ch / 2;
+    // try several spots and keep the one that hides the fewest plot labels and the least of the selected plot
+    const far = document.dir === "rtl" ? minX : maxX;
+    const near = document.dir === "rtl" ? maxX : minX;
+    const midY = (top0 + bottom0) / 2;
+    const spots = [[far, top0 + 24], [far, midY], [far, bottom0], [far, top0], [near, top0 + 24], [near, midY], [near, bottom0]];
+    if (target) {
+      const ty = target.top - pr.top + target.height / 2 - ch / 2;
+      spots.unshift([target.right - pr.left + 18, ty], [target.left - pr.left - cw - 18, ty]);
     }
-    x = Math.max(minX, Math.min(maxX, x));
-    y = Math.max(top0, Math.min(bottom0, y));
+    const clampX = (v) => Math.max(Math.min(minX, maxX), Math.min(Math.max(minX, maxX), v));
+    const clampY = (v) => Math.max(top0, Math.min(bottom0, v));
+    const rel = (r) => ({ l: r.left - pr.left, t: r.top - pr.top, r: r.right - pr.left, b: r.bottom - pr.top });
+    const labelBoxes = Object.values(labels).map((l) => rel(l.getBoundingClientRect()));
+    const tBox = target ? rel(target) : null;
+    const overlap = (a, b) => Math.max(0, Math.min(a.r, b.r) - Math.max(a.l, b.l)) * Math.max(0, Math.min(a.b, b.b) - Math.max(a.t, b.t));
+    let best = null;
+    spots.forEach(([sx, sy], idx) => {
+      const x0 = clampX(sx), y0 = clampY(sy);
+      const box = { l: x0, t: y0, r: x0 + cw, b: y0 + ch };
+      let score = labelBoxes.reduce((s, lb) => s + (overlap(box, lb) > 0 ? 1e6 + overlap(box, lb) : 0), 0);
+      if (tBox) score += overlap(box, tBox) * 2;
+      if (docked && idx === (target ? 2 : 0)) score -= 1; // autoplay prefers the top-right dock on a tie
+      if (!best || score < best.score) best = { x: x0, y: y0, score };
+    });
+    const x = best.x, y = best.y;
     card.style.left = x + "px"; card.style.top = y + "px";
     if (target) {
       card.style.setProperty("--ox", (target.left + target.width / 2 - pr.left - x) + "px");

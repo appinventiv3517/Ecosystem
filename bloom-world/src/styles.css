@@ -221,10 +221,11 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .plot-label .dot.z-re { fill: var(--re); } .plot-label .dot.z-edu { fill: var(--edu); } .plot-label .dot.z-hosp { fill: var(--hosp); }
 .plot-label .dot.z-retail { fill: var(--retail); } .plot-label .dot.z-health { fill: var(--health); } .plot-label .dot.z-fm { fill: var(--fm); } .plot-label .dot.z-land { fill: var(--land); }
 .plot:hover .zone, .plot:focus-visible .zone, .plot.is-on .zone { stroke-width: 5; stroke-dasharray: none; }
-.plot-label.is-hover rect, .plot-label.is-on rect { fill: var(--ink); }
-.plot-label.is-hover text, .plot-label.is-on text { fill: var(--paper); }
-.plot-label.is-focus rect { stroke: var(--red); stroke-width: 3; }
 .plot-label.is-dim rect { fill: color-mix(in srgb, var(--paper) 88%, var(--site)); }
+/* hover and selection always win over the dimmed state, so text and pill never share a tone */
+.plot-label.is-hover rect, .plot-label.is-on rect, .plot-label.is-dim.is-hover rect { fill: var(--ink); }
+.plot-label.is-hover text, .plot-label.is-on text, .plot-label.is-dim.is-hover text { fill: var(--paper); }
+.plot-label.is-focus rect { stroke: var(--red); stroke-width: 3; }
 .plan.has-active .plot:not(.is-on):not(.is-linked) { opacity: 0.42; filter: saturate(0.5); }
 .conns { pointer-events: none; }
 .conn { fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round; }
@@ -731,12 +732,12 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .parcels { grid-template-columns: repeat(2, 1fr); }
   .stamps { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .nav { display: none; }
   .menu-btn { display: grid; }
   .bar-end { margin-inline-start: auto; }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .hero { height: auto; min-height: 0; padding-top: 86px; display: flex; flex-direction: column; }
   .plan { position: relative; inset: auto; order: 3; }
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
@@ -810,7 +811,7 @@ address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--
   .pan-chip .ic { width: 14px; height: 14px; }
   .plan.is-panned .pan-chip { opacity: 0; }
 }
-@media (max-height: 880px) and (min-width: 1101px) {
+@media (max-height: 880px) and (min-width: 1201px) {
   .tb-lede { display: none; }
 }
 @media (max-width: 420px) {
@@ -865,4 +866,17 @@ html.smooth { scroll-behavior: auto; }
 @media (min-width: 561px) and (max-width: 1180px) {
   .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot-brand, .foot-grid > .foot-col:last-child { grid-column: 1 / -1; }
+}
+/* compact plot card on desktop so it fits the free lanes of the plan without covering labels */
+@media (min-width: 1201px) {
+  .plot-card { width: clamp(270px, 22vw, 330px); padding: 15px 16px 14px; gap: 5px; }
+  .card-name { font-size: 1.45rem; }
+  .card-time, .card-operator { font-size: 0.8rem; }
+  .card-text { font-size: 0.86rem; line-height: 1.45; }
+  .card-stat { font-size: 0.95rem; }
+  .card-links { gap: 4px; }
+  .card-chips { gap: 4px; }
+  .chip-biz { font-size: 0.74rem; padding: 3px 9px 3px 7px; }
+  .card-visit { font-size: 0.84rem; }
+  .card-close { width: 32px; height: 32px; }
 }

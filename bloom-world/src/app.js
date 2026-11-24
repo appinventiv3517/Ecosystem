@@ -163,6 +163,20 @@
   let conns = $(".conns", svg);
   const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
   const keyBtns = $$(".key button");
+  // size each pill to its real text so every label has the same padding on both sides
+  function sizeLabels() {
+    Object.values(labels).forEach((l) => {
+      const t = l.querySelector("text"), r = l.querySelector("rect");
+      const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(l.getAttribute("transform"));
+      if (!m) return;
+      if (!l.dataset.cx) l.dataset.cx = Number(m[1]) + Number(r.getAttribute("width")) / 2;
+      const w = Math.ceil(26 + t.getComputedTextLength() + 13);
+      r.setAttribute("width", w);
+      l.setAttribute("transform", `translate(${(Number(l.dataset.cx) - w / 2).toFixed(1)} ${m[2]})`);
+    });
+  }
+  sizeLabels();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeLabels);
   const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");
@@ -304,7 +318,7 @@
     }
   }
 
-  const mobile = window.matchMedia("(max-width: 1100px)");
+  const mobile = window.matchMedia("(max-width: 1200px)");
   function fitPlan() {
     svg.setAttribute("viewBox", mobile.matches ? "540 30 1060 940" : "0 0 1600 1000");
     svg.setAttribute("preserveAspectRatio", mobile.matches ? "xMidYMid meet" : "xMidYMid slice");
@@ -323,16 +337,31 @@
     const minX = (document.dir === "rtl" ? 16 : tb.right - pr.left + 20);
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
-    let x, y;
-    if (!target || docked) { x = maxX; y = top0 + 24; }
-    else {
-      const right = target.right - pr.left + 18;
-      const left = target.left - pr.left - cw - 18;
-      x = right <= maxX ? right : left >= minX ? left : maxX;
-      y = target.top - pr.top + target.height / 2 - ch / 2;
+    // try several spots and keep the one that hides the fewest plot labels and the least of the selected plot
+    const far = document.dir === "rtl" ? minX : maxX;
+    const near = document.dir === "rtl" ? maxX : minX;
+    const midY = (top0 + bottom0) / 2;
+    const spots = [[far, top0 + 24], [far, midY], [far, bottom0], [far, top0], [near, top0 + 24], [near, midY], [near, bottom0]];
+    if (target) {
+      const ty = target.top - pr.top + target.height / 2 - ch / 2;
+      spots.unshift([target.right - pr.left + 18, ty], [target.left - pr.left - cw - 18, ty]);
     }
-    x = Math.max(minX, Math.min(maxX, x));
-    y = Math.max(top0, Math.min(bottom0, y));
+    const clampX = (v) => Math.max(Math.min(minX, maxX), Math.min(Math.max(minX, maxX), v));
+    const clampY = (v) => Math.max(top0, Math.min(bottom0, v));
+    const rel = (r) => ({ l: r.left - pr.left, t: r.top - pr.top, r: r.right - pr.left, b: r.bottom - pr.top });
+    const labelBoxes = Object.values(labels).map((l) => rel(l.getBoundingClientRect()));
+    const tBox = target ? rel(target) : null;
+    const overlap = (a, b) => Math.max(0, Math.min(a.r, b.r) - Math.max(a.l, b.l)) * Math.max(0, Math.min(a.b, b.b) - Math.max(a.t, b.t));
+    let best = null;
+    spots.forEach(([sx, sy], idx) => {
+      const x0 = clampX(sx), y0 = clampY(sy);
+      const box = { l: x0, t: y0, r: x0 + cw, b: y0 + ch };
+      let score = labelBoxes.reduce((s, lb) => s + (overlap(box, lb) > 0 ? 1e6 + overlap(box, lb) : 0), 0);
+      if (tBox) score += overlap(box, tBox) * 2;
+      if (docked && idx === (target ? 2 : 0)) score -= 1; // autoplay prefers the top-right dock on a tie
+      if (!best || score < best.score) best = { x: x0, y: y0, score };
+    });
+    const x = best.x, y = best.y;
     card.style.left = x + "px"; card.style.top = y + "px";
     if (target) {
       card.style.setProperty("--ox", (target.left + target.width / 2 - pr.left - x) + "px");

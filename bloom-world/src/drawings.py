@@ -237,7 +237,7 @@ def masterplan():
         a(f'<g class="van" transform="translate({1486} {680 + i * 52})"><rect width="50" height="22" rx="4"/><rect class="car-glass" x="38" y="3" width="8" height="16" rx="2"/></g>')
     a(tree(1380, 820, 14)); a(tree(1420, 880, 12)); a(tree(1370, 900, 10))
     a(lamp(1360, 790)); a(lamp(1440, 790))
-    a(label(1456, 501, "Facilities", "fm", "middle"))
+    a(label(1456, 628, "Facilities", "fm", "middle"))
     a('</g>')
 
     # traffic on top of plots so it reads on every road
