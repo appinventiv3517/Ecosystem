@@ -145,7 +145,7 @@
     btn.innerHTML = key === "all"
       ? "<b>24/7</b><small>Together</small>"
       : `<b>${b.hour}</b><small>${b.name === "Facilities Management" ? "Facilities" : b.name}</small>`;
-    btn.addEventListener("click", () => { stop(); go(i, true); });
+    btn.addEventListener("click", () => { stop(); if (step === i && !card.hidden) { closeCard(); return; } go(i, true); });
     track.appendChild(btn);
   });
   const hours = $$(".hour", track);
@@ -182,8 +182,11 @@
     old.after(conns);
     if (!old.childElementCount || reduced.matches) { old.remove(); return; }
     old.style.pointerEvents = "none";
-    old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" });
-    setTimeout(() => old.remove(), 240);
+    const fade = old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" });
+    // removed when the fade itself finishes, so the fade is never cut short; the timer is only a safety net
+    const drop = () => old.isConnected && old.remove();
+    fade.finished.then(drop, drop);
+    setTimeout(drop, 2000);
   }
 
   function drawLinks(key) {
@@ -370,6 +373,7 @@
   });
   function closeCard() {
     card.hidden = true;
+    hours.forEach((h) => h.setAttribute("aria-selected", "false"));
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
     Object.values(labels).forEach((l) => l.classList.remove("is-on", "is-dim"));
@@ -389,7 +393,9 @@
   if (reduced.matches) { svg.pauseAnimations(); playBtn.setAttribute("aria-pressed", "false"); playBtn.setAttribute("aria-label", "Play the day"); }
 
   // the first state: the morning, so the plan explains itself before anyone touches it
-  go(0, false);
+  // ?plot=<business> opens the plan with that business selected (a shareable deep link)
+  const deep = new URLSearchParams(location.search).get("plot");
+  if (deep && DAY.includes(deep)) { playing = false; go(DAY.indexOf(deep), true); } else go(0, false);
   setPlaying(playing);
 
   /* ------------------------------------------------------------ search */
