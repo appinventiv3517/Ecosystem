@@ -603,78 +603,47 @@
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life: the sun travels a day timeline */
+  /* ------------------------------------------------------------ life: the sun crosses the sky as you scroll */
   const lifeSec = $("#life");
-  const ways = $$(".tl-stop");
-  const stageImgs = $$(".stage-img");
-  const moment = $("#day-moment");
-  const timeline = $(".tl-track");
-  if (!$(".tl-line", timeline)) timeline.insertAdjacentHTML("afterbegin", '<span class="tl-line"></span>');
-  const marks = $$(".tl-mark", timeline);
-  // markers sit exactly above the centre of each moment button; the sun travels between them
-  function centers() {
-    const tr = timeline.getBoundingClientRect();
-    return ways.map((b) => { const r = b.getBoundingClientRect(); return r.left + r.width / 2 - tr.left; });
-  }
-  function placeSun() {
-    if (!timeline.offsetWidth) return;
-    const cs = centers(), tw = timeline.offsetWidth;
-    const lo = Math.min(...cs), hi = Math.max(...cs);
-    timeline.style.setProperty("--l0", lo + "px");
-    timeline.style.setProperty("--r0", (tw - hi) + "px");
-    marks.forEach((m, j) => m.style.setProperty("--x", cs[j] + "px"));
-    timeline.style.setProperty("--sun", cs[wi] + "px");
+  const sky = $(".sky");
+  const arc = $("#sky-arc");
+  const skySun = $("#sky-sun");
+  const clock = $("#sky-clock");
+  const moments = $$(".moment");
+  const momentMin = moments.map((m) => { const [hh, mm] = m.dataset.time.split(":").map(Number); return hh * 60 + mm; });
+  const DAY_START = 6 * 60, DAY_END = 22 * 60;
+  const arcLen = arc.getTotalLength();
+  let lastT = -1;
+  function skyAt(t) {
+    // t is 0..1 across the day; place the sun on the arc (viewBox 1000 x 120, stretched to the sky box)
+    const pt = arc.getPointAtLength(arcLen * t);
+    const w = sky.clientWidth, h = sky.clientHeight;
     const rtl = document.dir === "rtl";
-    timeline.style.setProperty("--fill", (rtl ? hi - cs[wi] : cs[wi] - lo) + "px");
+    const x = (rtl ? 1000 - pt.x : pt.x) / 1000 * w, y = pt.y / 120 * h;
+    sky.style.setProperty("--sx", x.toFixed(1) + "px");
+    sky.style.setProperty("--sy", y.toFixed(1) + "px");
+    sky.classList.toggle("clock-left", rtl ? t < 0.2 : t > 0.8);
+    const mins = Math.round(DAY_START + t * (DAY_END - DAY_START));
+    clock.textContent = String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+    let now = -1;
+    momentMin.forEach((m, k) => { if (mins >= m) now = k; });
+    moments.forEach((m, k) => m.classList.toggle("is-now", k === now));
   }
-  window.addEventListener("resize", placeSun);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeSun);
-  const tlPlay = $("#tl-play");
-  function setDayPlaying(p) {
-    wAuto = p;
-    tlPlay.setAttribute("aria-pressed", String(p));
-    $(".tl-play-label", tlPlay).textContent = p ? "Pause the day" : "Play the day";
-    lifeSec.classList.toggle("is-auto", p);
-    const sel = ways[wi];
-    if (sel) { sel.style.animation = "none"; void sel.offsetWidth; sel.style.animation = ""; }
-    scheduleWay();
+  function skyScroll() {
+    const r = lifeSec.getBoundingClientRect(), vh = window.innerHeight;
+    // the day runs while the section passes through the viewport
+    // sunrise as the section arrives, midday as it settles, night as it leaves
+    let t = (vh * 0.75 - r.top) / (vh * 0.75 + r.height * 0.45);
+    t = Math.max(0, Math.min(1, t));
+    if (reduced.matches || still) t = (13 * 60 - DAY_START) / (DAY_END - DAY_START);
+    if (Math.abs(t - lastT) < 0.001) return;
+    lastT = t;
+    skyAt(t);
   }
-  const WAY_MS = 5600;
-  let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
-  function scheduleWay() {
-    clearTimeout(wTimer);
-    if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
-  }
-  function showWay(i) {
-    const prev = wi;
-    wi = i;
-    const b = ways[i];
-    ways.forEach((x, j) => { x.setAttribute("aria-selected", String(j === i)); x.tabIndex = j === i ? 0 : -1; });
-    // shuffle the prints: the current moment on top, the next ones of the day behind it
-    stageImgs.forEach((im, j) => { im.dataset.pos = String((j - i + stageImgs.length) % stageImgs.length); im.classList.toggle("is-on", j === i); });
-    $("#dm-time").textContent = b.dataset.time;
-    $("#dm-title").textContent = b.dataset.title;
-    $("#dm-text").textContent = b.dataset.text;
-    $("#dm-zone").textContent = b.dataset.zone;
-    $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    placeSun();
-    lifeSec.classList.remove("is-auto"); void lifeSec.offsetWidth; lifeSec.classList.toggle("is-auto", wAuto);
-    if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
-    scheduleWay();
-  }
-  ways.forEach((b, i) => b.addEventListener("click", () => { setDayPlaying(false); showWay(i); }));
-  tlPlay.addEventListener("click", () => { const p = !wAuto; if (p) showWay((wi + 1) % ways.length); setDayPlaying(p); });
-  $(".tl-stops").addEventListener("keydown", (e) => {
-    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
-    e.preventDefault(); setDayPlaying(false);
-    const fwd = (e.key === "ArrowRight") !== (document.dir === "rtl");
-    const n = e.key === "Home" ? 0 : e.key === "End" ? ways.length - 1 : (wi + (fwd ? 1 : -1) + ways.length) % ways.length;
-    showWay(n); ways[n].focus();
-  });
-  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
-  document.addEventListener("visibilitychange", scheduleWay);
-  showWay(0);
-  setDayPlaying(wAuto);
+  let skyTick = false;
+  window.addEventListener("scroll", () => { if (!skyTick) { skyTick = true; requestAnimationFrame(() => { skyTick = false; skyScroll(); }); } }, { passive: true });
+  window.addEventListener("resize", () => { lastT = -1; skyScroll(); });
+  skyScroll();
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
@@ -849,10 +818,10 @@
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
-      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
-    [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".sky"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
+    [".parcels > li", ".moments > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media, .day").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .mo-photo").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */

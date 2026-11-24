@@ -470,92 +470,46 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 }
 @media (prefers-reduced-motion: reduce) { .loc-pin.is-on { animation: none; } }
 
-/* ---------------------------------------------------------------- life (landscape zone, forest): a day timeline */
+/* ---------------------------------------------------------------- life (landscape zone, forest): four moments under a sun arc */
 .life { --forest: #173f2b; background: var(--forest); color: var(--paper); padding-block: var(--section-y); overflow: hidden; }
 .life :focus-visible { outline-color: var(--paper); }
-.life-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(32px, 4.5vw, 52px); }
+.life-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; }
 .life-head .display { max-width: 16ch; }
 .life-lede { font-size: 1.1rem; max-width: 40ch; color: color-mix(in srgb, var(--paper) 84%, var(--forest)); }
-.day {
-  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr); grid-template-rows: 1fr auto;
-  gap: 8px clamp(24px, 4vw, 64px); padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) 26px; border-radius: 30px; background: #1f5038; isolation: isolate;
-}
-.day-moment { grid-column: 1; grid-row: 1; align-self: center; display: grid; gap: 12px; max-width: 560px; }
-.dm-time { font: 800 clamp(3.2rem, 7vw, 6rem)/0.85 var(--display); letter-spacing: -0.04em; color: var(--site); font-variant-numeric: tabular-nums; }
-.dm-title { font: 800 clamp(1.7rem, 3vw, 2.6rem)/1.05 var(--display); letter-spacing: -0.03em; }
-.dm-text { font-size: 1.08rem; line-height: 1.55; max-width: 44ch; color: color-mix(in srgb, var(--paper) 90%, #1f5038); }
-.dm-zone { display: inline-flex; align-items: center; gap: 8px; justify-self: start; font-size: 0.85rem; font-weight: 600; padding: 5px 13px 5px 10px; border-radius: 999px; background: rgb(255 255 255 / 0.12); }
-.dm-zone i { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--paper); }
-.day-moment.is-swap > * { animation: swap-txt 0.55s var(--ease) backwards; }
-.day-moment.is-swap > :nth-child(2) { animation-delay: 0.06s; }
-.day-moment.is-swap > :nth-child(3) { animation-delay: 0.12s; }
-.day-moment.is-swap > :nth-child(4) { animation-delay: 0.18s; }
 
-/* a stack of photo prints: the current moment on top, the rest of the day tilted behind */
-.day-photos { grid-column: 2; grid-row: 1; position: relative; width: min(100%, 400px); aspect-ratio: 4 / 5; justify-self: center; align-self: center; margin: 12px 0 24px; }
-.stage-img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 18px; border: 7px solid var(--paper);
-  box-shadow: 0 30px 50px -28px rgb(0 0 0 / 0.75); transform: rotate(var(--r, 0deg)) translate(var(--tx, 0px), var(--ty, 0px)) scale(var(--s, 1));
-  transition: transform 0.9s var(--ease), opacity 0.6s var(--ease); z-index: var(--z, 1); opacity: var(--o, 1);
-}
-.stage-img[data-pos="0"] { --r: -1.5deg; --z: 4; }
-.stage-img[data-pos="1"] { --r: 6deg; --tx: 34px; --ty: 10px; --s: 0.94; --z: 3; }
-.stage-img[data-pos="2"] { --r: -8deg; --tx: -36px; --ty: 16px; --s: 0.9; --z: 2; --o: 0.85; }
-.stage-img[data-pos="3"] { --r: 3deg; --tx: 8px; --ty: 22px; --s: 0.86; --z: 1; --o: 0.6; }
-[dir="rtl"] .stage-img[data-pos="1"] { --tx: -34px; }
-[dir="rtl"] .stage-img[data-pos="2"] { --tx: 36px; }
+.sky { position: relative; height: 96px; margin: clamp(18px, 3vh, 32px) 0 clamp(14px, 2.4vh, 24px); }
+.sky-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.sky-arc { fill: none; stroke: color-mix(in srgb, var(--site) 55%, transparent); stroke-width: 2; stroke-dasharray: 6 8; vector-effect: non-scaling-stroke; }
+.sky-sun { position: absolute; left: 0; top: 0; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; display: grid; place-items: center; background: var(--site); color: var(--ink); box-shadow: 0 0 0 7px rgb(231 196 138 / 0.2), 0 0 40px 8px rgb(231 196 138 / 0.35); transform: translate(var(--sx, 0px), var(--sy, 0px)); will-change: transform; }
+.sky-sun .ic { width: 20px; height: 20px; }
+.sky-clock { position: absolute; left: 0; top: 0; transform: translate(calc(var(--sx, 0px) + 28px), calc(var(--sy, 0px) - 12px)); font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; color: var(--site); white-space: nowrap; background: var(--forest); padding: 3px 8px; border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--site) 45%, transparent); }
+.sky.clock-left .sky-clock { transform: translate(calc(var(--sx, 0px) - 100% - 28px), calc(var(--sy, 0px) - 12px)); }
+.sky-end { position: absolute; bottom: -6px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: color-mix(in srgb, var(--paper) 62%, var(--forest)); }
+.sky-start { left: 0; } .sky-stop { right: 0; }
 
-/* the track sits only above the four moments; markers line up with each button's centre (set in app.js) */
-.timeline { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 26px; margin-top: 10px; }
-.tl-track { grid-column: 2; grid-row: 1; position: relative; height: 3px; margin-top: 18px; }
-.tl-line { position: absolute; top: 0; bottom: 0; left: var(--l0, 0px); right: var(--r0, 0px); background: rgb(255 255 255 / 0.25); border-radius: 3px; }
-.tl-fill { position: absolute; top: 0; bottom: 0; left: var(--l0, 0px); width: var(--fill, 0px); background: var(--site); border-radius: 3px; transition: width 0.9s var(--ease), left 0.9s var(--ease); }
-[dir="rtl"] .tl-fill { left: auto; right: var(--r0, 0px); }
-.tl-mark { position: absolute; top: 50%; left: var(--x, 0px); width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--paper); }
-.tl-sun { position: absolute; top: 50%; left: var(--sun, 0px); width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; display: grid; place-items: center; background: var(--site); color: var(--ink); box-shadow: 0 0 0 5px rgb(231 196 138 / 0.22); transition: left 0.9s var(--ease); z-index: 2; }
-.tl-sun .ic { width: 16px; height: 16px; }
-.tl-controls { display: contents; }
-.tl-play { grid-column: 1; grid-row: 2; }
-.tl-stops { grid-column: 2; grid-row: 2; }
-.tl-play {
-  display: inline-flex; align-items: center; gap: 8px; border: 2px solid rgb(255 255 255 / 0.5); background: none; color: var(--paper);
-  border-radius: 16px; padding: 0 18px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; transition: border-color 0.2s, background-color 0.2s;
+.moments { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px); }
+.moment { display: grid; grid-template-rows: auto auto auto 1fr; align-content: start; gap: 8px; }
+.mo-photo { position: relative; margin: 0 0 6px; height: clamp(200px, 35vh, 380px); border-radius: 22px; overflow: hidden; background: #0f2a1d; outline: 3px solid transparent; outline-offset: 4px; transition: outline-color 0.4s var(--ease); }
+.mo-photo img { width: 100%; height: 100%; object-fit: cover; transition: scale 0.9s var(--ease); }
+.moment:hover .mo-photo img { scale: 1.05; }
+.mo-time { position: absolute; left: 12px; top: 12px; font: 800 1.05rem/1 var(--display); font-variant-numeric: tabular-nums; background: var(--paper); color: var(--ink); padding: 8px 12px; border-radius: 999px; }
+.mo-now { position: absolute; right: 12px; top: 12px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--site); color: var(--ink); padding: 6px 10px; border-radius: 999px; opacity: 0; transform: translateY(-6px); transition: opacity 0.3s, transform 0.4s var(--ease); }
+.moment.is-now .mo-photo { outline-color: var(--site); }
+.moment.is-now .mo-now { opacity: 1; transform: none; }
+.mo-zone { display: inline-flex; align-items: center; gap: 8px; justify-self: start; font-size: 0.8rem; font-weight: 600; padding: 4px 12px 4px 9px; border-radius: 999px; background: rgb(255 255 255 / 0.12); }
+.mo-zone i { width: 9px; height: 9px; border-radius: 50%; background: var(--zc); box-shadow: 0 0 0 1.5px var(--paper); }
+.mo-title { font: 800 clamp(1.2rem, 1.6vw, 1.5rem)/1.15 var(--display); letter-spacing: -0.02em; }
+.mo-text { font-size: 0.95rem; line-height: 1.5; color: color-mix(in srgb, var(--paper) 86%, var(--forest)); }
+@media (min-width: 861px) {
+  .life { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: clamp(84px, 11vh, 112px) clamp(28px, 5vh, 56px); }
 }
-.tl-play:hover { border-color: var(--paper); background: rgb(255 255 255 / 0.08); }
-.tl-play .ic { width: 16px; height: 16px; }
-.tl-play .ic-play { fill: currentColor; display: none; }
-.tl-play[aria-pressed="false"] .ic-play { display: block; }
-.tl-play[aria-pressed="false"] .ic-pause { display: none; }
-.tl-stops { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.tl-stop {
-  position: relative; width: 100%; height: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dot time" "dot name";
-  column-gap: 10px; row-gap: 2px; align-items: center; text-align: start; padding: 12px 14px; border-radius: 16px; overflow: hidden;
-  border: 2px solid rgb(255 255 255 / 0.3); background: rgb(255 255 255 / 0.04); color: var(--paper); cursor: pointer;
-  transition: border-color 0.2s, background-color 0.25s, color 0.25s;
-}
-.tl-stop:hover { border-color: var(--paper); background: rgb(255 255 255 / 0.1); }
-.tl-dot { grid-area: dot; width: 12px; height: 12px; border-radius: 50%; background: var(--zc); box-shadow: 0 0 0 2px var(--paper); }
-.tl-time { grid-area: time; font: 700 1rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
-.tl-name { grid-area: name; font-size: 0.85rem; line-height: 1.3; font-weight: 500; opacity: 0.9; }
-.tl-stop[aria-selected="true"] { background: var(--site); border-color: var(--site); color: var(--ink); }
-.tl-stop[aria-selected="true"] .tl-name { opacity: 1; font-weight: 600; }
-.tl-stop[aria-selected="true"] .tl-dot { box-shadow: 0 0 0 2px var(--ink); }
-.tl-stop::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 7px; height: 2px; border-radius: 2px; background: var(--ink); transform: scaleX(0); transform-origin: left; }
-.life.is-auto .tl-stop[aria-selected="true"]::after { animation: way-fill var(--way-ms, 5600ms) linear; }
-@keyframes way-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.tl-stop:focus-visible { outline-offset: 3px; }
 @media (max-width: 860px) {
   .life-head { grid-template-columns: minmax(0, 1fr); }
-  .day { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; padding: 26px 20px 18px; border-radius: 24px; }
-  .day-photos { grid-column: 1; grid-row: 1; width: min(76%, 320px); margin: 8px 0 30px; }
-  .day-moment { grid-column: 1; grid-row: 2; }
-  .dm-time { font-size: 2.8rem; }
-  .timeline { grid-row: 3; }
-  .timeline { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
-  .tl-track { display: none; }
-  .tl-play { grid-column: 1; grid-row: 1; justify-self: start; min-height: 44px; }
-  .tl-stops { grid-column: 1; grid-row: 2; }
-  .tl-stops { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sky { height: 70px; }
+  .moments { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); scrollbar-width: none; }
+  .moments::-webkit-scrollbar { display: none; }
+  .moment { scroll-snap-align: start; }
+  .mo-photo { height: 300px; }
 }
 
 /* ---------------------------------------------------------------- services (facilities slate zone) */
@@ -950,20 +904,16 @@ html.smooth { scroll-behavior: auto; }
   .plot-card.in-intro .card-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 }
 
-/* Life fits one screen on desktop: everything scales with the viewport height */
-@media (min-width: 861px) {
-  .life { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: clamp(84px, 11vh, 112px) clamp(24px, 4vh, 44px); }
-  .life-head { margin-bottom: clamp(14px, 2.6vh, 30px); }
-  .life-head .display { font-size: clamp(2rem, 5.4vh, 3.6rem); }
-  .life-lede { font-size: clamp(0.95rem, 1.9vh, 1.1rem); }
-  .day { padding: clamp(18px, 3vh, 40px) clamp(24px, 3.5vw, 48px) clamp(16px, 2.4vh, 26px); gap: 4px clamp(24px, 4vw, 64px); }
-  .day-photos { width: min(100%, calc(44vh * 0.8)); margin: 0 0 clamp(8px, 1.6vh, 18px); }
-  .dm-time { font-size: clamp(2.6rem, 9vh, 5.4rem); }
-  .dm-title { font-size: clamp(1.5rem, 4vh, 2.4rem); }
-  .dm-text { font-size: clamp(0.95rem, 1.9vh, 1.08rem); }
-  .day-moment { gap: clamp(6px, 1.2vh, 12px); }
-  .timeline { row-gap: clamp(20px, 3vh, 28px); margin-top: 0; }
-  .tl-stop { padding: clamp(8px, 1.3vh, 12px) 14px; }
+/* short laptop screens: keep the whole day in one fold */
+@media (min-width: 861px) and (max-height: 820px) {
+  .life { padding-block: 80px 22px; }
+  .life-head .display { font-size: clamp(1.9rem, 5.2vh, 2.8rem); }
+  .life-lede { font-size: 0.95rem; }
+  .sky { height: 64px; margin: 10px 0 12px; }
+  .mo-photo { height: 30vh; }
+  .moment { gap: 6px; }
+  .mo-title { font-size: 1.15rem; }
+  .mo-text { font-size: 0.88rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 }
 
 </style>
@@ -1588,41 +1538,42 @@ html.smooth { scroll-behavior: auto; }
 <!-- ================================================================ LIFE AT BLOOM -->
 <section class="life" id="life" aria-labelledby="life-title">
   <div class="wrap">
-  <div class="life-head">
-    <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-    <p class="life-lede">One day in a Bloom community, from the school run to dinner. It plays on its own, or choose a moment below.</p>
-  </div>
-  <div class="day" id="day">
-    <div class="day-photos" aria-hidden="true">
-      <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
-      <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
-      <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
-      <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
+    <div class="life-head">
+      <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
+      <p class="life-lede">One day in a Bloom community, from the school run to dinner. Scroll and follow the sun.</p>
     </div>
-    <div class="day-moment" id="day-moment" role="tabpanel" aria-live="polite">
-      <p class="dm-time" id="dm-time">07:45</p>
-      <h3 class="dm-title" id="dm-title">Growing up together</h3>
-      <p class="dm-text" id="dm-text">Schools and shared spaces where neighbours turn into friends.</p>
-      <p class="dm-zone"><i id="dm-dot" style="background: var(--edu)"></i><span id="dm-zone">Education</span></p>
+    <div class="sky" aria-hidden="true">
+      <svg class="sky-svg" viewBox="0 0 1000 120" preserveAspectRatio="none"><path class="sky-arc" id="sky-arc" d="M80 112 Q500 -96 920 112"/></svg>
+      <span class="sky-sun" id="sky-sun"><svg class="ic"><use href="#i-sun"/></svg></span>
+      <span class="sky-clock" id="sky-clock">06:00</span>
+      <span class="sky-end sky-start">Sunrise</span><span class="sky-end sky-stop">Night</span>
     </div>
-    <div class="timeline">
-      <div class="tl-track" aria-hidden="true" style="--sun:10.94%">
-        <span class="tl-fill" id="tl-fill"></span>
-        <span class="tl-mark"></span><span class="tl-mark"></span><span class="tl-mark"></span><span class="tl-mark"></span>
-        <span class="tl-sun" id="tl-sun"><svg class="ic"><use href="#i-sun"/></svg></span>
-        
-      </div>
-      <div class="tl-controls">
-        <button type="button" class="tl-play" id="tl-play" aria-pressed="true"><svg class="ic ic-pause"><use href="#i-pause"/></svg><svg class="ic ic-play"><use href="#i-play"/></svg><span class="tl-play-label">Pause the day</span></button>
-        <ol class="tl-stops" role="tablist" aria-label="A day in a Bloom community: choose a moment">
-        <li><button type="button" class="tl-stop" role="tab" data-i="0" aria-selected="true" tabindex="0" aria-controls="day-moment" style="--zc: var(--edu)" data-time="07:45" data-title="Growing up together" data-text="Schools and shared spaces where neighbours turn into friends." data-zone="Education"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">07:45</span><span class="tl-name">Growing up together</span></button></li>
-        <li><button type="button" class="tl-stop" role="tab" data-i="1" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--fm)" data-time="10:00" data-title="Looked after, every day" data-text="The teams who care for the buildings, streets and gardens behind the scenes." data-zone="Facilities Management"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">10:00</span><span class="tl-name">Looked after, every day</span></button></li>
-        <li><button type="button" class="tl-stop" role="tab" data-i="2" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--land)" data-time="18:30" data-title="Days spent outdoors" data-text="Shaded paths, open water and green streets, so stepping outside is part of the everyday." data-zone="Landscaping"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">18:30</span><span class="tl-name">Days spent outdoors</span></button></li>
-        <li><button type="button" class="tl-stop" role="tab" data-i="3" aria-selected="false" tabindex="-1" aria-controls="day-moment" style="--zc: var(--hosp)" data-time="20:00" data-title="Time well spent" data-text="Places to stay, dine and slow down, close to home." data-zone="Hospitality"><span class="tl-dot" aria-hidden="true"></span><span class="tl-time">20:00</span><span class="tl-name">Time well spent</span></button></li>
-        </ol>
-      </div>
-    </div>
-  </div>
+    <ol class="moments" aria-label="A day in a Bloom community">
+      <li class="moment" style="--zc: var(--edu)" data-time="07:45">
+        <figure class="mo-photo"><img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1060" loading="lazy"><figcaption class="mo-time">07:45</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
+        <p class="mo-zone"><i></i>Education</p>
+        <h3 class="mo-title">Growing up together</h3>
+        <p class="mo-text">Schools and shared spaces where neighbours turn into friends.</p>
+      </li>
+      <li class="moment" style="--zc: var(--fm)" data-time="10:00">
+        <figure class="mo-photo"><img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy"><figcaption class="mo-time">10:00</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
+        <p class="mo-zone"><i></i>Facilities Management</p>
+        <h3 class="mo-title">Looked after, every day</h3>
+        <p class="mo-text">The teams who care for the buildings, streets and gardens behind the scenes.</p>
+      </li>
+      <li class="moment" style="--zc: var(--land)" data-time="18:30">
+        <figure class="mo-photo"><img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy"><figcaption class="mo-time">18:30</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
+        <p class="mo-zone"><i></i>Landscaping</p>
+        <h3 class="mo-title">Days spent outdoors</h3>
+        <p class="mo-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</p>
+      </li>
+      <li class="moment" style="--zc: var(--hosp)" data-time="20:00">
+        <figure class="mo-photo"><img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy"><figcaption class="mo-time">20:00</figcaption><span class="mo-now" aria-hidden="true">Now</span></figure>
+        <p class="mo-zone"><i></i>Hospitality</p>
+        <h3 class="mo-title">Time well spent</h3>
+        <p class="mo-text">Places to stay, dine and slow down, close to home.</p>
+      </li>
+    </ol>
   </div>
 </section>
 
@@ -2508,78 +2459,47 @@ html.smooth { scroll-behavior: auto; }
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life: the sun travels a day timeline */
+  /* ------------------------------------------------------------ life: the sun crosses the sky as you scroll */
   const lifeSec = $("#life");
-  const ways = $$(".tl-stop");
-  const stageImgs = $$(".stage-img");
-  const moment = $("#day-moment");
-  const timeline = $(".tl-track");
-  if (!$(".tl-line", timeline)) timeline.insertAdjacentHTML("afterbegin", '<span class="tl-line"></span>');
-  const marks = $$(".tl-mark", timeline);
-  // markers sit exactly above the centre of each moment button; the sun travels between them
-  function centers() {
-    const tr = timeline.getBoundingClientRect();
-    return ways.map((b) => { const r = b.getBoundingClientRect(); return r.left + r.width / 2 - tr.left; });
-  }
-  function placeSun() {
-    if (!timeline.offsetWidth) return;
-    const cs = centers(), tw = timeline.offsetWidth;
-    const lo = Math.min(...cs), hi = Math.max(...cs);
-    timeline.style.setProperty("--l0", lo + "px");
-    timeline.style.setProperty("--r0", (tw - hi) + "px");
-    marks.forEach((m, j) => m.style.setProperty("--x", cs[j] + "px"));
-    timeline.style.setProperty("--sun", cs[wi] + "px");
+  const sky = $(".sky");
+  const arc = $("#sky-arc");
+  const skySun = $("#sky-sun");
+  const clock = $("#sky-clock");
+  const moments = $$(".moment");
+  const momentMin = moments.map((m) => { const [hh, mm] = m.dataset.time.split(":").map(Number); return hh * 60 + mm; });
+  const DAY_START = 6 * 60, DAY_END = 22 * 60;
+  const arcLen = arc.getTotalLength();
+  let lastT = -1;
+  function skyAt(t) {
+    // t is 0..1 across the day; place the sun on the arc (viewBox 1000 x 120, stretched to the sky box)
+    const pt = arc.getPointAtLength(arcLen * t);
+    const w = sky.clientWidth, h = sky.clientHeight;
     const rtl = document.dir === "rtl";
-    timeline.style.setProperty("--fill", (rtl ? hi - cs[wi] : cs[wi] - lo) + "px");
+    const x = (rtl ? 1000 - pt.x : pt.x) / 1000 * w, y = pt.y / 120 * h;
+    sky.style.setProperty("--sx", x.toFixed(1) + "px");
+    sky.style.setProperty("--sy", y.toFixed(1) + "px");
+    sky.classList.toggle("clock-left", rtl ? t < 0.2 : t > 0.8);
+    const mins = Math.round(DAY_START + t * (DAY_END - DAY_START));
+    clock.textContent = String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+    let now = -1;
+    momentMin.forEach((m, k) => { if (mins >= m) now = k; });
+    moments.forEach((m, k) => m.classList.toggle("is-now", k === now));
   }
-  window.addEventListener("resize", placeSun);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeSun);
-  const tlPlay = $("#tl-play");
-  function setDayPlaying(p) {
-    wAuto = p;
-    tlPlay.setAttribute("aria-pressed", String(p));
-    $(".tl-play-label", tlPlay).textContent = p ? "Pause the day" : "Play the day";
-    lifeSec.classList.toggle("is-auto", p);
-    const sel = ways[wi];
-    if (sel) { sel.style.animation = "none"; void sel.offsetWidth; sel.style.animation = ""; }
-    scheduleWay();
+  function skyScroll() {
+    const r = lifeSec.getBoundingClientRect(), vh = window.innerHeight;
+    // the day runs while the section passes through the viewport
+    // sunrise as the section arrives, midday as it settles, night as it leaves
+    let t = (vh * 0.75 - r.top) / (vh * 0.75 + r.height * 0.45);
+    t = Math.max(0, Math.min(1, t));
+    if (reduced.matches || still) t = (13 * 60 - DAY_START) / (DAY_END - DAY_START);
+    if (Math.abs(t - lastT) < 0.001) return;
+    lastT = t;
+    skyAt(t);
   }
-  const WAY_MS = 5600;
-  let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
-  function scheduleWay() {
-    clearTimeout(wTimer);
-    if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
-  }
-  function showWay(i) {
-    const prev = wi;
-    wi = i;
-    const b = ways[i];
-    ways.forEach((x, j) => { x.setAttribute("aria-selected", String(j === i)); x.tabIndex = j === i ? 0 : -1; });
-    // shuffle the prints: the current moment on top, the next ones of the day behind it
-    stageImgs.forEach((im, j) => { im.dataset.pos = String((j - i + stageImgs.length) % stageImgs.length); im.classList.toggle("is-on", j === i); });
-    $("#dm-time").textContent = b.dataset.time;
-    $("#dm-title").textContent = b.dataset.title;
-    $("#dm-text").textContent = b.dataset.text;
-    $("#dm-zone").textContent = b.dataset.zone;
-    $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    placeSun();
-    lifeSec.classList.remove("is-auto"); void lifeSec.offsetWidth; lifeSec.classList.toggle("is-auto", wAuto);
-    if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
-    scheduleWay();
-  }
-  ways.forEach((b, i) => b.addEventListener("click", () => { setDayPlaying(false); showWay(i); }));
-  tlPlay.addEventListener("click", () => { const p = !wAuto; if (p) showWay((wi + 1) % ways.length); setDayPlaying(p); });
-  $(".tl-stops").addEventListener("keydown", (e) => {
-    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
-    e.preventDefault(); setDayPlaying(false);
-    const fwd = (e.key === "ArrowRight") !== (document.dir === "rtl");
-    const n = e.key === "Home" ? 0 : e.key === "End" ? ways.length - 1 : (wi + (fwd ? 1 : -1) + ways.length) % ways.length;
-    showWay(n); ways[n].focus();
-  });
-  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
-  document.addEventListener("visibilitychange", scheduleWay);
-  showWay(0);
-  setDayPlaying(wAuto);
+  let skyTick = false;
+  window.addEventListener("scroll", () => { if (!skyTick) { skyTick = true; requestAnimationFrame(() => { skyTick = false; skyScroll(); }); } }, { passive: true });
+  window.addEventListener("resize", () => { lastT = -1; skyScroll(); });
+  skyScroll();
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
@@ -2754,10 +2674,10 @@ html.smooth { scroll-behavior: auto; }
     });
     [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
-      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
-    [".parcels > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark", ".sky"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
+    [".parcels > li", ".moments > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
     $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
-    $$(".parcel-media, .comm-media, .story-photo, .app-media, .day").forEach((el) => watch(el, "rv-img", 120));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .mo-photo").forEach((el) => watch(el, "rv-img", 120));
   }
 
   /* ------------------------------------------------------------ parallax and the header */
