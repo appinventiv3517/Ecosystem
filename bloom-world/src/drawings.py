@@ -118,15 +118,15 @@ def masterplan():
       '<rect class="roof" x="598" y="126" width="40" height="64" rx="4"/>'
       '<rect class="roof" x="712" y="126" width="40" height="64" rx="4"/>'
       '<rect class="roof-accent z-edu" x="598" y="88" width="154" height="9" rx="3"/></g>')
-    a(tree(675, 160, 15))
-    a('<rect class="track" x="600" y="214" width="150" height="212" rx="75"/>')
-    a('<rect class="pitch" x="618" y="236" width="114" height="168" rx="57"/>')
-    a('<line class="pitch-line" x1="618" y1="320" x2="732" y2="320"/><circle class="pitch-line" cx="675" cy="320" r="20" fill="none"/>')
-    for i, (cx, cy) in enumerate([(650, 290), (700, 350), (660, 370), (705, 280)]):
+    a(tree(675, 158, 14))
+    a('<rect class="track" x="604" y="240" width="142" height="194" rx="70"/>')
+    a('<rect class="pitch" x="621" y="259" width="108" height="156" rx="54"/>')
+    a('<line class="pitch-line" x1="621" y1="337" x2="729" y2="337"/><circle class="pitch-line" cx="675" cy="337" r="19" fill="none"/>')
+    for i, (cx, cy) in enumerate([(650, 305), (700, 365), (660, 385), (705, 300)]):
         a(f'<circle class="kid" cx="{cx}" cy="{cy}" r="5"><animate attributeName="cx" values="{cx};{cx+22};{cx-8};{cx}" dur="{5+i}s" repeatCount="indefinite"/>'
           f'<animate attributeName="cy" values="{cy};{cy-16};{cy+12};{cy}" dur="{6+i}s" repeatCount="indefinite"/></circle>')
     a(lamp(620, 200)); a(lamp(730, 200))
-    a(label(675, 191, "Education", "edu", "middle"))
+    a(label(675, 199, "Education", "edu", "middle"))
     a('</g>')
 
     # Retail high street (town centre)

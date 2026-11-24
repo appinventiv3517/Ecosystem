@@ -9,6 +9,7 @@
 <style>
 {{STYLES}}
 </style>
+<script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!/[?&]still\b/.test(location.search)){document.documentElement.classList.add("anim","intro");setTimeout(function(){document.documentElement.classList.remove("intro")},3000)}}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -315,38 +316,40 @@
 
 <!-- ================================================================ LIFE AT BLOOM -->
 <section class="life" id="life" aria-labelledby="life-title">
-  <div class="wrap">
-    <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-    <div class="strips" id="strips">
-      <article class="strip is-open">
-        <button type="button" class="strip-btn" aria-expanded="true">
-          <img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Days spent outdoors</span>
-        </button>
-        <p class="strip-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" loading="lazy" width="700" height="1061">
-          <span class="strip-title">Growing up together</span>
-        </button>
-        <p class="strip-text">Schools and shared spaces where neighbours turn into friends.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Time well spent</span>
-        </button>
-        <p class="strip-text">Places to stay, dine and slow down, close to home.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Looked after, every day</span>
-        </button>
-        <p class="strip-text">The teams who care for the buildings, streets and gardens behind the scenes.</p>
-      </article>
+  <div class="wrap life-grid">
+    <div class="life-copy">
+      <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
+      <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment.</p>
+      <ol class="ways" role="tablist" aria-label="Life at Bloom">
+        <li><button type="button" class="way" role="tab" aria-selected="true" aria-controls="life-stage" data-i="0" style="--zc: var(--edu)">
+          <span class="way-time">07:45</span><span class="way-title">Growing up together</span>
+          <span class="way-more"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="1" style="--zc: var(--fm)">
+          <span class="way-time">10:00</span><span class="way-title">Looked after, every day</span>
+          <span class="way-more"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="2" style="--zc: var(--land)">
+          <span class="way-time">18:30</span><span class="way-title">Days spent outdoors</span>
+          <span class="way-more"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="3" style="--zc: var(--hosp)">
+          <span class="way-time">20:00</span><span class="way-title">Time well spent</span>
+          <span class="way-more"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+      </ol>
     </div>
+    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite" data-parallax="0.06">
+      <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
+      <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
+      <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
+      <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
+      <figcaption class="stage-tag"><i id="stage-dot"></i><span id="stage-time">07:45</span><span id="stage-title">Growing up together</span></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -476,7 +479,7 @@
 
 </main>
 
-<!-- ================================================================ FOOTER: the drawing's title block -->
+<!-- ================================================================ FOOTER -->
 <footer class="footer" aria-labelledby="footer-title">
   <div class="wrap">
     <div class="close-cta">
@@ -486,48 +489,52 @@
         <a class="btn btn-line" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
       </div>
     </div>
-    <div class="tblock">
-      <div class="tb-cell tb-brand">
-        <img src="assets/img/bloom-wordmark-white.png" alt="Bloom" width="128" height="40">
-        <p>Curated Community Living</p>
-        <ul class="biz-list" aria-label="The businesses of Bloom World">
-          <li><i class="sw z-re"></i>Real Estate</li><li><i class="sw z-edu"></i>Education</li><li><i class="sw z-hosp"></i>Hospitality</li><li><i class="sw z-retail"></i>Retail</li><li><i class="sw z-health"></i>Healthcare</li><li><i class="sw z-fm"></i>Facilities Management</li><li><i class="sw z-land"></i>Landscaping</li>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/img/bloom-wordmark-white.png" alt="Bloom" width="150" height="47">
+        <p class="foot-tag">Curated Community Living</p>
+        <p class="foot-line">Seven businesses running one connected community across Abu Dhabi and Dubai.</p>
+        <ul class="foot-biz" aria-label="The businesses of Bloom World">
+          <li><i class="sw z-re"></i>Real Estate</li><li><i class="sw z-edu"></i>Education</li><li><i class="sw z-hosp"></i>Hospitality</li><li><i class="sw z-retail"></i>Retail</li><li><i class="sw z-health"></i>Healthcare</li><li><i class="sw z-fm"></i>Facilities</li><li><i class="sw z-land"></i>Landscaping</li>
         </ul>
       </div>
-      <nav class="tb-cell" aria-labelledby="fh-explore">
-        <h3 id="fh-explore" class="tb-h">Explore</h3>
-        <a href="#top">Bloom World</a><a href="#find">Find a Home</a><a href="#awards">Awards &amp; News</a><a href="#communities">Communities</a><a href="#story">Our Story</a><a href="#about">About Bloom</a>
+      <nav class="foot-col" aria-labelledby="fh-explore">
+        <h3 id="fh-explore" class="foot-h">Explore</h3>
+        <ul>
+          <li><a href="#top">Bloom World</a></li><li><a href="#find">Find a Home</a></li><li><a href="#communities">Communities</a></li><li><a href="#awards">Awards &amp; News</a></li><li><a href="#story">Our Story</a></li><li><a href="#about">About Bloom</a></li>
+        </ul>
       </nav>
-      <nav class="tb-cell" aria-labelledby="fh-services">
-        <h3 id="fh-services" class="tb-h">Customer services</h3>
-        <a href="#services" data-app-link="0">Bloom Community App</a><a href="#services" data-app-link="1">Bloom Super App</a><a href="#services" data-app-link="2">Bloom Partners App</a><a href="#services" data-construction>Construction updates</a><button type="button" class="tb-link" data-enquire>Make an enquiry</button>
+      <nav class="foot-col" aria-labelledby="fh-services">
+        <h3 id="fh-services" class="foot-h">Customer services</h3>
+        <ul>
+          <li><a href="#services" data-app-link="0">Bloom Community App</a></li><li><a href="#services" data-app-link="1">Bloom Super App</a></li><li><a href="#services" data-app-link="2">Bloom Partners App</a></li><li><a href="#services" data-construction>Construction updates</a></li><li><button type="button" class="foot-link" data-enquire>Make an enquiry</button></li>
+        </ul>
       </nav>
-      <div class="tb-cell">
-        <h3 class="tb-h">Contact</h3>
+      <div class="foot-col">
+        <h3 class="foot-h">Contact</h3>
         <address>Bloom Headquarters<br>7th Floor, Bloom Central<br>Sheikh Rashid Bin Saeed St. Rd 18<br>Abu Dhabi, UAE</address>
-        <a href="tel:80025666">800 Bloom (25666)</a>
-        <a href="tel:+97126969500">+971 2 696 9500 outside UAE</a>
-        <a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a>
-      </div>
-      <div class="tb-cell tb-drawing">
-        <div class="tb-row"><span>Drawing</span><strong>BW-001 · Homepage</strong></div>
-        <div class="tb-row"><span>Status</span><strong>Design prototype for review</strong></div>
-        <div class="tb-row"><span>Note</span><strong>Not the live Bloom Holding website. Images are stand-ins until Bloom supplies photography.</strong></div>
-        <div class="tb-row tb-social">
-          <a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://www.youtube.com/c/BloomHoldings" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://twitter.com/BloomHolding" target="_blank" rel="noopener">X</a>
-        </div>
-        <svg class="tb-scale" viewBox="0 0 220 40" aria-hidden="true"><path d="M10 26H210M10 20v12M60 22v8M110 20v12M160 22v8M210 20v12"/><rect x="10" y="23" width="50" height="6"/><rect x="110" y="23" width="50" height="6"/><text x="10" y="14">0</text><text x="104" y="14">50</text><text x="198" y="14">100m</text></svg>
+        <ul class="foot-contact">
+          <li><a href="tel:80025666">800 Bloom (25666)</a></li>
+          <li><a href="tel:+97126969500">+971 2 696 9500 outside UAE</a></li>
+          <li><a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a></li>
+        </ul>
+        <ul class="foot-social" aria-label="Bloom on social media">
+          <li><a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.youtube.com/c/BloomHoldings" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="https://twitter.com/BloomHolding" target="_blank" rel="noopener">X</a></li>
+        </ul>
       </div>
     </div>
-    <div class="legal">
+    <div class="foot-bar">
       <span>© 2026 Bloom. All rights reserved.</span>
-      <a href="#top">Privacy Policy</a><a href="#top">Terms of use</a>
+      <a href="#top">Privacy Policy</a>
+      <a href="#top">Terms of use</a>
+      <span class="foot-note">Design prototype for review. Not the live Bloom Holding website. Images are stand-ins.</span>
       <a class="to-top" href="#top">Back to top<svg class="ic"><use href="#i-down"/></svg></a>
     </div>
   </div>
+  <p class="foot-mark" aria-hidden="true">Bloom World</p>
 </footer>
 
 <!-- ================================================================ ENQUIRY -->

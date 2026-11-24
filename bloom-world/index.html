@@ -414,11 +414,12 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 .communities { background: var(--water-deep); color: var(--paper); padding-block: var(--section-y); }
 .comm-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
 .comm-head p { font-size: 1.1rem; color: color-mix(in srgb, var(--paper) 88%, var(--water)); max-width: 44ch; }
-.comm-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 22px; align-items: stretch; }
+.comm-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 22px; align-items: start; }
 .coast-col { display: grid; gap: 14px; align-content: start; }
 .coast { position: relative; border-radius: 26px; overflow: hidden; border: 2px solid var(--paper); background: var(--site); }
-.comm-legend { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.comm-legend button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; border: 2px solid rgb(255 255 255 / 0.45); background: none; color: var(--paper); font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+.comm-legend { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.comm-legend li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.comm-legend button { width: 100%; display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px 0 8px; text-align: start; border-radius: 999px; border: 2px solid rgb(255 255 255 / 0.45); background: none; color: var(--paper); font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
 [dir="rtl"] .comm-legend button { padding: 0 6px 0 14px; }
 .comm-legend b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--water-deep); font: 800 0.85rem var(--display); }
 .comm-legend button:hover { border-color: var(--paper); }
@@ -485,23 +486,45 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 @keyframes swap-img-rtl { from { clip-path: inset(0 100% 0 0); } }
 @keyframes swap-txt { from { opacity: 0; transform: translateY(8px); } }
 
-/* ---------------------------------------------------------------- life (landscape zone) */
-.life { background: var(--land); padding-block: var(--section-y); }
-.life .display { max-width: 15ch; margin-bottom: 40px; }
-.strips { display: flex; gap: 14px; height: clamp(420px, 52vw, 580px); }
-.strip { position: relative; flex: 1; min-width: 0; border-radius: 22px; overflow: hidden; background: var(--ink); transition: flex-grow 0.7s var(--ease); }
-.strip.is-open { flex-grow: 3.2; }
-.strip-btn { position: absolute; inset: 0; border: 0; padding: 0; background: none; width: 100%; text-align: start; color: #fff; }
-.strip-btn img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease), filter 0.6s var(--ease); filter: saturate(0.85) brightness(0.85); }
-.strip.is-open .strip-btn img { filter: none; }
-.strip:not(.is-open) .strip-btn:hover img { transform: scale(1.05); filter: none; }
-.strip-btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(18 14 32 / 0.82), rgb(18 14 32 / 0) 55%); }
-.strip-title { position: absolute; z-index: 1; inset-inline: 22px; bottom: 22px; font: 800 1.5rem/1.05 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
-.strip.is-open .strip-title { bottom: 74px; font-size: clamp(1.6rem, 2.4vw, 2.3rem); }
-.strip:not(.is-open) .strip-title { writing-mode: vertical-rl; transform: rotate(180deg); inset-inline: auto; inset-inline-start: 18px; bottom: 22px; }
-[dir="rtl"] .strip:not(.is-open) .strip-title { transform: none; }
-.strip-text { position: absolute; z-index: 1; inset-inline: 22px; bottom: 22px; color: #fff; max-width: 40ch; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.5s var(--ease); }
-.strip.is-open .strip-text { opacity: 1; transform: none; transition-delay: 0.25s; }
+/* ---------------------------------------------------------------- life (landscape zone): one day, hour by hour */
+.life { background: var(--land); padding-block: var(--section-y); overflow: hidden; }
+.life-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.life .display { max-width: 12ch; }
+.life-lede { margin-top: 18px; font-size: 1.1rem; max-width: 36ch; }
+.ways { list-style: none; margin: 36px 0 0; padding: 0; border-top: 2px solid var(--ink); }
+.way {
+  position: relative; display: grid; grid-template-columns: 74px 1fr; column-gap: 16px; width: 100%; text-align: start;
+  border: 0; border-bottom: 1.5px solid rgb(29 24 48 / 0.35); background: none; padding: 20px 0 22px; color: var(--ink);
+}
+.way-time { font: 700 1rem/1.9 var(--display); font-variant-numeric: tabular-nums; grid-row: 1 / span 2; }
+.way-title { font: 800 clamp(1.5rem, 2.6vw, 2.3rem)/1.05 var(--display); letter-spacing: -0.03em; opacity: 0.86; transition: opacity 0.35s var(--ease), transform 0.5s var(--ease); }
+.way:hover .way-title, .way[aria-selected="true"] .way-title { opacity: 1; }
+.way:hover .way-title { transform: translateX(6px); }
+[dir="rtl"] .way:hover .way-title { transform: translateX(-6px); }
+.way-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease); }
+.way-more > * { min-height: 0; overflow: hidden; }
+.way[aria-selected="true"] .way-more { grid-template-rows: 1fr; }
+.way-more { gap: 0; }
+.way-text { font-size: 1.02rem; max-width: 42ch; padding-top: 10px; }
+.way-zone { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; padding-top: 10px; }
+.way-zone i { width: 12px; height: 12px; border-radius: 3px; background: var(--zc); box-shadow: 0 0 0 1.5px var(--paper); }
+.way-bar { position: absolute; left: 0; right: 0; bottom: -1.5px; height: 3px; overflow: hidden; }
+.way-bar i { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+[dir="rtl"] .way-bar i { transform-origin: right; }
+.way[aria-selected="true"] .way-bar i { transform: scaleX(1); }
+.life.is-auto .way[aria-selected="true"] .way-bar i { animation: way-fill var(--way-ms, 5600ms) linear; }
+@keyframes way-fill { from { transform: scaleX(0); } }
+.way:focus-visible { outline-offset: -3px; }
+.life-stage { position: relative; margin: 0; aspect-ratio: 4 / 5; max-height: min(78vh, 720px); width: 100%; border-radius: 28px; overflow: hidden; border: 2px solid var(--ink); background: var(--ink); box-shadow: 0 40px 70px -40px rgb(20 40 10 / 0.7); justify-self: end; }
+.stage-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.08; translate: 0 var(--py, 0px); transition: opacity 0.6s var(--ease), scale 1.4s var(--ease); }
+.stage-img.is-on { opacity: 1; scale: 1.02; z-index: 1; }
+.stage-img.is-wipe { animation: stage-wipe 0.9s var(--ease); }
+@keyframes stage-wipe { from { clip-path: inset(0 0 0 100%); opacity: 1; } to { clip-path: inset(0); opacity: 1; } }
+[dir="rtl"] .stage-img.is-wipe { animation-name: stage-wipe-rtl; }
+@keyframes stage-wipe-rtl { from { clip-path: inset(0 100% 0 0); opacity: 1; } to { clip-path: inset(0); opacity: 1; } }
+.stage-tag { position: absolute; z-index: 2; left: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 10px; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 999px; padding: 8px 16px 8px 12px; font-weight: 600; font-size: 0.92rem; }
+.stage-tag i { width: 12px; height: 12px; border-radius: 3px; background: var(--edu); transition: background-color 0.3s; }
+.stage-tag span:first-of-type { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; }
 
 /* ---------------------------------------------------------------- services (facilities slate zone) */
 .services { background: var(--fm); color: #fff; padding-block: var(--section-y); }
@@ -514,8 +537,8 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 .who-btn:hover { border-color: #fff; }
 .who-btn[aria-selected="true"] { background: #fff; color: var(--ink); border-color: #fff; }
 .app-panel { background: var(--paper); color: var(--ink); border-radius: 26px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden; min-height: 340px; }
-.app-media { background: color-mix(in srgb, var(--fm) 16%, var(--paper)); display: grid; place-items: center; padding: 18px; overflow: hidden; }
-.app-media img { width: 100%; height: auto; border-radius: 14px; }
+.app-media { background: #f4f1e9; display: grid; place-items: center; padding: 0; overflow: hidden; }
+.app-media img { width: 100%; height: 100%; object-fit: contain; }
 .app-panel.is-swap .app-media img { animation: app-in 0.55s var(--ease); }
 @keyframes app-in { from { opacity: 0; transform: translateY(26px) rotate(-2deg); } }
 .app-body { padding: 26px; display: grid; gap: 14px; align-content: start; }
@@ -643,35 +666,43 @@ input[type="range"]:focus-visible { outline: 3px solid #fff; outline-offset: 4px
 .sw.z-health { background: var(--health); } .sw.z-fm { background: var(--fm); } .sw.z-land { background: var(--land); }
 .source { font-size: 0.82rem; color: var(--ink-soft); margin-top: 10px; }
 
-/* ---------------------------------------------------------------- footer: title block */
-.footer { background: var(--ink); color: var(--paper); padding-block: var(--section-y) 32px; }
-.close-cta { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 28px; align-items: end; padding-bottom: 64px; }
+/* ---------------------------------------------------------------- footer */
+.footer { position: relative; background: var(--ink); color: var(--paper); padding-top: var(--section-y); overflow: hidden; }
+.close-cta { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 28px; align-items: end; padding-bottom: clamp(56px, 8vw, 96px); border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 22%, transparent); }
 .close-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.tblock { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.2fr 1.4fr; border: 2px solid color-mix(in srgb, var(--paper) 60%, transparent); border-radius: 16px; overflow: hidden; }
-.tb-cell { padding: 22px; border-inline-end: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); display: grid; gap: 8px; align-content: start; font-size: 0.92rem; }
-.tb-cell:last-child { border-inline-end: 0; }
-.tb-cell a, .tb-link { text-decoration: none; color: color-mix(in srgb, var(--paper) 85%, var(--site)); background: none; border: 0; padding: 0; text-align: start; font-size: inherit; }
-.tb-cell a:hover, .tb-link:hover { color: #fff; text-decoration: underline; }
-.tb-brand img { width: 120px; }
-.tb-brand p { color: var(--site); font-weight: 600; }
-.biz-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; color: color-mix(in srgb, var(--paper) 85%, var(--site)); }
-.biz-list .sw { width: 10px; height: 10px; margin-inline-end: 8px; }
-.tb-h { font: 700 0.82rem var(--text); color: var(--site); margin-bottom: 4px; }
-address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--site)); margin-bottom: 6px; }
-.tb-drawing { gap: 0; padding: 0; }
-.tb-row { display: grid; grid-template-columns: 70px 1fr; gap: 10px; padding: 12px 18px; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); font-size: 0.85rem; }
-.tb-row span { color: var(--site); }
-.tb-row strong { font-weight: 500; }
-.tb-social { display: flex; flex-wrap: wrap; gap: 14px; }
-.tb-scale { width: 200px; margin: 14px 18px; }
-.tb-scale path { stroke: var(--paper); stroke-width: 1.5; fill: none; }
-.tb-scale rect { fill: var(--paper); }
-.tb-scale text { font: 500 10px var(--text); fill: var(--site); }
-.legal { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 24px; font-size: 0.85rem; color: color-mix(in srgb, var(--paper) 80%, var(--site)); }
-.legal a { text-decoration: none; }
-.legal a:hover { text-decoration: underline; }
-.to-top { margin-inline-start: auto; display: inline-flex; gap: 6px; align-items: center; }
-.to-top .ic { transform: rotate(180deg); }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 40px; padding-block: 56px 48px; }
+.foot-brand img { width: 132px; }
+.foot-tag { margin-top: 10px; color: var(--site); font-weight: 600; }
+.foot-line { margin-top: 14px; max-width: 34ch; color: color-mix(in srgb, var(--paper) 78%, var(--ink)); }
+.foot-biz { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.foot-biz li { display: inline-flex; align-items: center; gap: 7px; font-size: 0.8rem; font-weight: 600; border: 1.5px solid color-mix(in srgb, var(--paper) 26%, transparent); border-radius: 999px; padding: 4px 11px 4px 8px; color: color-mix(in srgb, var(--paper) 90%, var(--site)); }
+.foot-biz .sw { width: 9px; height: 9px; margin: 0; border-radius: 50%; }
+.foot-h { font: 700 0.95rem var(--display); color: var(--site); margin-bottom: 16px; }
+.foot-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.foot-col a, .foot-link {
+  color: color-mix(in srgb, var(--paper) 88%, var(--site)); text-decoration: none; background: none; border: 0; padding: 0; font-size: 0.98rem; text-align: start;
+  background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1.5px; background-repeat: no-repeat; background-position: left 100%;
+  transition: background-size 0.35s var(--ease), color 0.2s;
+}
+[dir="rtl"] .foot-col a, [dir="rtl"] .foot-link { background-position: right 100%; }
+.foot-col a:hover, .foot-link:hover { color: #fff; background-size: 100% 1.5px; }
+address { font-style: normal; line-height: 1.6; color: color-mix(in srgb, var(--paper) 78%, var(--ink)); margin-bottom: 14px; }
+.foot-contact { margin-bottom: 20px !important; }
+.foot-social { display: flex !important; flex-wrap: wrap; gap: 8px !important; }
+.foot-social a { display: inline-flex; border: 1.5px solid color-mix(in srgb, var(--paper) 30%, transparent); border-radius: 999px; padding: 6px 13px; font-size: 0.85rem; background-image: none; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+.foot-social a:hover { background-color: var(--paper); color: var(--ink); border-color: var(--paper); }
+.foot-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding-block: 22px; border-top: 1.5px solid color-mix(in srgb, var(--paper) 22%, transparent); font-size: 0.85rem; color: color-mix(in srgb, var(--paper) 72%, var(--ink)); }
+.foot-bar a { text-decoration: none; }
+.foot-bar a:hover { color: #fff; text-decoration: underline; }
+.foot-note { flex: 1 1 260px; }
+.to-top { display: inline-flex; gap: 6px; align-items: center; }
+.to-top .ic { transform: rotate(180deg); transition: transform 0.3s var(--ease); }
+.to-top:hover .ic { transform: rotate(180deg) translateY(3px); }
+.foot-mark {
+  margin: 0; font: 800 clamp(4.5rem, 17.5vw, 17rem)/0.78 var(--display); letter-spacing: -0.055em; white-space: nowrap; text-align: center;
+  color: color-mix(in srgb, var(--paper) 9%, var(--ink)); padding-top: 12px; margin-bottom: -0.08em; user-select: none;
+}
+.foot-bar { position: relative; z-index: 1; }
 
 /* ---------------------------------------------------------------- enquiry dialog */
 .enquiry { width: min(520px, calc(100% - 24px)); max-height: calc(100svh - 24px); border: 2px solid var(--ink); border-radius: 26px; padding: 0; background: var(--paper); color: var(--ink); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6); overflow: auto; }
@@ -708,10 +739,6 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   .search-fields > label:nth-of-type(3) { order: 4; grid-column: 1 / -1; }
   .parcels { grid-template-columns: repeat(2, 1fr); }
   .stamps { grid-template-columns: repeat(3, 1fr); }
-  .tblock { grid-template-columns: 1fr 1fr 1fr; }
-  .tb-brand { grid-column: 1 / -1; border-inline-end: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
-  .tb-drawing { grid-column: 1 / -1; border-top: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
-  .tb-cell:nth-child(4) { border-inline-end: 0; }
 }
 @media (max-width: 1100px) {
   .nav { display: none; }
@@ -745,14 +772,12 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 @media (max-width: 860px) {
   .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
   .find-head, .comm-head, .svc-head, .awards-head, .close-cta { grid-template-columns: 1fr; }
+  .life-grid { grid-template-columns: minmax(0, 1fr); }
+  .life-stage { order: -1; aspect-ratio: 4 / 3; justify-self: stretch; max-height: none; }
+  .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foot-brand { grid-column: 1 / -1; }
   .comm-grid, .svc-grid, .story-grid, .about-grid { grid-template-columns: minmax(0, 1fr); }
   .app-panel { grid-template-columns: 1fr; }
-  .strips { flex-direction: column; height: auto; }
-  .strip, .strip.is-open { flex: none; height: auto; }
-  .strip-btn { position: relative; display: block; height: 230px; }
-  .strip:not(.is-open) .strip-title, .strip .strip-title, .strip.is-open .strip-title { writing-mode: horizontal-tb; transform: none; inset-inline: 20px; bottom: 18px; font-size: 1.5rem; }
-  .strip .strip-text, .strip.is-open .strip-text { position: static; opacity: 1; transform: none; padding: 14px 20px 18px; max-width: none; }
-  .strip .strip-btn img { filter: none; }
   .stamps { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .news-list a, .news-next { grid-template-columns: 1fr auto; }
   .news-list time { grid-column: 1 / -1; }
@@ -768,10 +793,6 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   .stamp-year { font-size: 1.5rem; }
   .stamp strong { font-size: 0.8rem; }
   .stamp-org { display: none; }
-  .tblock { grid-template-columns: 1fr; }
-  .tb-cell { border-inline-end: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
-  .tb-cell:nth-child(4) { border-bottom: 1.5px solid color-mix(in srgb, var(--paper) 35%, transparent); }
-  .tb-drawing { border-top: 0; }
   .scrub-years li:nth-child(even) { visibility: hidden; }
   .legend-search .field { grid-template-columns: 1fr; gap: 6px; }
   .comm-actions .btn { flex: 1; }
@@ -819,7 +840,39 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 /* Arabic preview: body copy stays English, so each run takes its own direction */
 [dir="rtl"] :is(p, li, dd, small, strong, label, figcaption, address, td, th) { unicode-bidi: plaintext; }
 
+/* ---------------------------------------------------------------- motion system
+   .anim is set by app.js only when motion is allowed, so content is always visible without script */
+html.smooth { scroll-behavior: auto; }
+.site-header { transition: transform 0.5s var(--ease); }
+.site-header.is-hidden { transform: translateY(calc(-100% - 24px)); }
+.anim .rv { opacity: 0; transform: translate3d(0, 56px, 0); }
+.anim .rv.in { opacity: 1; transform: none; transition: opacity 0.9s var(--ease), transform 1.1s var(--ease); transition-delay: calc(var(--d, 0) * 1ms); }
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.wi { display: inline-block; }
+.anim .rv-words .wi { transform: translateY(108%); }
+.anim .rv-words.in .wi { transform: none; transition: transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 55ms); }
+.anim .rv-img { clip-path: inset(0 0 100% 0); }
+.anim .rv-img.in { clip-path: inset(0); transition: clip-path 1.2s var(--ease); transition-delay: calc(var(--d, 0) * 1ms); }
+.anim .rv-img img { scale: 1.18; }
+.anim .rv-img.in img { scale: 1; transition: scale 1.6s var(--ease); }
+.anim .stamp.rv { opacity: 0; transform: rotate(var(--rot)) scale(1.55); }
+.anim .stamp.rv.in { opacity: 1; transform: rotate(var(--rot)) scale(1); transition: opacity 0.35s ease-out, transform 0.6s cubic-bezier(0.2, 1.4, 0.4, 1); transition-delay: calc(var(--d, 0) * 1ms); }
+.anim .stamp.rv.in:hover { transform: rotate(0deg) scale(1.05); transition-delay: 0s; }
+.anim .pins:not(.dropped) .pin { opacity: 0; }
+[data-parallax] { will-change: translate; }
+@media (prefers-reduced-motion: reduce) {
+  .site-header.is-hidden { transform: none; }
+}
+.intro .site-header .bar, .intro .tb-sheet, .intro .legend-search, .intro .day-clock, .intro .plot-card, .intro .plan-svg { opacity: 0; }
+.zone, .label-in, .tree-canopy, .tree-light, .palm path, .umbrella circle { transform-box: fill-box; transform-origin: center; }
+.life-stage { translate: 0 var(--py, 0px); }
+.foot-contact a { overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .foot-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+
 </style>
+<script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!/[?&]still\b/.test(location.search)){document.documentElement.classList.add("anim","intro");setTimeout(function(){document.documentElement.classList.remove("intro")},3000)}}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -960,14 +1013,14 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="plot" data-biz="edu" tabindex="0" role="button" aria-label="Education plot: Bloom Education">
 <rect class="zone z-edu" x="576" y="70" width="198" height="374" rx="18"/>
 <g class="bld" filter="url(#sun)"><rect class="roof" x="598" y="88" width="154" height="38" rx="4"/><rect class="roof" x="598" y="126" width="40" height="64" rx="4"/><rect class="roof" x="712" y="126" width="40" height="64" rx="4"/><rect class="roof-accent z-edu" x="598" y="88" width="154" height="9" rx="3"/></g>
-<g class="tree" transform="translate(675 160)"><circle r="15" class="tree-canopy"/><circle r="6.8" cx="-3.8" cy="-3.8" class="tree-light"/></g>
-<rect class="track" x="600" y="214" width="150" height="212" rx="75"/>
-<rect class="pitch" x="618" y="236" width="114" height="168" rx="57"/>
-<line class="pitch-line" x1="618" y1="320" x2="732" y2="320"/><circle class="pitch-line" cx="675" cy="320" r="20" fill="none"/>
-<circle class="kid" cx="650" cy="290" r="5"><animate attributeName="cx" values="650;672;642;650" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="290;274;302;290" dur="6s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="700" cy="350" r="5"><animate attributeName="cx" values="700;722;692;700" dur="6s" repeatCount="indefinite"/><animate attributeName="cy" values="350;334;362;350" dur="7s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="660" cy="370" r="5"><animate attributeName="cx" values="660;682;652;660" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="370;354;382;370" dur="8s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="705" cy="280" r="5"><animate attributeName="cx" values="705;727;697;705" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="280;264;292;280" dur="9s" repeatCount="indefinite"/></circle>
+<g class="tree" transform="translate(675 158)"><circle r="14" class="tree-canopy"/><circle r="6.3" cx="-3.5" cy="-3.5" class="tree-light"/></g>
+<rect class="track" x="604" y="240" width="142" height="194" rx="70"/>
+<rect class="pitch" x="621" y="259" width="108" height="156" rx="54"/>
+<line class="pitch-line" x1="621" y1="337" x2="729" y2="337"/><circle class="pitch-line" cx="675" cy="337" r="19" fill="none"/>
+<circle class="kid" cx="650" cy="305" r="5"><animate attributeName="cx" values="650;672;642;650" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="305;289;317;305" dur="6s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="700" cy="365" r="5"><animate attributeName="cx" values="700;722;692;700" dur="6s" repeatCount="indefinite"/><animate attributeName="cy" values="365;349;377;365" dur="7s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="660" cy="385" r="5"><animate attributeName="cx" values="660;682;652;660" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="385;369;397;385" dur="8s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="705" cy="300" r="5"><animate attributeName="cx" values="705;727;697;705" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="300;284;312;300" dur="9s" repeatCount="indefinite"/></circle>
 <circle class="lamp" cx="620" cy="200" r="5"/>
 <circle class="lamp" cx="730" cy="200" r="5"/>
 
@@ -1214,7 +1267,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
 <rect class="tint" width="1600" height="1000"/>
 <g class="conns" aria-hidden="true"></g>
-<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 191)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 501)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
+<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 199)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 501)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
 </svg>
     </div>
     <p class="pan-chip" aria-hidden="true"><svg class="ic"><use href="#i-left"/></svg>Swipe to see the whole plan<svg class="ic"><use href="#i-right"/></svg></p>
@@ -1479,38 +1532,40 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 
 <!-- ================================================================ LIFE AT BLOOM -->
 <section class="life" id="life" aria-labelledby="life-title">
-  <div class="wrap">
-    <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-    <div class="strips" id="strips">
-      <article class="strip is-open">
-        <button type="button" class="strip-btn" aria-expanded="true">
-          <img src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Days spent outdoors</span>
-        </button>
-        <p class="strip-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" loading="lazy" width="700" height="1061">
-          <span class="strip-title">Growing up together</span>
-        </button>
-        <p class="strip-text">Schools and shared spaces where neighbours turn into friends.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Time well spent</span>
-        </button>
-        <p class="strip-text">Places to stay, dine and slow down, close to home.</p>
-      </article>
-      <article class="strip">
-        <button type="button" class="strip-btn" aria-expanded="false">
-          <img src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" loading="lazy" width="700" height="1060">
-          <span class="strip-title">Looked after, every day</span>
-        </button>
-        <p class="strip-text">The teams who care for the buildings, streets and gardens behind the scenes.</p>
-      </article>
+  <div class="wrap life-grid">
+    <div class="life-copy">
+      <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
+      <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment.</p>
+      <ol class="ways" role="tablist" aria-label="Life at Bloom">
+        <li><button type="button" class="way" role="tab" aria-selected="true" aria-controls="life-stage" data-i="0" style="--zc: var(--edu)">
+          <span class="way-time">07:45</span><span class="way-title">Growing up together</span>
+          <span class="way-more"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="1" style="--zc: var(--fm)">
+          <span class="way-time">10:00</span><span class="way-title">Looked after, every day</span>
+          <span class="way-more"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="2" style="--zc: var(--land)">
+          <span class="way-time">18:30</span><span class="way-title">Days spent outdoors</span>
+          <span class="way-more"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+        <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="3" style="--zc: var(--hosp)">
+          <span class="way-time">20:00</span><span class="way-title">Time well spent</span>
+          <span class="way-more"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span>
+          <span class="way-bar" aria-hidden="true"><i></i></span>
+        </button></li>
+      </ol>
     </div>
+    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite" data-parallax="0.06">
+      <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
+      <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
+      <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
+      <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
+      <figcaption class="stage-tag"><i id="stage-dot"></i><span id="stage-time">07:45</span><span id="stage-title">Growing up together</span></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -1686,7 +1741,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 
 </main>
 
-<!-- ================================================================ FOOTER: the drawing's title block -->
+<!-- ================================================================ FOOTER -->
 <footer class="footer" aria-labelledby="footer-title">
   <div class="wrap">
     <div class="close-cta">
@@ -1696,48 +1751,52 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
         <a class="btn btn-line" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
       </div>
     </div>
-    <div class="tblock">
-      <div class="tb-cell tb-brand">
-        <img src="assets/img/bloom-wordmark-white.png" alt="Bloom" width="128" height="40">
-        <p>Curated Community Living</p>
-        <ul class="biz-list" aria-label="The businesses of Bloom World">
-          <li><i class="sw z-re"></i>Real Estate</li><li><i class="sw z-edu"></i>Education</li><li><i class="sw z-hosp"></i>Hospitality</li><li><i class="sw z-retail"></i>Retail</li><li><i class="sw z-health"></i>Healthcare</li><li><i class="sw z-fm"></i>Facilities Management</li><li><i class="sw z-land"></i>Landscaping</li>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/img/bloom-wordmark-white.png" alt="Bloom" width="150" height="47">
+        <p class="foot-tag">Curated Community Living</p>
+        <p class="foot-line">Seven businesses running one connected community across Abu Dhabi and Dubai.</p>
+        <ul class="foot-biz" aria-label="The businesses of Bloom World">
+          <li><i class="sw z-re"></i>Real Estate</li><li><i class="sw z-edu"></i>Education</li><li><i class="sw z-hosp"></i>Hospitality</li><li><i class="sw z-retail"></i>Retail</li><li><i class="sw z-health"></i>Healthcare</li><li><i class="sw z-fm"></i>Facilities</li><li><i class="sw z-land"></i>Landscaping</li>
         </ul>
       </div>
-      <nav class="tb-cell" aria-labelledby="fh-explore">
-        <h3 id="fh-explore" class="tb-h">Explore</h3>
-        <a href="#top">Bloom World</a><a href="#find">Find a Home</a><a href="#awards">Awards &amp; News</a><a href="#communities">Communities</a><a href="#story">Our Story</a><a href="#about">About Bloom</a>
+      <nav class="foot-col" aria-labelledby="fh-explore">
+        <h3 id="fh-explore" class="foot-h">Explore</h3>
+        <ul>
+          <li><a href="#top">Bloom World</a></li><li><a href="#find">Find a Home</a></li><li><a href="#communities">Communities</a></li><li><a href="#awards">Awards &amp; News</a></li><li><a href="#story">Our Story</a></li><li><a href="#about">About Bloom</a></li>
+        </ul>
       </nav>
-      <nav class="tb-cell" aria-labelledby="fh-services">
-        <h3 id="fh-services" class="tb-h">Customer services</h3>
-        <a href="#services" data-app-link="0">Bloom Community App</a><a href="#services" data-app-link="1">Bloom Super App</a><a href="#services" data-app-link="2">Bloom Partners App</a><a href="#services" data-construction>Construction updates</a><button type="button" class="tb-link" data-enquire>Make an enquiry</button>
+      <nav class="foot-col" aria-labelledby="fh-services">
+        <h3 id="fh-services" class="foot-h">Customer services</h3>
+        <ul>
+          <li><a href="#services" data-app-link="0">Bloom Community App</a></li><li><a href="#services" data-app-link="1">Bloom Super App</a></li><li><a href="#services" data-app-link="2">Bloom Partners App</a></li><li><a href="#services" data-construction>Construction updates</a></li><li><button type="button" class="foot-link" data-enquire>Make an enquiry</button></li>
+        </ul>
       </nav>
-      <div class="tb-cell">
-        <h3 class="tb-h">Contact</h3>
+      <div class="foot-col">
+        <h3 class="foot-h">Contact</h3>
         <address>Bloom Headquarters<br>7th Floor, Bloom Central<br>Sheikh Rashid Bin Saeed St. Rd 18<br>Abu Dhabi, UAE</address>
-        <a href="tel:80025666">800 Bloom (25666)</a>
-        <a href="tel:+97126969500">+971 2 696 9500 outside UAE</a>
-        <a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a>
-      </div>
-      <div class="tb-cell tb-drawing">
-        <div class="tb-row"><span>Drawing</span><strong>BW-001 · Homepage</strong></div>
-        <div class="tb-row"><span>Status</span><strong>Design prototype for review</strong></div>
-        <div class="tb-row"><span>Note</span><strong>Not the live Bloom Holding website. Images are stand-ins until Bloom supplies photography.</strong></div>
-        <div class="tb-row tb-social">
-          <a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://www.youtube.com/c/BloomHoldings" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://twitter.com/BloomHolding" target="_blank" rel="noopener">X</a>
-        </div>
-        <svg class="tb-scale" viewBox="0 0 220 40" aria-hidden="true"><path d="M10 26H210M10 20v12M60 22v8M110 20v12M160 22v8M210 20v12"/><rect x="10" y="23" width="50" height="6"/><rect x="110" y="23" width="50" height="6"/><text x="10" y="14">0</text><text x="104" y="14">50</text><text x="198" y="14">100m</text></svg>
+        <ul class="foot-contact">
+          <li><a href="tel:80025666">800 Bloom (25666)</a></li>
+          <li><a href="tel:+97126969500">+971 2 696 9500 outside UAE</a></li>
+          <li><a href="mailto:customerservice@bloomholding.com">customerservice@bloomholding.com</a></li>
+        </ul>
+        <ul class="foot-social" aria-label="Bloom on social media">
+          <li><a href="https://www.instagram.com/bloomholding/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/company/bloom-properties/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.youtube.com/c/BloomHoldings" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="https://twitter.com/BloomHolding" target="_blank" rel="noopener">X</a></li>
+        </ul>
       </div>
     </div>
-    <div class="legal">
+    <div class="foot-bar">
       <span>© 2026 Bloom. All rights reserved.</span>
-      <a href="#top">Privacy Policy</a><a href="#top">Terms of use</a>
+      <a href="#top">Privacy Policy</a>
+      <a href="#top">Terms of use</a>
+      <span class="foot-note">Design prototype for review. Not the live Bloom Holding website. Images are stand-ins.</span>
       <a class="to-top" href="#top">Back to top<svg class="ic"><use href="#i-down"/></svg></a>
     </div>
   </div>
+  <p class="foot-mark" aria-hidden="true">Bloom World</p>
 </footer>
 
 <!-- ================================================================ ENQUIRY -->
@@ -1794,6 +1853,48 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   // ?still freezes the ambient scene (traffic, boats, autoplay) for screenshots and motion capture
   const still = new URLSearchParams(location.search).has("still");
+  // motion is on unless the visitor asked for less of it (or a capture froze the page)
+  const motion = document.documentElement.classList.contains("anim");
+
+  /* ------------------------------------------------------------ smooth, weighted scrolling (fine pointers only) */
+  const smooth = (() => {
+    if (!motion || !window.matchMedia("(pointer: fine)").matches) return null;
+    document.documentElement.classList.add("smooth");
+    let target = window.scrollY, current = window.scrollY, running = false;
+    const max = () => document.documentElement.scrollHeight - window.innerHeight;
+    function tick() {
+      current += (target - current) * 0.1;
+      if (Math.abs(target - current) < 0.4) { current = target; running = false; }
+      window.scrollTo(0, current);
+      if (running) requestAnimationFrame(tick);
+    }
+    function start() { if (!running) { running = true; current = window.scrollY; requestAnimationFrame(tick); } }
+    window.addEventListener("wheel", (e) => {
+      if (e.ctrlKey || e.defaultPrevented || document.querySelector("dialog[open]")) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      if (e.target.closest && e.target.closest("textarea, select, .plan-pan, .clock-track")) return;
+      e.preventDefault();
+      const d = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      target = Math.max(0, Math.min(max(), (running ? target : window.scrollY) + d));
+      start();
+    }, { passive: false });
+    window.addEventListener("scroll", () => { if (!running) { target = current = window.scrollY; } }, { passive: true });
+    return { to(y) { target = Math.max(0, Math.min(max(), y)); start(); } };
+  })();
+  function scrollToEl(el) {
+    const y = el.id === "top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 84;
+    if (smooth) smooth.to(y); else window.scrollTo({ top: y, behavior: reduced.matches ? "auto" : "smooth" });
+  }
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || a.classList.contains("skip")) return;
+    const id = a.getAttribute("href").slice(1);
+    const el = id ? document.getElementById(id) : null;
+    if (!el) return;
+    e.preventDefault();
+    scrollToEl(el);
+    try { history.replaceState(null, "", "#" + id); } catch (err) { /* the viewer may refuse; scrolling still works */ }
+  });
   if (still) window.addEventListener("load", () => document.querySelectorAll("svg").forEach((v) => v.pauseAnimations && v.pauseAnimations()));
   const SVGNS = "http://www.w3.org/2000/svg";
 
@@ -1806,7 +1907,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     edu: { name: "Education", op: "Bloom Education", hour: "07:45", moment: "The school run", zc: "var(--edu)",
       text: "Schools anchor Bloom's communities, from Brighton College to Bloom World Academy, so learning stays close to home.",
       stat: "15 schools serving more than 20,000 students", links: ["re", "land", "health"], url: "https://www.bloomeducation.com/", visit: "Visit Bloom Education",
-      at: [675, 260] },
+      at: [675, 337] },
     fm: { name: "Facilities Management", op: "Bloom Facilities Management", hour: "10:00", moment: "Everything working", zc: "var(--fm)",
       text: "Behind the scenes, community and facilities management keeps homes, buildings and shared spaces running day to day.",
       stat: "8,500+ units managed", links: ["re", "hosp", "retail"], url: "https://bfm.ae/", visit: "Visit Bloom Facilities Management",
@@ -2243,7 +2344,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     if (o.mode) { setMode(o.mode); }
     if ("community" in o) form.elements.community.value = o.community || "";
     if ("type" in o) form.elements.type.value = o.type || "";
-    document.getElementById("find").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth" });
+    scrollToEl(document.getElementById("find"));
     if (submit) form.requestSubmit();
   }
   $$(".try-chip").forEach((b) => b.addEventListener("click", () => {
@@ -2302,21 +2403,56 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   new IntersectionObserver(([en], obs) => {
     if (!en.isIntersecting) return;
     obs.disconnect();
-    if (reduced.matches) return;
-    pins.forEach((p, i) => { p.style.setProperty("animation-delay", "0s"); p.querySelector(".pin-head").style.animationDelay = i * 110 + "ms"; p.classList.add("is-drop"); });
-  }, { threshold: 0.4 }).observe($("#coast"));
+    $(".pins").classList.add("dropped");
+    if (!motion) return;
+    pins.forEach((p, i) => { p.querySelector(".pin-head").style.animationDelay = 200 + i * 120 + "ms"; p.classList.add("is-drop"); });
+  }, { threshold: 0.35 }).observe($("#coast"));
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life strips */
-  const strips = $$(".strip");
-  strips.forEach((s) => {
-    const b = $(".strip-btn", s);
-    const open = () => strips.forEach((o) => { const on = o === s; o.classList.toggle("is-open", on); $(".strip-btn", o).setAttribute("aria-expanded", String(on)); });
-    b.addEventListener("click", open);
-    b.addEventListener("focus", open);
-    s.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !mobile.matches) open(); });
+  /* ------------------------------------------------------------ life: one day, hour by hour */
+  const lifeSec = $("#life");
+  const ways = $$(".way");
+  const stageImgs = $$(".stage-img");
+  const WAY_MS = 5600;
+  let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
+  function restartBar() {
+    const bar = $(".way-bar i", ways[wi]);
+    bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+  }
+  function scheduleWay() {
+    clearTimeout(wTimer);
+    lifeSec.classList.toggle("is-auto", wAuto);
+    if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
+  }
+  function showWay(i) {
+    const prev = wi;
+    wi = i;
+    ways.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+    if (prev !== i) {
+      stageImgs.forEach((im, j) => { im.classList.toggle("is-on", j === i); im.classList.remove("is-wipe"); });
+      if (motion) { void stageImgs[i].offsetWidth; stageImgs[i].classList.add("is-wipe"); }
+    }
+    const b = ways[i];
+    $("#stage-time").textContent = $(".way-time", b).textContent;
+    $("#stage-title").textContent = $(".way-title", b).textContent;
+    $("#stage-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
+    restartBar();
+    scheduleWay();
+  }
+  ways.forEach((b, i) => {
+    b.addEventListener("click", () => { wAuto = false; showWay(i); });
+    b.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && wi !== i) { wAuto = false; showWay(i); } });
   });
+  $(".ways").addEventListener("keydown", (e) => {
+    if (!["ArrowDown", "ArrowUp"].includes(e.key)) return;
+    e.preventDefault(); wAuto = false;
+    const n = (wi + (e.key === "ArrowDown" ? 1 : -1) + ways.length) % ways.length;
+    showWay(n); ways[n].focus();
+  });
+  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; if (lifeVisible) restartBar(); scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
+  document.addEventListener("visibilitychange", scheduleWay);
+  showWay(0);
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
@@ -2341,22 +2477,6 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   $$(".store").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("Store links are not connected in this prototype."); }));
   $$("[data-construction]").forEach((a) => a.addEventListener("click", () => { showApp(1); toast("Construction updates live in the Bloom Super App, for the homes you own."); }));
   showApp(0);
-
-  /* ------------------------------------------------------------ awards: stamps press in */
-  const stampList = $("#stamps");
-  new IntersectionObserver(([en], obs) => {
-    if (!en.isIntersecting) return;
-    obs.disconnect();
-    if (reduced.matches) return;
-    $$(".stamp", stampList).forEach((s, i) => {
-      const rot = getComputedStyle(s).getPropertyValue("--rot").trim() || "0deg";
-      s.animate([
-        { transform: `rotate(${rot}) scale(1.6)`, opacity: 0 },
-        { transform: `rotate(${rot}) scale(0.96)`, opacity: 1, offset: 0.7 },
-        { transform: `rotate(${rot}) scale(1)`, opacity: 1 },
-      ], { duration: 520, delay: i * 140, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "backwards" });
-    });
-  }, { threshold: 0.35 }).observe(stampList);
 
   /* ------------------------------------------------------------ story: the plan grows */
   const range = $("#story-range");
@@ -2394,10 +2514,11 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   /* ------------------------------------------------------------ about: area schedule counts up */
   const nums = $$(".num[data-count]");
   const fmt = new Intl.NumberFormat("en");
+  if (motion) nums.forEach((n) => { n.textContent = "0" + (n.dataset.suffix || ""); });
   new IntersectionObserver(([en], obs) => {
     if (!en.isIntersecting) return;
     obs.disconnect();
-    if (reduced.matches) return;
+    if (!motion) return;
     nums.forEach((n, i) => {
       const end = Number(n.dataset.count), suf = n.dataset.suffix || "";
       const t0 = performance.now() + i * 90, dur = 1300;
@@ -2408,7 +2529,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       };
       requestAnimationFrame(tick);
     });
-  }, { threshold: 0.4 }).observe($(".schedule"));
+  }, { threshold: 0.3 }).observe($(".schedule"));
 
   /* ------------------------------------------------------------ enquiry dialog */
   const dlg = $("#enquiry");
@@ -2444,6 +2565,100 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     done.focus();
   });
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
+
+
+  /* ------------------------------------------------------------ entrance: the plan draws itself */
+  const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
+  function enter(el, frames, delay, duration = 900) {
+    if (el) el.animate(frames, { duration, delay, easing: ease, fill: "backwards" });
+  }
+  if (motion) {
+    const up = (px) => [{ opacity: 0, transform: `translateY(${px}px)` }, { opacity: 1, transform: "none" }];
+    enter($(".site-header .bar"), up(-30), 80, 900);
+    enter($(".roads", svg), [{ opacity: 0 }, { opacity: 1 }], 60, 700);
+    enter($(".beyond", svg), [{ opacity: 0 }, { opacity: 1 }], 60, 900);
+    ["edu", "retail", "health", "hosp", "re", "land", "fm"].forEach((k, i) => {
+      $$(".zone", plots[k]).forEach((z) => enter(z, [{ opacity: 0, transform: "scale(0.86)" }, { opacity: 1, transform: "none" }], 160 + i * 85, 850));
+      $$(".bld", plots[k]).forEach((b) => enter(b, up(-16), 420 + i * 70, 800));
+    });
+    $$(".tree-canopy, .tree-light, .palm path, .umbrella circle", svg).forEach((t, i) => enter(t, [{ transform: "scale(0)" }, { transform: "none" }], 650 + ((i * 37) % 480), 700));
+    $$(".water, .pool, .track, .pitch, .park-lawn", svg).forEach((w, i) => enter(w, [{ opacity: 0 }, { opacity: 1 }], 380 + i * 30, 700));
+    $$(".label-in", svg).forEach((l, i) => enter(l, [{ opacity: 0, transform: "scale(0.6)" }, { opacity: 1, transform: "none" }], 1050 + i * 60, 700));
+    enter($(".traffic", svg), [{ opacity: 0 }, { opacity: 1 }], 1200, 800);
+    $$(".tb-sheet h1 > span").forEach((sp, i) => enter(sp, up(34), 260 + i * 110, 1000));
+    enter($(".tb-sheet"), [{ opacity: 0, transform: "translateX(-28px)" }, { opacity: 1, transform: "none" }], 180, 950);
+    enter($(".legend-search"), up(28), 420, 950);
+    enter($(".day-clock"), up(28), 560, 950);
+    enter($(".plan-note"), [{ opacity: 0 }, { opacity: 1 }], 1300, 700);
+    if (!card.hidden) enter(card, [{ opacity: 0, transform: "scale(0.92) translateY(10px)" }, { opacity: 1, transform: "none" }], 1250, 800);
+    enter(conns, [{ opacity: 0 }, { opacity: 1 }], 1150, 700);
+  }
+  document.documentElement.classList.remove("intro");
+
+  /* ------------------------------------------------------------ scroll reveals */
+  if (motion) {
+    // clipped elements never intersect, so an element hidden by clip-path is watched through its parent
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      if (en.target.__self) en.target.classList.add("in");
+      (en.target.__rv || []).forEach((t) => t.classList.add("in"));
+      io.unobserve(en.target);
+    }), { rootMargin: "0px 0px -10% 0px", threshold: 0.01 });
+    const watch = (el, cls, d) => {
+      el.classList.add(cls);
+      if (d) el.style.setProperty("--d", d);
+      if (cls === "rv-img") {
+        const host = el.parentElement;
+        (host.__rv = host.__rv || []).push(el);
+        io.observe(host);
+      } else { el.__self = true; io.observe(el); }
+    };
+    $$("main h2.display, .footer h2.display").forEach((h) => {
+      const words = h.textContent.trim().split(/\s+/);
+      h.textContent = "";
+      words.forEach((w, i) => {
+        const o = document.createElement("span"); o.className = "w";
+        const inner = document.createElement("span"); inner.className = "wi"; inner.textContent = w; inner.style.setProperty("--i", i);
+        o.appendChild(inner); h.appendChild(o);
+        if (i < words.length - 1) h.appendChild(document.createTextNode(" "));
+      });
+      watch(h, "rv-words");
+    });
+    [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-lede", ".about-lede", ".about-actions", ".search",
+      ".parcels-head", ".coast-col", ".comm-panel", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-panel" ? 140 : 0)));
+    [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+    $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .life-stage").forEach((el) => watch(el, "rv-img", 120));
+  }
+
+  /* ------------------------------------------------------------ parallax and the header */
+  const header = $("#site-header");
+  const para = $$("[data-parallax]");
+  const planSvg = svg;
+  let tops = [];
+  function measure() { tops = para.map((el) => { let y = 0, n = el; while (n) { y += n.offsetTop; n = n.offsetParent; } return y + el.offsetHeight / 2; }); }
+  let lastY = window.scrollY, ticking = false;
+  function onScroll() {
+    const y = window.scrollY, vh = window.innerHeight;
+    if (motion) {
+      para.forEach((el, i) => {
+        const c = tops[i] - (y + vh / 2);
+        if (Math.abs(c) < vh * 1.5) el.style.setProperty("--py", (-c * Number(el.dataset.parallax)).toFixed(1) + "px");
+      });
+      if (!mobile.matches && y < vh * 1.2) planSvg.style.translate = `0 ${(y * 0.22).toFixed(1)}px`;
+    }
+    const menuOpen = menuBtn.getAttribute("aria-expanded") === "true";
+    if (!menuOpen && y > 420 && y > lastY + 2) header.classList.add("is-hidden");
+    else if (menuOpen || y < lastY - 2 || y <= 420) header.classList.remove("is-hidden");
+    lastY = y; ticking = false;
+  }
+  measure();
+  window.addEventListener("resize", () => { measure(); onScroll(); });
+  window.addEventListener("load", measure);
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  header.addEventListener("focusin", () => header.classList.remove("is-hidden"));
+  onScroll();
 
   /* ------------------------------------------------------------ language: EN / AR preview */
   const AR = {

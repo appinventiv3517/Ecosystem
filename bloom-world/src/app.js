@@ -5,6 +5,48 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   // ?still freezes the ambient scene (traffic, boats, autoplay) for screenshots and motion capture
   const still = new URLSearchParams(location.search).has("still");
+  // motion is on unless the visitor asked for less of it (or a capture froze the page)
+  const motion = document.documentElement.classList.contains("anim");
+
+  /* ------------------------------------------------------------ smooth, weighted scrolling (fine pointers only) */
+  const smooth = (() => {
+    if (!motion || !window.matchMedia("(pointer: fine)").matches) return null;
+    document.documentElement.classList.add("smooth");
+    let target = window.scrollY, current = window.scrollY, running = false;
+    const max = () => document.documentElement.scrollHeight - window.innerHeight;
+    function tick() {
+      current += (target - current) * 0.1;
+      if (Math.abs(target - current) < 0.4) { current = target; running = false; }
+      window.scrollTo(0, current);
+      if (running) requestAnimationFrame(tick);
+    }
+    function start() { if (!running) { running = true; current = window.scrollY; requestAnimationFrame(tick); } }
+    window.addEventListener("wheel", (e) => {
+      if (e.ctrlKey || e.defaultPrevented || document.querySelector("dialog[open]")) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      if (e.target.closest && e.target.closest("textarea, select, .plan-pan, .clock-track")) return;
+      e.preventDefault();
+      const d = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      target = Math.max(0, Math.min(max(), (running ? target : window.scrollY) + d));
+      start();
+    }, { passive: false });
+    window.addEventListener("scroll", () => { if (!running) { target = current = window.scrollY; } }, { passive: true });
+    return { to(y) { target = Math.max(0, Math.min(max(), y)); start(); } };
+  })();
+  function scrollToEl(el) {
+    const y = el.id === "top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 84;
+    if (smooth) smooth.to(y); else window.scrollTo({ top: y, behavior: reduced.matches ? "auto" : "smooth" });
+  }
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || a.classList.contains("skip")) return;
+    const id = a.getAttribute("href").slice(1);
+    const el = id ? document.getElementById(id) : null;
+    if (!el) return;
+    e.preventDefault();
+    scrollToEl(el);
+    try { history.replaceState(null, "", "#" + id); } catch (err) { /* the viewer may refuse; scrolling still works */ }
+  });
   if (still) window.addEventListener("load", () => document.querySelectorAll("svg").forEach((v) => v.pauseAnimations && v.pauseAnimations()));
   const SVGNS = "http://www.w3.org/2000/svg";
 
@@ -17,7 +59,7 @@
     edu: { name: "Education", op: "Bloom Education", hour: "07:45", moment: "The school run", zc: "var(--edu)",
       text: "Schools anchor Bloom's communities, from Brighton College to Bloom World Academy, so learning stays close to home.",
       stat: "15 schools serving more than 20,000 students", links: ["re", "land", "health"], url: "https://www.bloomeducation.com/", visit: "Visit Bloom Education",
-      at: [675, 260] },
+      at: [675, 337] },
     fm: { name: "Facilities Management", op: "Bloom Facilities Management", hour: "10:00", moment: "Everything working", zc: "var(--fm)",
       text: "Behind the scenes, community and facilities management keeps homes, buildings and shared spaces running day to day.",
       stat: "8,500+ units managed", links: ["re", "hosp", "retail"], url: "https://bfm.ae/", visit: "Visit Bloom Facilities Management",
@@ -454,7 +496,7 @@
     if (o.mode) { setMode(o.mode); }
     if ("community" in o) form.elements.community.value = o.community || "";
     if ("type" in o) form.elements.type.value = o.type || "";
-    document.getElementById("find").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth" });
+    scrollToEl(document.getElementById("find"));
     if (submit) form.requestSubmit();
   }
   $$(".try-chip").forEach((b) => b.addEventListener("click", () => {
@@ -513,21 +555,56 @@
   new IntersectionObserver(([en], obs) => {
     if (!en.isIntersecting) return;
     obs.disconnect();
-    if (reduced.matches) return;
-    pins.forEach((p, i) => { p.style.setProperty("animation-delay", "0s"); p.querySelector(".pin-head").style.animationDelay = i * 110 + "ms"; p.classList.add("is-drop"); });
-  }, { threshold: 0.4 }).observe($("#coast"));
+    $(".pins").classList.add("dropped");
+    if (!motion) return;
+    pins.forEach((p, i) => { p.querySelector(".pin-head").style.animationDelay = 200 + i * 120 + "ms"; p.classList.add("is-drop"); });
+  }, { threshold: 0.35 }).observe($("#coast"));
   const coastSvg = $(".coast-svg");
   new IntersectionObserver(([en]) => { if (still || reduced.matches || !en.isIntersecting) coastSvg.pauseAnimations(); else coastSvg.unpauseAnimations(); }).observe(coastSvg);
 
-  /* ------------------------------------------------------------ life strips */
-  const strips = $$(".strip");
-  strips.forEach((s) => {
-    const b = $(".strip-btn", s);
-    const open = () => strips.forEach((o) => { const on = o === s; o.classList.toggle("is-open", on); $(".strip-btn", o).setAttribute("aria-expanded", String(on)); });
-    b.addEventListener("click", open);
-    b.addEventListener("focus", open);
-    s.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !mobile.matches) open(); });
+  /* ------------------------------------------------------------ life: one day, hour by hour */
+  const lifeSec = $("#life");
+  const ways = $$(".way");
+  const stageImgs = $$(".stage-img");
+  const WAY_MS = 5600;
+  let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
+  function restartBar() {
+    const bar = $(".way-bar i", ways[wi]);
+    bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+  }
+  function scheduleWay() {
+    clearTimeout(wTimer);
+    lifeSec.classList.toggle("is-auto", wAuto);
+    if (wAuto && lifeVisible && !document.hidden) wTimer = setTimeout(() => showWay((wi + 1) % ways.length), WAY_MS);
+  }
+  function showWay(i) {
+    const prev = wi;
+    wi = i;
+    ways.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+    if (prev !== i) {
+      stageImgs.forEach((im, j) => { im.classList.toggle("is-on", j === i); im.classList.remove("is-wipe"); });
+      if (motion) { void stageImgs[i].offsetWidth; stageImgs[i].classList.add("is-wipe"); }
+    }
+    const b = ways[i];
+    $("#stage-time").textContent = $(".way-time", b).textContent;
+    $("#stage-title").textContent = $(".way-title", b).textContent;
+    $("#stage-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
+    restartBar();
+    scheduleWay();
+  }
+  ways.forEach((b, i) => {
+    b.addEventListener("click", () => { wAuto = false; showWay(i); });
+    b.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && wi !== i) { wAuto = false; showWay(i); } });
   });
+  $(".ways").addEventListener("keydown", (e) => {
+    if (!["ArrowDown", "ArrowUp"].includes(e.key)) return;
+    e.preventDefault(); wAuto = false;
+    const n = (wi + (e.key === "ArrowDown" ? 1 : -1) + ways.length) % ways.length;
+    showWay(n); ways[n].focus();
+  });
+  new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; if (lifeVisible) restartBar(); scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
+  document.addEventListener("visibilitychange", scheduleWay);
+  showWay(0);
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
@@ -552,22 +629,6 @@
   $$(".store").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("Store links are not connected in this prototype."); }));
   $$("[data-construction]").forEach((a) => a.addEventListener("click", () => { showApp(1); toast("Construction updates live in the Bloom Super App, for the homes you own."); }));
   showApp(0);
-
-  /* ------------------------------------------------------------ awards: stamps press in */
-  const stampList = $("#stamps");
-  new IntersectionObserver(([en], obs) => {
-    if (!en.isIntersecting) return;
-    obs.disconnect();
-    if (reduced.matches) return;
-    $$(".stamp", stampList).forEach((s, i) => {
-      const rot = getComputedStyle(s).getPropertyValue("--rot").trim() || "0deg";
-      s.animate([
-        { transform: `rotate(${rot}) scale(1.6)`, opacity: 0 },
-        { transform: `rotate(${rot}) scale(0.96)`, opacity: 1, offset: 0.7 },
-        { transform: `rotate(${rot}) scale(1)`, opacity: 1 },
-      ], { duration: 520, delay: i * 140, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "backwards" });
-    });
-  }, { threshold: 0.35 }).observe(stampList);
 
   /* ------------------------------------------------------------ story: the plan grows */
   const range = $("#story-range");
@@ -605,10 +666,11 @@
   /* ------------------------------------------------------------ about: area schedule counts up */
   const nums = $$(".num[data-count]");
   const fmt = new Intl.NumberFormat("en");
+  if (motion) nums.forEach((n) => { n.textContent = "0" + (n.dataset.suffix || ""); });
   new IntersectionObserver(([en], obs) => {
     if (!en.isIntersecting) return;
     obs.disconnect();
-    if (reduced.matches) return;
+    if (!motion) return;
     nums.forEach((n, i) => {
       const end = Number(n.dataset.count), suf = n.dataset.suffix || "";
       const t0 = performance.now() + i * 90, dur = 1300;
@@ -619,7 +681,7 @@
       };
       requestAnimationFrame(tick);
     });
-  }, { threshold: 0.4 }).observe($(".schedule"));
+  }, { threshold: 0.3 }).observe($(".schedule"));
 
   /* ------------------------------------------------------------ enquiry dialog */
   const dlg = $("#enquiry");
@@ -655,6 +717,100 @@
     done.focus();
   });
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
+
+
+  /* ------------------------------------------------------------ entrance: the plan draws itself */
+  const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
+  function enter(el, frames, delay, duration = 900) {
+    if (el) el.animate(frames, { duration, delay, easing: ease, fill: "backwards" });
+  }
+  if (motion) {
+    const up = (px) => [{ opacity: 0, transform: `translateY(${px}px)` }, { opacity: 1, transform: "none" }];
+    enter($(".site-header .bar"), up(-30), 80, 900);
+    enter($(".roads", svg), [{ opacity: 0 }, { opacity: 1 }], 60, 700);
+    enter($(".beyond", svg), [{ opacity: 0 }, { opacity: 1 }], 60, 900);
+    ["edu", "retail", "health", "hosp", "re", "land", "fm"].forEach((k, i) => {
+      $$(".zone", plots[k]).forEach((z) => enter(z, [{ opacity: 0, transform: "scale(0.86)" }, { opacity: 1, transform: "none" }], 160 + i * 85, 850));
+      $$(".bld", plots[k]).forEach((b) => enter(b, up(-16), 420 + i * 70, 800));
+    });
+    $$(".tree-canopy, .tree-light, .palm path, .umbrella circle", svg).forEach((t, i) => enter(t, [{ transform: "scale(0)" }, { transform: "none" }], 650 + ((i * 37) % 480), 700));
+    $$(".water, .pool, .track, .pitch, .park-lawn", svg).forEach((w, i) => enter(w, [{ opacity: 0 }, { opacity: 1 }], 380 + i * 30, 700));
+    $$(".label-in", svg).forEach((l, i) => enter(l, [{ opacity: 0, transform: "scale(0.6)" }, { opacity: 1, transform: "none" }], 1050 + i * 60, 700));
+    enter($(".traffic", svg), [{ opacity: 0 }, { opacity: 1 }], 1200, 800);
+    $$(".tb-sheet h1 > span").forEach((sp, i) => enter(sp, up(34), 260 + i * 110, 1000));
+    enter($(".tb-sheet"), [{ opacity: 0, transform: "translateX(-28px)" }, { opacity: 1, transform: "none" }], 180, 950);
+    enter($(".legend-search"), up(28), 420, 950);
+    enter($(".day-clock"), up(28), 560, 950);
+    enter($(".plan-note"), [{ opacity: 0 }, { opacity: 1 }], 1300, 700);
+    if (!card.hidden) enter(card, [{ opacity: 0, transform: "scale(0.92) translateY(10px)" }, { opacity: 1, transform: "none" }], 1250, 800);
+    enter(conns, [{ opacity: 0 }, { opacity: 1 }], 1150, 700);
+  }
+  document.documentElement.classList.remove("intro");
+
+  /* ------------------------------------------------------------ scroll reveals */
+  if (motion) {
+    // clipped elements never intersect, so an element hidden by clip-path is watched through its parent
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      if (en.target.__self) en.target.classList.add("in");
+      (en.target.__rv || []).forEach((t) => t.classList.add("in"));
+      io.unobserve(en.target);
+    }), { rootMargin: "0px 0px -10% 0px", threshold: 0.01 });
+    const watch = (el, cls, d) => {
+      el.classList.add(cls);
+      if (d) el.style.setProperty("--d", d);
+      if (cls === "rv-img") {
+        const host = el.parentElement;
+        (host.__rv = host.__rv || []).push(el);
+        io.observe(host);
+      } else { el.__self = true; io.observe(el); }
+    };
+    $$("main h2.display, .footer h2.display").forEach((h) => {
+      const words = h.textContent.trim().split(/\s+/);
+      h.textContent = "";
+      words.forEach((w, i) => {
+        const o = document.createElement("span"); o.className = "w";
+        const inner = document.createElement("span"); inner.className = "wi"; inner.textContent = w; inner.style.setProperty("--i", i);
+        o.appendChild(inner); h.appendChild(o);
+        if (i < words.length - 1) h.appendChild(document.createTextNode(" "));
+      });
+      watch(h, "rv-words");
+    });
+    [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-lede", ".about-lede", ".about-actions", ".search",
+      ".parcels-head", ".coast-col", ".comm-panel", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
+      ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-panel" ? 140 : 0)));
+    [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));
+    $$(".stamp").forEach((el, i) => watch(el, "rv", i * 130));
+    $$(".parcel-media, .comm-media, .story-photo, .app-media, .life-stage").forEach((el) => watch(el, "rv-img", 120));
+  }
+
+  /* ------------------------------------------------------------ parallax and the header */
+  const header = $("#site-header");
+  const para = $$("[data-parallax]");
+  const planSvg = svg;
+  let tops = [];
+  function measure() { tops = para.map((el) => { let y = 0, n = el; while (n) { y += n.offsetTop; n = n.offsetParent; } return y + el.offsetHeight / 2; }); }
+  let lastY = window.scrollY, ticking = false;
+  function onScroll() {
+    const y = window.scrollY, vh = window.innerHeight;
+    if (motion) {
+      para.forEach((el, i) => {
+        const c = tops[i] - (y + vh / 2);
+        if (Math.abs(c) < vh * 1.5) el.style.setProperty("--py", (-c * Number(el.dataset.parallax)).toFixed(1) + "px");
+      });
+      if (!mobile.matches && y < vh * 1.2) planSvg.style.translate = `0 ${(y * 0.22).toFixed(1)}px`;
+    }
+    const menuOpen = menuBtn.getAttribute("aria-expanded") === "true";
+    if (!menuOpen && y > 420 && y > lastY + 2) header.classList.add("is-hidden");
+    else if (menuOpen || y < lastY - 2 || y <= 420) header.classList.remove("is-hidden");
+    lastY = y; ticking = false;
+  }
+  measure();
+  window.addEventListener("resize", () => { measure(); onScroll(); });
+  window.addEventListener("load", measure);
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  header.addEventListener("focusin", () => header.classList.remove("is-hidden"));
+  onScroll();
 
   /* ------------------------------------------------------------ language: EN / AR preview */
   const AR = {
