@@ -938,18 +938,34 @@
         if (!info && target.closest(HOVER)) key = "hover";
       }
       if (key === "hover") key += isDeep(target.closest(HOVER)) ? ":deep" : "";
-      if (key === lastKey) return;
+      if (key === lastKey) { clearTimeout(closeT); return; }
+      // leaving a labelled thing waits a beat, so crossing a small gap between rows doesn't flicker
+      if (lastKey.startsWith("label") && !info) {
+        clearTimeout(closeT);
+        closeT = setTimeout(() => apply(key, null), 140);
+        return;
+      }
+      clearTimeout(closeT);
+      apply(key, info);
+    }
+    let closeT = 0;
+    function apply(key, info) {
+      const wasOn = btag.classList.contains("is-on");
       lastKey = key;
+      if (info) {
+        btag.style.setProperty("--cc", info.c);
+        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
+        const html = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+        if (btagText.innerHTML !== html) {
+          btagText.innerHTML = html;
+          if (wasOn) { btagText.classList.remove("is-swap"); void btagText.offsetWidth; btagText.classList.add("is-swap"); }
+        }
+      }
       blob.classList.toggle("is-text", key === "text");
       blob.classList.toggle("is-hover", key.startsWith("hover"));
       blob.classList.toggle("is-sheen", key === "hover:deep");
       blob.classList.toggle("is-label", !!info);
       btag.classList.toggle("is-on", !!info);
-      if (info) {
-        btag.style.setProperty("--cc", info.c);
-        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
-        btagText.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
-      }
     }
     const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
     let magnet = null;
@@ -1015,7 +1031,7 @@
       const sx = (1 + sp) * (1 - squish * 0.35), sy = (1 - sp * 0.4) * (1 - squish * 0.35);
       head.style.transform = `rotate(${ang.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
       blob.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
-      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0) rotate(${Math.max(-8, Math.min(8, vx * 0.3)).toFixed(1)}deg)`;
+      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0)`;
       requestAnimationFrame(loop);
     })();
   }

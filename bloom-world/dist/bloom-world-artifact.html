@@ -1166,6 +1166,7 @@ html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { curso
 .blob.is-hover .bd-head { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
 .blob.is-hover :is(.bd-t1, .bd-t2, .bd-t3) { width: 0; height: 0; margin: 0; }
 .blob.is-label, .blob.is-text, .blob.is-out { opacity: 0; }
+.blob { transition: opacity 0.2s; }
 .blob.is-sheen { mix-blend-mode: normal; }
 .blob.is-sheen:not(.is-label):not(.is-text):not(.is-out) { opacity: 0.28; }
 .blob { transition: opacity 0.25s; }
@@ -1176,11 +1177,14 @@ html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { curso
   position: fixed; left: 0; top: 0; z-index: 91; pointer-events: none; width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%;
   display: grid; place-items: center; background: var(--cc, var(--ink)); color: var(--cf, #fff); box-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.55);
   font: 700 0.86rem/1 var(--display); letter-spacing: 0.01em; will-change: transform;
-  scale: 0; transition: scale 0.45s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.3s;
+  scale: 0.25; opacity: 0; transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s, background-color 0.35s;
 }
-.blob-tag span { display: inline-flex; align-items: center; gap: 5px; }
+.blob-tag span { display: inline-flex; align-items: center; gap: 5px; opacity: 0; transition: opacity 0.2s; }
+.blob-tag.is-on span { opacity: 1; transition-delay: 0.12s; }
+.blob-tag span.is-swap { animation: tag-swap 0.3s ease; }
+@keyframes tag-swap { from { opacity: 0; } }
 .blob-tag .ic { width: 14px; height: 14px; }
-.blob-tag.is-on { scale: 1; }
+.blob-tag.is-on { scale: 1; opacity: 1; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }
 
 </style>
@@ -3180,18 +3184,34 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
         if (!info && target.closest(HOVER)) key = "hover";
       }
       if (key === "hover") key += isDeep(target.closest(HOVER)) ? ":deep" : "";
-      if (key === lastKey) return;
+      if (key === lastKey) { clearTimeout(closeT); return; }
+      // leaving a labelled thing waits a beat, so crossing a small gap between rows doesn't flicker
+      if (lastKey.startsWith("label") && !info) {
+        clearTimeout(closeT);
+        closeT = setTimeout(() => apply(key, null), 140);
+        return;
+      }
+      clearTimeout(closeT);
+      apply(key, info);
+    }
+    let closeT = 0;
+    function apply(key, info) {
+      const wasOn = btag.classList.contains("is-on");
       lastKey = key;
+      if (info) {
+        btag.style.setProperty("--cc", info.c);
+        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
+        const html = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+        if (btagText.innerHTML !== html) {
+          btagText.innerHTML = html;
+          if (wasOn) { btagText.classList.remove("is-swap"); void btagText.offsetWidth; btagText.classList.add("is-swap"); }
+        }
+      }
       blob.classList.toggle("is-text", key === "text");
       blob.classList.toggle("is-hover", key.startsWith("hover"));
       blob.classList.toggle("is-sheen", key === "hover:deep");
       blob.classList.toggle("is-label", !!info);
       btag.classList.toggle("is-on", !!info);
-      if (info) {
-        btag.style.setProperty("--cc", info.c);
-        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
-        btagText.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
-      }
     }
     const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
     let magnet = null;
@@ -3257,7 +3277,7 @@ html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), backgrou
       const sx = (1 + sp) * (1 - squish * 0.35), sy = (1 - sp * 0.4) * (1 - squish * 0.35);
       head.style.transform = `rotate(${ang.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
       blob.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
-      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0) rotate(${Math.max(-8, Math.min(8, vx * 0.3)).toFixed(1)}deg)`;
+      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0)`;
       requestAnimationFrame(loop);
     })();
   }
