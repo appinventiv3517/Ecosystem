@@ -1165,12 +1165,17 @@ html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { curso
 
 /* selection brackets that trail the crosshair and snap around what you point at */
 .cur-box { position: fixed; left: 0; top: 0; will-change: transform, width, height; filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); transition: opacity 0.25s; }
-.cb { position: absolute; width: 9px; height: 9px; border: 0 solid var(--cc, var(--ink)); transition: border-color 0.3s, width 0.3s var(--ease), height 0.3s var(--ease); }
-.cb-tl { left: 0; top: 0; border-width: 2px 0 0 2px; }
-.cb-tr { right: 0; top: 0; border-width: 2px 2px 0 0; }
-.cb-bl { left: 0; bottom: 0; border-width: 0 0 2px 2px; }
-.cb-br { right: 0; bottom: 0; border-width: 0 2px 2px 0; }
-.cur.is-snap .cb { width: 14px; height: 14px; }
+.cb { position: absolute; width: 10px; height: 10px; border: 0 solid var(--cc, var(--k)); transition: border-color 0.3s, width 0.3s var(--ease), height 0.3s var(--ease); }
+.cb-tl { --k: var(--re); left: 0; top: 0; border-width: 3px 0 0 3px; border-top-left-radius: 3px; }
+.cb-tr { --k: var(--edu); right: 0; top: 0; border-width: 3px 3px 0 0; border-top-right-radius: 3px; }
+.cb-bl { --k: var(--land); left: 0; bottom: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 3px; }
+.cb-br { --k: var(--hosp); right: 0; bottom: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 3px; }
+.cur.is-snap .cb { width: 16px; height: 16px; }
+.cur.is-snap .cur-box { animation: lock-on 0.45s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes lock-on { 40% { filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgb(255 255 255 / 0.9)); } }
+.cur.is-label .cur-tag { animation: tag-pop 0.45s cubic-bezier(0.3, 1.8, 0.5, 1); }
+@keyframes tag-pop { from { scale: 0.3; rotate: -12deg; } }
+.cur-tag { transform-origin: 0 100%; }
 .cur.is-down .cur-box { scale: 0.96; }
 .cur-box { transition: opacity 0.25s, scale 0.15s var(--ease); }
 .cur-tag {
@@ -1183,5 +1188,6 @@ html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { curso
 .cur.is-label .cur-tag { opacity: 1; translate: 0 0; }
 .cur.is-flip .cur-tag { bottom: auto; top: calc(100% + 6px); }
 .cur.is-text .cur-ret, .cur.is-out .cur-ret, .cur.is-out .cur-box { opacity: 0; }
+.cur-bit { position: fixed; left: 0; top: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 2px; border: 1.5px solid #fff; pointer-events: none; z-index: 89; }
 .cur-ping { position: fixed; left: 0; top: 0; width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 2px solid var(--ink); pointer-events: none; z-index: 89; box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }

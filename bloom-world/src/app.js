@@ -912,6 +912,24 @@
     const ret = $(".cur-ret", cur), box = $(".cur-box", cur), tag = $(".cur-tag", cur);
     let mx = -100, my = -100;
     const b = { x: -100, y: -100, w: 28, h: 28 };
+    const v = { x: 0, y: 0, w: 0, h: 0 };
+    let rot = 0, lastMove = 0, pmx = -100, pmy = -100, lastBit = 0, bits = 0;
+    const ZONES = ["--re", "--edu", "--land", "--hosp", "--retail", "--health", "--water"];
+    // little plot tiles that tumble off the frame when you move fast
+    function bit(x, y, spread, life) {
+      if (bits > 28) return;
+      bits++;
+      const el = document.createElement("span");
+      el.className = "cur-bit";
+      el.style.background = `var(${ZONES[Math.floor(Math.random() * ZONES.length)]})`;
+      document.body.appendChild(el);
+      const a = Math.random() * Math.PI * 2, d = spread * (0.5 + Math.random() * 0.6), r0 = Math.random() * 90;
+      el.animate([
+        { transform: `translate(${x}px, ${y}px) rotate(${r0}deg) scale(0.3)`, opacity: 1 },
+        { transform: `translate(${x + Math.cos(a) * d}px, ${y + Math.sin(a) * d}px) rotate(${r0 + 120}deg) scale(1)`, opacity: 1, offset: 0.3 },
+        { transform: `translate(${x + Math.cos(a) * d * 1.2}px, ${y + Math.sin(a) * d + 46}px) rotate(${r0 + 320}deg) scale(0.4)`, opacity: 0 },
+      ], { duration: life, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)" }).onfinish = () => { el.remove(); bits--; };
+    }
     let snapEl = null;
     // what the frame says over each kind of thing (first match wins)
     const LABELS = [
@@ -964,7 +982,11 @@
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      if (cur.classList.contains("is-out")) { b.x = mx - 14; b.y = my - 14; cur.classList.remove("is-out"); }
+      if (cur.classList.contains("is-out")) { b.x = mx - 14; b.y = my - 14; pmx = mx; pmy = my; cur.classList.remove("is-out"); }
+      const sp = Math.hypot(mx - pmx, my - pmy), now = performance.now();
+      if (sp > 22 && now - lastBit > 45 && !snapEl) { lastBit = now; bit(mx, my, 14, 800); }
+      if (now - lastMove > 1400) cur.classList.remove("is-idle");
+      lastMove = now; pmx = mx; pmy = my;
       setState(e.target);
       pullMagnet(e.target);
     }, { passive: true });
@@ -974,6 +996,9 @@
     window.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse") return;
       cur.classList.add("is-down");
+      // the frame squishes and springs back, and a handful of tiles pop out
+      v.w -= 14; v.h -= 14; v.x += 7; v.y += 7;
+      for (let n = 0; n < 9; n++) bit(mx, my, 44, 900);
       // a square ping, like marking a point on the plan
       const ping = document.createElement("span");
       ping.className = "cur-ping";
@@ -984,23 +1009,39 @@
       ], { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }).onfinish = () => ping.remove();
     });
     window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
-    (function loop() {
+    let prevX = 0, prevY = 0;
+    (function loop(t) {
       let tx, ty, tw, th;
-      if (snapEl && snapEl.isConnected) {
+      const snapped = snapEl && snapEl.isConnected;
+      const dvx = mx - prevX, dvy = my - prevY; prevX = mx; prevY = my;
+      const idle = !snapped && performance.now() - lastMove > 1400;
+      cur.classList.toggle("is-idle", idle);
+      if (snapped) {
         const r = snapEl.getBoundingClientRect(), pad = 6;
         tx = r.left - pad; ty = r.top - pad; tw = r.width + pad * 2; th = r.height + pad * 2;
       } else {
-        const size = cur.classList.contains("is-label") ? 40 : 28;
-        tx = mx - size / 2; ty = my - size / 2; tw = size; th = size;
+        // the frame stretches along fast movement, and breathes while you rest
+        const base = cur.classList.contains("is-label") ? 42 : idle ? 30 + Math.sin((t || 0) / 380) * 4 : 30;
+        tw = base + Math.min(Math.abs(dvx) * 1.4, 40); th = base + Math.min(Math.abs(dvy) * 1.4, 40);
+        tx = mx - tw / 2; ty = my - th / 2;
       }
-      const k = 0.22;
-      b.x += (tx - b.x) * k; b.y += (ty - b.y) * k; b.w += (tw - b.w) * k; b.h += (th - b.h) * k;
-      box.style.transform = `translate3d(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px, 0)`;
-      box.style.width = `${b.w.toFixed(1)}px`; box.style.height = `${b.h.toFixed(1)}px`;
+      // springs, so it overshoots a little and settles: a jelly snap around whatever you point at
+      // position follows firmly; size is the wobbly part
+      const k = 0.2, damp = 0.62, kp = 0.3, dp = 0.42;
+      v.x = v.x * dp + (tx - b.x) * kp; b.x += v.x;
+      v.y = v.y * dp + (ty - b.y) * kp; b.y += v.y;
+      v.w = v.w * damp + (tw - b.w) * k; b.w += v.w;
+      v.h = v.h * damp + (th - b.h) * k; b.h += v.h;
+      // tilt into the movement; spin slowly when idle; square up when framing something
+      if (!idle) rot = ((rot + 180) % 360 + 360) % 360 - 180;
+      const tRot = snapped ? Math.round(rot / 90) * 90 : idle ? rot + 1.6 : Math.max(-22, Math.min(22, dvx * 1.2));
+      rot += (tRot - rot) * (idle ? 1 : 0.18);
+      box.style.transform = `translate3d(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px, 0) rotate(${rot.toFixed(1)}deg)`;
+      box.style.width = `${Math.max(18, b.w).toFixed(1)}px`; box.style.height = `${Math.max(18, b.h).toFixed(1)}px`;
       cur.classList.toggle("is-flip", b.y < 40);
-      ret.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+      ret.style.transform = `translate3d(${mx}px, ${my}px, 0) rotate(${(dvx * 2).toFixed(1)}deg)`;
       requestAnimationFrame(loop);
-    })();
+    })(0);
   }
 
   /* ------------------------------------------------------------ entrance: the plan draws itself */
