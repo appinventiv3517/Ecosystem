@@ -1146,41 +1146,36 @@ body.dock-on .toast { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
 .dock :focus-visible { outline-color: var(--site); }
 @media (prefers-reduced-motion: reduce) { .dock { transition: opacity 0.2s; } }
 
-/* ---------------------------------------------------------------- custom cursor: a liquid blob (fine pointers with motion only) */
+/* ---------------------------------------------------------------- custom cursor: a bloom (fine pointers with motion only) */
+.cur { position: fixed; inset: 0 auto auto 0; z-index: 90; pointer-events: none; display: none; }
+html.has-cursor .cur { display: block; }
 html.has-cursor, html.has-cursor * { cursor: none !important; }
 html.has-cursor :is(input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]) { cursor: text !important; }
-html.has-cursor:has(dialog[open]) :is(.blob, .blob-tag) { display: none; }
+html.has-cursor:has(dialog[open]) .cur { display: none; }
 html.has-cursor:has(dialog[open]) * { cursor: auto !important; }
 html.has-cursor:has(dialog[open]) :is(button, a, label, [role="button"]) { cursor: pointer !important; }
 
-/* the blob sits straight on the page so it can invert whatever is under it */
-.blob { position: fixed; left: 0; top: 0; width: 260px; height: 260px; margin: -130px 0 0 -130px; z-index: 90; pointer-events: none; mix-blend-mode: difference; filter: url(#goo); will-change: transform; transition: opacity 0.25s; }
-.bd { position: absolute; left: 130px; top: 130px; border-radius: 50%; background: #fff; will-change: transform; transition: width 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), height 0.45s cubic-bezier(0.3, 1.5, 0.5, 1), margin 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
-.bd-head { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
-.bd-t1 { width: 16px; height: 16px; margin: -8px 0 0 -8px; }
-.bd-t2 { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
-.bd-t3 { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
-.bd-drop { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
-.blob.is-hover .bd-head { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
-.blob.is-hover :is(.bd-t1, .bd-t2, .bd-t3) { width: 0; height: 0; margin: 0; }
-.blob.is-label, .blob.is-text, .blob.is-out { opacity: 0; }
-.blob { transition: opacity 0.2s; }
-.blob.is-sheen { mix-blend-mode: normal; }
-.blob.is-sheen:not(.is-label):not(.is-text):not(.is-out) { opacity: 0.28; }
-.blob { transition: opacity 0.25s; }
-.bd { transition-property: width, height, margin, background-color; }
+.cur-fl { position: fixed; left: 0; top: 0; width: 64px; height: 64px; margin: -32px 0 0 -32px; overflow: visible; will-change: transform; filter: drop-shadow(0 3px 5px rgb(0 0 0 / 0.28)); transition: opacity 0.2s; }
+.fl-petals { transform-box: view-box; transform-origin: center; transform: scale(var(--open, 0.5)); transition: transform 0.45s cubic-bezier(0.3, 1.7, 0.5, 1); }
+.fl-petals ellipse { fill: var(--cc, var(--red)); stroke: #fff; stroke-width: 1.6; transition: fill 0.3s; }
+.fl-petals ellipse:nth-child(even) { fill: color-mix(in srgb, var(--cc, var(--red)) 78%, #fff); }
+.fl-heart { fill: var(--re); stroke: var(--ink); stroke-width: 1.6; transform-box: fill-box; transform-origin: center; transition: transform 0.3s var(--ease); }
+.cur.is-hover .cur-fl { --open: 1; }
+.cur.is-label .cur-fl { --open: 1.12; }
+.cur.is-down .fl-heart { transform: scale(1.5); }
+.cur.is-down .cur-fl { --open: 0.35; }
 
-/* over plots and cards: a coloured bubble with the action */
-.blob-tag {
-  position: fixed; left: 0; top: 0; z-index: 91; pointer-events: none; width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%;
-  display: grid; place-items: center; background: var(--cc, var(--ink)); color: var(--cf, #fff); box-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.55);
-  font: 700 0.86rem/1 var(--display); letter-spacing: 0.01em; will-change: transform;
-  scale: 0.25; opacity: 0; transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s, background-color 0.35s;
+.cur-tag {
+  position: fixed; left: 0; top: 0; padding: 8px 12px; border-radius: 999px; white-space: nowrap; will-change: transform;
+  font: 700 0.84rem/1 var(--display); color: var(--cf, #fff); background: var(--cc, var(--ink)); border: 2px solid #fff;
+  box-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.5); display: inline-flex; align-items: center; gap: 6px;
+  opacity: 0; scale: 0.4; transform-origin: 0 50%; transition: opacity 0.2s, scale 0.4s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.3s;
 }
-.blob-tag span { display: inline-flex; align-items: center; gap: 5px; opacity: 0; transition: opacity 0.2s; }
-.blob-tag.is-on span { opacity: 1; transition-delay: 0.12s; }
-.blob-tag span.is-swap { animation: tag-swap 0.3s ease; }
-@keyframes tag-swap { from { opacity: 0; } }
-.blob-tag .ic { width: 14px; height: 14px; }
-.blob-tag.is-on { scale: 1; opacity: 1; }
+.cur-tag .ic { width: 14px; height: 14px; }
+.cur.is-label .cur-tag { opacity: 1; scale: 1; }
+.cur.is-text .cur-fl, .cur.is-out .cur-fl, .cur.is-out .cur-tag, .cur.is-text .cur-tag { opacity: 0; }
+
+.cur-leaf, .cur-petal { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 89; }
+.cur-leaf { width: 10px; height: 16px; margin: -8px 0 0 -5px; border-radius: 0 100% 0 100%; background: var(--land); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.7); }
+.cur-petal { width: 9px; height: 14px; margin: -7px 0 0 -4.5px; border-radius: 50%; border: 1.5px solid #fff; }
 html.has-cursor .is-magnetic { transition: translate 0.35s var(--ease), background-color 0.2s, color 0.2s, border-color 0.2s; }

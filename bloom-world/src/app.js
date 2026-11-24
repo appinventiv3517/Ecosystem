@@ -898,18 +898,18 @@
   $("#enq-back").addEventListener("click", () => { dlg.close(); window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }); });
 
 
-  /* ------------------------------------------------------------ custom cursor: a liquid blob */
+  /* ------------------------------------------------------------ custom cursor: a bloom that rolls, opens and drops leaves */
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (motion && finePointer.matches) {
-    // the goo: blur the dots together, then sharpen the edge back up so they merge like liquid
-    document.body.insertAdjacentHTML("beforeend", `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="5"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter></svg>
-      <div class="blob is-out" aria-hidden="true"><i class="bd bd-t3"></i><i class="bd bd-t2"></i><i class="bd bd-t1"></i><i class="bd bd-head"></i></div>
-      <div class="blob-tag" aria-hidden="true"><span></span></div>`);
+    const cur = document.createElement("div");
+    cur.className = "cur is-out";
+    cur.setAttribute("aria-hidden", "true");
+    cur.innerHTML = '<svg class="cur-fl" viewBox="0 0 64 64"><g class="fl-petals"><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(0 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(72 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(144 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(216 32 32)"/><ellipse cx="32" cy="20" rx="7" ry="11.5" transform="rotate(288 32 32)"/></g><circle class="fl-heart" cx="32" cy="32" r="5.5"/></svg><span class="cur-tag"></span>';
+    document.body.appendChild(cur);
     document.documentElement.classList.add("has-cursor");
-    const blob = $(".blob"), head = $(".bd-head", blob), tails = [$(".bd-t1", blob), $(".bd-t2", blob), $(".bd-t3", blob)];
-    const btag = $(".blob-tag"), btagText = $("span", btag);
-    let mx = -300, my = -300, hx = -300, hy = -300, gx = -300, gy = -300;
-    const tp = tails.map(() => ({ x: -300, y: -300 }));
+    const fl = $(".cur-fl", cur), tag = $(".cur-tag", cur);
+    let mx = -100, my = -100, tx = -100, ty = -100, spin = 0, lastX = -100, lastY = -100, travel = 0;
+    // what the bloom says over each kind of thing (first match wins)
     const LABELS = [
       [".plot, .plot-label", (el) => ({ t: "Explore", c: `var(--${el.dataset.biz})` })],
       [".parcel-hit", () => ({ t: "Enquire", c: "var(--red)" })],
@@ -918,55 +918,30 @@
       [".role", () => ({ t: "Try it", c: "var(--fm)" })],
       [".story.is-pinned .story-reel", () => ({ t: "Scroll", c: "var(--site)", ic: "i-down" })],
     ];
-    const HOVER = "a, button, [role='button'], label, select, summary, input[type='range']";
+    const HOVER = "a, button, [role='button'], label, select, summary, input[type='radio'], input[type='range']";
     const TEXT = "input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea";
     let lastKey = "";
-    // on dark or coloured buttons an inverted blob turns garish, so there it becomes a soft sheen instead
-    function isDeep(el) {
-      for (let n = el; n && n !== document.body; n = n.parentElement) {
-        const m = getComputedStyle(n).backgroundColor.match(/[\d.]+/g);
-        if (m && (m.length < 4 || Number(m[3]) > 0.5)) { const [r, g, b] = m.map(Number); return (0.299 * r + 0.587 * g + 0.114 * b) < 150; }
-      }
-      return false;
-    }
     function setState(target) {
       if (!target.closest) return;
       let key = "", info = null;
       if (target.closest(TEXT)) key = "text";
       else {
-        for (const [sel, fn] of LABELS) { const m = target.closest(sel); if (m) { info = fn(m); key = "label:" + info.t + info.c; break; } }
+        for (const [sel, fn] of LABELS) { const el = target.closest(sel); if (el) { info = fn(el); key = "label:" + info.t + info.c; break; } }
         if (!info && target.closest(HOVER)) key = "hover";
       }
-      if (key === "hover") key += isDeep(target.closest(HOVER)) ? ":deep" : "";
-      if (key === lastKey) { clearTimeout(closeT); return; }
-      // leaving a labelled thing waits a beat, so crossing a small gap between rows doesn't flicker
-      if (lastKey.startsWith("label") && !info) {
-        clearTimeout(closeT);
-        closeT = setTimeout(() => apply(key, null), 140);
-        return;
-      }
-      clearTimeout(closeT);
-      apply(key, info);
-    }
-    let closeT = 0;
-    function apply(key, info) {
-      const wasOn = btag.classList.contains("is-on");
+      if (key === lastKey) return;
       lastKey = key;
+      cur.classList.toggle("is-text", key === "text");
+      cur.classList.toggle("is-hover", key === "hover");
+      cur.classList.toggle("is-label", !!info);
       if (info) {
-        btag.style.setProperty("--cc", info.c);
-        btag.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
-        const html = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
-        if (btagText.innerHTML !== html) {
-          btagText.innerHTML = html;
-          if (wasOn) { btagText.classList.remove("is-swap"); void btagText.offsetWidth; btagText.classList.add("is-swap"); }
-        }
-      }
-      blob.classList.toggle("is-text", key === "text");
-      blob.classList.toggle("is-hover", key.startsWith("hover"));
-      blob.classList.toggle("is-sheen", key === "hover:deep");
-      blob.classList.toggle("is-label", !!info);
-      btag.classList.toggle("is-on", !!info);
+        cur.style.setProperty("--cc", info.c);
+        // dark text on the light zone colours, white on the deep ones
+        cur.style.setProperty("--cf", /--(re|land|health|hosp|site)\)/.test(info.c) ? "var(--ink)" : "#fff");
+        tag.innerHTML = info.t + (info.ic ? `<svg class="ic"><use href="#${info.ic}"/></svg>` : "");
+      } else cur.style.removeProperty("--cc");
     }
+    // primary buttons lean towards the cursor
     const MAGNETS = ".btn-red, .btn-ink, .dock-cta, .story-nav, .enq-send";
     let magnet = null;
     function pullMagnet(target) {
@@ -978,60 +953,68 @@
       const dx = (mx - (r.left + r.width / 2)) / r.width, dy = (my - (r.top + r.height / 2)) / r.height;
       m.style.translate = `${(dx * 10).toFixed(1)}px ${(dy * 8).toFixed(1)}px`;
     }
+    // a leaf falls from the bloom every so often as it travels
+    function dropLeaf(x, y, dir) {
+      const leaf = document.createElement("span");
+      leaf.className = "cur-leaf";
+      document.body.appendChild(leaf);
+      const rot = dir + 90 + (Math.random() * 60 - 30);
+      leaf.animate([
+        { transform: `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.3)`, opacity: 0.95 },
+        { transform: `translate(${x + (Math.random() * 16 - 8)}px, ${y + 8}px) rotate(${rot + 40}deg) scale(1)`, opacity: 0.9, offset: 0.25 },
+        { transform: `translate(${x + (Math.random() * 30 - 15)}px, ${y + 34}px) rotate(${rot + 140}deg) scale(0.5)`, opacity: 0 },
+      ], { duration: 1100, easing: "cubic-bezier(0.3, 0.6, 0.4, 1)" }).onfinish = () => leaf.remove();
+    }
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX; my = e.clientY;
-      // never fly in from somewhere else: re-entering, or a big jump, puts the blob straight under the pointer
-      if (blob.classList.contains("is-out") || Math.hypot(mx - hx, my - hy) > 160) {
-        hx = gx = mx; hy = gy = my; tp.forEach((p) => { p.x = mx; p.y = my; });
-        blob.classList.remove("is-out");
+      // never glide in from an old spot: coming back onto the page, or a big jump, starts right here
+      if (cur.classList.contains("is-out") || Math.hypot(mx - lastX, my - lastY) > 160) { tx = mx + 30; ty = my + 8; lastX = mx; lastY = my; cur.classList.remove("is-out"); }
+      const d = Math.hypot(mx - lastX, my - lastY);
+      // the bloom rolls: it turns with the distance it covers, clockwise going right
+      spin += (mx - lastX >= 0 ? 1 : -1) * d * 1.4;
+      travel += d;
+      if (travel > 90 && !cur.classList.contains("is-label") && !cur.classList.contains("is-text")) {
+        travel = 0;
+        dropLeaf(mx, my, Math.atan2(my - lastY, mx - lastX) * 180 / Math.PI);
       }
+      lastX = mx; lastY = my;
       setState(e.target);
       pullMagnet(e.target);
     }, { passive: true });
+    // the label can change under a still cursor when the page scrolls
     window.addEventListener("scroll", () => { const el = document.elementFromPoint(mx, my); if (el) setState(el); }, { passive: true });
-    const hideBlob = () => { blob.classList.add("is-out"); btag.classList.remove("is-on"); lastKey = ""; };
-    document.addEventListener("pointerleave", hideBlob);
-    document.addEventListener("mouseout", (e) => { if (!e.relatedTarget) hideBlob(); });
-    window.addEventListener("blur", () => blob.classList.add("is-out"));
-    // a click splashes: droplets fly out of the blob and are pulled back in
-    let squish = 0;
+    document.addEventListener("pointerleave", () => cur.classList.add("is-out"));
+    document.addEventListener("mouseout", (e) => { if (!e.relatedTarget) cur.classList.add("is-out"); });
+    window.addEventListener("blur", () => cur.classList.add("is-out"));
     window.addEventListener("pointerdown", (e) => {
       if (e.pointerType !== "mouse") return;
-      squish = 1;
-      for (let n = 0; n < 5; n++) {
-        const d = document.createElement("i");
-        d.className = "bd bd-drop";
-        blob.appendChild(d);
-        const a = (n / 5) * Math.PI * 2 + Math.random() * 0.6, r = 34 + Math.random() * 18;
-        d.animate([
-          { transform: "translate(0, 0) scale(1)" },
-          { transform: `translate(${Math.cos(a) * r}px, ${Math.sin(a) * r}px) scale(0.9)`, offset: 0.45 },
-          { transform: "translate(0, 0) scale(0.4)" },
-        ], { duration: 700, easing: "cubic-bezier(0.3, 0.9, 0.4, 1)" }).onfinish = () => d.remove();
+      cur.classList.add("is-down");
+      // petals scatter and drift down, in the colours of Bloom's businesses
+      const cols = ["--red", "--re", "--hosp", "--retail", "--edu", "--land", "--health"];
+      for (let k = 0; k < 7; k++) {
+        const p = document.createElement("span");
+        p.className = "cur-petal";
+        p.style.background = `var(${cols[k]})`;
+        document.body.appendChild(p);
+        const a = (k / 7) * Math.PI * 2 + Math.random() * 0.4, d = 30 + Math.random() * 22, r0 = (a * 180) / Math.PI + 90;
+        p.animate([
+          { transform: `translate(${mx}px, ${my}px) rotate(${r0}deg) scale(0.4)`, opacity: 1 },
+          { transform: `translate(${mx + Math.cos(a) * d}px, ${my + Math.sin(a) * d}px) rotate(${r0 + 90}deg) scale(1)`, opacity: 1, offset: 0.35 },
+          { transform: `translate(${mx + Math.cos(a) * d * 1.3}px, ${my + Math.sin(a) * d + 40}px) rotate(${r0 + 240}deg) scale(0.6)`, opacity: 0 },
+        ], { duration: 1000, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)" }).onfinish = () => p.remove();
       }
     });
+    window.addEventListener("pointerup", () => cur.classList.remove("is-down"));
+    let shownSpin = 0;
     (function loop() {
-      // the head chases the pointer, each tail drop chases the one ahead: a liquid trail
-      hx += (mx - hx) * 0.45; hy += (my - hy) * 0.45;
-      gx = hx; gy = hy;
-      let px = hx, py = hy;
-      tp.forEach((p, n) => {
-        const k = [0.34, 0.28, 0.22][n];
-        p.x += (px - p.x) * k; p.y += (py - p.y) * k;
-        // keep the tail inside the blob's canvas
-        const dx = Math.max(-110, Math.min(110, p.x - hx)), dy = Math.max(-110, Math.min(110, p.y - hy));
-        tails[n].style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
-        px = p.x; py = p.y;
-      });
-      // the head stretches along its speed and squishes on click
-      const vx = mx - hx, vy = my - hy, sp = Math.min(Math.hypot(vx, vy) / 30, 0.6);
-      squish *= 0.86;
-      const ang = Math.atan2(vy, vx) * 180 / Math.PI;
-      const sx = (1 + sp) * (1 - squish * 0.35), sy = (1 - sp * 0.4) * (1 - squish * 0.35);
-      head.style.transform = `rotate(${ang.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
-      blob.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
-      btag.style.transform = `translate3d(${hx.toFixed(1)}px, ${hy.toFixed(1)}px, 0)`;
+      // idle blooms turn slowly on their own; moving ones roll
+      spin += 0.35;
+      shownSpin += (spin - shownSpin) * 0.2;
+      fl.style.transform = `translate3d(${mx}px, ${my}px, 0) rotate(${shownSpin.toFixed(1)}deg)`;
+      // the label tag trails just behind and to the right
+      tx += (mx + 30 - tx) * 0.2; ty += (my + 8 - ty) * 0.2;
+      tag.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) translateY(-50%)`;
       requestAnimationFrame(loop);
     })();
   }
