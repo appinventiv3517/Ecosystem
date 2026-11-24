@@ -496,34 +496,54 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 [dir="rtl"] .stage-img[data-pos="1"] { --tx: -34px; }
 [dir="rtl"] .stage-img[data-pos="2"] { --tx: 36px; }
 
-.timeline { grid-column: 1 / -1; grid-row: 2; position: relative; height: 88px; margin-top: 6px; }
-.tl-track { position: absolute; left: 0; right: 0; top: 30px; height: 3px; background: rgb(255 255 255 / 0.25); border-radius: 3px; }
+.timeline { grid-column: 1 / -1; grid-row: 2; display: grid; gap: 22px; margin-top: 10px; }
+.tl-track { position: relative; height: 3px; margin: 30px 8px 0; background: rgb(255 255 255 / 0.25); border-radius: 3px; }
 .tl-fill { position: absolute; left: 0; top: 0; bottom: 0; width: var(--sun, 0%); background: var(--site); border-radius: 3px; transition: width 0.9s var(--ease); }
+.tl-mark { position: absolute; top: 50%; left: var(--at); width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--paper); }
 .tl-sun { position: absolute; top: 50%; left: var(--sun, 0%); width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; display: grid; place-items: center; background: var(--site); color: var(--ink); box-shadow: 0 0 0 6px rgb(231 196 138 / 0.22); transition: left 0.9s var(--ease); z-index: 2; }
 .tl-sun .ic { width: 18px; height: 18px; }
 .tl-hour { position: absolute; top: -26px; font-size: 0.75rem; font-weight: 600; color: rgb(255 255 255 / 0.72); font-variant-numeric: tabular-nums; }
 .tl-start { left: 0; } .tl-end { right: 0; }
 [dir="rtl"] .tl-track { transform: scaleX(-1); }
 [dir="rtl"] .tl-track .tl-hour, [dir="rtl"] .tl-sun .ic { transform: scaleX(-1); }
-.tl-stops { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
-.tl-stops li { position: absolute; top: 0; left: var(--at); transform: translateX(-50%); }
-[dir="rtl"] .tl-stops li { left: auto; right: var(--at); transform: translateX(50%); }
-.tl-stop { position: relative; display: grid; justify-items: center; gap: 6px; border: 0; background: none; color: var(--paper); padding: 22px 8px 4px; min-width: 44px; cursor: pointer; }
-.tl-dot { width: 18px; height: 18px; border-radius: 50%; background: #1f5038; border: 3px solid var(--paper); transition: transform 0.3s var(--ease), background-color 0.3s; }
-.tl-time { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; color: rgb(255 255 255 / 0.85); }
-.tl-name { position: absolute; top: 100%; left: 50%; translate: -50% 0; font-size: 0.82rem; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-.tl-stop:hover .tl-dot { transform: scale(1.2); background: var(--zc); }
-.tl-stop[aria-selected="true"] .tl-dot { background: var(--zc); transform: scale(1.3); }
-.tl-stop[aria-selected="true"] .tl-time { color: var(--site); }
-.tl-stop:focus-visible { outline-offset: 2px; border-radius: 10px; }
+.tl-controls { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: stretch; }
+.tl-play {
+  display: inline-flex; align-items: center; gap: 8px; border: 2px solid rgb(255 255 255 / 0.5); background: none; color: var(--paper);
+  border-radius: 16px; padding: 0 18px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; transition: border-color 0.2s, background-color 0.2s;
+}
+.tl-play:hover { border-color: var(--paper); background: rgb(255 255 255 / 0.08); }
+.tl-play .ic { width: 16px; height: 16px; }
+.tl-play .ic-play { fill: currentColor; display: none; }
+.tl-play[aria-pressed="false"] .ic-play { display: block; }
+.tl-play[aria-pressed="false"] .ic-pause { display: none; }
+.tl-stops { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tl-stop {
+  position: relative; width: 100%; height: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dot time" "dot name";
+  column-gap: 10px; row-gap: 2px; align-items: center; text-align: start; padding: 12px 14px; border-radius: 16px; overflow: hidden;
+  border: 2px solid rgb(255 255 255 / 0.3); background: rgb(255 255 255 / 0.04); color: var(--paper); cursor: pointer;
+  transition: border-color 0.2s, background-color 0.25s, color 0.25s;
+}
+.tl-stop:hover { border-color: var(--paper); background: rgb(255 255 255 / 0.1); }
+.tl-dot { grid-area: dot; width: 12px; height: 12px; border-radius: 50%; background: var(--zc); box-shadow: 0 0 0 2px var(--paper); }
+.tl-time { grid-area: time; font: 700 1rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.tl-name { grid-area: name; font-size: 0.85rem; line-height: 1.3; font-weight: 500; opacity: 0.9; }
+.tl-stop[aria-selected="true"] { background: var(--site); border-color: var(--site); color: var(--ink); }
+.tl-stop[aria-selected="true"] .tl-name { opacity: 1; font-weight: 600; }
+.tl-stop[aria-selected="true"] .tl-dot { box-shadow: 0 0 0 2px var(--ink); }
+.tl-stop::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+.life.is-auto .tl-stop[aria-selected="true"]::after { animation: way-fill var(--way-ms, 5600ms) linear; }
+@keyframes way-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tl-stop:focus-visible { outline-offset: 3px; }
 @media (max-width: 860px) {
   .life-head { grid-template-columns: minmax(0, 1fr); }
   .day { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; padding: 26px 20px 18px; border-radius: 24px; }
   .day-photos { grid-column: 1; grid-row: 1; width: min(76%, 320px); margin: 8px 0 30px; }
   .day-moment { grid-column: 1; grid-row: 2; }
   .dm-time { font-size: 2.8rem; }
-  .timeline { grid-row: 3; height: 70px; }
-  .tl-stop:not([aria-selected="true"]) .tl-time { opacity: 0; }
+  .timeline { grid-row: 3; }
+  .tl-controls { grid-template-columns: minmax(0, 1fr); }
+  .tl-play { justify-self: start; min-height: 44px; }
+  .tl-stops { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ---------------------------------------------------------------- services (facilities slate zone) */

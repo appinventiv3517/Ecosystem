@@ -608,7 +608,17 @@
   const ways = $$(".tl-stop");
   const stageImgs = $$(".stage-img");
   const moment = $("#day-moment");
-  const timeline = $(".timeline");
+  const timeline = $(".tl-track");
+  const tlPlay = $("#tl-play");
+  function setDayPlaying(p) {
+    wAuto = p;
+    tlPlay.setAttribute("aria-pressed", String(p));
+    $(".tl-play-label", tlPlay).textContent = p ? "Pause the day" : "Play the day";
+    lifeSec.classList.toggle("is-auto", p);
+    const sel = ways[wi];
+    if (sel) { sel.style.animation = "none"; void sel.offsetWidth; sel.style.animation = ""; }
+    scheduleWay();
+  }
   const WAY_MS = 5600;
   let wi = 0, wTimer = null, lifeVisible = false, wAuto = motion;
   function scheduleWay() {
@@ -627,14 +637,16 @@
     $("#dm-text").textContent = b.dataset.text;
     $("#dm-zone").textContent = b.dataset.zone;
     $("#dm-dot").style.background = getComputedStyle(b).getPropertyValue("--zc");
-    timeline.style.setProperty("--sun", b.parentElement.style.getPropertyValue("--at"));
+    timeline.style.setProperty("--sun", $$(".tl-mark")[i].style.getPropertyValue("--at"));
+    lifeSec.classList.remove("is-auto"); void lifeSec.offsetWidth; lifeSec.classList.toggle("is-auto", wAuto);
     if (prev !== i && motion) { moment.classList.remove("is-swap"); void moment.offsetWidth; moment.classList.add("is-swap"); }
     scheduleWay();
   }
-  ways.forEach((b, i) => b.addEventListener("click", () => { wAuto = false; showWay(i); }));
+  ways.forEach((b, i) => b.addEventListener("click", () => { setDayPlaying(false); showWay(i); }));
+  tlPlay.addEventListener("click", () => { const p = !wAuto; if (p) showWay((wi + 1) % ways.length); setDayPlaying(p); });
   $(".tl-stops").addEventListener("keydown", (e) => {
     if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
-    e.preventDefault(); wAuto = false;
+    e.preventDefault(); setDayPlaying(false);
     const fwd = (e.key === "ArrowRight") !== (document.dir === "rtl");
     const n = e.key === "Home" ? 0 : e.key === "End" ? ways.length - 1 : (wi + (fwd ? 1 : -1) + ways.length) % ways.length;
     showWay(n); ways[n].focus();
@@ -642,6 +654,7 @@
   new IntersectionObserver(([en]) => { lifeVisible = en.isIntersecting; scheduleWay(); }, { threshold: 0.35 }).observe(lifeSec);
   document.addEventListener("visibilitychange", scheduleWay);
   showWay(0);
+  setDayPlaying(wAuto);
 
   /* ------------------------------------------------------------ services */
   const whoBtns = $$(".who-btn");
