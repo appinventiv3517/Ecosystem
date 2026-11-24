@@ -15,7 +15,7 @@
     let target = window.scrollY, current = window.scrollY, running = false;
     const max = () => document.documentElement.scrollHeight - window.innerHeight;
     function tick() {
-      current += (target - current) * 0.1;
+      current += (target - current) * 0.16;
       if (Math.abs(target - current) < 0.4) { current = target; running = false; }
       window.scrollTo(0, current);
       if (running) requestAnimationFrame(tick);
