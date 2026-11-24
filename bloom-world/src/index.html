@@ -68,19 +68,8 @@
 <!-- ================================================================ HERO: the living masterplan -->
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="plan" id="plan" data-hour="0">
+    <div class="plan-pan" id="plan-pan">
     {{PLAN_SVG}}
-    <div class="plot-card" id="plot-card" role="region" aria-live="polite" aria-label="Selected business" hidden>
-      <button type="button" class="card-close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
-      <p class="card-time"><span class="card-hour"></span> <span class="card-moment"></span></p>
-      <h2 class="card-name"></h2>
-      <p class="card-operator"></p>
-      <p class="card-text"></p>
-      <p class="card-stat"></p>
-      <div class="card-links">
-        <span class="card-links-label">Works with</span>
-        <div class="card-chips"></div>
-      </div>
-      <a class="card-visit" target="_blank" rel="noopener"></a>
     </div>
   </div>
 
@@ -88,35 +77,58 @@
     <div class="tb-sheet">
       <h1 id="hero-title"><span data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
       <p class="tb-lede" data-i18n="hero.lede">Seven businesses. One connected community. Tap any plot to see who it works with.</p>
+      <dl class="tb-cells">
+        <div class="tb-c tb-client"><dt>Client</dt><dd><img src="assets/img/bloom-wordmark-red.png" alt="Bloom" width="70" height="22"></dd></div>
+        <div class="tb-c"><dt>Sheet</dt><dd dir="ltr">01 of 08</dd></div>
+        <div class="tb-c"><dt>Scale</dt><dd dir="ltr">Not to scale</dd></div>
+        <div class="tb-c tb-status"><dt>Status</dt><dd dir="ltr">Design concept for review. Not the live Bloom Holding website.</dd></div>
+      </dl>
     </div>
     <form class="legend-search" id="hero-search" aria-labelledby="hero-search-title">
-      <h2 class="legend-title" id="hero-search-title" data-i18n="hero.search">Find your plot</h2>
-      <div class="seg" role="radiogroup" aria-label="I want to">
-        <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
-        <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
+      <div class="legend-head">
+        <h2 class="legend-title" id="hero-search-title">Legend</h2>
       </div>
-      <label class="field">
-        <span class="field-label">Community</span>
-        <select name="community">
-          <option value="">Any community</option>
-          <option value="zayed">Zayed City</option>
-          <option value="saadiyat">Saadiyat Island</option>
-          <option value="bateen">Al Bateen Marina</option>
-          <option value="jvc">Jumeirah Village Circle</option>
-          <option value="mangrove">Eastern Mangrove Corniche</option>
-        </select>
-      </label>
-      <label class="field">
-        <span class="field-label">Home</span>
-        <select name="type">
-          <option value="">Any type</option>
-          <option value="Apartment">Apartment</option>
-          <option value="Townhouse">Townhouse</option>
-          <option value="Villa">Villa</option>
-          <option value="Penthouse">Penthouse</option>
-        </select>
-      </label>
-      <button class="btn btn-red btn-block" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
+      <ul class="key" aria-label="Plan key: select a business to find its plot">
+        <li><button type="button" data-key="re"><i class="sw z-re"></i>Real Estate</button></li>
+        <li><button type="button" data-key="edu"><i class="sw z-edu"></i>Education</button></li>
+        <li><button type="button" data-key="hosp"><i class="sw z-hosp"></i>Hospitality</button></li>
+        <li><button type="button" data-key="retail"><i class="sw z-retail"></i>Retail</button></li>
+        <li><button type="button" data-key="health"><i class="sw z-health"></i>Healthcare</button></li>
+        <li><button type="button" data-key="fm"><i class="sw z-fm"></i>Facilities</button></li>
+        <li><button type="button" data-key="land"><i class="sw z-land"></i>Landscaping</button></li>
+      </ul>
+      <div class="legend-find">
+        <p class="legend-sub" data-i18n="hero.search">Find your plot</p>
+        <div class="seg" role="radiogroup" aria-label="I want to">
+          <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
+          <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
+        </div>
+        <div class="legend-fields" id="legend-more">
+          <label class="field">
+            <span class="field-label">Community</span>
+            <select name="community" id="h-community">
+              <option value="">Any community</option>
+              <option value="zayed">Zayed City</option>
+              <option value="saadiyat">Saadiyat Island</option>
+              <option value="bateen">Al Bateen Marina</option>
+              <option value="jvc">Jumeirah Village Circle</option>
+              <option value="mangrove">Eastern Mangrove Corniche</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Home</span>
+            <select name="type" id="h-type">
+              <option value="">Any type</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Townhouse">Townhouse</option>
+              <option value="Villa">Villa</option>
+              <option value="Penthouse">Penthouse</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn btn-red legend-go" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
+        <button type="button" class="legend-toggle" aria-expanded="false" aria-controls="legend-more">More filters</button>
+      </div>
     </form>
   </div>
 
@@ -126,7 +138,20 @@
       <!-- filled by app.js from the business data -->
     </div>
   </div>
-  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span></p>
+  <div class="plot-card" id="plot-card" role="region" aria-live="polite" aria-label="Selected business" hidden>
+    <button type="button" class="card-close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    <h2 class="card-name"></h2>
+    <p class="card-time"><span class="card-hour"></span> <span class="card-moment"></span></p>
+    <p class="card-operator"></p>
+    <p class="card-text"></p>
+    <p class="card-stat"></p>
+    <div class="card-links">
+      <span class="card-links-label">Works with</span>
+      <div class="card-chips"></div>
+    </div>
+    <a class="card-visit" target="_blank" rel="noopener"></a>
+  </div>
+  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span><span class="pan-hint"> Swipe sideways to see the whole plan.</span></p>
 </section>
 
 <!-- ================================================================ FIND A HOME -->
@@ -205,32 +230,32 @@
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"zayed","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/community-zayed-city.webp" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" width="1400" height="933"></span>
-          <span class="parcel-tag">Plot A · Zayed City</span>
           <strong class="parcel-name">Bloom Living</strong>
+          <span class="parcel-tag">Plot A · Zayed City</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"mangrove","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/dev-bloom-gardens.webp" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" width="560" height="700"></span>
-          <span class="parcel-tag">Plot B · Eastern Mangrove Corniche</span>
           <strong class="parcel-name">Bloom Gardens</strong>
+          <span class="parcel-tag">Plot B · Eastern Mangrove Corniche</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"saadiyat","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/community-saadiyat.webp" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" width="1400" height="933"></span>
-          <span class="parcel-tag">Plot C · Saadiyat Island</span>
           <strong class="parcel-name">Soho Square</strong>
+          <span class="parcel-tag">Plot C · Saadiyat Island</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel parcel-reserved">
         <button type="button" class="parcel-hit" data-enquire="Buying">
           <span class="parcel-empty" aria-hidden="true"><span class="stamp-reserved">Reserved</span></span>
-          <span class="parcel-tag">Plot D · Next launch</span>
           <strong class="parcel-name">Launch details to come from Bloom.</strong>
+          <span class="parcel-tag">Plot D · Next launch</span>
           <span class="parcel-cta">Get launch updates <svg class="ic"><use href="#i-arrow"/></svg></span>
         </button>
       </li>
@@ -268,8 +293,8 @@
       <article class="comm-panel" id="comm-panel" role="tabpanel" aria-live="polite">
         <div class="comm-media"><img id="comm-img" src="assets/img/community-zayed-city.webp" alt="" width="1400" height="933"></div>
         <div class="comm-body">
-          <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
           <h3 class="comm-name" id="comm-name">Zayed City</h3>
+          <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
           <p class="comm-line" id="comm-line">A new community living experience, and home to Bloom Living.</p>
           <p class="comm-devs"><span>Bloom developments</span> <strong id="comm-devs">Bloom Living</strong></p>
           <div class="comm-actions">
@@ -354,7 +379,7 @@
         <a class="talk-num" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
         <p class="talk-alt">+971 2 696 9500 outside the UAE</p>
         <div class="talk-links">
-          <button type="button" class="btn btn-paper" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
+          <button type="button" class="btn btn-red" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
           <a class="link-u" href="#services" data-construction>Construction updates</a>
         </div>
       </aside>

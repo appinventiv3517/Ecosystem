@@ -119,7 +119,7 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .round-light:hover { color: var(--night); }
 
 /* ---------------------------------------------------------------- header */
-.site-header { position: fixed; inset: 12px 0 auto; z-index: 50; pointer-events: none; }
+.site-header { position: fixed; inset: calc(12px + env(safe-area-inset-top, 0px)) 0 auto; z-index: 50; pointer-events: none; }
 .bar {
   pointer-events: auto;
   width: min(1320px, 100% - 2 * var(--gutter)); margin-inline: auto;
@@ -210,7 +210,8 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .car-glass { fill: #21304f; opacity: 0.85; }
 .boat path { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
 .boat-b path { fill: var(--re); }
-.walker { fill: var(--ink); }
+.walker { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
+.boat-cabin { fill: var(--water-deep); }
 .north circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
 .north path { fill: var(--ink); }
 .north text { font: 700 13px var(--text); fill: var(--ink); }
@@ -220,13 +221,16 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 
 .plot { cursor: pointer; outline: none; transition: opacity 0.45s var(--ease), filter 0.45s var(--ease); }
 .plot-label rect { fill: var(--paper); stroke: rgb(29 24 48 / 0.15); stroke-width: 1.5; transition: fill 0.25s; }
-.plot-label text { font: 600 14px var(--text); fill: var(--ink); }
+.plot-label { cursor: pointer; }
+.label-in { transform-box: fill-box; transform-origin: center; }
+.plot-label text { font: 600 14px var(--text); fill: var(--ink); transition: fill 0.25s; }
 .plot-label .dot.z-re { fill: var(--re); } .plot-label .dot.z-edu { fill: var(--edu); } .plot-label .dot.z-hosp { fill: var(--hosp); }
 .plot-label .dot.z-retail { fill: var(--retail); } .plot-label .dot.z-health { fill: var(--health); } .plot-label .dot.z-fm { fill: var(--fm); } .plot-label .dot.z-land { fill: var(--land); }
 .plot:hover .zone, .plot:focus-visible .zone, .plot.is-on .zone { stroke-width: 5; stroke-dasharray: none; }
-.plot:hover .plot-label rect, .plot.is-on .plot-label rect { fill: var(--ink); }
-.plot:hover .plot-label text, .plot.is-on .plot-label text { fill: var(--paper); }
-.plot:focus-visible .plot-label rect { stroke: var(--red); stroke-width: 3; }
+.plot-label.is-hover rect, .plot-label.is-on rect { fill: var(--ink); }
+.plot-label.is-hover text, .plot-label.is-on text { fill: var(--paper); }
+.plot-label.is-focus rect { stroke: var(--red); stroke-width: 3; }
+.plot-label.is-dim rect { fill: color-mix(in srgb, var(--paper) 88%, var(--site)); }
 .plan.has-active .plot:not(.is-on):not(.is-linked) { opacity: 0.42; filter: saturate(0.5); }
 .conn { fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round; }
 .conn-flow { fill: none; stroke: var(--paper); stroke-width: 2; stroke-dasharray: 2 12; stroke-linecap: round; animation: flow 1.1s linear 4; }
@@ -239,23 +243,42 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
   position: absolute; z-index: 3; inset-inline-start: var(--gutter); top: 104px; bottom: 96px;
   width: min(430px, 36vw); display: flex; flex-direction: column; gap: 14px; justify-content: space-between;
 }
-.tb-sheet { background: var(--paper); border-radius: var(--r); padding: 28px 28px 26px; box-shadow: var(--shadow); border: 2px solid var(--ink); }
-.title-block h1 { font-size: clamp(2.6rem, 4.6vw, 4.4rem); }
+.tb-sheet { background: var(--paper); border-radius: 6px; padding: 24px 0 0; box-shadow: var(--shadow); border: 2px solid var(--ink); overflow: hidden; }
+.tb-sheet h1, .tb-sheet .tb-lede { margin-inline: 24px; }
+.tb-cells { margin: 16px 0 0; display: grid; grid-template-columns: 1fr 0.8fr 1fr; border-top: 2px solid var(--ink); }
+.tb-c { padding: 8px 14px 9px; border-top: 1.5px solid rgb(29 24 48 / 0.25); display: grid; gap: 1px; min-width: 0; }
+.tb-c:nth-child(-n+3) { border-top: 0; }
+.tb-c:nth-child(-n+2) { border-inline-end: 1.5px solid rgb(29 24 48 / 0.25); }
+.tb-c.tb-status { grid-column: 1 / -1; border-inline-end: 0; background: color-mix(in srgb, var(--site) 28%, var(--paper)); }
+.tb-c dt { font-size: 0.74rem; font-weight: 600; color: var(--ink-soft); letter-spacing: 0.04em; text-transform: uppercase; }
+.tb-c dd { margin: 0; text-align: start; unicode-bidi: isolate; font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
+.tb-client img { width: 62px; margin-top: 2px; }
+.title-block h1 { font-size: clamp(2.3rem, 3.4vw, 3.3rem); }
 .h1-world { color: var(--red); display: inline-block; }
-.tb-lede { margin-top: 14px; font-size: 1.08rem; color: var(--ink-soft); max-width: 34ch; }
-.legend-search { background: var(--ink); color: var(--paper); border-radius: var(--r); padding: 22px; display: grid; gap: 12px; box-shadow: var(--shadow); }
-.legend-title { font: 700 1.3rem/1.1 var(--display); letter-spacing: -0.02em; }
-.seg { display: grid; grid-template-columns: 1fr 1fr; background: rgb(255 255 255 / 0.1); border-radius: 999px; padding: 4px; }
+.tb-lede { margin-top: 12px; font-size: 1rem; color: var(--ink-soft); max-width: 34ch; }
+.tb-concept { margin-top: 14px; padding-top: 12px; border-top: 1.5px dashed rgb(29 24 48 / 0.3); font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); }
+.legend-search { background: var(--paper); color: var(--ink); border-radius: 6px; border: 2px solid var(--ink); display: grid; box-shadow: var(--shadow); overflow: hidden; }
+.legend-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 16px; border-bottom: 2px solid var(--ink); }
+.legend-title { font: 800 1.15rem/1.1 var(--display); letter-spacing: -0.02em; }
+.legend-toggle { display: none; border: 1.5px solid var(--ink); background: none; border-radius: 999px; min-height: 36px; padding: 0 12px; font-size: 0.82rem; font-weight: 600; }
+.key { list-style: none; margin: 0; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1.5px solid rgb(29 24 48 / 0.25); }
+.key button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; border-radius: 999px; min-height: 30px; padding: 0 9px 0 6px; font-size: 0.8rem; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
+.key .sw { width: 12px; height: 12px; margin: 0; border-radius: 3px; }
+.key button:hover { background: color-mix(in srgb, var(--site) 45%, var(--paper)); }
+.key button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.legend-find { padding: 12px 16px 14px; display: grid; gap: 10px; }
+.legend-sub { font: 700 1rem/1.2 var(--display); display: none; }
+.legend-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.legend-fields .field-label { font-size: 0.75rem; color: var(--ink-soft); }
+.legend-fields select { min-height: 42px; font-size: 0.9rem; }
+.legend-go { width: 100%; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: color-mix(in srgb, var(--site) 40%, var(--paper)); border-radius: 999px; padding: 4px; }
 .seg label { position: relative; }
 .seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.seg span { display: grid; place-items: center; height: 38px; border-radius: 999px; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
-.seg input:checked + span { background: var(--paper); color: var(--ink); }
-.seg input:focus-visible + span { outline: 3px solid var(--re); outline-offset: 1px; }
-.legend-search .field { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 10px; }
-.legend-search .field-label { font-size: 0.85rem; color: color-mix(in srgb, var(--paper) 78%, transparent); }
-.legend-search select { background-color: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.22); color: var(--paper); }
-.legend-search select option { color: var(--ink); }
-.legend-search .btn-red:focus-visible { outline-color: var(--re); }
+.seg span { display: grid; place-items: center; height: 36px; border-radius: 999px; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
+.seg input:checked + span { background: var(--ink); color: var(--paper); }
+.seg input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 1px; }
+
 
 .day-clock {
   position: absolute; z-index: 3; bottom: 26px; inset-inline-start: calc(var(--gutter) + min(430px, 36vw) + 28px); inset-inline-end: var(--gutter);
@@ -270,7 +293,7 @@ h1, h2, .display { font-family: var(--display); font-weight: 800; letter-spacing
 .clock-track::-webkit-scrollbar { display: none; }
 .hour { flex: 1; min-width: 74px; border: 0; background: none; border-radius: 999px; padding: 6px 8px; display: grid; line-height: 1.1; text-align: center; transition: background-color 0.25s, color 0.25s; }
 .hour b { font: 700 0.95rem var(--display); font-variant-numeric: tabular-nums; }
-.hour small { font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; }
+.hour small { font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; transition: color 0.25s; }
 .hour:hover { background: color-mix(in srgb, var(--site) 50%, var(--paper)); }
 .hour[aria-selected="true"] { background: var(--z, var(--ink)); color: #fff; }
 .hour[aria-selected="true"] small { color: rgb(255 255 255 / 0.9); }
@@ -477,17 +500,17 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 .strip.is-open .strip-text { opacity: 1; transform: none; transition-delay: 0.25s; }
 
 /* ---------------------------------------------------------------- services (Bloom red) */
-.services { background: var(--red); color: #fff; padding-block: var(--section-y); }
+.services { background: var(--fm); color: #fff; padding-block: var(--section-y); }
 .svc-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; margin-bottom: 40px; }
-.svc-head p { font-size: 1.1rem; color: #fbe3df; max-width: 40ch; }
+.svc-head p { font-size: 1.1rem; color: #e6eaf3; max-width: 40ch; }
 .svc-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
 .who { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .who-label { font: 800 1.5rem var(--display); letter-spacing: -0.02em; margin-inline-end: 6px; }
 .who-btn { border: 2px solid rgb(255 255 255 / 0.55); background: transparent; color: #fff; border-radius: 999px; min-height: 48px; padding: 0 20px; font-weight: 600; font-size: 1rem; transition: background-color 0.25s, color 0.25s, border-color 0.25s; }
 .who-btn:hover { border-color: #fff; }
-.who-btn[aria-selected="true"] { background: #fff; color: var(--red); border-color: #fff; }
+.who-btn[aria-selected="true"] { background: #fff; color: var(--ink); border-color: #fff; }
 .app-panel { background: var(--paper); color: var(--ink); border-radius: 26px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden; min-height: 340px; }
-.app-media { background: color-mix(in srgb, var(--red) 12%, var(--paper)); display: grid; place-items: center; padding: 18px; overflow: hidden; }
+.app-media { background: color-mix(in srgb, var(--fm) 16%, var(--paper)); display: grid; place-items: center; padding: 18px; overflow: hidden; }
 .app-media img { width: 100%; height: auto; border-radius: 14px; }
 .app-panel.is-swap .app-media img { animation: app-in 0.55s var(--ease); }
 @keyframes app-in { from { opacity: 0; transform: translateY(26px) rotate(-2deg); } }
@@ -506,10 +529,10 @@ select:focus-visible, input:not([type="radio"]):focus-visible, textarea:focus-vi
 .store:hover { background: #000; }
 .store small { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.85; }
 .store .ic { width: 26px; height: 26px; }
-.talk { background: var(--red-deep); border-radius: 26px; padding: 26px; display: grid; gap: 10px; align-content: start; border: 2px solid rgb(255 255 255 / 0.25); }
+.talk { background: color-mix(in srgb, var(--fm) 55%, var(--ink)); border-radius: 26px; padding: 26px; display: grid; gap: 10px; align-content: start; border: 2px solid rgb(255 255 255 / 0.25); }
 .talk-num { display: inline-flex; align-items: center; gap: 10px; font: 800 clamp(1.5rem, 2.2vw, 2rem)/1.1 var(--display); letter-spacing: -0.02em; text-decoration: none; }
 .talk-num:hover { text-decoration: underline; }
-.talk-alt { color: #f5d3cd; font-size: 0.92rem; }
+.talk-alt { color: #dfe3ee; font-size: 0.92rem; }
 .talk-links { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-top: 12px; }
 
 /* ---------------------------------------------------------------- awards (blueprint) */
@@ -693,18 +716,30 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 }
 @media (max-width: 1100px) {
   .hero { height: auto; min-height: 0; padding-top: 86px; display: flex; flex-direction: column; }
-  .plan { position: relative; inset: auto; order: 4; }
-  .plan-svg { height: auto; aspect-ratio: 1060 / 940; }
-  .title-block { position: static; order: 1; width: auto; margin: 0 16px 14px; display: contents; }
-  .tb-sheet { order: 1; margin: 0 16px 14px; padding: 22px; }
-  .legend-search { order: 2; margin: 0 16px 14px; padding: 18px; gap: 10px; }
-  .legend-search .legend-title { display: none; }
-  .day-clock { position: relative; order: 3; inset: auto; margin: 0 16px 12px; }
-  .plan-note { position: static; order: 5; align-self: flex-start; margin: 10px 16px 22px; background: var(--paper); }
+  .plan { position: relative; inset: auto; order: 3; }
+  .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
+  .plan-pan { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+  .plan-svg { width: max(100%, 560px); height: auto; aspect-ratio: 1060 / 940; }
+  .title-block { position: static; width: auto; display: contents; }
+  .title-block h1 { font-size: clamp(2rem, 6vw, 3rem); }
+  .tb-sheet { order: 1; margin: 0 16px 12px; padding-top: 16px; }
+  .tb-sheet h1, .tb-sheet .tb-lede { margin-inline: 16px; }
+  .tb-sheet .tb-lede { display: none; }
+  .tb-cells { margin-top: 12px; }
+  .tb-cells .tb-c:not(.tb-status) { display: none; }
+  .tb-c.tb-status { border-top: 0; }
+  .legend-search { order: 2; margin: 0 16px 12px; }
+  .legend-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .legend-search:not(.is-open) .legend-head, .legend-search:not(.is-open) .key, .legend-search:not(.is-open) .legend-fields { display: none; }
+  .legend-search:not(.is-open) .legend-find { grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 8px; }
+  .legend-search:not(.is-open) .legend-go { width: auto; padding: 0 14px; }
+  .legend-search:not(.is-open) .legend-toggle { min-height: 44px; }
+  .day-clock { position: relative; order: 4; inset: auto; margin: 0 16px 12px; }
+  .plan-note { position: static; order: 6; align-self: flex-start; margin: 10px 16px 22px; background: var(--paper); }
   .tb-sheet, .legend-search, .day-clock, .plot-card, .plan-note { margin-inline: var(--gutter); }
 }
 @media (max-width: 860px) {
-  .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 12px 16px 0; }
+  .plot-card { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0 16px; order: 5; }
   .find-head, .comm-head, .svc-head, .awards-head, .close-cta { grid-template-columns: 1fr; }
   .comm-grid, .svc-grid, .story-grid, .about-grid { grid-template-columns: minmax(0, 1fr); }
   .app-panel { grid-template-columns: 1fr; }
@@ -740,7 +775,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.15s !important; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-property: color, background-color, border-color, opacity, fill, stroke !important; }
   .conn-flow { animation: none; }
 }
 
@@ -748,8 +783,22 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 .pin-end .pin-name { translate: -38% 0; }
 [dir="rtl"] .pin-end .pin-name { translate: -38% 0; }
 @media (max-width: 560px) {
-  .display { font-size: clamp(2rem, 9vw, 2.6rem); hyphens: auto; }
+  .display { font-size: clamp(1.9rem, 8.6vw, 2.6rem); }
   .pin-name { font-size: 0.7rem; }
+}
+
+.pan-hint { display: none; }
+@media (max-width: 700px) {
+  .label-in { transform: scale(1.65); }
+  .pan-hint { display: inline; }
+}
+@media (max-height: 880px) and (min-width: 1101px) {
+  .tb-lede { display: none; }
+}
+@media (max-width: 420px) {
+  .legend-search:not(.is-open) .legend-go span { display: none; }
+  .legend-search:not(.is-open) .legend-go { min-width: 48px; }
+  .legend-search:not(.is-open) .legend-go::after { content: "Search"; }
 }
 
 </style>
@@ -812,6 +861,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <!-- ================================================================ HERO: the living masterplan -->
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="plan" id="plan" data-hour="0">
+    <div class="plan-pan" id="plan-pan">
     <svg class="plan-svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-labelledby="plan-title plan-desc">
 <title id="plan-title">Illustrative masterplan of a Bloom community</title>
 <desc id="plan-desc">Seven plots, one for each Bloom business: homes, a school, a hotel, a high street, a clinic, a facilities depot and a park around a lagoon. Select a plot to see the businesses it works with.</desc>
@@ -896,13 +946,13 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <rect class="track" x="600" y="214" width="150" height="212" rx="75"/>
 <rect class="pitch" x="618" y="236" width="114" height="168" rx="57"/>
 <line class="pitch-line" x1="618" y1="320" x2="732" y2="320"/><circle class="pitch-line" cx="675" cy="320" r="20" fill="none"/>
-<circle class="kid" cx="650" cy="290" r="3.6"><animate attributeName="cx" values="650;672;642;650" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="290;274;302;290" dur="6s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="700" cy="350" r="3.6"><animate attributeName="cx" values="700;722;692;700" dur="6s" repeatCount="indefinite"/><animate attributeName="cy" values="350;334;362;350" dur="7s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="660" cy="370" r="3.6"><animate attributeName="cx" values="660;682;652;660" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="370;354;382;370" dur="8s" repeatCount="indefinite"/></circle>
-<circle class="kid" cx="705" cy="280" r="3.6"><animate attributeName="cx" values="705;727;697;705" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="280;264;292;280" dur="9s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="650" cy="290" r="5"><animate attributeName="cx" values="650;672;642;650" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="290;274;302;290" dur="6s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="700" cy="350" r="5"><animate attributeName="cx" values="700;722;692;700" dur="6s" repeatCount="indefinite"/><animate attributeName="cy" values="350;334;362;350" dur="7s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="660" cy="370" r="5"><animate attributeName="cx" values="660;682;652;660" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="370;354;382;370" dur="8s" repeatCount="indefinite"/></circle>
+<circle class="kid" cx="705" cy="280" r="5"><animate attributeName="cx" values="705;727;697;705" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="280;264;292;280" dur="9s" repeatCount="indefinite"/></circle>
 <circle class="lamp" cx="620" cy="200" r="5"/>
 <circle class="lamp" cx="730" cy="200" r="5"/>
-<g class="plot-label" transform="translate(625.8 191)"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g>
+
 </g>
 <g class="plot" data-biz="retail" tabindex="0" role="button" aria-label="Retail plot: shops and cafés">
 <rect class="zone z-retail" x="830" y="70" width="440" height="176" rx="18"/>
@@ -928,9 +978,9 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="umbrella" transform="translate(1048 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
 <g class="umbrella" transform="translate(1132 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
 <g class="umbrella" transform="translate(1216 159)"><circle r="9"/><path d="M-9 0H9M0-9V9" /></g>
-<circle class="walker" r="3.2"><animateMotion dur="24s" begin="0s" repeatCount="indefinite" path="M850 152 H1250"/></circle>
-<circle class="walker" r="3.2"><animateMotion dur="19s" begin="-6s" repeatCount="indefinite" path="M1250 166 H850"/></circle>
-<circle class="walker" r="3.2"><animateMotion dur="28s" begin="-12s" repeatCount="indefinite" path="M850 160 H1250"/></circle>
+<circle class="walker" r="5.5"><animateMotion dur="24s" begin="0s" repeatCount="indefinite" path="M850 152 H1250"/></circle>
+<circle class="walker" r="5.5"><animateMotion dur="19s" begin="-6s" repeatCount="indefinite" path="M1250 166 H850"/></circle>
+<circle class="walker" r="5.5"><animateMotion dur="28s" begin="-12s" repeatCount="indefinite" path="M850 160 H1250"/></circle>
 <circle class="lamp" cx="876" cy="112" r="5"/>
 <circle class="lamp" cx="876" cy="206" r="5"/>
 <circle class="lamp" cx="933" cy="112" r="5"/>
@@ -945,7 +995,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <circle class="lamp" cx="1161" cy="206" r="5"/>
 <circle class="lamp" cx="1218" cy="112" r="5"/>
 <circle class="lamp" cx="1218" cy="206" r="5"/>
-<g class="plot-label" transform="translate(1012.2 144)"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g>
+
 </g>
 <g class="plot" data-biz="health" tabindex="0" role="button" aria-label="Healthcare plot: care close to home">
 <rect class="zone z-health" x="830" y="294" width="196" height="150" rx="18"/>
@@ -957,7 +1007,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <rect class="parking" x="852" y="410" width="122" height="22" rx="3"/>
 <circle class="lamp" cx="860" cy="330" r="5"/>
 <circle class="lamp" cx="966" cy="330" r="5"/>
-<g class="plot-label" transform="translate(875 255)"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g>
+
 </g>
 <g class="plot" data-biz="hosp" tabindex="0" role="button" aria-label="Hospitality plot: hotels and serviced apartments">
 <rect class="zone z-hosp" x="1040" y="294" width="230" height="150" rx="18"/>
@@ -976,7 +1026,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <circle class="lamp" cx="1124" cy="334" r="5"/>
 <circle class="lamp" cx="1150" cy="334" r="5"/>
 <circle class="lamp" cx="1176" cy="334" r="5"/>
-<g class="plot-label" transform="translate(1098.2 255)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g>
+
 </g>
 <g class="plot" data-biz="re" tabindex="0" role="button" aria-label="Real estate plot: Bloom homes">
 <rect class="zone z-re" x="576" y="516" width="198" height="420" rx="18"/>
@@ -1048,7 +1098,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <circle class="lamp" cx="741" cy="882" r="5"/>
 <circle class="lamp" cx="1398" cy="110" r="5"/>
 <circle class="lamp" cx="1514" cy="110" r="5"/>
-<g class="plot-label" transform="translate(618.2 501)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g>
+
 </g>
 <g class="plot" data-biz="land" tabindex="0" role="button" aria-label="Landscaping plot: parks, streets and gardens">
 <rect class="zone z-land" x="830" y="516" width="440" height="420" rx="18"/>
@@ -1073,11 +1123,11 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="tree" transform="translate(1028 556)"><circle r="9" class="tree-canopy"/><circle r="4" cx="-2.2" cy="-2.2" class="tree-light"/></g>
 <g class="tree" transform="translate(1120 556)"><circle r="11" class="tree-canopy"/><circle r="5" cx="-2.8" cy="-2.8" class="tree-light"/></g>
 <g class="playground"><circle cx="1196" cy="830" r="20"/><path d="M1182 830h28M1196 816v28"/></g>
-<g class="boat"><path d="M-12 -5 H8 L14 0 L8 5 H-12 Z"/><animateMotion dur="26s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
-<g class="boat boat-b"><path d="M-9 -4 H6 L11 0 L6 4 H-9 Z"/><animateMotion dur="34s" begin="-14s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
-<circle class="walker" r="3.2"><animateMotion dur="30s" begin="0s" repeatCount="indefinite" path="M852 560 C 900 540 980 540 1040 556 S 1200 548 1250 560"/></circle>
-<circle class="walker" r="3.2"><animateMotion dur="26s" begin="-8s" repeatCount="indefinite" path="M1250 912 C 1080 900 940 920 852 900"/></circle>
-<circle class="walker" r="3.2"><animateMotion dur="35s" begin="-20s" repeatCount="indefinite" path="M852 900 C 940 920 1080 900 1250 912"/></circle>
+<g class="boat"><path d="M-20 -8 H12 L22 0 L12 8 H-20 Z"/><rect x="-10" y="-4" width="10" height="8" rx="2" class="boat-cabin"/><animateMotion dur="26s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
+<g class="boat boat-b"><path d="M-16 -6 H10 L18 0 L10 6 H-16 Z"/><animateMotion dur="34s" begin="-14s" repeatCount="indefinite" rotate="auto" path="M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"/></g>
+<circle class="walker" r="5.5"><animateMotion dur="30s" begin="0s" repeatCount="indefinite" path="M852 560 C 900 540 980 540 1040 556 S 1200 548 1250 560"/></circle>
+<circle class="walker" r="5.5"><animateMotion dur="26s" begin="-8s" repeatCount="indefinite" path="M1250 912 C 1080 900 940 920 852 900"/></circle>
+<circle class="walker" r="5.5"><animateMotion dur="35s" begin="-20s" repeatCount="indefinite" path="M852 900 C 940 920 1080 900 1250 912"/></circle>
 <circle class="lamp" cx="900" cy="560" r="5"/>
 <circle class="lamp" cx="1000" cy="550" r="5"/>
 <circle class="lamp" cx="1100" cy="556" r="5"/>
@@ -1085,7 +1135,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <circle class="lamp" cx="920" cy="905" r="5"/>
 <circle class="lamp" cx="1040" cy="910" r="5"/>
 <circle class="lamp" cx="1160" cy="908" r="5"/>
-<g class="plot-label" transform="translate(993.2 501)"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g>
+
 </g>
 <g class="plot" data-biz="fm" tabindex="0" role="button" aria-label="Facilities management plot: the team behind the scenes">
 <rect class="zone z-fm" x="1330" y="516" width="252" height="420" rx="18"/>
@@ -1100,7 +1150,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <g class="tree" transform="translate(1370 900)"><circle r="10" class="tree-canopy"/><circle r="4.5" cx="-2.5" cy="-2.5" class="tree-light"/></g>
 <circle class="lamp" cx="1360" cy="790" r="5"/>
 <circle class="lamp" cx="1440" cy="790" r="5"/>
-<g class="plot-label" transform="translate(1403 501)"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g>
+
 </g>
 <g class="traffic">
 <g class="car"><rect x="-9" y="-5" width="18" height="10" rx="3"/><rect class="car-glass" x="2" y="-3.6" width="4.5" height="7.2" rx="1.2"/><animateMotion dur="22s" begin="0s" repeatCount="indefinite" rotate="auto" path="M-20 470 H1620"/></g>
@@ -1144,21 +1194,10 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
 <circle class="lamp" cx="1566" cy="452" r="5"/>
 <circle class="lamp" cx="1566" cy="508" r="5"/>
 <g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>
-<g class="conns" aria-hidden="true"></g>
 <rect class="tint" width="1600" height="1000"/>
+<g class="conns" aria-hidden="true"></g>
+<g class="labels"><g class="plot-label" data-biz="edu" transform="translate(625.8 191)"><g class="label-in"><rect width="98.4" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-edu"/><text x="26" y="20">Education</text></g></g><g class="plot-label" data-biz="retail" transform="translate(1012.2 144)"><g class="label-in"><rect width="75.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-retail"/><text x="26" y="20">Retail</text></g></g><g class="plot-label" data-biz="health" transform="translate(875 255)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-health"/><text x="26" y="20">Healthcare</text></g></g><g class="plot-label" data-biz="hosp" transform="translate(1098.2 255)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-hosp"/><text x="26" y="20">Hospitality</text></g></g><g class="plot-label" data-biz="re" transform="translate(618.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-re"/><text x="26" y="20">Real Estate</text></g></g><g class="plot-label" data-biz="land" transform="translate(993.2 501)"><g class="label-in"><rect width="113.6" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-land"/><text x="26" y="20">Landscaping</text></g></g><g class="plot-label" data-biz="fm" transform="translate(1403 501)"><g class="label-in"><rect width="106" height="30" rx="15"/><circle cx="15" cy="15" r="5.5" class="dot z-fm"/><text x="26" y="20">Facilities</text></g></g></g>
 </svg>
-    <div class="plot-card" id="plot-card" role="region" aria-live="polite" aria-label="Selected business" hidden>
-      <button type="button" class="card-close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
-      <p class="card-time"><span class="card-hour"></span> <span class="card-moment"></span></p>
-      <h2 class="card-name"></h2>
-      <p class="card-operator"></p>
-      <p class="card-text"></p>
-      <p class="card-stat"></p>
-      <div class="card-links">
-        <span class="card-links-label">Works with</span>
-        <div class="card-chips"></div>
-      </div>
-      <a class="card-visit" target="_blank" rel="noopener"></a>
     </div>
   </div>
 
@@ -1166,35 +1205,58 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     <div class="tb-sheet">
       <h1 id="hero-title"><span data-i18n="hero.title1">Welcome to</span> <span class="h1-world" data-i18n="hero.title2">Bloom World</span></h1>
       <p class="tb-lede" data-i18n="hero.lede">Seven businesses. One connected community. Tap any plot to see who it works with.</p>
+      <dl class="tb-cells">
+        <div class="tb-c tb-client"><dt>Client</dt><dd><img src="assets/img/bloom-wordmark-red.png" alt="Bloom" width="70" height="22"></dd></div>
+        <div class="tb-c"><dt>Sheet</dt><dd dir="ltr">01 of 08</dd></div>
+        <div class="tb-c"><dt>Scale</dt><dd dir="ltr">Not to scale</dd></div>
+        <div class="tb-c tb-status"><dt>Status</dt><dd dir="ltr">Design concept for review. Not the live Bloom Holding website.</dd></div>
+      </dl>
     </div>
     <form class="legend-search" id="hero-search" aria-labelledby="hero-search-title">
-      <h2 class="legend-title" id="hero-search-title" data-i18n="hero.search">Find your plot</h2>
-      <div class="seg" role="radiogroup" aria-label="I want to">
-        <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
-        <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
+      <div class="legend-head">
+        <h2 class="legend-title" id="hero-search-title">Legend</h2>
       </div>
-      <label class="field">
-        <span class="field-label">Community</span>
-        <select name="community">
-          <option value="">Any community</option>
-          <option value="zayed">Zayed City</option>
-          <option value="saadiyat">Saadiyat Island</option>
-          <option value="bateen">Al Bateen Marina</option>
-          <option value="jvc">Jumeirah Village Circle</option>
-          <option value="mangrove">Eastern Mangrove Corniche</option>
-        </select>
-      </label>
-      <label class="field">
-        <span class="field-label">Home</span>
-        <select name="type">
-          <option value="">Any type</option>
-          <option value="Apartment">Apartment</option>
-          <option value="Townhouse">Townhouse</option>
-          <option value="Villa">Villa</option>
-          <option value="Penthouse">Penthouse</option>
-        </select>
-      </label>
-      <button class="btn btn-red btn-block" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
+      <ul class="key" aria-label="Plan key: select a business to find its plot">
+        <li><button type="button" data-key="re"><i class="sw z-re"></i>Real Estate</button></li>
+        <li><button type="button" data-key="edu"><i class="sw z-edu"></i>Education</button></li>
+        <li><button type="button" data-key="hosp"><i class="sw z-hosp"></i>Hospitality</button></li>
+        <li><button type="button" data-key="retail"><i class="sw z-retail"></i>Retail</button></li>
+        <li><button type="button" data-key="health"><i class="sw z-health"></i>Healthcare</button></li>
+        <li><button type="button" data-key="fm"><i class="sw z-fm"></i>Facilities</button></li>
+        <li><button type="button" data-key="land"><i class="sw z-land"></i>Landscaping</button></li>
+      </ul>
+      <div class="legend-find">
+        <p class="legend-sub" data-i18n="hero.search">Find your plot</p>
+        <div class="seg" role="radiogroup" aria-label="I want to">
+          <label><input type="radio" name="hmode" value="buy" checked><span data-i18n="mode.buy">Buy</span></label>
+          <label><input type="radio" name="hmode" value="rent"><span data-i18n="mode.rent">Rent</span></label>
+        </div>
+        <div class="legend-fields" id="legend-more">
+          <label class="field">
+            <span class="field-label">Community</span>
+            <select name="community" id="h-community">
+              <option value="">Any community</option>
+              <option value="zayed">Zayed City</option>
+              <option value="saadiyat">Saadiyat Island</option>
+              <option value="bateen">Al Bateen Marina</option>
+              <option value="jvc">Jumeirah Village Circle</option>
+              <option value="mangrove">Eastern Mangrove Corniche</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Home</span>
+            <select name="type" id="h-type">
+              <option value="">Any type</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Townhouse">Townhouse</option>
+              <option value="Villa">Villa</option>
+              <option value="Penthouse">Penthouse</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn btn-red legend-go" type="submit"><svg class="ic"><use href="#i-search"/></svg><span data-i18n="cta.search">Search homes</span></button>
+        <button type="button" class="legend-toggle" aria-expanded="false" aria-controls="legend-more">More filters</button>
+      </div>
     </form>
   </div>
 
@@ -1204,7 +1266,20 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       <!-- filled by app.js from the business data -->
     </div>
   </div>
-  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span></p>
+  <div class="plot-card" id="plot-card" role="region" aria-live="polite" aria-label="Selected business" hidden>
+    <button type="button" class="card-close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    <h2 class="card-name"></h2>
+    <p class="card-time"><span class="card-hour"></span> <span class="card-moment"></span></p>
+    <p class="card-operator"></p>
+    <p class="card-text"></p>
+    <p class="card-stat"></p>
+    <div class="card-links">
+      <span class="card-links-label">Works with</span>
+      <div class="card-chips"></div>
+    </div>
+    <a class="card-visit" target="_blank" rel="noopener"></a>
+  </div>
+  <p class="plan-note">Illustrative plan, not a real site. <span class="plan-hint">Tap a plot.</span><span class="pan-hint"> Swipe sideways to see the whole plan.</span></p>
 </section>
 
 <!-- ================================================================ FIND A HOME -->
@@ -1283,32 +1358,32 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"zayed","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/community-zayed-city.webp" alt="Waterfront plaza framed by mid-rise buildings at Bloom Living, Zayed City (architectural render)" loading="lazy" width="1400" height="933"></span>
-          <span class="parcel-tag">Plot A · Zayed City</span>
           <strong class="parcel-name">Bloom Living</strong>
+          <span class="parcel-tag">Plot A · Zayed City</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"mangrove","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/dev-bloom-gardens.webp" alt="Mediterranean-style villa with arches and bougainvillea at Bloom Gardens" loading="lazy" width="560" height="700"></span>
-          <span class="parcel-tag">Plot B · Eastern Mangrove Corniche</span>
           <strong class="parcel-name">Bloom Gardens</strong>
+          <span class="parcel-tag">Plot B · Eastern Mangrove Corniche</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel">
         <a class="parcel-hit" href="#find" data-prefill='{"community":"saadiyat","mode":"buy"}'>
           <span class="parcel-media"><img src="assets/img/community-saadiyat.webp" alt="Apartment buildings behind a landscaped podium on Saadiyat Island" loading="lazy" width="1400" height="933"></span>
-          <span class="parcel-tag">Plot C · Saadiyat Island</span>
           <strong class="parcel-name">Soho Square</strong>
+          <span class="parcel-tag">Plot C · Saadiyat Island</span>
           <span class="parcel-cta">Homes to buy here <svg class="ic"><use href="#i-arrow"/></svg></span>
         </a>
       </li>
       <li class="parcel parcel-reserved">
         <button type="button" class="parcel-hit" data-enquire="Buying">
           <span class="parcel-empty" aria-hidden="true"><span class="stamp-reserved">Reserved</span></span>
-          <span class="parcel-tag">Plot D · Next launch</span>
           <strong class="parcel-name">Launch details to come from Bloom.</strong>
+          <span class="parcel-tag">Plot D · Next launch</span>
           <span class="parcel-cta">Get launch updates <svg class="ic"><use href="#i-arrow"/></svg></span>
         </button>
       </li>
@@ -1364,8 +1439,8 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       <article class="comm-panel" id="comm-panel" role="tabpanel" aria-live="polite">
         <div class="comm-media"><img id="comm-img" src="assets/img/community-zayed-city.webp" alt="" width="1400" height="933"></div>
         <div class="comm-body">
-          <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
           <h3 class="comm-name" id="comm-name">Zayed City</h3>
+          <p class="comm-where"><svg class="ic"><use href="#i-pin"/></svg><span id="comm-where">Khalifa City C, Abu Dhabi</span></p>
           <p class="comm-line" id="comm-line">A new community living experience, and home to Bloom Living.</p>
           <p class="comm-devs"><span>Bloom developments</span> <strong id="comm-devs">Bloom Living</strong></p>
           <div class="comm-actions">
@@ -1450,7 +1525,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
         <a class="talk-num" href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a>
         <p class="talk-alt">+971 2 696 9500 outside the UAE</p>
         <div class="talk-links">
-          <button type="button" class="btn btn-paper" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
+          <button type="button" class="btn btn-red" data-enquire="Resident support" data-i18n="cta.enquiry">Make an enquiry</button>
           <a class="link-u" href="#services" data-construction>Construction updates</a>
         </div>
       </aside>
@@ -1720,7 +1795,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     retail: { name: "Retail", op: "Part of Bloom Holding", hour: "13:00", moment: "Lunch around the corner", zc: "var(--retail)",
       text: "Shops, cafés and everyday conveniences bring a community's streets to life, a short walk from home.",
       stat: "", links: ["re", "hosp", "fm"], url: "", visit: "Retail website to come",
-      at: [1050, 158] },
+      at: [1050, 206] },
     health: { name: "Healthcare", op: "Part of Bloom Holding", hour: "16:00", moment: "Care, close by", zc: "var(--health)",
       text: "Care and wellbeing, close to where people live, as part of the same connected community.",
       stat: "", links: ["re", "edu", "land"], url: "", visit: "Healthcare website to come",
@@ -1813,7 +1888,10 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   /* ------------------------------------------------------------ the living masterplan */
   const plan = $("#plan");
   const svg = $(".plan-svg");
-  const conns = $(".conns", svg);
+  let conns = $(".conns", svg);
+  const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
+  const keyBtns = $$(".key button");
+  const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");
   const card = $("#plot-card");
@@ -1868,15 +1946,14 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   }
 
   function clearLinks() {
-    // old service lines fade out on their own layer while the new ones draw in
-    const old = [...conns.children];
-    if (!old.length) return;
-    if (reduced.matches) { old.forEach((n) => n.remove()); return; }
-    const g = document.createElementNS(SVGNS, "g");
-    g.setAttribute("class", "conns-old");
-    conns.parentNode.insertBefore(g, conns);
-    g.append(...old);
-    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" }).finished.then(() => g.remove(), () => g.remove());
+    // the old line layer fades out as a whole while a fresh layer takes its place
+    const old = conns;
+    conns = old.cloneNode(false);
+    old.after(conns);
+    if (!old.childElementCount || reduced.matches) { old.remove(); return; }
+    old.style.pointerEvents = "none";
+    old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" });
+    setTimeout(() => old.remove(), 240);
   }
 
   function drawLinks(key) {
@@ -1897,7 +1974,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       if (!reduced.matches) {
         const L = p.getTotalLength();
         p.animate([{ strokeDasharray: `${L} ${L}`, strokeDashoffset: L }, { strokeDasharray: `${L} ${L}`, strokeDashoffset: 0 }],
-          { duration: 700, easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: pairs.size * 70 });
+          { duration: 700, easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: pairs.size * 70, fill: "backwards" });
         f.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 600 + pairs.size * 70, fill: "backwards" });
       }
       const [ex, ey] = BIZ[l].at;
@@ -1959,6 +2036,8 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   }
   fitPlan();
   mobile.addEventListener("change", fitPlan);
+  requestAnimationFrame(() => { if (pan.scrollWidth > pan.clientWidth) pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2; });
+  let docked = true;
   function placeCard(key) {
     if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
     const pr = plan.getBoundingClientRect();
@@ -1969,7 +2048,7 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
     let x, y;
-    if (!target) { x = maxX; y = top0 + 30; }
+    if (!target || docked) { x = maxX; y = top0 + 24; }
     else {
       const right = target.right - pr.left + 18;
       const left = target.left - pr.left - cw - 18;
@@ -1995,14 +2074,27 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
       g.classList.toggle("is-linked", key !== "all" && BIZ[key].links.includes(k));
       g.setAttribute("aria-pressed", String(k === key));
     });
+    Object.entries(labels).forEach(([k, l]) => {
+      l.classList.toggle("is-on", key === "all" || k === key);
+      l.classList.toggle("is-dim", key !== "all" && k !== key && !BIZ[key].links.includes(k));
+    });
+    keyBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.key === key)));
     hours.forEach((h, j) => { h.setAttribute("aria-selected", String(j === i)); h.tabIndex = j === i ? 0 : -1; });
-    if (user || inView) hours[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduced.matches ? "auto" : "smooth" });
+    const h = hours[i];
+    const smooth = reduced.matches ? "auto" : "smooth";
+    track.scrollTo({ left: h.offsetLeft - track.clientWidth / 2 + h.offsetWidth / 2, behavior: smooth });
+    if (mobile.matches && pan.scrollWidth > pan.clientWidth && key !== "all") {
+      const zr = plots[key].querySelector(".zone").getBoundingClientRect();
+      const pr = pan.getBoundingClientRect();
+      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: smooth });
+    }
+    docked = !user;
     setLight(key);
     drawLinks(key);
     fillCard(key);
     card.hidden = false;
     placeCard(key);
-    card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in");
+    if (!reduced.matches) { card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in"); }
     if (user) $(".plan-hint").textContent = "";
   }
 
@@ -2019,15 +2111,36 @@ address { font-style: normal; color: color-mix(in srgb, var(--paper) 85%, var(--
   function stop() { setPlaying(false); }
   playBtn.addEventListener("click", () => setPlaying(!playing));
 
+  const acts = {};
   Object.entries(plots).forEach(([k, g]) => {
     const act = () => { stop(); if (plan.classList.contains("has-active") && step === DAY.indexOf(k) && !card.hidden) { closeCard(); return; } go(DAY.indexOf(k), true); };
+    acts[k] = act;
+    const l = labels[k];
     g.addEventListener("click", act);
     g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+    g.addEventListener("pointerenter", () => l.classList.add("is-hover"));
+    g.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
+    g.addEventListener("focus", () => l.classList.toggle("is-focus", g.matches(":focus-visible")));
+    g.addEventListener("blur", () => l.classList.remove("is-focus"));
+    l.addEventListener("click", act);
+    l.addEventListener("pointerenter", () => l.classList.add("is-hover"));
+    l.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
+  });
+  keyBtns.forEach((b) => b.addEventListener("click", () => { stop(); go(DAY.indexOf(b.dataset.key), true); }));
+  const legend = $("#hero-search");
+  const legendToggle = $(".legend-toggle");
+  legendToggle.addEventListener("click", () => {
+    const open = !legend.classList.contains("is-open");
+    legend.classList.toggle("is-open", open);
+    legendToggle.setAttribute("aria-expanded", String(open));
+    legendToggle.textContent = open ? "Fewer filters" : "More filters";
   });
   function closeCard() {
     card.hidden = true;
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
+    Object.values(labels).forEach((l) => l.classList.remove("is-on", "is-dim"));
+    keyBtns.forEach((b) => b.setAttribute("aria-pressed", "false"));
     clearLinks();
   }
   $(".card-close", card).addEventListener("click", () => { stop(); closeCard(); });

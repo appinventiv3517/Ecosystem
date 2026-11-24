@@ -25,7 +25,7 @@
     retail: { name: "Retail", op: "Part of Bloom Holding", hour: "13:00", moment: "Lunch around the corner", zc: "var(--retail)",
       text: "Shops, cafés and everyday conveniences bring a community's streets to life, a short walk from home.",
       stat: "", links: ["re", "hosp", "fm"], url: "", visit: "Retail website to come",
-      at: [1050, 158] },
+      at: [1050, 206] },
     health: { name: "Healthcare", op: "Part of Bloom Holding", hour: "16:00", moment: "Care, close by", zc: "var(--health)",
       text: "Care and wellbeing, close to where people live, as part of the same connected community.",
       stat: "", links: ["re", "edu", "land"], url: "", visit: "Healthcare website to come",
@@ -118,7 +118,10 @@
   /* ------------------------------------------------------------ the living masterplan */
   const plan = $("#plan");
   const svg = $(".plan-svg");
-  const conns = $(".conns", svg);
+  let conns = $(".conns", svg);
+  const labels = Object.fromEntries($$(".plot-label", svg).map((l) => [l.dataset.biz, l]));
+  const keyBtns = $$(".key button");
+  const pan = $("#plan-pan");
   const tint = $(".tint", svg);
   const sun = $("#sun-shadow");
   const card = $("#plot-card");
@@ -173,15 +176,14 @@
   }
 
   function clearLinks() {
-    // old service lines fade out on their own layer while the new ones draw in
-    const old = [...conns.children];
-    if (!old.length) return;
-    if (reduced.matches) { old.forEach((n) => n.remove()); return; }
-    const g = document.createElementNS(SVGNS, "g");
-    g.setAttribute("class", "conns-old");
-    conns.parentNode.insertBefore(g, conns);
-    g.append(...old);
-    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" }).finished.then(() => g.remove(), () => g.remove());
+    // the old line layer fades out as a whole while a fresh layer takes its place
+    const old = conns;
+    conns = old.cloneNode(false);
+    old.after(conns);
+    if (!old.childElementCount || reduced.matches) { old.remove(); return; }
+    old.style.pointerEvents = "none";
+    old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-out", fill: "forwards" });
+    setTimeout(() => old.remove(), 240);
   }
 
   function drawLinks(key) {
@@ -202,7 +204,7 @@
       if (!reduced.matches) {
         const L = p.getTotalLength();
         p.animate([{ strokeDasharray: `${L} ${L}`, strokeDashoffset: L }, { strokeDasharray: `${L} ${L}`, strokeDashoffset: 0 }],
-          { duration: 700, easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: pairs.size * 70 });
+          { duration: 700, easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: pairs.size * 70, fill: "backwards" });
         f.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 600 + pairs.size * 70, fill: "backwards" });
       }
       const [ex, ey] = BIZ[l].at;
@@ -264,6 +266,8 @@
   }
   fitPlan();
   mobile.addEventListener("change", fitPlan);
+  requestAnimationFrame(() => { if (pan.scrollWidth > pan.clientWidth) pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2; });
+  let docked = true;
   function placeCard(key) {
     if (mobile.matches) { card.style.left = ""; card.style.top = ""; return; }
     const pr = plan.getBoundingClientRect();
@@ -274,7 +278,7 @@
     const maxX = (document.dir === "rtl" ? tb.left - pr.left - 20 : pr.width - 16) - cw;
     const top0 = 100, bottom0 = pr.height - 100 - ch;
     let x, y;
-    if (!target) { x = maxX; y = top0 + 30; }
+    if (!target || docked) { x = maxX; y = top0 + 24; }
     else {
       const right = target.right - pr.left + 18;
       const left = target.left - pr.left - cw - 18;
@@ -300,14 +304,27 @@
       g.classList.toggle("is-linked", key !== "all" && BIZ[key].links.includes(k));
       g.setAttribute("aria-pressed", String(k === key));
     });
+    Object.entries(labels).forEach(([k, l]) => {
+      l.classList.toggle("is-on", key === "all" || k === key);
+      l.classList.toggle("is-dim", key !== "all" && k !== key && !BIZ[key].links.includes(k));
+    });
+    keyBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.key === key)));
     hours.forEach((h, j) => { h.setAttribute("aria-selected", String(j === i)); h.tabIndex = j === i ? 0 : -1; });
-    if (user || inView) hours[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduced.matches ? "auto" : "smooth" });
+    const h = hours[i];
+    const smooth = reduced.matches ? "auto" : "smooth";
+    track.scrollTo({ left: h.offsetLeft - track.clientWidth / 2 + h.offsetWidth / 2, behavior: smooth });
+    if (mobile.matches && pan.scrollWidth > pan.clientWidth && key !== "all") {
+      const zr = plots[key].querySelector(".zone").getBoundingClientRect();
+      const pr = pan.getBoundingClientRect();
+      pan.scrollTo({ left: pan.scrollLeft + zr.left - pr.left + zr.width / 2 - pr.width / 2, behavior: smooth });
+    }
+    docked = !user;
     setLight(key);
     drawLinks(key);
     fillCard(key);
     card.hidden = false;
     placeCard(key);
-    card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in");
+    if (!reduced.matches) { card.classList.remove("is-in"); void card.offsetWidth; card.classList.add("is-in"); }
     if (user) $(".plan-hint").textContent = "";
   }
 
@@ -324,15 +341,36 @@
   function stop() { setPlaying(false); }
   playBtn.addEventListener("click", () => setPlaying(!playing));
 
+  const acts = {};
   Object.entries(plots).forEach(([k, g]) => {
     const act = () => { stop(); if (plan.classList.contains("has-active") && step === DAY.indexOf(k) && !card.hidden) { closeCard(); return; } go(DAY.indexOf(k), true); };
+    acts[k] = act;
+    const l = labels[k];
     g.addEventListener("click", act);
     g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+    g.addEventListener("pointerenter", () => l.classList.add("is-hover"));
+    g.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
+    g.addEventListener("focus", () => l.classList.toggle("is-focus", g.matches(":focus-visible")));
+    g.addEventListener("blur", () => l.classList.remove("is-focus"));
+    l.addEventListener("click", act);
+    l.addEventListener("pointerenter", () => l.classList.add("is-hover"));
+    l.addEventListener("pointerleave", () => l.classList.remove("is-hover"));
+  });
+  keyBtns.forEach((b) => b.addEventListener("click", () => { stop(); go(DAY.indexOf(b.dataset.key), true); }));
+  const legend = $("#hero-search");
+  const legendToggle = $(".legend-toggle");
+  legendToggle.addEventListener("click", () => {
+    const open = !legend.classList.contains("is-open");
+    legend.classList.toggle("is-open", open);
+    legendToggle.setAttribute("aria-expanded", String(open));
+    legendToggle.textContent = open ? "Fewer filters" : "More filters";
   });
   function closeCard() {
     card.hidden = true;
     plan.classList.remove("has-active");
     Object.values(plots).forEach((g) => g.classList.remove("is-on", "is-linked"));
+    Object.values(labels).forEach((l) => l.classList.remove("is-on", "is-dim"));
+    keyBtns.forEach((b) => b.setAttribute("aria-pressed", "false"));
     clearLinks();
   }
   $(".card-close", card).addEventListener("click", () => { stop(); closeCard(); });

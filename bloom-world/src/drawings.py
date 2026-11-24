@@ -37,17 +37,22 @@ def car(path, dur, begin, cls="car", reverse=False):
 
 
 def walker(path, dur, begin, cls="walker"):
-    return (f'<circle class="{cls}" r="3.2"><animateMotion dur="{dur}s" begin="{begin}s" '
+    return (f'<circle class="{cls}" r="5.5"><animateMotion dur="{dur}s" begin="{begin}s" '
             f'repeatCount="indefinite" path="{path}"/></circle>')
 
 
+LABELS = []
+
+
 def label(x, y, text, zone, anchor="start"):
+    """Plot labels are collected and drawn last, above the service lines, so nothing covers them."""
     w = 30 + len(text) * 7.6
     x0 = x if anchor == "start" else x - w / 2
-    return (f'<g class="plot-label" transform="translate({f(x0)} {f(y)})">'
-            f'<rect width="{f(w)}" height="30" rx="15"/>'
-            f'<circle cx="15" cy="15" r="5.5" class="dot z-{zone}"/>'
-            f'<text x="26" y="20">{text}</text></g>')
+    LABELS.append(f'<g class="plot-label" data-biz="{zone}" transform="translate({f(x0)} {f(y)})"><g class="label-in">'
+                  f'<rect width="{f(w)}" height="30" rx="15"/>'
+                  f'<circle cx="15" cy="15" r="5.5" class="dot z-{zone}"/>'
+                  f'<text x="26" y="20">{text}</text></g></g>')
+    return ""
 
 
 def lamp(x, y):
@@ -57,6 +62,7 @@ def lamp(x, y):
 # --------------------------------------------------------------------------- the masterplan
 
 def masterplan():
+    LABELS.clear()
     out = []
     a = out.append
     a('<svg class="plan-svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" '
@@ -117,7 +123,7 @@ def masterplan():
     a('<rect class="pitch" x="618" y="236" width="114" height="168" rx="57"/>')
     a('<line class="pitch-line" x1="618" y1="320" x2="732" y2="320"/><circle class="pitch-line" cx="675" cy="320" r="20" fill="none"/>')
     for i, (cx, cy) in enumerate([(650, 290), (700, 350), (660, 370), (705, 280)]):
-        a(f'<circle class="kid" cx="{cx}" cy="{cy}" r="3.6"><animate attributeName="cx" values="{cx};{cx+22};{cx-8};{cx}" dur="{5+i}s" repeatCount="indefinite"/>'
+        a(f'<circle class="kid" cx="{cx}" cy="{cy}" r="5"><animate attributeName="cx" values="{cx};{cx+22};{cx-8};{cx}" dur="{5+i}s" repeatCount="indefinite"/>'
           f'<animate attributeName="cy" values="{cy};{cy-16};{cy+12};{cy}" dur="{6+i}s" repeatCount="indefinite"/></circle>')
     a(lamp(620, 200)); a(lamp(730, 200))
     a(label(675, 191, "Education", "edu", "middle"))
@@ -209,8 +215,8 @@ def masterplan():
         a(tree(x, y, r))
     a('<g class="playground"><circle cx="1196" cy="830" r="20"/><path d="M1182 830h28M1196 816v28"/></g>')
     boat_path = "M960 700 C 1000 640 1120 640 1170 690 C 1210 740 1140 810 1060 810 C 980 810 930 760 960 700 Z"
-    a(f'<g class="boat"><path d="M-12 -5 H8 L14 0 L8 5 H-12 Z"/><animateMotion dur="26s" repeatCount="indefinite" rotate="auto" path="{boat_path}"/></g>')
-    a(f'<g class="boat boat-b"><path d="M-9 -4 H6 L11 0 L6 4 H-9 Z"/><animateMotion dur="34s" begin="-14s" repeatCount="indefinite" rotate="auto" path="{boat_path}"/></g>')
+    a(f'<g class="boat"><path d="M-20 -8 H12 L22 0 L12 8 H-20 Z"/><rect x="-10" y="-4" width="10" height="8" rx="2" class="boat-cabin"/><animateMotion dur="26s" repeatCount="indefinite" rotate="auto" path="{boat_path}"/></g>')
+    a(f'<g class="boat boat-b"><path d="M-16 -6 H10 L18 0 L10 6 H-16 Z"/><animateMotion dur="34s" begin="-14s" repeatCount="indefinite" rotate="auto" path="{boat_path}"/></g>')
     a(walker("M852 560 C 900 540 980 540 1040 556 S 1200 548 1250 560", 30, 0))
     a(walker("M1250 912 C 1080 900 940 920 852 900", 26, -8))
     a(walker("M852 900 C 940 920 1080 900 1250 912", 35, -20))
@@ -250,8 +256,10 @@ def masterplan():
     # north arrow and scale bar
     a('<g class="north" transform="translate(1556 168)"><circle r="16"/><path d="M0 -12 L6 6 L0 2 L-6 6 Z"/><text y="-22" text-anchor="middle">N</text></g>')
 
-    a('<g class="conns" aria-hidden="true"></g>')
     a('<rect class="tint" width="1600" height="1000"/>')
+    a('<g class="conns" aria-hidden="true"></g>')
+    a('<g class="labels">' + "".join(LABELS) + '</g>')
+    LABELS.clear()
     a('</svg>')
     return "\n".join(out)
 

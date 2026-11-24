@@ -54,6 +54,12 @@ def main():
     (ROOT / "dist").mkdir(exist_ok=True)
     single = inline_assets(html)
     (ROOT / "dist" / "bloom-world.html").write_text(single, encoding="utf-8")
+    # artifact variant: the host supplies the document skeleton, so ship title, styles and body content only
+    head = re.search(r"<head>(.*?)</head>", single, re.S).group(1)
+    style = re.search(r"<style>.*?</style>", head, re.S).group(0)
+    body = re.search(r"<body>(.*)</body>", single, re.S).group(1)
+    artifact = "<title>Bloom World</title>\n" + style + "\n" + body.strip() + "\n"
+    (ROOT / "dist" / "bloom-world-artifact.html").write_text(artifact, encoding="utf-8")
     print(f"index.html {len(html) // 1024} KB · dist/bloom-world.html {len(single) // 1024} KB")
 
 
