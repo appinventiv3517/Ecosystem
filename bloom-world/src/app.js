@@ -623,8 +623,8 @@
     wi = i;
     ways.forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
     if (prev !== i) {
-      stageImgs.forEach((im, j) => { im.classList.toggle("is-on", j === i); im.classList.remove("is-wipe"); });
-      if (motion) { void stageImgs[i].offsetWidth; stageImgs[i].classList.add("is-wipe"); }
+      // crossfade: the new photo fades in over the old one, so there is never an empty frame
+      stageImgs.forEach((im, j) => im.classList.toggle("is-on", j === i));
     }
     const b = ways[i];
     $("#stage-time").textContent = $(".way-time", b).textContent;
@@ -818,7 +818,7 @@
       });
       watch(h, "rv-words");
     });
-    [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-lede", ".about-lede", ".about-actions", ".search",
+    [".find-intro", ".comm-head p", ".svc-head p", ".awards-head p", ".life-head .life-lede", ".about-lede", ".about-actions", ".search",
       ".parcels-head", ".comm-index", ".comm-stage", ".who", ".app-panel", ".talk", ".news-head", ".growth", ".story-text", ".scrub",
       ".schedule", ".close-actions", ".foot-bar", ".foot-mark"].forEach((sel) => $$(sel).forEach((el) => watch(el, "rv", sel === ".talk" || sel === ".comm-stage" ? 140 : 0)));
     [".parcels > li", ".ways > li", ".news-list > li", ".foot-grid > *", ".schedule tbody tr"].forEach((sel) => $$(sel).forEach((el, i) => watch(el, "rv", 80 + i * 90)));

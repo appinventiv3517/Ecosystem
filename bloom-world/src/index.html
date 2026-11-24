@@ -276,40 +276,44 @@
 
 <!-- ================================================================ LIFE AT BLOOM -->
 <section class="life" id="life" aria-labelledby="life-title">
-  <div class="wrap life-grid">
+  <div class="wrap">
+  <div class="life-head">
+    <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
+    <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment to see it.</p>
+  </div>
+  <div class="life-grid">
     <div class="life-copy">
-      <h2 id="life-title" class="display" data-i18n="life.title">More than a place. A way of living.</h2>
-      <p class="life-lede">One day in a Bloom community, hour by hour. Pick a moment.</p>
       <ol class="ways" role="tablist" aria-label="Life at Bloom">
         <li><button type="button" class="way" role="tab" aria-selected="true" aria-controls="life-stage" data-i="0" style="--zc: var(--edu)">
           <span class="way-time">07:45</span><span class="way-title">Growing up together</span>
-          <span class="way-more"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span>
+          <span class="way-more"><span class="way-more-in"><span class="way-text">Schools and shared spaces where neighbours turn into friends.</span><span class="way-zone"><i></i>Education</span></span></span>
           <span class="way-bar" aria-hidden="true"><i></i></span>
         </button></li>
         <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="1" style="--zc: var(--fm)">
           <span class="way-time">10:00</span><span class="way-title">Looked after, every day</span>
-          <span class="way-more"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span>
+          <span class="way-more"><span class="way-more-in"><span class="way-text">The teams who care for the buildings, streets and gardens behind the scenes.</span><span class="way-zone"><i></i>Facilities Management</span></span></span>
           <span class="way-bar" aria-hidden="true"><i></i></span>
         </button></li>
         <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="2" style="--zc: var(--land)">
           <span class="way-time">18:30</span><span class="way-title">Days spent outdoors</span>
-          <span class="way-more"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span>
+          <span class="way-more"><span class="way-more-in"><span class="way-text">Shaded paths, open water and green streets, so stepping outside is part of the everyday.</span><span class="way-zone"><i></i>Landscaping</span></span></span>
           <span class="way-bar" aria-hidden="true"><i></i></span>
         </button></li>
         <li><button type="button" class="way" role="tab" aria-selected="false" aria-controls="life-stage" data-i="3" style="--zc: var(--hosp)">
           <span class="way-time">20:00</span><span class="way-title">Time well spent</span>
-          <span class="way-more"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span>
+          <span class="way-more"><span class="way-more-in"><span class="way-text">Places to stay, dine and slow down, close to home.</span><span class="way-zone"><i></i>Hospitality</span></span></span>
           <span class="way-bar" aria-hidden="true"><i></i></span>
         </button></li>
       </ol>
     </div>
-    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite" data-parallax="0.06">
+    <figure class="life-stage" id="life-stage" role="tabpanel" aria-live="polite">
       <img class="stage-img is-on" src="assets/img/life-growing-up.webp" alt="Children playing among ground fountains at golden hour" width="700" height="1061" loading="lazy">
       <img class="stage-img" src="assets/img/life-looked-after.webp" alt="Two engineers reviewing building plans on a monitor" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-outdoors.webp" alt="Couple on a timber footbridge looking over a lake (architectural render)" width="700" height="1060" loading="lazy">
       <img class="stage-img" src="assets/img/life-time-well-spent.webp" alt="Warmly lit hotel restaurant interior" width="700" height="1060" loading="lazy">
       <figcaption class="stage-tag"><i id="stage-dot"></i><span id="stage-time">07:45</span><span id="stage-title">Growing up together</span></figcaption>
     </figure>
+  </div>
   </div>
 </section>
 
