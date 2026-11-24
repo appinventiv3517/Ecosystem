@@ -857,10 +857,23 @@
     enq.hidden = false; done.hidden = true; enq.reset();
     $$(".field", enq).forEach((f) => f.classList.remove("is-bad"));
     const want = b.dataset.enquire;
-    if (want) { const r = enq.querySelector(`input[name="interest"][value="${want}"]`); if (r) r.checked = true; }
+    if (want) { const r = dlg.querySelector(`input[name="interest"][value="${want}"]`); if (r) r.checked = true; }
+    dlg.classList.remove("is-sent");
+    setTopic(false);
     dlg.showModal();
   }));
   dlg.addEventListener("close", () => { if (opener) opener.focus(); });
+  const topics = $$('input[name="interest"]', dlg);
+  // the side panel recolours and rewords itself for the chosen topic
+  function setTopic(animate = true) {
+    const t = topics.find((r) => r.checked) || topics[0];
+    dlg.style.setProperty("--tc", t.closest(".enq-topic").style.getPropertyValue("--tc"));
+    const lede = $("#enq-lede");
+    lede.textContent = t.dataset.lede;
+    enq.elements.message.placeholder = t.dataset.ph;
+    if (animate && motion) { lede.classList.remove("is-swap"); void lede.offsetWidth; lede.classList.add("is-swap"); }
+  }
+  topics.forEach((r) => r.addEventListener("change", () => setTopic()));
   dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
   function check(input) {
     const ok = input.name === "email" ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim()) : input.value.trim().length > 1;
@@ -876,7 +889,9 @@
     if (bad.length) { bad[0].focus(); return; }
     const first = enq.elements.name.value.trim().split(/\s+/)[0];
     $("#enq-name").textContent = first ? `, ${first}` : "";
-    enq.hidden = true; done.hidden = false;
+    const topic = topics.find((r) => r.checked);
+    $("#enq-topic-done").textContent = (topic ? topic.value : "your enquiry").toLowerCase();
+    enq.hidden = true; done.hidden = false; dlg.classList.add("is-sent");
     done.classList.remove("is-in"); void done.offsetWidth; done.classList.add("is-in");
     done.focus();
   });

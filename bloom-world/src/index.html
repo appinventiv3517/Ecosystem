@@ -653,46 +653,61 @@
 </footer>
 
 <!-- ================================================================ ENQUIRY -->
-<dialog class="enquiry" id="enquiry" aria-labelledby="enquiry-title">
-  <form method="dialog" class="enq-close-form"><button class="card-close" aria-label="Close enquiry"><svg class="ic"><use href="#i-close"/></svg></button></form>
-  <form class="enq-form" id="enq-form" novalidate>
-    <h2 id="enquiry-title" class="enq-title">How can we help?</h2>
-    <fieldset class="enq-interest">
-      <legend class="field-label">I'm interested in</legend>
-      <div class="chips">
-        <label><input type="radio" name="interest" value="Buying" checked><span>Buying</span></label>
-        <label><input type="radio" name="interest" value="Renting"><span>Renting</span></label>
-        <label><input type="radio" name="interest" value="Resident support"><span>Resident support</span></label>
-        <label><input type="radio" name="interest" value="Partnering"><span>Partnering</span></label>
-        <label><input type="radio" name="interest" value="Something else"><span>Something else</span></label>
+<dialog class="enquiry" id="enquiry" aria-labelledby="enquiry-title" style="--tc: var(--re)">
+  <form method="dialog" class="enq-close-form"><button class="enq-x" aria-label="Close enquiry"><svg class="ic"><use href="#i-close"/></svg></button></form>
+  <div class="enq-grid">
+    <aside class="enq-side">
+      <span class="enq-glow" aria-hidden="true"></span>
+      <h2 id="enquiry-title" class="enq-title">How can we help?</h2>
+      <p class="enq-lede" id="enq-lede" aria-live="polite">Tell us what you're looking for and our sales team will help you find the right home.</p>
+      <fieldset class="enq-topics">
+        <legend class="sr">I'm interested in</legend>
+        <label class="enq-topic" style="--tc: var(--re)"><input type="radio" name="interest" value="Buying" form="enq-form" data-lede="Tell us what you're looking for and our sales team will help you find the right home." data-ph="For example: a three-bedroom villa in Zayed City" checked><span class="enq-topic-in"><span class="enq-topic-ic"><svg class="ic"><use href="#i-home"/></svg></span>Buying<svg class="ic enq-topic-tick"><use href="#i-check"/></svg></span></label>
+        <label class="enq-topic" style="--tc: var(--water)"><input type="radio" name="interest" value="Renting" form="enq-form" data-lede="Looking to rent in a Bloom community? We'll tell you what's available and when." data-ph="For example: an apartment on Saadiyat Island from June"><span class="enq-topic-in"><span class="enq-topic-ic"><svg class="ic"><use href="#i-key"/></svg></span>Renting<svg class="ic enq-topic-tick"><use href="#i-check"/></svg></span></label>
+        <label class="enq-topic" style="--tc: var(--fm)"><input type="radio" name="interest" value="Resident support" form="enq-form" data-lede="Already living with us? We'll pass this straight to your community team." data-ph="Tell us your community and what you need help with"><span class="enq-topic-in"><span class="enq-topic-ic"><svg class="ic"><use href="#i-tool"/></svg></span>Resident support<svg class="ic enq-topic-tick"><use href="#i-check"/></svg></span></label>
+        <label class="enq-topic" style="--tc: var(--edu)"><input type="radio" name="interest" value="Partnering" form="enq-form" data-lede="Working with Bloom on a project or a partnership? We'll route this to the right team." data-ph="Tell us about your company and the idea"><span class="enq-topic-in"><span class="enq-topic-ic"><svg class="ic"><use href="#i-handshake"/></svg></span>Partnering<svg class="ic enq-topic-tick"><use href="#i-check"/></svg></span></label>
+        <label class="enq-topic" style="--tc: var(--site)"><input type="radio" name="interest" value="Something else" form="enq-form" data-lede="Anything else on your mind? We'll make sure the right person reads it." data-ph="How can we help?"><span class="enq-topic-in"><span class="enq-topic-ic"><svg class="ic"><use href="#i-doc"/></svg></span>Something else<svg class="ic enq-topic-tick"><use href="#i-check"/></svg></span></label>
+      </fieldset>
+      <ul class="enq-direct">
+        <li><a href="tel:80025666"><svg class="ic"><use href="#i-phone"/></svg>800 Bloom (25666)</a></li>
+        <li><a href="mailto:customerservice@bloomholding.com"><svg class="ic"><use href="#i-doc"/></svg>customerservice@bloomholding.com</a></li>
+      </ul>
+    </aside>
+    <div class="enq-main">
+      <form class="enq-form" id="enq-form" novalidate>
+        <h3 class="enq-h">Your details</h3>
+        <label class="field">
+          <span class="field-label">Full name</span>
+          <input name="name" autocomplete="name" required aria-describedby="err-name">
+          <span class="err" id="err-name">Please add your name.</span>
+        </label>
+        <div class="enq-row">
+          <label class="field">
+            <span class="field-label">Email address</span>
+            <input name="email" type="email" autocomplete="email" required aria-describedby="err-email">
+            <span class="err" id="err-email">Please add a valid email address.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Phone <em>(optional)</em></span>
+            <input name="phone" type="tel" autocomplete="tel" inputmode="tel">
+          </label>
+        </div>
+        <label class="field">
+          <span class="field-label">Message <em>(optional)</em></span>
+          <textarea name="message" rows="4" placeholder="For example: a three-bedroom villa in Zayed City"></textarea>
+        </label>
+        <div class="enq-foot">
+          <p class="enq-note">Prototype form: nothing is sent or stored.</p>
+          <button class="btn btn-red enq-send" type="submit"><span>Send enquiry</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+        </div>
+      </form>
+      <div class="enq-done" id="enq-done" hidden tabindex="-1">
+        <svg class="enq-stamp" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="44"/><path d="M38 61l15 15 30-32"/></svg>
+        <h3 class="enq-h enq-h-big">Thank you<span id="enq-name"></span>.</h3>
+        <p>This is a prototype, so nothing was sent. On the finished site, Bloom's team would follow up about <b id="enq-topic-done">buying</b>.</p>
+        <button type="button" class="btn btn-ink" id="enq-back">Back to the homepage</button>
       </div>
-    </fieldset>
-    <label class="field">
-      <span class="field-label">Full name</span>
-      <input name="name" autocomplete="name" required aria-describedby="err-name">
-      <span class="err" id="err-name">Please add your name.</span>
-    </label>
-    <label class="field">
-      <span class="field-label">Email address</span>
-      <input name="email" type="email" autocomplete="email" required aria-describedby="err-email">
-      <span class="err" id="err-email">Please add a valid email address, like name@example.com.</span>
-    </label>
-    <label class="field">
-      <span class="field-label">Phone number <em>(optional)</em></span>
-      <input name="phone" type="tel" autocomplete="tel">
-    </label>
-    <label class="field">
-      <span class="field-label">Message <em>(optional)</em></span>
-      <textarea name="message" rows="3"></textarea>
-    </label>
-    <button class="btn btn-red btn-block" type="submit"><span>Send enquiry</span><svg class="ic"><use href="#i-arrow"/></svg></button>
-    <p class="enq-note">Prototype form: nothing is sent or stored.</p>
-  </form>
-  <div class="enq-done" id="enq-done" hidden tabindex="-1">
-    <svg class="enq-stamp" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="44"/><path d="M38 61l15 15 30-32"/></svg>
-    <h2 class="enq-title">Thank you<span id="enq-name"></span>.</h2>
-    <p>This is a prototype, so nothing was sent. On the finished site, Bloom's team would follow up on your enquiry.</p>
-    <button type="button" class="btn btn-ink" id="enq-back">Back to the homepage</button>
+    </div>
   </div>
 </dialog>
 
